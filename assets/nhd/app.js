@@ -234,6 +234,21 @@
     $("fitInfo") ? $("fitInfo").innerHTML = txt : $("genMsg").insertAdjacentHTML("beforeend", `<div class="note blue small" id="fitInfo">${txt}</div>`);
     if (target && pages > target) $("fitInfo").innerHTML = txt + ` <b>Vẫn vượt ${target} trang</b> — thầy giảm bớt câu có hình lớn hoặc chọn số trang lớn hơn.`;
   }
+  /* đáp án cho ứng dụng chấm điện thoại */
+  function baiCham() {
+    const I = info(); const keys = {};
+    ex.versions.forEach((V, i) => { const k = Gen.keys(ex, i); keys[V.ma] = { TN: k.TN, DS: k.DS, TLN: k.TLN.map(x => String(x).replace(/\$|\{|\}|\\,/g, "").trim()) }; });
+    const t = Gen.totals(M, st.mon);
+    return { ten: [I.ky, I.monTen + " " + st.lop].filter(Boolean).join(" – "), mon: st.mon, preset: window.OMR ? OMR.pickPreset({ TN: t.TN, DS: t.DS, TLN: t.TLN }) : "", keys };
+  }
+  function drawKeyQR() {
+    if (!window.OMR || !window.qrcode) return;
+    const b = baiCham(); const url = location.href.replace(/[^/]*$/, "") + "cham.html#k=" + encodeURIComponent(OMR.pack(b));
+    try { const q = qrcode(0, "L"); q.addData(url); q.make(); $("keyQR").innerHTML = q.createSvgTag({ cellSize: 3, margin: 2 }); } catch (e) { $("keyQR").textContent = "Quá nhiều mã đề cho một mã QR — dùng file .json"; }
+    const P = OMR.PRESETS[b.preset];
+    $("keyInfo").innerHTML = `${Object.keys(b.keys).length} mã đề · dùng phiếu <b>${esc(P ? P.ten : "")}</b> (in ở trang “Phiếu & chấm”). Nếu đổi câu sau khi đã quét, hãy quét lại mã mới.`;
+  }
+  $("keyJson").onclick = () => { if (ex) download(new Blob([JSON.stringify(baiCham(), null, 1)], { type: "application/json" }), "DapAn_ChamDienThoai.json"); };
   function countDup() { const seen = new Map(); let d = 0; ex.versions.forEach(V => V.pick.forEach(q => { if (!q) return; if (seen.has(q.id)) d++; else seen.set(q.id, 1); })); return d; }
   const partsBase = () => Gen.baseParts(ex);
   function drawPreview() {
@@ -249,6 +264,7 @@
     else if (view === -2) pages = Out.paginate(Out.keysBlocks(allKeys(), st.mon), (i, n) => `Trang ${i}/${n} – Đáp án`, LV);
     else pages = Out.paginate(Out.versionBlocks(Gen.partsOf(ex, view), info(), ex.versions[view].ma, { swap: ex.mode === "khac" }), (i, n) => `Trang ${i}/${n} – Mã đề ${ex.versions[view].ma}`, LV);
     const pv = $("preview"); const y = pv.scrollTop; pv.innerHTML = ""; pages.forEach(p => pv.appendChild(p)); pv.scrollTop = y;
+    drawKeyQR();
     pv.querySelectorAll("[data-swap]").forEach(b => b.onclick = () => { if (Gen.swap(ex, idx, Math.max(0, view), +b.dataset.swap, $("oSeed").value)) { refit(); drawPreview(); } else toast("Không còn câu nào khác cùng dạng, cùng mức độ"); });
   }
   const allKeys = () => ex.versions.map((V, i) => ({ ma: V.ma, keys: Gen.keys(ex, i) }));
@@ -285,6 +301,7 @@
       if (withSol) T.file("LoiGiai_ChiTiet.tex", Out.doc(I, ex.versions.map((V, i) => Out.versionTex(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true })).join("\n"), ex.lv));
       if (ex.mode === "goc") T.file("DeGoc_KemDapAn.tex", Out.doc(I, Out.versionTex(partsBase(), I, "GOC", { dapan: true, loigiai: withSol }), ex.lv));
       if ($("xMT").checked) z.file(folder + `/MaTran_DacTa.xls`, xlsBlob());
+      if (window.OMR) z.file(folder + "/DapAn_ChamDienThoai.json", JSON.stringify(baiCham(), null, 1));
       z.file(folder + "/HUONG_DAN.txt", [
         "GÓI ĐỀ KIỂM TRA — tạo bởi trang Học cùng Thầy Hiếu", "",
         "Mã đề: " + ex.versions.map(V => V.ma).join(", "),

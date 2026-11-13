@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phiếu trả lời & chấm bằng điện thoại · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/lib/qrcode.js"></script>
+<style>
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px;margin:14px 0}
+.pc{background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:6px}
+.pc[aria-selected=true]{border-color:var(--violet);box-shadow:0 0 0 4px #efe8ff}
+.pc .pv{background:#f3f4f8;border-radius:10px;display:grid;place-items:center;height:170px;overflow:hidden}
+.pc .pv svg{height:160px;width:auto;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pc b{font-size:15px}.pc span{font-size:12.5px;color:var(--muted)}
+.big-pv{background:#e9ecf3;border-radius:18px;padding:16px;display:grid;place-items:center}
+.big-pv svg{width:min(100%,560px);height:auto;box-shadow:0 4px 18px rgba(0,0,0,.18);background:#fff}
+.qr-phone{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qr-phone .q{background:#fff;padding:8px;border-radius:12px;border:1px solid var(--line)}
+</style>
+</head>
+<body data-page="phieu">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm" style="background:linear-gradient(120deg,#8a5cf6,#3b7bff 60%,#10b3a3)">
+    <h1>Phiếu trả lời & chấm bằng điện thoại</h1>
+    <p>In phiếu cho học sinh tô, rồi dùng camera điện thoại quét từng phiếu: máy tự đọc số báo danh, mã đề, chấm theo thang điểm của Bộ và xuất bảng điểm Excel.</p>
+  </section>
+
+  <div class="grid2" style="margin-top:16px;align-items:start">
+    <div>
+      <h2 style="margin-top:6px">1. Chọn mẫu phiếu</h2>
+      <div class="pcards" id="cards"></div>
+      <fieldset>
+        <legend>Thông tin in trên phiếu</legend>
+        <div style="display:grid;gap:10px">
+          <label class="f">Trường<input type="text" id="fTruong"></label>
+          <div class="grid2"><label class="f">Kì kiểm tra<input type="text" id="fKy" placeholder="KIỂM TRA GIỮA KÌ I"></label><label class="f">Môn – lớp<input type="text" id="fMon" placeholder="TOÁN 12"></label></div>
+          <label class="f">Khổ in<select id="fKho"></select></label>
+          <div class="row"><button class="btn violet" id="btnIn">🖨 In phiếu / lưu PDF</button><span class="small muted">Khi in chọn tỉ lệ <b>100%</b> (không “vừa trang”), giấy trắng.</span></div>
+        </div>
+      </fieldset>
+    </div>
+    <div>
+      <div class="big-pv" id="bigPv"></div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:22px">2. Chấm bằng điện thoại</h2>
+  <div class="card qr-phone">
+    <div class="q" id="appQR"></div>
+    <div style="flex:1;min-width:260px">
+      <p style="margin-top:0"><b>Quét mã này bằng camera điện thoại</b> để mở ứng dụng chấm (hoặc mở địa chỉ <a href="cham.html" id="appLink">cham.html</a>). Trên iPhone dùng Safari, trên Android dùng Chrome. Lần đầu trình duyệt sẽ hỏi quyền dùng camera — bấm <b>Cho phép</b>.</p>
+      <ol class="small" style="padding-left:18px;margin:0">
+        <li><b>Nạp đáp án:</b> ở trang <a href="rade.html">Ra đề</a> bước 4 có <b>mã QR đáp án</b> — trên điện thoại bấm “Quét QR đáp án”. Đề soạn ngoài web thì chọn “Nhập tay”.</li>
+        <li><b>Chấm:</b> đặt phiếu trên bàn, đủ sáng, đưa trọn 4 ô vuông đen vào khung — máy tự chụp, đọc SBD, mã đề và cho điểm ngay.</li>
+        <li><b>Kiểm tra:</b> ảnh phiếu hiện vòng <span style="color:#19a64a;font-weight:700">xanh</span> (đúng), <span style="color:#e0234e;font-weight:700">đỏ</span> (sai), <span style="color:#2f6bff;font-weight:700">xanh dương</span> (đáp án đúng). Bấm “Lưu và chấm phiếu tiếp”.</li>
+        <li><b>Xuất điểm:</b> mục Kết quả → Tải Excel (có thể dán danh sách lớp để hiện họ tên).</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note blue small">Kết quả chấm lưu ngay trong điện thoại (không gửi đi đâu). Chấm xong nên tải Excel về để lưu trữ.</div>
+</main>
+<footer id="foot"></footer>
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const S = window.SITE || {};
+  const st = Object.assign({ p: "p90", kho: "A4", truong: (S.de && S.de.truong) || "", ky: "", mon: "" }, JSON.parse(localStorage.getItem("phieu-cfg") || "{}"));
+  $("fTruong").value = st.truong; $("fKy").value = st.ky; $("fMon").value = st.mon;
+  const info = () => ({ truong: $("fTruong").value, ky: $("fKy").value, mon: $("fMon").value });
+  // khổ in phù hợp từng mẫu
+  const KHO = id => OMR.PRESETS[id].paper === "A5" ? [["A5", "A5 — 2 phiếu trên 1 tờ A4"]] :
+    (id === "p45" || id === "p60" ? [["A4", "A4 — 1 phiếu / tờ"], ["A5", "A5 thu nhỏ — 2 phiếu trên 1 tờ A4 (tiết kiệm giấy)"]] : [["A4", "A4 — 1 phiếu / tờ (mẫu này nhiều ô, không nên thu nhỏ)"]]);
+  function draw() {
+    $("cards").innerHTML = Object.entries(OMR.PRESETS).map(([id, p]) => `<button class="pc" data-id="${id}" aria-selected="${id === st.p}"><span class="pv">${OMR.svg(OMR.build(id), {})}</span><b>${p.ten}</b><span>${p.mota}</span></button>`).join("");
+    $("cards").querySelectorAll(".pc").forEach(b => b.onclick = () => { st.p = b.dataset.id; save(); draw(); });
+    const ks = KHO(st.p); if (!ks.some(k => k[0] === st.kho)) st.kho = ks[0][0];
+    $("fKho").innerHTML = ks.map(([v, t]) => `<option value="${v}"${v === st.kho ? " selected" : ""}>${t}</option>`).join("");
+    $("bigPv").innerHTML = OMR.svg(OMR.build(st.p), info());
+  }
+  function save() { st.truong = $("fTruong").value; st.ky = $("fKy").value; st.mon = $("fMon").value; st.kho = $("fKho").value || st.kho; localStorage.setItem("phieu-cfg", JSON.stringify(st)); }
+  ["fTruong", "fKy", "fMon"].forEach(id => $(id).oninput = () => { save(); $("bigPv").innerHTML = OMR.svg(OMR.build(st.p), info()); });
+  $("fKho").onchange = save;
+  $("btnIn").onclick = () => {
+    save(); const L = OMR.build(st.p); let one = OMR.svg(L, info());
+    let body, page;
+    if (st.kho === "A5") { // 2 phiếu cạnh nhau trên A4 ngang; phiếu A4 thu nhỏ vào khung 140×198 mm
+      const w = OMR.PRESETS[st.p].paper === "A5" ? 148 : 140, h = OMR.PRESETS[st.p].paper === "A5" ? 210 : 198;
+      one = one.replace(/width="[\d.]+mm" height="[\d.]+mm"/, `width="${w}mm" height="${h}mm"`);
+      body = `<div class="pg l"><div class="h">${one}</div><div class="h">${one}</div></div>`; page = "A4 landscape";
+    } else { body = `<div class="pg">${one}</div>`; page = "A4"; }
+    const wv = window.open("", "_blank"); if (!wv) return alert("Hãy cho phép cửa sổ bật lên (pop-up).");
+    wv.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Phieu tra loi</title><style>@page{size:${page};margin:0}body{margin:0}.pg{width:210mm;height:297mm;display:flex;align-items:center;justify-content:center;overflow:hidden}.pg.l{width:297mm;height:210mm}.pg.l .h{width:148.5mm;height:210mm;display:flex;align-items:center;justify-content:center}.pg.l .h+.h{border-left:.2mm dashed #bbb}svg{display:block}</style></head><body>${body}<script>setTimeout(()=>print(),300)<\/script></body></html>`);
+    wv.document.close();
+  };
+  // QR mở ứng dụng chấm
+  const url = location.href.replace(/[^/]*$/, "") + "cham.html"; $("appLink").href = url; $("appLink").textContent = url.replace(/^https?:\/\//, "");
+  try { const q = qrcode(0, "M"); q.addData(url); q.make(); $("appQR").innerHTML = q.createSvgTag({ cellSize: 4, margin: 2 }); } catch (e) {}
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1d2742"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>Chấm phiếu · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/scan.js"></script><script src="assets/omr/keys.js"></script>
+<style>
+body{background:#f4f6fb}
+body::before{display:none}
+.app{max-width:760px;margin:0 auto;padding:0 12px 90px}
+.bar{position:sticky;top:0;z-index:20;background:#1d2742;color:#fff;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
+.bar a{color:#fff;text-decoration:none;font-weight:700;font:800 18px var(--font-h)}
+.bar .sub{margin-left:auto;font-size:13px;opacity:.85;max-width:55%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav3{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav3 button{border:0;background:none;padding:9px 4px 8px;font:600 13px var(--font);color:var(--muted);display:grid;gap:2px;justify-items:center;cursor:pointer}
+.nav3 button b{font-size:20px;line-height:1}
+.nav3 button[aria-selected=true]{color:var(--coral)}
+.pg{display:none;padding-top:12px}.pg.on{display:block}
+.bai{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
+.bai.cur{border-color:var(--coral);box-shadow:0 0 0 3px #ffe3da}
+.bai .t{font-weight:700}.bai .m{font-size:13px;color:var(--muted)}
+.cam{position:relative;background:#000;border-radius:18px;overflow:hidden;aspect-ratio:3/4;max-height:72vh;margin:0 auto}
+.cam video,.cam canvas.ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cam .guide{position:absolute;inset:7% 9%;border:2px dashed rgba(255,255,255,.55);border-radius:10px;pointer-events:none}
+.cam .guide i{position:absolute;width:26px;height:26px;border:4px solid #ffd54d}
+.cam .guide i:nth-child(1){left:-4px;top:-4px;border-right:0;border-bottom:0}.cam .guide i:nth-child(2){right:-4px;top:-4px;border-left:0;border-bottom:0}
+.cam .guide i:nth-child(3){left:-4px;bottom:-4px;border-right:0;border-top:0}.cam .guide i:nth-child(4){right:-4px;bottom:-4px;border-left:0;border-top:0}
+.cam .msg{position:absolute;left:10px;right:10px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;border-radius:12px;padding:8px 12px;font-size:14.5px;text-align:center}
+.cam .start{position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-align:center;padding:20px}
+.score{display:flex;align-items:center;gap:14px;background:#fff;border-radius:18px;padding:14px;border:1px solid var(--line);margin:12px 0}
+.score .d{font:800 44px/1 var(--font-h);color:var(--coral);min-width:92px;text-align:center}
+.score .i{font-size:14px;line-height:1.5}
+.qs{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}
+.qs span{font:600 12.5px var(--font);padding:3px 7px;border-radius:8px;background:#eef1f7}
+.qs .y{background:#dff5e6;color:#14632f}.qs .n{background:#ffe1e7;color:#b0163d}.qs .b{background:#fff2cc;color:#7a5a00}
+.sheet{width:100%;border-radius:12px;border:1px solid var(--line);background:#fff}
+table.kq{width:100%;border-collapse:collapse;font-size:14px;background:#fff;border-radius:12px;overflow:hidden}
+table.kq th,table.kq td{padding:7px 8px;border-bottom:1px solid var(--line2);text-align:left}
+table.kq th{background:#fbf6ee}
+.big-btn{width:100%;padding:14px;font-size:17px;border-radius:14px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
+.keyrow{display:grid;gap:6px;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;background:#fff}
+.keyrow input{width:100%}
+.hint{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bar"><a href="index.html">✓ Chấm phiếu</a><span class="sub" id="curName">Chưa chọn bài</span></div>
+<div class="app">
+
+  <!-- ===================== 1. BÀI KIỂM TRA ===================== -->
+  <section class="pg" id="pgBai">
+    <h2 style="margin:6px 0 4px">Bài kiểm tra</h2>
+    <p class="hint">Chọn bài để chấm. Thêm bài mới bằng cách quét <b>mã QR đáp án</b> ở trang Ra đề (bước 4), mở <b>file đáp án .json</b>, hoặc nhập đáp án bằng tay.</p>
+    <div class="row" style="margin:10px 0">
+      <button class="btn coral" id="addQR">📷 Quét QR đáp án</button>
+      <label class="btn ghost">📄 Mở file .json<input type="file" id="addFile" accept=".json,application/json,text/plain" hidden></label>
+      <button class="btn ghost" id="addHand">✍️ Nhập tay</button>
+    </div>
+    <div id="qrBox" class="hidden"><div class="cam" style="aspect-ratio:1/1"><video id="qrVideo" playsinline muted></video><div class="msg">Đưa mã QR đáp án vào giữa khung</div></div><button class="btn ghost big-btn" id="qrStop" style="margin-top:8px">Huỷ</button></div>
+    <div id="handBox" class="hidden card" style="margin-bottom:12px"></div>
+    <div id="baiList"></div>
+  </section>
+
+  <!-- ===================== 2. CHẤM ===================== -->
+  <section class="pg" id="pgCham">
+    <div class="cam" id="cam">
+      <video id="video" playsinline muted></video><canvas class="ov" id="ov"></canvas>
+      <div class="guide"><i></i><i></i><i></i><i></i></div>
+      <div class="start" id="camStart"><div><div style="font-size:46px">📷</div><b style="font-size:18px">Bấm để mở camera</b><div class="hint" style="color:#ccd">Đặt phiếu trên mặt bàn phẳng, đủ sáng. Đưa cả 4 ô vuông đen vào khung vàng — máy tự chụp và chấm.</div></div></div>
+      <div class="msg" id="camMsg">Đang chờ…</div>
+    </div>
+    <div class="row" style="margin:10px 0;justify-content:center">
+      <button class="btn ghost sm" id="torch">🔦 Đèn</button>
+      <label class="btn ghost sm">🖼 Chấm từ ảnh có sẵn<input type="file" id="photo" accept="image/*" hidden></label>
+      <label class="chk small"><input type="checkbox" id="beep" checked> Âm báo</label>
+    </div>
+    <div id="result"></div>
+  </section>
+
+  <!-- ===================== 3. KẾT QUẢ ===================== -->
+  <section class="pg" id="pgKq">
+    <h2 style="margin:6px 0 4px" id="kqTitle">Kết quả</h2>
+    <div class="sum" id="kqSum"></div>
+    <div class="row" style="margin:8px 0">
+      <button class="btn green sm" id="xls">⬇ Tải Excel</button>
+      <button class="btn ghost sm" id="csv">⬇ CSV</button>
+      <button class="btn ghost sm" id="dsLop">👥 Danh sách lớp</button>
+      <button class="btn ghost sm" id="kqClear">🗑 Xoá kết quả</button>
+    </div>
+    <div id="dsBox" class="hidden card" style="margin-bottom:10px">
+      <p class="hint">Dán danh sách lớp, mỗi dòng: <b>SBD</b>, dấu Tab hoặc dấu phẩy, rồi <b>Họ tên</b> (chép thẳng từ Excel được).</p>
+      <textarea id="dsText" placeholder="120001	Nguyễn Văn An&#10;120002	Trần Thị Bình"></textarea>
+      <button class="btn blue sm" id="dsSave" style="margin-top:8px">Lưu danh sách</button>
+    </div>
+    <div id="kqTable"></div>
+  </section>
+</div>
+<nav class="nav3">
+  <button data-p="pgBai"><b>📋</b>Bài kiểm tra</button>
+  <button data-p="pgCham"><b>📷</b>Chấm</button>
+  <button data-p="pgKq"><b>📊</b>Kết quả</button>
+</nav>
+<script src="assets/omr/app.js"></script>
+</body>
+</html>

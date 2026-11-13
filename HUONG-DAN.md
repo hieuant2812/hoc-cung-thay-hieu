@@ -22,7 +22,9 @@ Giải nén, mở `index.html` bằng Chrome. Phần Mô phỏng chạy được
 
 **Không cài GitHub Desktop?** Làm ngay trên github.com: tạo kho mới (*New repository*, chọn *Public*, tích *Add a README file*) → *Add file → Upload files*. Mỗi lần tải tối đa 100 file, nên chia 3 lượt: (1) 5 file ở ngoài cùng + thư mục `assets` + thư mục `data`; (2) thư mục `sims`; (3) thư mục `thumbs`. Mỗi lượt bấm *Commit changes*. Sau đó bật *Settings → Pages* như bước 5.
 
-Mỗi lần cập nhật: chép file mới vào thư mục → GitHub Desktop → *Commit* → *Push origin*.
+**Cập nhật trên github.com (khi Claude gửi "gói cập nhật"):** giải nén gói → mở kho trên github.com, đứng ở trang gốc của kho → *Add file → Upload files* → kéo **tất cả những gì nằm trong** thư mục gói cập nhật (file lẻ và thư mục `assets`…) vào → *Commit changes*. File trùng tên được thay mới, các file khác giữ nguyên. Đợi 1–2 phút, mở web và bấm Ctrl+F5 (Mac: ⌘+Shift+R).
+
+Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục → GitHub Desktop → *Commit* → *Push origin*.
 
 > **Không chép file ngân hàng đề (.tex, .zip) vào thư mục web.** Kho để công khai nên ai cũng tải được, kể cả đáp án.
 
@@ -67,7 +69,15 @@ Mỗi lần cập nhật: chép file mới vào thư mục → GitHub Desktop �
 | Phần II | Đúng 1/2/3/4 ý: 0,1/0,25/0,5/1 điểm |
 | Phần III | Toán 0,5 điểm/câu; Lí, Hoá 0,25 điểm/câu |
 
-## 4. Định dạng câu hỏi trong ngân hàng
+## 4. Phiếu trả lời & chấm bằng điện thoại
+
+- Trang **Phiếu & chấm** (`phieu.html`): chọn 1 trong 5 mẫu phiếu (15 phút khổ A5; 45, 60 phút in A4 hoặc thu nhỏ A5; Toán 90 phút 12–4–6; Lí/Hoá 50 phút 18–4–6), điền trường – kì kiểm tra rồi in (tỉ lệ 100%).
+- Ứng dụng chấm (`cham.html`) chạy ngay trên trình duyệt điện thoại (Safari/Chrome), không cần cài đặt. Cần mở qua địa chỉ https (GitHub Pages) để dùng được camera.
+- Nạp đáp án: trang Ra đề → bước 4 → mục **Chấm bằng điện thoại** có mã QR; quét bằng camera điện thoại là mở ứng dụng và nạp sẵn đáp án mọi mã đề. Cũng có thể mở file `DapAn_ChamDienThoai.json` (có trong gói đề) hoặc nhập đáp án bằng tay.
+- Chấm: đưa trọn 4 ô vuông đen của phiếu vào khung, giữ yên — máy tự chụp, đọc SBD, mã đề, chấm theo thang điểm Bộ. Kiểm tra ảnh phiếu (xanh = đúng, đỏ = sai, xanh dương = đáp án) rồi bấm "Lưu và chấm phiếu tiếp".
+- Kết quả lưu trong điện thoại; mục Kết quả có thống kê, tải Excel/CSV, dán danh sách lớp (SBD – Họ tên) để hiện tên.
+
+## 5. Định dạng câu hỏi trong ngân hàng
 
 ```latex
 %% Dạng: Tên dạng toán (dòng này đặt tên dạng trong ma trận)
@@ -80,7 +90,7 @@ Mỗi lần cập nhật: chép file mới vào thư mục → GitHub Desktop �
 - `muc` nhận một trong các giá trị NB, TH, VD, VDC.
 - Ở `\cauTN`, phương án đầu tiên là đáp án đúng; web tự đảo thứ tự phương án.
 
-## 5. Sửa thông tin, thêm nội dung
+## 6. Sửa thông tin, thêm nội dung
 
 - `config.js`: tên web, khẩu hiệu, dòng chân trang, thông tin điền sẵn cho đầu đề.
 - `data/chuongtrinh.js`: tên chương, bài theo SGK Kết nối tri thức. Muốn thêm lớp hoặc môn mới thì thêm một khối theo mẫu có sẵn.

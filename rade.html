@@ -7,6 +7,7 @@
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/lib/jszip.min.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/lib/qrcode.js"></script>
 <script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/nhd/gen.js"></script><script src="assets/nhd/out.js"></script>
 </head>
 <body data-page="rade">
@@ -158,6 +159,17 @@
           <button class="btn coral" id="btnZip">⬇ Tải gói đề (.zip)</button>
         </div>
         <div class="prog hidden" id="xprog"><i></i></div><div class="small muted" id="xprogT"></div>
+      </fieldset>
+      <fieldset>
+        <legend>📱 Chấm bằng điện thoại</legend>
+        <div class="row" style="align-items:flex-start;gap:18px">
+          <div id="keyQR" style="background:#fff;padding:6px;border-radius:12px;border:1px solid var(--line)"></div>
+          <div style="flex:1;min-width:240px">
+            <p style="margin:0 0 6px"><b>Quét mã này bằng camera điện thoại</b>: điện thoại mở ứng dụng chấm và nạp sẵn đáp án của tất cả mã đề.</p>
+            <p class="small muted" style="margin:0 0 8px" id="keyInfo"></p>
+            <div class="row"><button class="btn ghost sm" id="keyJson">⬇ Tải file đáp án (.json)</button><a class="btn ghost sm" href="phieu.html" target="_blank">🖨 In phiếu trả lời</a></div>
+          </div>
+        </div>
       </fieldset>
       <div class="vtabs" id="vtabs"></div>
       <div class="small muted noprint">Rê chuột vào một câu và bấm <b>⟳ Đổi câu</b> để thay bằng câu khác cùng dạng, cùng mức độ.</div>
