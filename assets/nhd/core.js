@@ -327,9 +327,9 @@
     if (body[0] === "[") { const g = readGroup(body, 0, "[", "]"); gopt = g[0]; body = body.slice(g[1]); }
     const G0 = tikzStyle(gopt);
     const gk = parseKeys(gopt);
-    let ux = CM * G0.sx, uy = CM * G0.sy;
-    if (gk.x) { const L = lenToCm(gk.x); if (L) ux = (L.u === "pt" ? L.v / 28.45 : L.u === "mm" ? L.v / 10 : L.v) * CM * G0.sx; }
-    if (gk.y) { const L = lenToCm(gk.y); if (L) uy = (L.u === "pt" ? L.v / 28.45 : L.u === "mm" ? L.v / 10 : L.v) * CM * G0.sy; }
+    const FS = NHD.figScale || 1; let ux = CM * G0.sx * FS, uy = CM * G0.sy * FS;
+    if (gk.x) { const L = lenToCm(gk.x); if (L) ux = (L.u === "pt" ? L.v / 28.45 : L.u === "mm" ? L.v / 10 : L.v) * CM * G0.sx * FS; }
+    if (gk.y) { const L = lenToCm(gk.y); if (L) uy = (L.u === "pt" ? L.v / 28.45 : L.u === "mm" ? L.v / 10 : L.v) * CM * G0.sy * FS; }
     const fsc0 = fontScale(G0.font);
     body = body.replace(/\\begin\{scope\}\s*(\[[^\]]*\])?/g, (m0, o) => "\\SCOPE" + (o || "[]") + ";").replace(/\\end\{scope\}/g, "\\ENDSCOPE;");
     const stmts = splitTop(body, ";").map(t => t.trim()).filter(Boolean);
@@ -558,7 +558,7 @@
     const o = parseKeys(ini.opt); const lgt = parseFloat(o.lgt || 2), esp = parseFloat(o.espcl || 2), mar = parseFloat(o.deltacl || 0.5);
     const rows = splitTop(ini.args[0]).map(r => { const p = r.lastIndexOf("/"); return { t: r.slice(0, p).trim(), h: parseFloat(r.slice(p + 1)) || 1 }; });
     const xs = splitTop(ini.args[1]).map(x => x.trim()); const n = xs.length;
-    const C = CM * .82;
+    const C = CM * .82 * (NHD.figScale || 1);
     const W = (lgt + 2 * mar + esp * (n - 1)) * C, x0 = lgt * C, Xk = k => x0 + (mar + esp * k) * C;
     const rh = rows.map(r => Math.max(r.h * C, 26)), ry = []; let acc = 0; rh.forEach(h => { ry.push(acc); acc += h; }); const H = acc;
     const id = ++UID; const lw = 1;
@@ -631,19 +631,35 @@
     return L <= 14 ? 4 : L <= 34 ? 2 : 1;
   }
 
+  /* Hình đặt bên phải: câu có đúng 1 hình TikZ (không phải bảng biến thiên), hình hẹp → tách hình ra khỏi đề bài */
+  const SIDE_MAX_PX = 232; // ≈ 1/3 bề rộng dòng
+  function sideFig(q) {
+    const de = q.de || ""; if ((de.match(/\\begin\{tikzpicture\}/g) || []).length !== 1 || /\\tkzTab/.test(de)) return null;
+    let a = de.indexOf("\\begin{tikzpicture}"), b = de.indexOf("\\end{tikzpicture}") + "\\end{tikzpicture}".length;
+    const cs = de.lastIndexOf("\\begin{center}", a); const ce = de.indexOf("\\end{center}", b);
+    if (cs >= 0 && ce >= 0 && !de.slice(cs + 14, a).trim() && !de.slice(b, ce).trim()) { a = cs; b = ce + "\\end{center}".length; }
+    const figTex = de.slice(de.indexOf("\\begin{tikzpicture}"), de.indexOf("\\end{tikzpicture}") + "\\end{tikzpicture}".length);
+    const html = tikz(figTex.replace(/^\\begin\{tikzpicture\}/, "").replace(/\\end\{tikzpicture\}$/, ""));
+    const m = /tikz-wrap" style="width:([\d.]+)px/.exec(html); if (!m || +m[1] > SIDE_MAX_PX) return null;
+    const rest = (de.slice(0, a) + " " + de.slice(b)).replace(/(\\\\\s*)+$/, "").trim();
+    if (!rest) return null;
+    return { figTex, figHtml: html, rest };
+  }
   /* hiển thị một câu: item = {q, order} ; mode "exam" | "key" (có đáp án) ; opts.sol: kèm lời giải; opts.n: số câu */
   function renderQuestion(item, n, mode, opts = {}) {
     const { q, order } = item;
+    const side = opts.side === false ? null : sideFig(q);
     let h = `<div class="q" data-k="${esc(q.k || q.id)}">`;
-    if (opts.swap) h += `<button class="swap noprint" data-swap="${opts.swap}" title="Thay bằng câu khác cùng dạng, cùng mức độ">⟳ Đổi câu</button>`;
+    if (opts.swap != null && opts.swap !== false) h += `<button class="swap noprint" data-swap="${opts.swap}" title="Thay bằng câu khác cùng dạng, cùng mức độ">⟳ Đổi câu</button>`;
     if (opts.meta) h += `<div class="meta"><span class="lv"><i class="${q.muc}">${q.muc}</i></span><span>${esc(q.id)}</span></div>`;
-    h += `<span class="qh">Câu ${n}.</span>${texToHtml(q.de)}`;
+    let body = `<span class="qh">Câu ${n}.</span>${texToHtml(side ? side.rest : q.de)}`;
     if (q.loai === "TN") {
-      const cols = optCols(q.pa);
-      h += `<div class="opts c${cols}">` + order.map((j, i) => `<div class="opt${mode === "key" && j === 0 ? " right" : ""}"><b>${"ABCD"[i]}.</b>${texToHtml(q.pa[j])}</div>`).join("") + "</div>";
+      let cols = optCols(q.pa); if (side) cols = cols === 4 ? 2 : 1;
+      body += `<div class="opts c${cols}">` + order.map((j, i) => `<div class="opt${mode === "key" && j === 0 ? " right" : ""}"><b>${"ABCD"[i]}.</b>${texToHtml(q.pa[j])}</div>`).join("") + "</div>";
     } else if (q.loai === "DS") {
-      h += order.map((j, i) => `<div class="ds-row"><b>${"abcd"[i]})</b><span>${texToHtml(q.y[j].t)}${mode === "key" ? ` <span class="ans">(${q.y[j].d ? "Đúng" : "Sai"})</span>` : ""}</span></div>`).join("");
-    } else if (mode === "key") h += `<div>Đáp số: <span class="ans">${texToHtml(q.da)}</span></div>`;
+      body += order.map((j, i) => `<div class="ds-row"><b>${"abcd"[i]})</b><span>${texToHtml(q.y[j].t)}${mode === "key" ? ` <span class="ans">(${q.y[j].d ? "Đúng" : "Sai"})</span>` : ""}</span></div>`).join("");
+    } else if (mode === "key") body += `<div>Đáp số: <span class="ans">${texToHtml(q.da)}</span></div>`;
+    h += side ? `<div class="qside"><div>${body}</div><div class="qf">${side.figHtml}</div></div>` : body;
     if (opts.sol && q.loigiai) h += `<div class="sol"><span class="lb">Lời giải.</span> ${texToHtml(q.loigiai)}</div>`;
     return h + "</div>";
   }
@@ -654,5 +670,5 @@
     return q.da;
   }
 
-  Object.assign(NHD, { esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, MUC, plainLen, findEnd });
+  Object.assign(NHD, { sideFig, esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, MUC, plainLen, findEnd });
 })(window);

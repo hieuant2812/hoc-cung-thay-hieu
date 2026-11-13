@@ -197,7 +197,7 @@
 
   /* ---------------------------------------------------------------- BƯỚC 3: thông tin */
   const S = window.SITE || {}; const D = S.de || {};
-  const FIELDS = { iSo: D.so || "", iTruong: D.truong || "", iKy: "KIỂM TRA GIỮA KÌ I", iNam: D.namHoc || "", iPhut: 90, iLoai: "ĐỀ CHÍNH THỨC", oSoMa: 4, oMaDau: "101", oKieu: "tang", oSeed: 2026 };
+  const FIELDS = { iSo: D.so || "", iTruong: D.truong || "", iKy: "KIỂM TRA GIỮA KÌ I", iNam: D.namHoc || "", iPhut: 90, iLoai: "ĐỀ CHÍNH THỨC", oSoMa: 4, oMaDau: "101", oKieu: "tang", oSeed: 2026, oTrang: "4" };
   const saved = LS.get("rd-info", {});
   Object.entries(FIELDS).forEach(([id, d]) => { $(id).value = saved[id] != null ? saved[id] : d; $(id).addEventListener("input", saveInfo); $(id).addEventListener("change", saveInfo); });
   ["oTronCau", "oTronY", "oMoi"].forEach(id => { if (saved[id] != null) $(id).checked = saved[id]; $(id).onchange = saveInfo; });
@@ -207,6 +207,7 @@
   function saveInfo() { const o = {}; Object.keys(FIELDS).forEach(id => o[id] = $(id).value); ["oTronCau", "oTronY", "oMoi"].forEach(id => o[id] = $(id).checked); o.mode = document.querySelector("input[name=mode]:checked").value; LS.set("rd-info", o); }
   const info = () => ({ so: $("iSo").value, truong: $("iTruong").value, ky: $("iKy").value, namHoc: $("iNam").value, monTen: $("iMon").value, lop: st.lop, phut: $("iPhut").value, loaiDe: $("iLoai").value, chinhThuc: !!$("iLoai").value });
   $("go4").onclick = () => { st.step = 4; drawTabs(); };
+  $("oTrang").addEventListener("change", () => { if (ex) { refit(); drawPreview(); } });
   $("btnHist").onclick = () => { if (confirm("Xoá lịch sử câu đã dùng của " + st.mon + " " + st.lop + "?")) { LS.set(key("used"), []); toast("Đã xoá lịch sử"); } };
 
   /* ---------------------------------------------------------------- BƯỚC 4: sinh đề */
@@ -222,8 +223,17 @@
     if (ex.short.length) warn.push(`Ngân hàng thiếu câu cho ${ex.short.length} vị trí (đã bỏ qua) — giảm số câu ở ô báo đỏ.`);
     if (ex.mode === "khac") { const dupN = countDup(); if (dupN) warn.push(`Ngân hàng không đủ để mọi mã khác hẳn nhau: có ${dupN} câu lặp lại giữa các mã.`); }
     $("genMsg").innerHTML = warn.length ? `<div class="note">${warn.map(esc).join("<br>")}</div>` : `<div class="note green">Đã sinh ${mas.length} mã đề (${t.TN} – ${t.DS} – ${t.TLN} câu): ${mas.join(", ")}.</div>`;
-    view = ex.mode === "goc" ? -1 : 0; $("genBox").classList.remove("hidden"); drawPreview();
+    view = ex.mode === "goc" ? -1 : 0; $("genBox").classList.remove("hidden"); refit(); drawPreview();
   };
+  function refit() {
+    const target = +$("oTrang").value || 0; const I = info();
+    const k = Out.fitLevel(v => Out.versionBlocks(Gen.partsOf(ex, v), I, ex.versions[v].ma), ex.versions.length, target);
+    ex.lv = Out.LEVELS[k]; NHD.figScale = ex.lv.fig;
+    const pages = Math.max(...ex.versions.map((V, v) => Out.paginate(Out.versionBlocks(Gen.partsOf(ex, v), I, V.ma), () => "", ex.lv).length));
+    const txt = `Mỗi mã đề ${pages} trang · cỡ chữ ${String(ex.lv.fs).replace(".", ",")}pt · hình ${Math.round(ex.lv.fig * 100)}%.`;
+    $("fitInfo") ? $("fitInfo").innerHTML = txt : $("genMsg").insertAdjacentHTML("beforeend", `<div class="note blue small" id="fitInfo">${txt}</div>`);
+    if (target && pages > target) $("fitInfo").innerHTML = txt + ` <b>Vẫn vượt ${target} trang</b> — thầy giảm bớt câu có hình lớn hoặc chọn số trang lớn hơn.`;
+  }
   function countDup() { const seen = new Map(); let d = 0; ex.versions.forEach(V => V.pick.forEach(q => { if (!q) return; if (seen.has(q.id)) d++; else seen.set(q.id, 1); })); return d; }
   const partsBase = () => Gen.baseParts(ex);
   function drawPreview() {
@@ -234,11 +244,12 @@
     $("vtabs").innerHTML = tabsV.map(([v, t]) => `<button type="button" data-v="${v}" aria-selected="${v === view}">${t}</button>`).join("");
     $("vtabs").querySelectorAll("button").forEach(b => b.onclick = () => { view = +b.dataset.v; drawPreview(); });
     let pages;
-    if (view === -1) pages = Out.paginate(Out.versionBlocks(partsBase(), info(), "GỐC", { dapan: true, swap: true }), (i, n) => `Trang ${i}/${n} – Đề gốc`);
-    else if (view === -2) pages = Out.paginate(Out.keysBlocks(allKeys(), st.mon), (i, n) => `Trang ${i}/${n} – Đáp án`);
-    else pages = Out.paginate(Out.versionBlocks(Gen.partsOf(ex, view), info(), ex.versions[view].ma, { swap: ex.mode === "khac" }), (i, n) => `Trang ${i}/${n} – Mã đề ${ex.versions[view].ma}`);
+    NHD.figScale = (ex.lv || Out.LEVELS[0]).fig; const LV = ex.lv;
+    if (view === -1) pages = Out.paginate(Out.versionBlocks(partsBase(), info(), "GỐC", { dapan: true, swap: true }), (i, n) => `Trang ${i}/${n} – Đề gốc`, LV);
+    else if (view === -2) pages = Out.paginate(Out.keysBlocks(allKeys(), st.mon), (i, n) => `Trang ${i}/${n} – Đáp án`, LV);
+    else pages = Out.paginate(Out.versionBlocks(Gen.partsOf(ex, view), info(), ex.versions[view].ma, { swap: ex.mode === "khac" }), (i, n) => `Trang ${i}/${n} – Mã đề ${ex.versions[view].ma}`, LV);
     const pv = $("preview"); const y = pv.scrollTop; pv.innerHTML = ""; pages.forEach(p => pv.appendChild(p)); pv.scrollTop = y;
-    pv.querySelectorAll("[data-swap]").forEach(b => b.onclick = () => { if (Gen.swap(ex, idx, Math.max(0, view), +b.dataset.swap, $("oSeed").value)) drawPreview(); else toast("Không còn câu nào khác cùng dạng, cùng mức độ"); });
+    pv.querySelectorAll("[data-swap]").forEach(b => b.onclick = () => { if (Gen.swap(ex, idx, Math.max(0, view), +b.dataset.swap, $("oSeed").value)) { refit(); drawPreview(); } else toast("Không còn câu nào khác cùng dạng, cùng mức độ"); });
   }
   const allKeys = () => ex.versions.map((V, i) => ({ ma: V.ma, keys: Gen.keys(ex, i) }));
 
@@ -248,10 +259,10 @@
   function loadScript(src) { return new Promise((res, rej) => { if (document.querySelector(`script[src="${src}"]`)) return res(); const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("Không tải được " + src)); document.head.appendChild(s); }); }
   function markUsed() { const u = new Set(LS.get(key("used"), [])); ex.versions.forEach(V => V.pick.forEach(q => q && u.add(q.id))); LS.set(key("used"), [...u]); }
   function allPages(withSol) {
-    const I = info(); const out = [];
+    const I = info(); const out = []; const LV = ex.lv; NHD.figScale = (LV || Out.LEVELS[0]).fig;
     ex.versions.forEach((V, i) => out.push({ name: "De_" + V.ma, pages: Out.paginate(Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma), (p, n) => `Trang ${p}/${n} – Mã đề ${V.ma}`) }));
-    out.push({ name: "DapAn", pages: Out.paginate(Out.keysBlocks(allKeys(), st.mon), (p, n) => `Trang ${p}/${n} – Đáp án`) });
-    if (withSol) ex.versions.forEach((V, i) => out.push({ name: "LoiGiai_" + V.ma, pages: Out.paginate(Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true }), (p, n) => `Trang ${p}/${n} – Lời giải mã ${V.ma}`) }));
+    out.push({ name: "DapAn", pages: Out.paginate(Out.keysBlocks(allKeys(), st.mon), (p, n) => `Trang ${p}/${n} – Đáp án`, LV) });
+    if (withSol) ex.versions.forEach((V, i) => out.push({ name: "LoiGiai_" + V.ma, pages: Out.paginate(Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true }), (p, n) => `Trang ${p}/${n} – Lời giải mã ${V.ma}`, LV) }));
     return out;
   }
   $("btnPrint").onclick = async () => {
@@ -267,12 +278,12 @@
       const folder = `De_${slug(st.mon)}${st.lop}_${slug(I.ky || "KiemTra")}`;
       const T = z.folder(folder + "/TeX");
       const opt = {};
-      ex.versions.forEach((V, i) => T.file(`De_${V.ma}.tex`, Out.doc(I, Out.versionTex(Gen.partsOf(ex, i), I, V.ma, opt))));
+      ex.versions.forEach((V, i) => T.file(`De_${V.ma}.tex`, Out.doc(I, Out.versionTex(Gen.partsOf(ex, i), I, V.ma, opt), ex.lv)));
       const keysT = Out.keysTex(allKeys(), st.mon);
-      T.file("DapAn_TongHop.tex", Out.doc(I, keysT));
-      T.file("TatCaMaDe_KemDapAn.tex", Out.doc(I, ex.versions.map((V, i) => Out.versionTex(Gen.partsOf(ex, i), I, V.ma, opt)).join("\n") + keysT));
-      if (withSol) T.file("LoiGiai_ChiTiet.tex", Out.doc(I, ex.versions.map((V, i) => Out.versionTex(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true })).join("\n")));
-      if (ex.mode === "goc") T.file("DeGoc_KemDapAn.tex", Out.doc(I, Out.versionTex(partsBase(), I, "GOC", { dapan: true, loigiai: withSol })));
+      T.file("DapAn_TongHop.tex", Out.doc(I, keysT, ex.lv));
+      T.file("TatCaMaDe_KemDapAn.tex", Out.doc(I, ex.versions.map((V, i) => Out.versionTex(Gen.partsOf(ex, i), I, V.ma, opt)).join("\n") + keysT, ex.lv));
+      if (withSol) T.file("LoiGiai_ChiTiet.tex", Out.doc(I, ex.versions.map((V, i) => Out.versionTex(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true })).join("\n"), ex.lv));
+      if (ex.mode === "goc") T.file("DeGoc_KemDapAn.tex", Out.doc(I, Out.versionTex(partsBase(), I, "GOC", { dapan: true, loigiai: withSol }), ex.lv));
       if ($("xMT").checked) z.file(folder + `/MaTran_DacTa.xls`, xlsBlob());
       z.file(folder + "/HUONG_DAN.txt", [
         "GÓI ĐỀ KIỂM TRA — tạo bởi trang Học cùng Thầy Hiếu", "",
