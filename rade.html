@@ -125,7 +125,11 @@
           <label class="chk"><input type="checkbox" id="oTronY"> Phần II: đảo thứ tự các ý a), b), c), d)</label>
           <label class="chk"><input type="checkbox" id="oMoi" checked> Ưu tiên câu chưa dùng ở các đề đã xuất trước đây <button class="btn ghost sm" id="btnHist" type="button" style="margin-left:6px">Xoá lịch sử</button></label>
           <div class="small muted">Phương án Phần I luôn được đảo (trong ngân hàng phương án đúng đứng đầu).</div>
-          <label class="f" style="max-width:220px">Hạt giống trộn (đổi số → đề khác)<input type="number" id="oSeed"></label>
+          <div class="grid2">
+            <label class="f">Số trang tối đa mỗi mã đề<select id="oTrang"><option value="4">4 trang (1 tờ A3 gấp đôi / 2 tờ A4 in 2 mặt)</option><option value="2">2 trang (1 tờ A4 in 2 mặt)</option><option value="6">6 trang</option><option value="8">8 trang</option><option value="0">Không giới hạn</option></select></label>
+            <label class="f">Hạt giống trộn (đổi số → đề khác)<input type="number" id="oSeed"></label>
+          </div>
+          <div class="small muted">Web tự thu nhỏ hình, cỡ chữ (không dưới 10,5pt) và khoảng cách để mỗi mã đề vừa số trang đã chọn.</div>
         </div>
       </fieldset>
     </div>
