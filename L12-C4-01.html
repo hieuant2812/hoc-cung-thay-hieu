@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phóng xạ và chu kì bán rã</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Bố cục: đồ thị lớn bên trái (giấy kẻ ô), bảng điều khiển bên phải; dưới là bảng biến thiên, câu hỏi, thử thách */
+:root {
+  --paper: #f6f7f4;
+  --card: #ffffff;
+  --ink: #1d2433;
+  --muted: #5d6677;
+  --line: #d9ddd6;
+  --grid: #e7eae3;
+  --accent: #1f5fbf;      /* đường cong y = f(x) */
+  --accent-soft: #e5eefb;
+  --deriv: #9a6a00;       /* đồ thị y' */
+  --up: #1b8a4b;          /* đồng biến, f' > 0 */
+  --down: #c2412d;        /* nghịch biến, f' < 0 */
+  --font-display: "Lexend", "Be Vietnam Pro", system-ui, sans-serif;
+  --font-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12161d; --card: #1a2029; --ink: #e8ebf0; --muted: #a2abb9;
+    --line: #2f3744; --grid: #232a34; --accent: #6ea8ff; --accent-soft: #1e2b40;
+    --deriv: #e2b54a; --up: #4cc985; --down: #ff7a63; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12161d; --card: #1a2029; --ink: #e8ebf0; --muted: #a2abb9;
+  --line: #2f3744; --grid: #232a34; --accent: #6ea8ff; --accent-soft: #1e2b40;
+  --deriv: #e2b54a; --up: #4cc985; --down: #ff7a63; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.5;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 20px 20px 48px; display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.code { font-family: var(--font-display); font-weight: 600; font-size: 13px; letter-spacing: .06em; color: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(22px, 3vw, 32px); line-height: 1.2; margin: 4px 0 0; text-wrap: balance; max-width: 30ch; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0 0 10px; }
+.modes { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--card); }
+.modes button { border: 0; background: none; color: var(--muted); font: 600 15px var(--font-body); padding: 7px 16px; border-radius: 999px; cursor: pointer; }
+.modes button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.graph-card { padding: 0; overflow: hidden; position: relative; }
+.graph-card canvas { display: block; width: 100%; height: clamp(340px, 62vh, 640px); touch-action: none; cursor: crosshair; }
+.graph-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; }
+.graph-legend { position: absolute; left: 12px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; color: var(--muted); background: color-mix(in srgb, var(--card) 88%, transparent); padding: 4px 10px; border-radius: 8px; }
+.sw { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.btn { border: 1px solid var(--line); background: var(--card); color: var(--ink); font: 600 15px var(--font-body); padding: 7px 12px; border-radius: 9px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn.icon { width: 40px; padding: 7px 0; font-size: 18px; line-height: 1; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.eq { font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--accent); margin: 2px 0 12px; overflow-wrap: anywhere; }
+.eq.small { font-size: 17px; color: var(--deriv); margin-bottom: 4px; }
+.sl { display: grid; grid-template-columns: 26px 1fr 78px; align-items: center; gap: 10px; margin: 10px 0; }
+.sl label { font-family: var(--font-display); font-weight: 600; font-size: 20px; font-style: italic; }
+.sl input[type=range] { width: 100%; accent-color: var(--accent); height: 28px; }
+.sl input[type=number] { width: 78px; font: 600 16px var(--font-body); padding: 5px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font-variant-numeric: tabular-nums; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.presets .btn { font-size: 14px; padding: 5px 10px; font-weight: 500; }
+.obs { display: grid; gap: 6px; margin: 0; }
+.obs div { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+.obs dt { color: var(--muted); }
+.obs dd { margin: 0; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.chip { display: inline-block; font-size: 13px; font-weight: 600; padding: 2px 10px; border-radius: 999px; }
+.chip.up { background: color-mix(in srgb, var(--up) 16%, transparent); color: var(--up); }
+.chip.down { background: color-mix(in srgb, var(--down) 16%, transparent); color: var(--down); }
+.chip.info { background: var(--accent-soft); color: var(--accent); }
+.warn { border-left: 4px solid var(--down); background: color-mix(in srgb, var(--down) 10%, transparent); padding: 8px 12px; border-radius: 6px; font-size: 15px; margin-top: 10px; }
+.toggles { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; font-size: 15px; }
+.toggles label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.bbt-wrap { overflow-x: auto; }
+#bbt { display: block; width: 100%; min-width: 520px; max-width: 760px; height: auto; }
+#bbt text { font-family: var(--font-body); fill: var(--ink); }
+.lower { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+ol.q { margin: 0; padding-left: 22px; display: grid; gap: 8px; }
+.ch-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.ch-tabs .btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.ch-task { font-weight: 600; margin: 0 0 8px; }
+.checks { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 4px; font-size: 15px; }
+.checks li::before { content: "○"; display: inline-block; width: 22px; color: var(--muted); }
+.checks li.ok::before { content: "●"; color: var(--up); }
+.result { font-family: var(--font-display); font-weight: 600; font-size: 18px; }
+.result.ok { color: var(--up); }
+.note { font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+body.teacher .student-only { display: none !important; }
+body.teacher .graph-card canvas { height: clamp(420px, 74vh, 760px); }
+@media (max-width: 900px) {
+  .main, .lower { grid-template-columns: 1fr; }
+  .graph-card canvas { height: 56vh; min-height: 320px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---- bổ sung cho các trang khác ---- */
+.cv { display: block; width: 100%; height: clamp(320px, 56vh, 600px); touch-action: none; cursor: crosshair; background: var(--card); }
+body.teacher .cv { height: clamp(400px, 70vh, 760px); }
+.cv.half { height: clamp(220px, 34vh, 380px); }
+body.teacher .cv.half { height: clamp(260px, 40vh, 440px); }
+.split { border-top: 1px solid var(--line); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.seg .btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.formula { font-family: var(--font-display); font-weight: 600; font-size: 18px; margin: 6px 0; overflow-wrap: anywhere; }
+.big { font-family: var(--font-display); font-weight: 600; font-size: 22px; color: var(--accent); }
+.mc { display: grid; gap: 6px; margin: 8px 0; }
+.mc button { text-align: left; }
+.mc button.right { border-color: var(--up); background: color-mix(in srgb, var(--up) 14%, transparent); }
+.mc button.wrong { border-color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
+.hint { font-size: 15px; color: var(--muted); }
+@media (max-width: 900px) { .cv { height: 52vh; min-height: 300px; } }
+[hidden] { display: none !important; }
+label.f { display: grid; gap: 4px; font-size: 14px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+select, .tbl input, input[type=text] { font: 500 15px var(--font-body); padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); }
+.tbl { border-collapse: collapse; } .tbl th, .tbl td { border-bottom: 1px dashed var(--line); padding: 3px 6px; text-align: left; font-variant-numeric: tabular-nums; }
+</style>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"></head>
+<body><!--site-strip--><div style="background:#fff;border-top:4px solid #ff6f4a;border-bottom:1px solid #eee2d0;color:#66708a;font:14.5px 'Be Vietnam Pro',system-ui,sans-serif;display:flex;gap:16px;align-items:center;padding:7px 18px;flex-wrap:wrap"><a href="../mophong.html" style="color:#ff6f4a;text-decoration:none;font-weight:700">&larr; Tất cả mô phỏng</a><a href="../index.html" style="color:#1d2742;text-decoration:none;font-weight:600">Trang chủ</a><span style="margin-left:auto;font-weight:600;color:#1d2742">Học cùng Thầy Hiếu</span></div><!--/site-strip-->
+<div class="wrap">
+  <header>
+    <div>
+      <div class="code">L12-C4-01 · VẬT LÍ 12 · CHƯƠNG IV · VẬT LÍ HẠT NHÂN</div>
+      <h1>1000 hạt nhân phân rã ngẫu nhiên: vì sao số còn lại vẫn giảm theo một quy luật?</h1>
+    </div>
+    <div class="modes" role="group" aria-label="Chế độ hiển thị">
+      <button type="button" id="mode-student" aria-pressed="true">Học sinh</button>
+      <button type="button" id="mode-teacher" aria-pressed="false">Chiếu lớp</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <section class="card graph-card" id="graph-card" aria-label="Các hạt nhân và đồ thị N theo t">
+      <div style="display:grid;grid-template-columns:1fr 1.2fr">
+        <canvas class="cv" id="cv" aria-label="1000 hạt nhân"></canvas>
+        <canvas class="cv" id="gr" style="border-left:1px solid var(--line)" aria-label="Đồ thị số hạt nhân còn lại"></canvas>
+      </div>
+      <div class="graph-tools"><button class="btn" type="button" id="fs">Toàn màn hình</button></div>
+    </section>
+    <aside class="card" aria-label="Bảng điều khiển">
+<div class="sl" style="grid-template-columns:96px 1fr 72px"><label for="T" style="font-size:15px;font-style:normal">Chu kì bán rã T (s)</label><input type="range" id="T" min="2" max="20" step="1"><input type="number" id="Tn" min="2" max="20" step="1" aria-label="Chu kì bán rã T (s)" style="width:72px"></div>
+      <div class="presets"><button class="btn" type="button" id="go">▶ Bắt đầu</button><button class="btn" type="button" id="rs">↺ Làm lại</button></div>
+      <div class="formula">N = N₀·2<sup>−t/T</sup> = N₀·e<sup>−λt</sup> ; λ = ln2 / T</div>
+      <dl class="obs" id="obs"></dl>
+    </aside>
+  </div>
+<div class="lower student-only">
+<section class="card"><h2>Câu hỏi gợi mở</h2><ol class="q"><li>Có đoán trước được hạt nhân nào sẽ phân rã tiếp theo không?</li><li>Sau đúng một chu kì bán rã, số hạt còn lại có đúng bằng 500 không? Vì sao chỉ "xấp xỉ"?</li><li>Sau 2T, 3T còn lại bao nhiêu phần số hạt ban đầu?</li></ol></section>
+<section class="card" aria-live="polite"><h2>Thử thách</h2><p class="ch-task">Sau 3 chu kì bán rã, số hạt nhân chưa phân rã còn lại bằng bao nhiêu phần số hạt nhân ban đầu?</p><div class="mc" id="mc"></div><div class="result" id="mc-res"></div></section>
+</div>
+
+</div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const EPS = 1e-9;
+function r2(v) { return Math.round(v * 100) / 100; }
+function isNice(v) { return Math.abs(v - r2(v)) < 1e-7; }
+function num(v, dp) {
+  const k = Math.pow(10, dp == null ? 2 : dp);
+  let x = Math.round(v * k) / k; if (Math.abs(x) < 1e-12) x = 0;
+  const s = String(x).replace(".", ",");
+  return x < 0 ? "−" + s.slice(1) : s;
+}
+function val(v) { return (isNice(v) ? "" : "≈ ") + num(v); }
+function pt(x, y) { return "(" + val(x) + "; " + val(y) + ")"; }
+function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+function colors() {
+  return { grid: css("--grid"), line: css("--line"), ink: css("--ink"), muted: css("--muted"), acc: css("--accent"),
+    accSoft: css("--accent-soft"), der: css("--deriv"), up: css("--up"), down: css("--down"), card: css("--card"), paper: css("--paper") };
+}
+const FONT = "'Be Vietnam Pro', system-ui, sans-serif";
+
+class Plot {
+  constructor(canvas, o) {
+    this.cv = canvas; this.ctx = canvas.getContext("2d");
+    o = o || {};
+    this.cx = o.cx || 0; this.cy = o.cy || 0; this.sx = o.sx || 50; this.sy = o.sy || this.sx;
+    this.span = o.span || null; // nửa bề rộng theo x mong muốn khi đổi kích thước
+    this.equal = o.equal !== false && !o.sy;
+    this.w = 0; this.h = 0; this.grid = o.grid !== false; this.xlabels = o.xlabels || null;
+  }
+  resize() {
+    const r = this.cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    this.w = r.width; this.h = r.height;
+    this.cv.width = Math.round(r.width * dpr); this.cv.height = Math.round(r.height * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (this.span) { const ratio = this.sy / this.sx; this.sx = this.w / (2 * this.span); this.sy = this.equal ? this.sx : this.sx * ratio; }
+  }
+  X(x) { return this.w / 2 + (x - this.cx) * this.sx; }
+  Y(y) { return this.h / 2 - (y - this.cy) * this.sy; }
+  WX(px) { return this.cx + (px - this.w / 2) / this.sx; }
+  WY(py) { return this.cy - (py - this.h / 2) / this.sy; }
+  niceStep(pp) { const raw = 64 / pp, p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+  base(C) {
+    const c = this.ctx, w = this.w, h = this.h; this.C = C;
+    c.clearRect(0, 0, w, h); c.fillStyle = C.card; c.fillRect(0, 0, w, h);
+    const stx = this.xstep || this.niceStep(this.sx), sty = this.niceStep(this.sy);
+    const x0 = this.WX(0), x1 = this.WX(w), yT = this.WY(0), yB = this.WY(h);
+    if (this.grid) {
+      c.lineWidth = 1; c.strokeStyle = C.grid; c.beginPath();
+      for (let x = Math.ceil(x0 / stx) * stx; x <= x1; x += stx) { const p = Math.round(this.X(x)) + .5; c.moveTo(p, 0); c.lineTo(p, h); }
+      for (let y = Math.ceil(yB / sty) * sty; y <= yT; y += sty) { const p = Math.round(this.Y(y)) + .5; c.moveTo(0, p); c.lineTo(w, p); }
+      c.stroke();
+    }
+    const ax = Math.min(Math.max(this.Y(0), 0), h), ay = Math.min(Math.max(this.X(0), 0), w);
+    this.ax = ax; this.ay = ay;
+    c.strokeStyle = C.muted; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, ax); c.lineTo(w, ax); c.moveTo(ay, 0); c.lineTo(ay, h); c.stroke();
+    c.fillStyle = C.muted; c.font = "13px " + FONT; c.textAlign = "center"; c.textBaseline = "top";
+    for (let x = Math.ceil(x0 / stx) * stx; x <= x1; x += stx) {
+      if (Math.abs(x) < stx / 2) continue;
+      c.fillText(this.xlabels ? this.xlabels(x) : num(x), this.X(x), Math.min(ax + 4, h - 16));
+    }
+    c.textAlign = "right"; c.textBaseline = "middle";
+    for (let y = Math.ceil(yB / sty) * sty; y <= yT; y += sty) { if (Math.abs(y) < sty / 2) continue; c.fillText(num(y), Math.max(ay - 5, 30), this.Y(y)); }
+    c.textAlign = "left"; c.textBaseline = "top"; c.fillText("O", ay + 4, ax + 3);
+    c.font = "italic 600 15px " + FONT; c.fillText(this.yname || "y", ay + 8, 6); c.textAlign = "right"; c.fillText(this.xname || "x", w - 6, ax - 22);
+  }
+  curve(fn, color, width, dash, from, to) {
+    const c = this.ctx, h = this.h; c.strokeStyle = color; c.lineWidth = width || 3; c.setLineDash(dash || []);
+    c.beginPath(); let pen = false, lastY = null;
+    const p0 = from == null ? 0 : Math.max(0, this.X(from)), p1 = to == null ? this.w : Math.min(this.w, this.X(to));
+    for (let px = p0; px <= p1; px += 1) {
+      const y = fn(this.WX(px)), py = this.Y(y);
+      if (!isFinite(py) || py < -3 * h || py > 4 * h || (lastY != null && Math.abs(py - lastY) > 2 * h)) { pen = false; lastY = isFinite(py) ? py : null; continue; }
+      if (pen) c.lineTo(px, py); else { c.moveTo(px, py); pen = true; }
+      lastY = py;
+    }
+    c.stroke(); c.setLineDash([]);
+  }
+  seg(x1, y1, x2, y2, color, width, dash) {
+    const c = this.ctx; c.strokeStyle = color; c.lineWidth = width || 2; c.setLineDash(dash || []);
+    c.beginPath(); c.moveTo(this.X(x1), this.Y(y1)); c.lineTo(this.X(x2), this.Y(y2)); c.stroke(); c.setLineDash([]);
+  }
+  hline(y, color, width, dash) { this.seg(this.WX(0), y, this.WX(this.w), y, color, width, dash); }
+  vline(x, color, width, dash) { this.seg(x, this.WY(0), x, this.WY(this.h), color, width, dash); }
+  arrow(x1, y1, x2, y2, color, width, label) {
+    const c = this.ctx, X1 = this.X(x1), Y1 = this.Y(y1), X2 = this.X(x2), Y2 = this.Y(y2);
+    const L = Math.hypot(X2 - X1, Y2 - Y1); if (L < 1) return;
+    const ux = (X2 - X1) / L, uy = (Y2 - Y1) / L, hl = Math.min(14, L * 0.4);
+    c.strokeStyle = color; c.fillStyle = color; c.lineWidth = width || 3;
+    c.beginPath(); c.moveTo(X1, Y1); c.lineTo(X2 - ux * hl * 0.8, Y2 - uy * hl * 0.8); c.stroke();
+    c.beginPath(); c.moveTo(X2, Y2); c.lineTo(X2 - ux * hl - uy * hl * 0.5, Y2 - uy * hl + ux * hl * 0.5);
+    c.lineTo(X2 - ux * hl + uy * hl * 0.5, Y2 - uy * hl - ux * hl * 0.5); c.closePath(); c.fill();
+    if (label) { c.font = "italic 600 16px " + FONT; c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText(label, X2 + 6, Y2 - 4); }
+  }
+  dot(x, y, color, hollow, label, below, r) {
+    const c = this.ctx, px = this.X(x), py = this.Y(y); r = r || 6.5;
+    c.beginPath(); c.arc(px, py, r, 0, Math.PI * 2);
+    if (hollow) { c.fillStyle = this.C.card; c.fill(); c.lineWidth = 2.5; c.strokeStyle = color; c.stroke(); } else { c.fillStyle = color; c.fill(); }
+    if (label) { c.font = "600 15px " + FONT; c.fillStyle = color; c.textAlign = "center"; c.textBaseline = below ? "top" : "bottom"; c.fillText(label, px, py + (below ? 11 : -11)); }
+  }
+  text(x, y, s, color, align, base, size, weight) {
+    const c = this.ctx; c.font = (weight || 600) + " " + (size || 15) + "px " + FONT; c.fillStyle = color;
+    c.textAlign = align || "left"; c.textBaseline = base || "middle"; c.fillText(s, this.X(x), this.Y(y));
+  }
+  poly(pts, fill, alpha, stroke, width) {
+    if (!pts.length) return; const c = this.ctx; c.beginPath();
+    pts.forEach((p, i) => i ? c.lineTo(this.X(p[0]), this.Y(p[1])) : c.moveTo(this.X(p[0]), this.Y(p[1]))); c.closePath();
+    if (fill) { c.globalAlpha = alpha == null ? 1 : alpha; c.fillStyle = fill; c.fill(); c.globalAlpha = 1; }
+    if (stroke) { c.strokeStyle = stroke; c.lineWidth = width || 2; c.stroke(); }
+  }
+  zoom(k) { this.sx *= k; this.sy *= k; if (this.span) this.span /= k; }
+  onPointer(cb, hover) {
+    const cv = this.cv; let down = false;
+    const at = e => { const r = cv.getBoundingClientRect(); return [this.WX(e.clientX - r.left), this.WY(e.clientY - r.top)]; };
+    cv.addEventListener("pointerdown", e => { down = true; try { cv.setPointerCapture(e.pointerId); } catch (_) {} cb(...at(e), "down", e); });
+    cv.addEventListener("pointermove", e => { if (down) cb(...at(e), "move", e); else if (hover && e.pointerType === "mouse") cb(...at(e), "hover", e); });
+    const up = e => { if (down) { down = false; cb(...at(e), "up", e); } };
+    cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  }
+}
+
+function setupPage(redrawAll) {
+  const setMode = t => {
+    document.body.classList.toggle("teacher", t);
+    $("mode-teacher").setAttribute("aria-pressed", String(t));
+    $("mode-student").setAttribute("aria-pressed", String(!t));
+    setTimeout(redrawAll, 30);
+  };
+  $("mode-teacher").addEventListener("click", () => setMode(true));
+  $("mode-student").addEventListener("click", () => setMode(false));
+  const fsb = $("fs");
+  if (fsb) fsb.addEventListener("click", () => {
+    const g = $("graph-card");
+    try { if (document.fullscreenElement) document.exitFullscreen(); else if (g.requestFullscreen) g.requestFullscreen().catch(() => {}); } catch (_) {}
+  });
+  document.addEventListener("fullscreenchange", () => setTimeout(redrawAll, 60));
+  window.addEventListener("resize", redrawAll);
+  try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redrawAll); } catch (_) {}
+  new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+}
+
+function bindSlider(id, obj, key, onChange) {
+  const r = $(id), n = $(id + "n");
+  r.value = obj[key]; if (n) n.value = obj[key];
+  r.addEventListener("input", () => { obj[key] = +r.value; if (n) n.value = obj[key]; onChange(); });
+  if (n) n.addEventListener("input", () => { const v = parseFloat(String(n.value).replace(",", ".")); if (isFinite(v)) { obj[key] = v; r.value = v; onChange(); } });
+}
+function setSlider(id, v) { $(id).value = v; const n = $(id + "n"); if (n) n.value = v; }
+
+function renderChecks(ulId, resId, items) {
+  const ul = $(ulId); ul.innerHTML = ""; let all = true;
+  for (const [t, ok] of items) { all = all && !!ok; const li = document.createElement("li"); li.textContent = t; if (ok) li.className = "ok"; ul.appendChild(li); }
+  const r = $(resId); r.textContent = all ? "Đạt! Em đã hoàn thành thử thách." : "Chưa đạt, thử điều chỉnh tiếp."; r.className = "result" + (all ? " ok" : "");
+}
+function setupTabs(sel, onPick) {
+  const bs = document.querySelectorAll(sel);
+  bs.forEach(b => b.addEventListener("click", () => { bs.forEach(x => x.setAttribute("aria-pressed", String(x === b))); onPick(b.dataset.v, b); }));
+}
+
+// ---- lượng giác: hiển thị góc theo π và giá trị đặc biệt ----
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; }
+function radFmt(rad) {
+  const n = rad * 12 / Math.PI, k = Math.round(n);
+  if (Math.abs(n - k) > 1e-6) return "≈ " + num(rad);
+  if (k === 0) return "0";
+  const g = gcd(k, 12), p = k / g, q = 12 / g;
+  const top = (p < 0 ? "−" : "") + (Math.abs(p) === 1 ? "" : Math.abs(p)) + "π";
+  return q === 1 ? top : top + "/" + q;
+}
+const REF = { 0: "0", 30: "1/2", 45: "√2/2", 60: "√3/2", 90: "1" };
+function refOf(t) { return t <= 90 ? t : t <= 180 ? 180 - t : t <= 270 ? t - 180 : 360 - t; }
+function exactSin(deg) {
+  if (Math.abs(deg - Math.round(deg)) > 1e-9) return null;
+  const t = ((Math.round(deg) % 360) + 360) % 360; const r = refOf(t);
+  if (!(r in REF)) return null; const v = REF[r];
+  return (t > 180 && t < 360 && v !== "0" ? "−" : "") + v;
+}
+function exactCos(deg) { return exactSin(90 - deg); }
+function exactTan(deg) {
+  if (Math.abs(deg - Math.round(deg)) > 1e-9) return null;
+  const t = ((Math.round(deg) % 360) + 360) % 360; const r = refOf(t);
+  const T = { 0: "0", 30: "√3/3", 45: "1", 60: "√3" };
+  if (r === 90) return "không xác định";
+  if (!(r in T)) return null; const v = T[r];
+  const neg = (t > 90 && t < 180) || (t > 270 && t < 360);
+  return (neg && v !== "0" ? "−" : "") + v;
+}
+function piLabels(x) {
+  const n = x / (Math.PI / 2), k = Math.round(n);
+  if (Math.abs(n - k) > 1e-6) return "";
+  return radFmt(x);
+}
+
+// ---- không gian 3 chiều: phép chiếu song song, kéo để xoay ----
+class View3D {
+  constructor(canvas, o) {
+    o = o || {}; this.cv = canvas; this.ctx = canvas.getContext("2d");
+    this.yaw = o.yaw != null ? o.yaw : -2.25; this.pitch = o.pitch != null ? o.pitch : 0.42;
+    this.range = o.range || 5; this.center = o.center || [0, 0, 0]; this.w = 0; this.h = 0; this.zoomK = 1;
+    let drag = null;
+    canvas.addEventListener("pointerdown", e => { drag = [e.clientX, e.clientY, this.yaw, this.pitch]; try { canvas.setPointerCapture(e.pointerId); } catch (_) {} });
+    canvas.addEventListener("pointermove", e => {
+      if (!drag) return;
+      this.yaw = drag[2] - (e.clientX - drag[0]) * 0.01;
+      this.pitch = Math.max(-1.45, Math.min(1.45, drag[3] + (e.clientY - drag[1]) * 0.01));
+      if (this.onRotate) this.onRotate();
+    });
+    const up = () => { drag = null; }; canvas.addEventListener("pointerup", up); canvas.addEventListener("pointercancel", up);
+    canvas.style.cursor = "grab";
+  }
+  resize() {
+    const r = this.cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    this.w = r.width; this.h = r.height; this.cv.width = Math.round(r.width * dpr); this.cv.height = Math.round(r.height * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.s = Math.min(this.w, this.h) / (2.3 * this.range) * this.zoomK;
+  }
+  P(p) {
+    const x = p[0] - this.center[0], y = p[1] - this.center[1], z = p[2] - this.center[2];
+    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const u = x * cy - y * sy, v = x * sy + y * cy;
+    const up = z * cp + v * sp, depth = v * cp - z * sp;
+    return [this.w / 2 + u * this.s, this.h / 2 - up * this.s, depth];
+  }
+  clear(C) { this.C = C; const c = this.ctx; c.clearRect(0, 0, this.w, this.h); c.fillStyle = C.card; c.fillRect(0, 0, this.w, this.h); }
+  seg(a, b, color, width, dash) {
+    const c = this.ctx, A = this.P(a), B = this.P(b); c.strokeStyle = color; c.lineWidth = width || 2; c.setLineDash(dash || []);
+    c.beginPath(); c.moveTo(A[0], A[1]); c.lineTo(B[0], B[1]); c.stroke(); c.setLineDash([]);
+  }
+  arrow(a, b, color, width, label) {
+    const c = this.ctx, A = this.P(a), B = this.P(b), L = Math.hypot(B[0] - A[0], B[1] - A[1]); if (L < 2) return;
+    const ux = (B[0] - A[0]) / L, uy = (B[1] - A[1]) / L, hl = Math.min(13, L * 0.4);
+    c.strokeStyle = color; c.fillStyle = color; c.lineWidth = width || 3; c.setLineDash([]);
+    c.beginPath(); c.moveTo(A[0], A[1]); c.lineTo(B[0] - ux * hl * 0.8, B[1] - uy * hl * 0.8); c.stroke();
+    c.beginPath(); c.moveTo(B[0], B[1]); c.lineTo(B[0] - ux * hl - uy * hl * 0.5, B[1] - uy * hl + ux * hl * 0.5); c.lineTo(B[0] - ux * hl + uy * hl * 0.5, B[1] - uy * hl - ux * hl * 0.5); c.closePath(); c.fill();
+    if (label) { c.font = "italic 600 16px " + FONT; c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText(label, B[0] + 5, B[1] - 3); }
+  }
+  dot(p, color, label, r, hollow) {
+    const c = this.ctx, A = this.P(p); c.beginPath(); c.arc(A[0], A[1], r || 5.5, 0, Math.PI * 2);
+    if (hollow) { c.fillStyle = this.C.card; c.fill(); c.strokeStyle = color; c.lineWidth = 2.5; c.stroke(); } else { c.fillStyle = color; c.fill(); }
+    if (label) { c.font = "600 15px " + FONT; c.fillStyle = color; c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText(label, A[0] + 7, A[1] - 5); }
+  }
+  text(p, s, color, size, align) { const c = this.ctx, A = this.P(p); c.font = "600 " + (size || 15) + "px " + FONT; c.fillStyle = color; c.textAlign = align || "center"; c.textBaseline = "middle"; c.fillText(s, A[0], A[1]); }
+  poly(pts, fill, alpha, stroke, width, dash) {
+    if (!pts.length) return; const c = this.ctx; c.beginPath();
+    pts.forEach((p, i) => { const A = this.P(p); i ? c.lineTo(A[0], A[1]) : c.moveTo(A[0], A[1]); }); c.closePath();
+    if (fill) { c.globalAlpha = alpha == null ? 0.2 : alpha; c.fillStyle = fill; c.fill(); c.globalAlpha = 1; }
+    if (stroke) { c.strokeStyle = stroke; c.lineWidth = width || 2; c.setLineDash(dash || []); c.stroke(); c.setLineDash([]); }
+  }
+  circle3(center, n, r, color, width, dash, fill, alpha) { // đường tròn tâm center, pháp tuyến n, bán kính r
+    const [e1, e2] = basis(n), pts = [];
+    for (let i = 0; i <= 72; i++) { const t = i / 72 * 2 * Math.PI; pts.push(add(center, add(mul(e1, r * Math.cos(t)), mul(e2, r * Math.sin(t))))); }
+    this.poly(pts, fill, alpha, color, width, dash);
+  }
+  axes(C, L, names) {
+    L = L || this.range * 0.9; names = names || ["x", "y", "z"];
+    [[1, 0, 0], [0, 1, 0], [0, 0, 1]].forEach((e, i) => {
+      this.seg(mul(e, -L), [0, 0, 0], C.muted, 1.2, [4, 4]);
+      this.arrow([0, 0, 0], mul(e, L), C.muted, 1.6);
+      this.text(mul(e, L * 1.07), names[i], C.muted, 16);
+    });
+    this.text([-0.25, -0.25, -0.25], "O", C.muted, 14);
+  }
+}
+const add = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const mul = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const norm3 = a => Math.hypot(a[0], a[1], a[2]);
+const unit = a => { const l = norm3(a) || 1; return mul(a, 1 / l); };
+function basis(n) { n = unit(n); const t = Math.abs(n[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0]; const e1 = unit(cross(n, t)); return [e1, cross(n, e1)]; }
+// giao của mặt phẳng n·X = d với hộp [lo, hi]^3: trả về đa giác lồi (đã sắp thứ tự)
+function planeBox(n, d, lo, hi) {
+  const V = []; for (const x of [lo[0], hi[0]]) for (const y of [lo[1], hi[1]]) for (const z of [lo[2], hi[2]]) V.push([x, y, z]);
+  const E = []; for (let i = 0; i < 8; i++) for (let j = i + 1; j < 8; j++) { let diff = 0; for (let k = 0; k < 3; k++) if (V[i][k] !== V[j][k]) diff++; if (diff === 1) E.push([V[i], V[j]]); }
+  const pts = [];
+  for (const [a, b] of E) {
+    const fa = dot3(n, a) - d, fb = dot3(n, b) - d;
+    if (Math.abs(fa) < 1e-9) pts.push(a);
+    if (fa * fb < -1e-18) { const t = fa / (fa - fb); pts.push(add(a, mul(sub(b, a), t))); }
+  }
+  const u = []; pts.forEach(p => { if (!u.some(q => norm3(sub(p, q)) < 1e-7)) u.push(p); });
+  if (u.length < 3) return u;
+  const c = mul(u.reduce((s, p) => add(s, p), [0, 0, 0]), 1 / u.length), [e1, e2] = basis(n);
+  return u.sort((p, q) => Math.atan2(dot3(sub(p, c), e2), dot3(sub(p, c), e1)) - Math.atan2(dot3(sub(q, c), e2), dot3(sub(q, c), e1)));
+}
+function v3(p) { return "(" + num(p[0]) + "; " + num(p[1]) + "; " + num(p[2]) + ")"; }
+
+// ---- câu hỏi trắc nghiệm nhanh ----
+function makeMC(boxId, resId, opts, ok, hintWrong) {
+  let picked = null;
+  const render = () => {
+    const box = $(boxId); box.innerHTML = "";
+    opts.forEach((t, j) => {
+      const b = document.createElement("button"); b.className = "btn"; b.type = "button"; b.textContent = String.fromCharCode(65 + j) + ". " + t;
+      if (picked != null) { if (j === ok) b.classList.add("right"); else if (j === picked) b.classList.add("wrong"); }
+      b.addEventListener("click", () => { picked = j; render(); }); box.appendChild(b);
+    });
+    const r = $(resId);
+    if (picked == null) { r.textContent = ""; r.className = "result"; }
+    else if (picked === ok) { r.textContent = "Chính xác!"; r.className = "result ok"; }
+    else { r.textContent = hintWrong || "Chưa đúng, thử lại."; r.className = "result"; }
+  };
+  render();
+}
+function simpson(f, a, b, n) { n = n || 2000; if (n % 2) n++; const h = (b - a) / n; let s = f(a) + f(b); for (let i = 1; i < n; i++) s += (i % 2 ? 4 : 2) * f(a + i * h); return s * h / 3; }
+
+// ---- kéo nhiều điểm trên Plot ----
+function dragPoints(P, keys, get, set, snap, onChange) {
+  let cur = null;
+  P.onPointer((x, y, t) => {
+    if (t === "down") { cur = null; let bd = 0.7 * 50 / P.sx; keys().forEach(k => { const p = get(k), d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; cur = k; } }); }
+    if (cur && (t === "down" || t === "move")) { const s = snap || 0; const p = s ? [Math.round(x / s) * s, Math.round(y / s) * s] : [x, y]; if (set(cur, p) !== false) onChange(); }
+    if (t === "up") cur = null;
+  });
+}
+function angleAt(P0, A, B) { // góc AP0B (độ)
+  const u = [A[0] - P0[0], A[1] - P0[1]], v = [B[0] - P0[0], B[1] - P0[1]];
+  const c = (u[0] * v[0] + u[1] * v[1]) / (Math.hypot(...u) * Math.hypot(...v) || 1);
+  return Math.acos(Math.max(-1, Math.min(1, c))) * 180 / Math.PI;
+}
+function arcMark(P, V0, A, B, r, color, width, fill) { // cung đánh dấu góc tại V0 (r tính bằng px)
+  const c = P.ctx, a1 = Math.atan2(-(A[1] - V0[1]), A[0] - V0[0]), a2 = Math.atan2(-(B[1] - V0[1]), B[0] - V0[0]);
+  let d = a2 - a1; while (d < -Math.PI) d += 2 * Math.PI; while (d > Math.PI) d -= 2 * Math.PI;
+  c.beginPath(); if (fill) c.moveTo(P.X(V0[0]), P.Y(V0[1]));
+  c.arc(P.X(V0[0]), P.Y(V0[1]), r, a1, a1 + d, d < 0);
+  if (fill) { c.closePath(); c.globalAlpha = 0.3; c.fillStyle = fill; c.fill(); c.globalAlpha = 1; }
+  c.strokeStyle = color; c.lineWidth = width || 2; c.stroke();
+}
+function lbl(P, p, G, name, color, size) { const k = 0.45 * 50 / P.sx / (Math.hypot(p[0] - G[0], p[1] - G[1]) || 1); P.text(p[0] + (p[0] - G[0]) * k, p[1] + (p[1] - G[1]) * k, name, color, "center", "middle", size || 17, 700); }
+
+// ---- canvas thô (không dùng hệ trục) ----
+function rawCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1, c = cv.getContext("2d");
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const C = colors(); c.fillStyle = C.card; c.fillRect(0, 0, r.width, r.height);
+  return { c, w: r.width, h: r.height, C };
+}
+function txt(c, s, x, y, color, size, align, base, weight) { c.font = (weight || 600) + " " + (size || 15) + "px " + FONT; c.fillStyle = color; c.textAlign = align || "center"; c.textBaseline = base || "middle"; c.fillText(s, x, y); }
+function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function arrow2(c, x1, y1, x2, y2, color, width) { const L = Math.hypot(x2 - x1, y2 - y1); if (L < 1) return; const ux = (x2 - x1) / L, uy = (y2 - y1) / L, hl = Math.min(12, L * 0.4); c.strokeStyle = color; c.fillStyle = color; c.lineWidth = width || 2.5; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2 - ux * hl * 0.8, y2 - uy * hl * 0.8); c.stroke(); c.beginPath(); c.moveTo(x2, y2); c.lineTo(x2 - ux * hl - uy * hl * 0.5, y2 - uy * hl + ux * hl * 0.5); c.lineTo(x2 - ux * hl + uy * hl * 0.5, y2 - uy * hl - ux * hl * 0.5); c.closePath(); c.fill(); }
+
+// ---- tiện ích chung cho trang Lí, Hoá ----
+function obsRows(id, rows) { $(id).innerHTML = rows.map(([a, b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join(""); }
+function loop(step) { let last = performance.now(); (function f(now) { const dt = Math.min(0.05, (now - last) / 1000); last = now; step(dt); requestAnimationFrame(f); })(last); }
+function sci(v, dp) { if (v === 0) return "0"; const e = Math.floor(Math.log10(Math.abs(v))); if (e >= -2 && e < 5) return num(v, dp == null ? 3 : dp); const m = v / Math.pow(10, e); return num(m, dp == null ? 2 : dp) + "·10" + String(e).replace("-", "⁻").replace(/\d/g, d => "⁰¹²³⁴⁵⁶⁷⁸⁹"[d]); }
+function fx(v, dp) { return num(Math.round(v * Math.pow(10, dp)) / Math.pow(10, dp), dp); }
+// ---- đồ thị nhỏ trong một khung chữ nhật (canvas thô) ----
+function niceStep(range, n) { const raw = range / (n || 5), p = Math.pow(10, Math.floor(Math.log10(raw))); for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= raw) return m * p; return 10 * p; }
+function chart(c, box, o) {
+  const [L, T, W, H] = box, C = o.C, X = x => L + (x - o.x0) / (o.x1 - o.x0) * W, Y = y => T + H - (y - o.y0) / (o.y1 - o.y0) * H;
+  c.save(); c.strokeStyle = C.grid; c.lineWidth = 1; c.font = "12px " + FONT; c.fillStyle = C.muted;
+  const sx = o.xstep || niceStep(o.x1 - o.x0, 6), sy = o.ystep || niceStep(o.y1 - o.y0, 4);
+  c.textAlign = "center"; c.textBaseline = "top";
+  for (let x = Math.ceil(o.x0 / sx) * sx; x <= o.x1 + 1e-9; x += sx) { c.beginPath(); c.moveTo(X(x), T); c.lineTo(X(x), T + H); c.stroke(); c.fillText(num(x), X(x), T + H + 3); }
+  c.textAlign = "right"; c.textBaseline = "middle";
+  for (let y = Math.ceil(o.y0 / sy) * sy; y <= o.y1 + 1e-9; y += sy) { c.beginPath(); c.moveTo(L, Y(y)); c.lineTo(L + W, Y(y)); c.stroke(); c.fillText(num(y), L - 4, Y(y)); }
+  c.strokeStyle = C.muted; c.lineWidth = 1.5; c.beginPath(); c.moveTo(L, T); c.lineTo(L, T + H); c.lineTo(L + W, T + H); c.stroke();
+  if (o.y0 < 0 && o.y1 > 0) { c.beginPath(); c.moveTo(L, Y(0)); c.lineTo(L + W, Y(0)); c.stroke(); }
+  c.font = "italic 600 13px " + FONT; c.fillStyle = C.ink; c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText(o.ys || "", L + 4, T - 2);
+  c.textAlign = "right"; c.textBaseline = "bottom"; c.fillText(o.xs || "", L + W, T + H - 3);
+  c.beginPath(); c.rect(L, T - 2, W, H + 4); c.clip();
+  (o.series || []).forEach(s => {
+    if (!s.pts || s.pts.length < 1) return;
+    c.beginPath(); s.pts.forEach((p, i) => i ? c.lineTo(X(p[0]), Y(p[1])) : c.moveTo(X(p[0]), Y(p[1])));
+    if (s.fill) { c.save(); c.lineTo(X(s.pts[s.pts.length - 1][0]), Y(Math.max(o.y0, 0))); c.lineTo(X(s.pts[0][0]), Y(Math.max(o.y0, 0))); c.closePath(); c.globalAlpha = 0.18; c.fillStyle = s.fill; c.fill(); c.restore(); c.beginPath(); s.pts.forEach((p, i) => i ? c.lineTo(X(p[0]), Y(p[1])) : c.moveTo(X(p[0]), Y(p[1]))); }
+    c.setLineDash(s.dash || []); c.strokeStyle = s.color; c.lineWidth = s.width || 2.5; if (!s.dots) c.stroke(); c.setLineDash([]);
+    if (s.dots) s.pts.forEach(p => { c.beginPath(); c.arc(X(p[0]), Y(p[1]), s.r || 4, 0, 7); c.fillStyle = s.color; c.fill(); });
+  });
+  c.restore(); return { X, Y };
+}
+
+(function () {
+
+const N0 = 1000, S = { T: 6, t: 0, run: false, alive: [], H: [] };
+const cv = $("cv"), gr = $("gr");
+function reset() { S.t = 0; S.run = false; S.alive = Array.from({ length: N0 }, () => true); S.H = [[0, N0]]; $("go").textContent = "▶ Bắt đầu"; update(); }
+function step(dt) { if (!S.run) return; const p = 1 - Math.pow(0.5, dt / S.T); for (let i = 0; i < N0; i++) if (S.alive[i] && Math.random() < p) S.alive[i] = false; S.t += dt; S.H.push([S.t, S.alive.filter(Boolean).length]); if (S.t >= 5 * S.T) { S.run = false; $("go").textContent = "▶ Bắt đầu"; } update(); }
+function draw() {
+  let { c, w, h, C } = rawCanvas(cv); const cols = 40, rows = 25, cs = Math.min((w - 20) / cols, (h - 20) / rows), ox = (w - cs * cols) / 2, oy = (h - cs * rows) / 2;
+  for (let i = 0; i < N0; i++) { const x = ox + (i % cols) * cs + cs / 2, y = oy + Math.floor(i / cols) * cs + cs / 2; c.beginPath(); c.arc(x, y, cs * 0.36, 0, 7); c.fillStyle = S.alive[i] ? C.down : C.line; c.fill(); }
+  ({ c, w, h, C } = rawCanvas(gr)); const tm = 5 * S.T;
+  const r = chart(c, [56, 22, w - 74, h - 52], { C, x0: 0, x1: tm, xstep: S.T, y0: 0, y1: 1050, ystep: 250, xs: "t (s)", ys: "N", series: [{ pts: Array.from({ length: 101 }, (_, i) => { const t = tm * i / 100; return [t, N0 * Math.pow(0.5, t / S.T)]; }), color: C.muted, dash: [6, 4], width: 2 }, { pts: S.H, color: C.down }] });
+  for (let k = 1; k <= 4; k++) txt(c, k + "T", r.X(k * S.T), 14, C.muted, 11);
+}
+function update() {
+  const N = S.alive.filter(Boolean).length;
+  obsRows("obs", [["Thời gian t", num(S.t, 1) + " s (= " + num(S.t / S.T, 2) + "T)"], ["Số hạt còn lại N (mô phỏng)", N + ""], ["Theo lí thuyết N₀·2^(−t/T)", num(N0 * Math.pow(0.5, S.t / S.T), 0)], ["Hằng số phóng xạ λ", num(Math.LN2 / S.T, 3) + " s⁻¹"]]);
+  draw();
+}
+bindSlider("T", S, "T", reset);
+$("go").onclick = () => { if (S.t >= 5 * S.T) reset(); S.run = !S.run; $("go").textContent = S.run ? "❚❚ Tạm dừng" : "▶ Tiếp tục"; }; $("rs").onclick = reset;
+makeMC("mc", "mc-res", ["1/3", "1/6", "1/8", "1/9"], 2, "Chưa đúng. Mỗi chu kì bán rã, số hạt còn lại giảm đi một nửa.");
+setupPage(draw); reset(); loop(step);
+
+})();
+</script>
+<!--site-foot--><div style="text-align:center;font:13.5px 'Be Vietnam Pro',system-ui,sans-serif;color:#66708a;padding:14px 10px 18px;border-top:1px solid #eee2d0;margin-top:18px">Phát triển bởi Thầy Hiếu - GV Toán Trường THPT An Nhơn Tây - TP.HCM</div><!--/site-foot--></body>
+</html>

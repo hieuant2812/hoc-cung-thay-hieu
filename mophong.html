@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mô phỏng · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/sims.js"></script>
+</head>
+<body data-page="mophong">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm toan">
+    <h1>Mô phỏng tương tác</h1>
+    <p>Chọn môn, chọn lớp rồi bấm vào một bài. Mỗi trang có chế độ <b>Chiếu lớp</b> và nút toàn màn hình.</p>
+  </section>
+  <div class="tabs lg" role="tablist" aria-label="Môn" id="tmon"></div>
+  <div class="tabs" role="tablist" aria-label="Lớp" id="tlop"></div>
+  <div class="row" style="margin:6px 0"><input type="search" id="q" placeholder="Tìm bài: cực trị, thấu kính, pH…" aria-label="Tìm bài" style="width:360px;max-width:100%"><span class="muted small" id="cnt"></span></div>
+  <div id="list"></div>
+</main>
+<footer id="foot"></footer>
+<script>
+const MON = [["Toán", [12, 11, 10, 9, 8, 7, 6], "m-toan", "∑"], ["KHTN", [9, 8, 7, 6], "m-khtn", "⚗"], ["Vật lí", [12, 11, 10], "m-li", "⚡"], ["Hoá học", [12, 11, 10], "m-hoa", "⌬"]];
+const CLS = Object.fromEntries(MON.map(m => [m[0], m[2]]));
+const st = { mon: "Toán", lop: 12, q: "" };
+try { Object.assign(st, JSON.parse(localStorage.getItem("mp-tab") || "{}")); } catch (e) {}
+const P = new URLSearchParams(location.search); if (P.get("mon")) st.mon = P.get("mon"); if (P.get("lop")) st.lop = +P.get("lop");
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
+function tabs(box, items, cur, on) {
+  box.innerHTML = "";
+  items.forEach(it => {
+    const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", it.v === cur);
+    if (it.cls) b.className = it.cls; b.innerHTML = it.html; b.onclick = () => on(it.v); box.appendChild(b);
+  });
+}
+function tile(r) {
+  return `<a class="tile ${CLS[r.mon] || ""}" href="${r.file}" target="_blank" rel="noopener"><span class="th" style="background-image:url('thumbs/${r.code}.jpg')" role="img" aria-label="Ảnh xem trước"></span><span class="bd"><span class="code">${r.code} · ${r.mon} ${r.lop}</span><span class="tt">${esc(r.ten)}</span><span class="ds">${esc(r.mota)}</span></span></a>`;
+}
+function render() {
+  try { localStorage.setItem("mp-tab", JSON.stringify({ mon: st.mon, lop: st.lop })); } catch (e) {}
+  const m = MON.find(x => x[0] === st.mon) || MON[0]; st.mon = m[0];
+  if (!m[1].includes(st.lop)) st.lop = m[1][0];
+  tabs(document.getElementById("tmon"), MON.map(x => ({ v: x[0], cls: x[2], html: `<span class="ic">${x[3]}</span>${x[0]}<span class="n">${SIMS.filter(s => s.mon === x[0]).length}</span>` })), st.mon, v => { st.mon = v; render(); });
+  const tl = document.getElementById("tlop"); tl.className = "tabs " + m[2];
+  tabs(tl, m[1].map(l => ({ v: l, html: `Lớp ${l}<span class="n">${SIMS.filter(s => s.mon === st.mon && s.lop === l).length}</span>` })), st.lop, v => { st.lop = v; render(); });
+  const k = norm(st.q.trim());
+  const rows = k ? SIMS.filter(s => norm(s.code + " " + s.ten + " " + s.mota + " " + s.mon).includes(k)) : SIMS.filter(s => s.mon === st.mon && s.lop === st.lop);
+  tl.hidden = !!k; document.getElementById("tmon").style.opacity = k ? .45 : 1;
+  document.getElementById("cnt").textContent = rows.length + " bài" + (k ? " khớp từ khoá (mọi môn, mọi lớp)" : "");
+  const list = document.getElementById("list"); list.innerHTML = ""; list.className = m[2];
+  if (!rows.length) { list.innerHTML = `<div class="card empty"><h3>Phần này đang được soạn…</h3><p class="muted">Thầy sẽ bổ sung sớm. Trong lúc chờ, em xem thử các lớp khác nhé!</p></div>`; return; }
+  const groups = {};
+  rows.forEach(r => { const g = k ? r.mon + " " + r.lop : r.chuong; (groups[g] = groups[g] || []).push(r); });
+  for (const [g, rs] of Object.entries(groups)) {
+    const h = document.createElement("div"); h.className = "chap " + (k ? CLS[rs[0].mon] : ""); h.textContent = g; list.appendChild(h);
+    const gr = document.createElement("div"); gr.className = "grid"; gr.innerHTML = rs.map(tile).join(""); list.appendChild(gr);
+  }
+}
+document.getElementById("q").addEventListener("input", e => { st.q = e.target.value; render(); });
+render();
+</script>
+</body>
+</html>
