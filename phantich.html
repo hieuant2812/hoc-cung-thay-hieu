@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phân tích kết quả · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script>
+<script src="assets/katex/katex.min.js"></script><script src="assets/lib/jszip.min.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/saoluu.js"></script>
+<style>
+.ptwrap{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start;margin-top:16px}
+@media(max-width:900px){.ptwrap{grid-template-columns:1fr}}
+.side{display:grid;gap:12px;min-width:0}
+.side>*{min-width:0}
+.ptwrap>section{min-width:0}
+.blist{display:grid;gap:8px;max-height:46vh;overflow:auto}
+.bi{white-space:normal;word-break:break-word;border:1.5px solid var(--line);border-radius:14px;padding:9px 11px;background:#fff;cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:2px}
+.bi[aria-selected=true]{border-color:var(--coral);box-shadow:0 0 0 3px #ffe3da}
+.bi b{font-size:14.5px}.bi span{font-size:12.5px;color:var(--muted)}
+.drop2{border:2px dashed #b9c2d6;border-radius:14px;padding:12px;text-align:center;background:#fafbff}
+.drop2.over{background:#eef4ff;border-color:var(--blue)}
+.ptop{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.ptop h2{margin:0;flex:1;min-width:200px}
+.pt .q .opt,.pt .q p{margin:2px 0}
+table.kqt{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+table.kqt th,table.kqt td{border:1px solid #e3e6ee;padding:5px 7px}
+table.kqt th{background:#fbf6ee}
+@media print{header,footer,.side,.ptop .btn,.noprint{display:none!important}.ptwrap{display:block}.hero{display:none}body{background:#fff}}
+</style>
+</head>
+<body data-page="phantich">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm" style="background:linear-gradient(120deg,#ff7a59,#ff5d8f 55%,#8a5cf6)">
+    <h1>Phân tích kết quả kiểm tra</h1>
+    <p>Từ kết quả chấm phiếu: tỉ lệ đúng từng câu, dạng toán và mức độ lớp còn yếu, phổ điểm, so sánh các lớp, những lỗi hiểu sai chung — và một nút để sinh đề ôn tập đúng chỗ yếu.</p>
+  </section>
+
+  <div class="ptwrap">
+    <aside class="side">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Bài đã chấm</h3>
+        <div class="drop2" id="drop"><b>Kéo thả file kết quả từ điện thoại</b><div class="small muted">(KetQua_….json — trên điện thoại: Phân tích → Gửi kết quả sang máy tính)</div>
+          <label class="btn blue sm" style="margin-top:8px">Chọn file<input type="file" id="fKq" accept=".json,application/json" multiple hidden></label></div>
+        <div class="blist" id="blist" style="margin-top:10px"></div>
+      </div>
+      <div class="card" id="cfg"></div>
+      <div class="card">
+        <h3 style="margin:0 0 6px">💾 Sao lưu dữ liệu</h3>
+        <div id="saoLuu"></div>
+      </div>
+    </aside>
+    <section>
+      <div class="tabs noprint" id="vt" style="margin-bottom:12px"><button type="button" data-v="pt" aria-selected="true">📈 Phân tích bài</button><button type="button" data-v="sd">📒 Sổ điểm theo lớp</button><button type="button" data-v="xh">🏆 Xếp hạng toàn khối</button></div>
+      <div id="vSD" class="hidden"></div><div id="vXH" class="hidden"></div>
+      <div id="vPT">
+      <div class="ptop"><h2 id="ttl">Chọn một bài ở cột bên trái</h2>
+        <button class="btn ghost sm" id="bXls">⬇ Excel phân tích</button>
+        <button class="btn ghost sm" id="bPrint">🖨 In báo cáo</button></div>
+      <div id="ontap"></div>
+      <div id="out" data-wrap><div class="card empty"><h3>Chưa có dữ liệu</h3><p class="muted">Chấm phiếu bằng điện thoại ở trang <a href="cham.html">Chấm phiếu</a>, sau đó trên điện thoại vào mục <b>Phân tích → Gửi kết quả sang máy tính</b>, chuyển file sang máy này (Zalo, Google Drive, email…) và kéo thả vào ô bên trái. Nếu chấm ngay trên máy tính này thì kết quả đã có sẵn.</p></div></div>
+      </div>
+    </section>
+  </div>
+</main>
+<footer id="foot"></footer>
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const { Kho, Stats } = OMR;
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let cur = localStorage.getItem("pt-cur") || "", A = null;
+  const bank = {}; // "Toán|11" → Map(id → câu)
+  async function loadBank(mon, lop) {
+    const k = mon + "|" + lop; if (bank[k]) return bank[k];
+    try { const L = lop === "TT" ? [10, 11, 12] : [lop]; const qs = []; for (const l of L) qs.push(...(await NHD.Store.load(mon, l)).questions); bank[k] = new Map(qs.map(q => [q.id, q])); } catch (e) { bank[k] = new Map(); }
+    return bank[k];
+  }
+  function list() {
+    const L = Kho.list();
+    $("blist").innerHTML = L.length ? L.map(b => `<button class="bi" data-id="${b.id}" aria-selected="${b.id === cur}"><b>${esc(b.lopHoc ? b.lopHoc + " · " : "")}${esc(b.ten || "(chưa đặt tên)")}</b><span>${esc(b.mon)} · ${Object.keys(b.keys).length} mã đề · ${Kho.results(b.id).length} phiếu · ${Stats.findMeta(b) ? "có thông tin câu hỏi" : "<span style='color:#b0163d'>chưa có thông tin câu hỏi</span>"}</span></button>`).join("") : `<div class="small muted">Chưa có bài nào trên máy này.</div>`;
+    $("blist").querySelectorAll(".bi").forEach(x => x.onclick = () => { cur = x.dataset.id; localStorage.setItem("pt-cur", cur); list(); show(); setView("pt"); });
+  }
+  async function importFiles(files) {
+    let nb = 0, nr = 0, err = [];
+    for (const f of files) {
+      try {
+        const o = JSON.parse(await f.text());
+        if (o.type === "hcth-ketqua") { const r = OMR.importKQ(o); nb += r.nb; nr += r.nr; if (o.bai[0]) cur = o.bai[0].id; }
+        else if (o.keys && o.meta) { // file đáp án của trang Ra đề → gắn vào bài cùng đáp án
+          const sg = Stats.sig(o.keys); const hit = Kho.list().filter(b => Stats.sig(b.keys) === sg);
+          if (!hit.length) err.push(f.name + ": chưa có bài chấm nào dùng đáp án này"); else hit.forEach(b => { b.meta = o.meta; b.lop = b.lop || o.lop; Kho.save(b); });
+        } else err.push(f.name + ": không phải file kết quả");
+      } catch (e) { err.push(f.name + ": " + e.message); }
+    }
+    localStorage.setItem("pt-cur", cur); list(); show();
+    toast((nb ? `Đã nạp ${nb} bài, ${nr} phiếu. ` : "") + (err.length ? err.join("; ") : ""), 4500);
+  }
+  $("fKq").onchange = e => { importFiles([...e.target.files]); e.target.value = ""; };
+  const dp = $("drop");
+  ["dragenter", "dragover"].forEach(ev => dp.addEventListener(ev, e => { e.preventDefault(); dp.classList.add("over"); }));
+  ["dragleave", "drop"].forEach(ev => dp.addEventListener(ev, e => { e.preventDefault(); dp.classList.remove("over"); }));
+  dp.addEventListener("drop", e => importFiles([...e.dataTransfer.files]));
+
+  function cfg(B) {
+    const sg = Stats.sig(B.keys); const same = Kho.list().filter(b => b.id !== B.id && Stats.sig(b.keys) === sg);
+    const sel = JSON.parse(localStorage.getItem("cham-cmp-" + B.id) || "[]");
+    const k0 = Object.values(B.keys)[0] || {}; const o = JSON.parse(localStorage.getItem("pt-ontap") || "{}");
+    $("cfg").innerHTML = `<h3 style="margin:0 0 8px">Cài đặt phân tích</h3>
+      <label class="f">Tên lớp<input type="text" id="cLop" value="${esc(B.lopHoc || "")}" placeholder="VD: 11A1"></label>
+      <div style="margin-top:8px">${same.length ? `<div class="small muted">So sánh với các lớp làm cùng đề:</div>` + same.map(b => `<label class="chk"><input type="checkbox" class="cmp" value="${b.id}"${sel.includes(b.id) ? " checked" : ""}> ${esc(b.lopHoc || b.ten)} <span class="small muted">(${Kho.results(b.id).length} phiếu)</span></label>`).join("") : `<div class="small muted">Chưa có lớp khác làm cùng đề để so sánh.</div>`}</div>
+      <label class="btn ghost sm" style="margin-top:8px">🧩 Gắn thông tin câu hỏi (DapAn_ChamDienThoai.json)<input type="file" id="cMeta" accept=".json" hidden></label>
+      <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <h3 style="margin:0 0 6px">📝 Đề ôn tập theo chỗ yếu</h3>
+      <div class="grid2" style="gap:8px"><label class="f">Số dạng yếu<input type="number" id="oD" min="1" max="10" value="${o.d || 5}"></label><label class="f">Số mã đề<input type="number" id="oM" min="1" max="8" value="${o.m || 1}"></label></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px"><label class="f">Phần I<input type="number" id="oTN" min="0" value="${o.TN != null ? o.TN : (k0.TN || []).length || 12}"></label><label class="f">Phần II<input type="number" id="oDS" min="0" value="${o.DS != null ? o.DS : (k0.DS || []).length || 4}"></label><label class="f">Phần III<input type="number" id="oTLN" min="0" value="${o.TLN != null ? o.TLN : (k0.TLN || []).length || 6}"></label></div>
+      <button class="btn coral" id="bOntap" style="margin-top:10px;width:100%">Sinh đề ôn tập</button>
+      <div class="small muted" style="margin-top:6px">Đề lấy từ ngân hàng trên máy này, ưu tiên câu chưa dùng, kèm đáp án và lời giải. Dạng yếu là các dạng có tỉ lệ đúng thấp nhất (dưới 70%).</div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:12px 0">
+      <button class="btn ghost sm" id="bDel">🗑 Xoá bài này khỏi máy</button>`;
+    $("cLop").onchange = () => { B.lopHoc = $("cLop").value.trim(); Kho.save(B); list(); show(); };
+    $("cfg").querySelectorAll(".cmp").forEach(i => i.onchange = () => { localStorage.setItem("cham-cmp-" + B.id, JSON.stringify([...$("cfg").querySelectorAll(".cmp:checked")].map(x => x.value))); show(); });
+    $("cMeta").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return; try { Stats.attachMeta(B, JSON.parse(await f.text())); Kho.save(B); toast("Đã gắn thông tin câu hỏi"); list(); show(); } catch (err) { alert(err.message); } };
+    const saveO = () => localStorage.setItem("pt-ontap", JSON.stringify({ d: +$("oD").value, m: +$("oM").value, TN: +$("oTN").value, DS: +$("oDS").value, TLN: +$("oTLN").value }));
+    ["oD", "oM", "oTN", "oDS", "oTLN"].forEach(id => $(id).onchange = () => { saveO(); drawOntap(); });
+    $("bOntap").onclick = () => { if (!A || !A.meta) return alert("Bài này chưa có thông tin câu hỏi (dạng, mức độ). Hãy gắn file DapAn_ChamDienThoai.json của đề."); saveO(); location.href = Stats.ontapUrl(A, { soDang: +$("oD").value || 5, soMa: +$("oM").value || 1, ct: { TN: +$("oTN").value || 0, DS: +$("oDS").value || 0, TLN: +$("oTLN").value || 0 } }); };
+    $("bDel").onclick = () => { if (!confirm("Xoá bài “" + (B.ten || "") + "” và toàn bộ kết quả trên máy này?")) return; Kho.del(B.id); cur = ""; list(); show(); };
+  }
+  function drawOntap() {
+    if (!A || !A.meta || !A.n) { $("ontap").innerHTML = ""; return; }
+    const dk = Stats.weakPlan(A, +($("oD") || {}).value || 5, 2);
+    $("ontap").innerHTML = dk.length ? `<div class="note blue noprint"><b>Gợi ý ôn tập:</b> ${dk.map(k => { const d = A.dangs.find(x => x.k === k); const t = A.meta.dang[k]; return `<b>${esc(k.replace(/^C\d+-B\d+-/, ""))}</b> ${t ? NHD.texToHtml(t) : ""} (${Math.round(d.rate * 100)}%)`; }).join(" · ")} — bấm <b>Sinh đề ôn tập</b> ở cột trái.</div>` : "";
+  }
+  async function show() {
+    const B = Kho.get(cur);
+    if (!B) { $("cfg").innerHTML = `<div class="small muted">Chọn một bài để xem phân tích.</div>`; $("ttl").textContent = "Chọn một bài ở cột bên trái"; A = null; $("ontap").innerHTML = ""; return; }
+    $("ttl").textContent = (B.lopHoc ? B.lopHoc + " · " : "") + (B.ten || "");
+    cfg(B);
+    A = Stats.analyze(B, Kho.results(B.id));
+    const sel = JSON.parse(localStorage.getItem("cham-cmp-" + B.id) || "[]");
+    const others = Kho.list().filter(b => sel.includes(b.id) && Stats.sig(b.keys) === Stats.sig(B.keys));
+    const lop = (A.meta && A.meta.lop) || B.lop; const qmap = lop ? await loadBank(B.mon || "Toán", lop) : new Map();
+    $("out").innerHTML = Stats.render(A, {
+      tex: s => NHD.texToHtml(s),
+      compare: others.map(b => Stats.analyze(b, Kho.results(b.id))), names: [B.lopHoc || B.ten, ...others.map(b => b.lopHoc || b.ten)],
+      question: (id, e) => {
+        const q = qmap.get(id); if (!q) return "";
+        const m = A.mas.find(x => e.it.pos[x]); const ord = q.loai === "TN" && e.it.pos[m] && e.it.pos[m].ord ? e.it.pos[m].ord : [0, 1, 2, 3];
+        try { return NHD.renderQuestion({ q, order: ord }, "", "key", { sol: true }).replace(/<span class="qh">Câu \.<\/span>/, ""); } catch (err) { return ""; }
+      }
+    });
+    drawOntap();
+  }
+  $("bPrint").onclick = () => window.print();
+  $("bXls").onclick = () => {
+    if (!A) return; const T = Stats.excelRows(A);
+    const blob = new Blob(["﻿<html><head><meta charset='utf-8'></head><body><table border='1'>" + T.map(r => "<tr>" + r.map(c => `<td>${esc(c)}</td>`).join("") + "</tr>").join("") + "</table></body></html>"], { type: "application/vnd.ms-excel" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "PhanTich_" + (A.bai.lopHoc || "") + "_" + (A.bai.ten || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").replace(/[^A-Za-z0-9]+/g, "_") + ".xls"; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1000);
+  };
+  /* ---------------------------------------------------------------- sổ điểm theo lớp, xếp hạng toàn khối */
+  let view = localStorage.getItem("pt-view") || "pt";
+  function setView(v) { view = v; localStorage.setItem("pt-view", v); $("vt").querySelectorAll("button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === v)); $("vPT").classList.toggle("hidden", v !== "pt"); $("vSD").classList.toggle("hidden", v !== "sd"); $("vXH").classList.toggle("hidden", v !== "xh"); if (v === "sd") soDiem(); if (v === "xh") xepHang(); }
+  $("vt").querySelectorAll("button").forEach(b => b.onclick = () => setView(b.dataset.v));
+  const f2 = x => x == null || isNaN(x) ? "" : String(Math.round(x * 100) / 100).replace(".", ",");
+  const dsOf = id => { try { return JSON.parse(localStorage.getItem("cham-ds-" + id) || "{}"); } catch (e) { return {}; } };
+  const tOf = b => parseInt(String(b.id).replace(/^b/, ""), 36) || 0;
+  function xls(rows, name) {
+    const blob = new Blob(["\ufeff<html><head><meta charset='utf-8'></head><body><table border='1'>" + rows.map((r, i) => "<tr>" + r.map(c => `<${i ? "td" : "th"} style="mso-number-format:'\\@'">${esc(c)}</${i ? "td" : "th"}>`).join("") + "</tr>").join("") + "</table></body></html>"], { type: "application/vnd.ms-excel" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1000);
+  }
+  function soDiem() {
+    const L = Kho.list(); const lops = [...new Set(L.map(b => b.lopHoc).filter(Boolean))].sort();
+    const cur = localStorage.getItem("pt-sdlop") || lops[0] || "";
+    if (!lops.length) { $("vSD").innerHTML = `<div class="card empty"><h3>Chưa có lớp nào</h3><p class="muted">Đặt <b>tên lớp</b> cho từng bài (ở cột trái, mục Cài đặt phân tích hoặc trên điện thoại) để web gom các bài kiểm tra của cùng một lớp thành sổ điểm.</p></div>`; return; }
+    const bs = L.filter(b => b.lopHoc === cur).sort((a, b) => tOf(a) - tOf(b));
+    const hs = JSON.parse(localStorage.getItem("pt-heso-" + cur) || "{}");
+    const ten = {}; bs.forEach(b => Object.assign(ten, dsOf(b.id)));
+    const sbds = [...new Set(bs.flatMap(b => Kho.results(b.id).map(r => r.sbd)))].sort();
+    const diem = (b, sbd) => { const r = Kho.results(b.id).find(x => x.sbd === sbd); return r ? r.diem : null; };
+    const tb = sbd => { let s = 0, w = 0; bs.forEach(b => { const d = diem(b, sbd); const h = +(hs[b.id] || 1); if (d != null) { s += d * h; w += h; } }); return w ? s / w : null; };
+    const rows = sbds.map(sbd => ({ sbd, ten: ten[sbd] || "", d: bs.map(b => diem(b, sbd)), tb: tb(sbd) }));
+    $("vSD").innerHTML = `<div class="card"><div class="row" style="gap:10px;align-items:end;flex-wrap:wrap"><label class="f">Lớp<select id="sdLop">${lops.map(l => `<option${l === cur ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
+      <span class="grow"></span><button class="btn green sm" id="sdX">⬇ Tải Excel sổ điểm</button><button class="btn ghost sm" onclick="print()">🖨 In</button></div>
+      <p class="small muted">Sổ điểm gom mọi bài kiểm tra đã chấm có cùng <b>tên lớp</b>, xếp theo thời gian thêm bài. Hệ số dùng để tính điểm trung bình (VD bài 15 phút hệ số 1, giữa kì hệ số 2). Ô trống: học sinh chưa có kết quả bài đó.</p>
+      <div style="overflow:auto"><table class="kqt"><tr><th>STT</th><th>SBD</th><th>Họ và tên</th>${bs.map(b => `<th title="${esc(b.ten)}">${esc((b.ten || "").replace(/ – .*$/, "").slice(0, 28))}<br><label class="small">hệ số <input type="number" min="0" step="0.5" value="${hs[b.id] || 1}" data-hs="${b.id}" style="width:52px"></label></th>`).join("")}<th>TB</th></tr>
+      ${rows.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.sbd)}</td><td>${esc(r.ten)}</td>${r.d.map(d => `<td style="text-align:center">${f2(d)}</td>`).join("")}<td style="text-align:center"><b>${f2(r.tb)}</b></td></tr>`).join("")}
+      <tr><th colspan="3">Trung bình bài</th>${bs.map((b, j) => { const v = rows.map(r => r.d[j]).filter(x => x != null); return `<th>${v.length ? f2(v.reduce((a, c) => a + c, 0) / v.length) : ""}</th>`; }).join("")}<th>${f2(rows.filter(r => r.tb != null).reduce((a, r) => a + r.tb, 0) / (rows.filter(r => r.tb != null).length || 1))}</th></tr></table></div></div>`;
+    $("sdLop").onchange = e => { localStorage.setItem("pt-sdlop", e.target.value); soDiem(); };
+    $("vSD").querySelectorAll("[data-hs]").forEach(i => i.onchange = () => { hs[i.dataset.hs] = +i.value || 0; localStorage.setItem("pt-heso-" + cur, JSON.stringify(hs)); soDiem(); });
+    $("sdX").onclick = () => xls([["STT", "SBD", "Họ và tên", ...bs.map(b => (b.ten || "") + " (hệ số " + (hs[b.id] || 1) + ")"), "Điểm TB"], ...rows.map((r, i) => [i + 1, r.sbd, r.ten, ...r.d.map(f2), f2(r.tb)])], "SoDiem_" + cur.replace(/[^A-Za-z0-9]+/g, "_") + ".xls");
+  }
+  function xepHang() {
+    const L = Kho.list(); const groups = {}; L.forEach(b => { const s = Stats.sig(b.keys); (groups[s] = groups[s] || []).push(b); });
+    const G = Object.entries(groups).map(([s, bs]) => ({ s, bs, ten: bs[0].ten, n: bs.reduce((a, b) => a + Kho.results(b.id).length, 0) })).filter(g => g.n).sort((a, b) => b.bs.length - a.bs.length);
+    if (!G.length) { $("vXH").innerHTML = `<div class="card empty"><h3>Chưa có kết quả</h3></div>`; return; }
+    const cs = localStorage.getItem("pt-xh") || G[0].s; const g = G.find(x => x.s === cs) || G[0];
+    const all = []; g.bs.forEach(b => { const ds = dsOf(b.id); Kho.results(b.id).forEach(r => all.push({ sbd: r.sbd, ten: ds[r.sbd] || "", lop: b.lopHoc || b.ten, ma: r.ma, diem: r.diem })); });
+    all.sort((a, b) => b.diem - a.diem); let rk = 0; all.forEach((r, i) => { if (i === 0 || r.diem !== all[i - 1].diem) rk = i + 1; r.rk = rk; });
+    const byL = {}; all.forEach(r => (byL[r.lop] = byL[r.lop] || []).push(r.diem));
+    const sum = Object.entries(byL).map(([l, d]) => ({ l, n: d.length, tb: d.reduce((a, b) => a + b, 0) / d.length, ge5: d.filter(x => x >= 5).length / d.length, ge8: d.filter(x => x >= 8).length / d.length })).sort((a, b) => b.tb - a.tb);
+    const pc = x => Math.round(x * 100) + "%";
+    const hist = Array(10).fill(0); all.forEach(r => hist[Math.min(9, Math.floor(r.diem + 1e-9))]++);
+    $("vXH").innerHTML = `<div class="card"><div class="row" style="gap:10px;align-items:end;flex-wrap:wrap"><label class="f" style="min-width:320px">Đề kiểm tra (gom mọi lớp làm cùng đề)<select id="xhDe">${G.map(x => `<option value="${x.s}"${x.s === g.s ? " selected" : ""}>${esc(x.ten)} — ${x.bs.length} lớp, ${x.n} học sinh</option>`).join("")}</select></label><span class="grow"></span><button class="btn green sm" id="xhX">⬇ Tải Excel xếp hạng</button><button class="btn ghost sm" onclick="print()">🖨 In</button></div>
+      <h3>Toàn khối: ${all.length} học sinh · điểm trung bình ${f2(all.reduce((a, r) => a + r.diem, 0) / all.length)} · từ 5 điểm ${pc(all.filter(r => r.diem >= 5).length / all.length)}</h3>
+      <div style="overflow:auto"><table class="kqt"><tr><th>Hạng lớp</th><th>Lớp</th><th>Số HS</th><th>Điểm TB</th><th>Từ 5 điểm</th><th>Từ 8 điểm</th></tr>${sum.map((x, i) => `<tr><td>${i + 1}</td><td><b>${esc(x.l)}</b></td><td>${x.n}</td><td>${f2(x.tb)}</td><td>${pc(x.ge5)}</td><td>${pc(x.ge8)}</td></tr>`).join("")}</table></div>
+      <h3 style="margin-top:14px">Phổ điểm toàn khối</h3><div class="small">${hist.map((c, i) => `<span style="display:inline-block;margin-right:10px">${i}–${i + 1}: <b>${c}</b></span>`).join("")}</div>
+      <h3 style="margin-top:14px">Bảng xếp hạng học sinh</h3><div style="overflow:auto;max-height:70vh"><table class="kqt"><tr><th>Hạng</th><th>SBD</th><th>Họ và tên</th><th>Lớp</th><th>Mã đề</th><th>Điểm</th></tr>${all.map(r => `<tr><td>${r.rk}</td><td>${esc(r.sbd)}</td><td>${esc(r.ten)}</td><td>${esc(r.lop)}</td><td>${esc(r.ma)}</td><td><b>${f2(r.diem)}</b></td></tr>`).join("")}</table></div></div>`;
+    $("xhDe").onchange = e => { localStorage.setItem("pt-xh", e.target.value); xepHang(); };
+    $("xhX").onclick = () => xls([["Hạng", "SBD", "Họ và tên", "Lớp", "Mã đề", "Điểm"], ...all.map(r => [r.rk, r.sbd, r.ten, r.lop, r.ma, f2(r.diem)]), [], ["Hạng lớp", "Lớp", "Số HS", "Điểm TB", "Từ 5 điểm", "Từ 8 điểm"], ...sum.map((x, i) => [i + 1, x.l, x.n, f2(x.tb), pc(x.ge5), pc(x.ge8)])], "XepHang_" + (g.ten || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "_") + ".xls");
+  }
+  SaoLuu.mount($("saoLuu"));
+  list(); show(); setView(view);
+})();
+</script>
+</body>
+</html>

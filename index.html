@@ -55,6 +55,30 @@
     <span style="flex:1"><b style="font:700 22px var(--font-h)">Phiếu trả lời & chấm bằng điện thoại</b><br><span class="muted">5 mẫu phiếu (15 – 45 – 60 – 90 phút, Lí/Hoá 50 phút). In phiếu, quét bằng camera điện thoại, máy tự chấm theo thang điểm của Bộ và xuất bảng điểm Excel.</span></span>
     <span class="btn violet">Mở →</span>
   </a>
+  <div class="grid2" style="margin-top:16px;gap:16px">
+    <a class="card" href="tren-lop.html" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:linear-gradient(120deg,#e6fbf7,#e8f0ff)">
+      <span style="font-size:36px">📽</span>
+      <span style="flex:1"><b style="font:700 20px var(--font-h)">Trên lớp</b><br><span class="muted small">Trình chiếu câu hỏi chữ to có đồng hồ, phiếu học tập có mã QR, gọi tên ngẫu nhiên, chia nhóm, đồng hồ, bảng vẽ trên lưới toạ độ.</span></span>
+      <span class="btn blue">Mở →</span>
+    </a>
+    <a class="card" href="luyentap.html" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:linear-gradient(120deg,#e8faf6,#eaf6ff)">
+      <span style="font-size:36px">✍️</span>
+      <span style="flex:1"><b style="font:700 20px var(--font-h)">Tự học (cho học sinh)</b><br><span class="muted small">Luyện tập theo chương, dạng, mức độ trên điện thoại — chấm ngay, có lời giải. Sổ tay công thức Toán 10, 11, 12.</span></span>
+      <span class="btn green">Mở →</span>
+    </a>
+  </div>
+  <div class="grid2" style="margin-top:16px;gap:16px">
+    <a class="card" href="phantich.html" style="display:flex;gap:14px;align-items:center;text-decoration:none;color:inherit;background:linear-gradient(120deg,#fff0ea,#ffe9f1)">
+      <span style="font-size:36px">📈</span>
+      <span style="flex:1"><b style="font:700 20px var(--font-h)">Phân tích kết quả</b><br><span class="muted small">Tỉ lệ đúng từng câu, dạng và mức độ lớp còn yếu, phổ điểm, so sánh các lớp, lỗi sai chung — và sinh đề ôn tập đúng chỗ yếu.</span></span>
+      <span class="btn coral">Mở →</span>
+    </a>
+    <div class="card" style="background:linear-gradient(120deg,#eafaf1,#e8f4ff)">
+      <b style="font:700 20px var(--font-h)">💾 Sao lưu dữ liệu</b>
+      <p class="muted small" style="margin:4px 0 10px">Một file chứa toàn bộ ngân hàng đề, mẫu ma trận, đề đã ra, bài chấm và kết quả trên máy này. Cất vào Google Drive; đổi máy thì khôi phục lại.</p>
+      <div id="saoLuu"></div>
+    </div>
+  </div>
   <div class="stats">
     <div class="stat" style="--k:var(--blue)"><b id="sSim">0</b><span>trang mô phỏng</span></div>
     <div class="stat" style="--k:var(--teal)"><b>4</b><span>môn: Toán, KHTN, Lí, Hoá</span></div>
@@ -63,11 +87,12 @@
   </div>
 </main>
 <footer id="foot"></footer>
-<script src="assets/nhd/store.js"></script>
+<script src="assets/nhd/store.js"></script><script src="assets/saoluu.js"></script>
 <script>
 document.getElementById("hTitle").textContent = SITE.tenWeb;
 document.getElementById("hSlogan").textContent = SITE.khauHieu;
 document.getElementById("sSim").textContent = (window.SIMS || []).length;
+SaoLuu.mount(document.getElementById("saoLuu"));
 NHD.Store.count().then(n => document.getElementById("sQ").textContent = n.toLocaleString("vi-VN")).catch(() => {});
 </script>
 </body>

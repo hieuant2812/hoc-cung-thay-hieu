@@ -15,6 +15,7 @@
     if (p !== "pgCham") stopCam();
     if (p === "pgKq") drawKq();
     if (p === "pgBai") drawBai();
+    if (p === "pgPt") drawPt();
     localStorage.setItem("cham-pg", p);
   }
   document.querySelectorAll(".nav3 button").forEach(b => b.onclick = () => go(b.dataset.p));
@@ -36,7 +37,15 @@
     const k0 = Object.values(o.keys)[0]; o.preset = o.preset && PRESETS[o.preset] ? o.preset : OMR.pickPreset({ TN: k0.TN.length, DS: k0.DS.length, TLN: k0.TLN.length });
     o.mon = o.mon || "Toán"; const b = Kho.save(o); setCur(b.id); drawBai(); toast("Đã thêm: " + (b.ten || "bài kiểm tra"));
   }
-  $("addFile").onchange = async e => { const f = e.target.files[0]; if (!f) return; try { addBai(OMR.unpack(await f.text())); } catch (err) { alert("Không đọc được file: " + err.message); } e.target.value = ""; };
+  $("addFile").onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const txt = await f.text(); let o = null; try { o = JSON.parse(txt); } catch (x) {}
+      if (o && o.type === "hcth-ketqua") { const r = OMR.importKQ(o); drawBai(); toast(`Đã nạp ${r.nb} bài, ${r.nr} phiếu`); }
+      else addBai(OMR.unpack(txt));
+    } catch (err) { alert("Không đọc được file: " + err.message); }
+    e.target.value = "";
+  };
   // quét QR
   let qrStream = null, qrTimer = null;
   function loadScript(src) { return new Promise((res, rej) => { if (document.querySelector(`script[src="${src}"]`)) return res(); const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
@@ -137,8 +146,10 @@
   let last = null;
   function process(img) {
     const B = bai();
-    const ids = B.preset && PRESETS[B.preset] ? [B.preset] : Object.keys(PRESETS);
-    const r = OMR.readAuto(img, ids);
+    const k0 = Object.values(B.keys)[0] || {};
+    const fitIds = Object.keys(PRESETS).filter(id => PRESETS[id].TN >= (k0.TN || []).length && PRESETS[id].DS >= (k0.DS || []).length && PRESETS[id].TLN >= (k0.TLN || []).length);
+    let r = B.preset && PRESETS[B.preset] ? OMR.readAuto(img, [B.preset]) : { ok: false };
+    if (!r.ok) { const r2 = OMR.readAuto(img, fitIds.length ? fitIds : Object.keys(PRESETS)); if (r2.ok || !B.preset) r = r2; else if (!r.why) r = r2; }
     if (!r.ok) { msg(r.why); beep(false); return; }
     paused = true;
     const mas = Object.keys(B.keys); let ma = r.ma;
@@ -214,6 +225,38 @@
   $("xls").onclick = () => { if (!bai()) return; const T = table(); dl(new Blob(["\ufeff<html><head><meta charset='utf-8'></head><body><table border='1'>" + T.map((r, i) => "<tr>" + r.map(c => `<${i ? "td" : "th"} style="mso-number-format:'\\@'">${esc(c)}</${i ? "td" : "th"}>`).join("") + "</tr>").join("") + "</table></body></html>"], { type: "application/vnd.ms-excel" }), fname("xls")); };
   $("csv").onclick = () => { if (!bai()) return; dl(new Blob(["\ufeff" + table().map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n")], { type: "text/csv" }), fname("csv")); };
   $("kqClear").onclick = () => { const B = bai(); if (B && confirm("Xoá toàn bộ kết quả của bài này?")) { Kho.setResults(B.id, []); drawKq(); } };
+
+  /* ---------------------------------------------------------------- 4. phân tích */
+  $("kqPt").onclick = () => go("pgPt");
+  function drawPt() {
+    const B = bai(); $("ptTitle").textContent = B ? "Phân tích: " + (B.ten || "") : "Phân tích kết quả";
+    if (!B) { $("ptBox").innerHTML = `<div class="card empty">Chưa chọn bài kiểm tra.</div>`; $("ptCmp").innerHTML = ""; return; }
+    $("ptLop").value = B.lopHoc || "";
+    const sg = OMR.Stats.sig(B.keys); const same = Kho.list().filter(b => b.id !== B.id && OMR.Stats.sig(b.keys) === sg);
+    const sel = JSON.parse(localStorage.getItem("cham-cmp-" + B.id) || "[]");
+    $("ptCmp").innerHTML = same.length ? `<div class="hint">So sánh với các lớp làm cùng đề:</div>` + same.map(b => `<label class="chk"><input type="checkbox" value="${b.id}"${sel.includes(b.id) ? " checked" : ""}> ${esc(b.lopHoc || b.ten)} <span class="hint">(${Kho.results(b.id).length} phiếu)</span></label>`).join("") : `<div class="hint">Muốn so sánh nhiều lớp: mỗi lớp nạp đáp án thành một bài riêng (quét lại cùng mã QR), chấm, rồi đặt tên lớp.</div>`;
+    $("ptCmp").querySelectorAll("input").forEach(i => i.onchange = () => { localStorage.setItem("cham-cmp-" + B.id, JSON.stringify([...$("ptCmp").querySelectorAll("input:checked")].map(x => x.value))); drawPt(); });
+    const A = OMR.Stats.analyze(B, Kho.results(B.id));
+    const cmp = same.filter(b => sel.includes(b.id)).map(b => OMR.Stats.analyze(b, Kho.results(b.id)));
+    $("ptBox").innerHTML = OMR.Stats.render(A, { compare: cmp, names: [B.lopHoc || B.ten, ...same.filter(b => sel.includes(b.id)).map(b => b.lopHoc || b.ten)] });
+    $("ptOntap").disabled = !A.meta || !A.n;
+    $("ptOntap").title = A.meta ? "" : "Cần thông tin câu hỏi (dạng, mức độ)";
+    drawPt.A = A;
+  }
+  $("ptLop").onchange = () => { const B = bai(); if (!B) return; B.lopHoc = $("ptLop").value.trim(); Kho.save(B); drawPt(); };
+  $("ptMeta").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; const B = bai(); if (!f || !B) return; try { OMR.Stats.attachMeta(B, JSON.parse(await f.text())); Kho.save(B); toast("Đã gắn thông tin câu hỏi"); drawPt(); } catch (err) { alert(err.message); } };
+  $("ptSend").onclick = () => {
+    const B = bai(); if (!B) return; const o = OMR.exportKQ([B.id]);
+    const blob = new Blob([JSON.stringify(o)], { type: "application/json" }); const name = "KetQua_" + fname("json");
+    const file = new File([blob], name, { type: "application/json" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: name }).catch(() => dl(blob, name)); else dl(blob, name);
+  };
+  $("ptOntap").onclick = () => {
+    const A = drawPt.A; if (!A || !A.meta) return;
+    const k0 = Object.values(A.bai.keys)[0] || {};
+    location.href = OMR.Stats.ontapUrl(A, { soDang: 5, ct: { TN: (k0.TN || []).length || 12, DS: (k0.DS || []).length || 4, TLN: (k0.TLN || []).length || 6 }, soMa: 1 });
+  };
+  if (window.SaoLuu) SaoLuu.mount($("saoLuu"));
 
   /* ---------------------------------------------------------------- khởi động: mở link có sẵn đáp án (#k=...) */
   (function init() {

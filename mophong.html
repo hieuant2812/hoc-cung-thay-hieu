@@ -5,6 +5,7 @@
 <title>Mô phỏng · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/sims.js"></script>
+<style>.tilew{display:flex;flex-direction:column;gap:6px}.tilew .tile{flex:1}.tlink{align-self:flex-start;font-size:13px;font-weight:700;text-decoration:none;color:#c43d1c;background:#fff3ee;border-radius:10px;padding:4px 10px}.tlink:hover{background:#ffe3da}</style>
 </head>
 <body data-page="mophong">
 <header id="top"></header>
@@ -34,6 +35,10 @@ function tabs(box, items, cur, on) {
   });
 }
 function tile(r) {
+  const luyen = ["Toán", "Vật lí", "Hoá học"].includes(r.mon) && r.lop >= 10 ? `<a class="tlink" href="tren-lop.html#tc=${encodeURIComponent(JSON.stringify({ mon: r.mon, lop: r.lop, chuong: r.chuong, ten: r.ten, mota: r.mota, n: 5 }))}" title="Trình chiếu 5 câu luyện tập từ ngân hàng (máy đã đăng ngân hàng đề)">🎯 Chiếu 5 câu luyện tập</a>` : "";
+  return `<div class="tilew">` + tile0(r) + luyen + `</div>`;
+}
+function tile0(r) {
   return `<a class="tile ${CLS[r.mon] || ""}" href="${r.file}" target="_blank" rel="noopener"><span class="th" style="background-image:url('thumbs/${r.code}.jpg')" role="img" aria-label="Ảnh xem trước"></span><span class="bd"><span class="code">${r.code} · ${r.mon} ${r.lop}</span><span class="tt">${esc(r.ten)}</span><span class="ds">${esc(r.mota)}</span></span></a>`;
 }
 function render() {

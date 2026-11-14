@@ -31,11 +31,12 @@ main{flex:1;padding:22px 0 40px}
   background:conic-gradient(from 200deg,var(--blue),var(--teal),var(--green),var(--sun),var(--coral),var(--pink),var(--violet),var(--blue));box-shadow:0 4px 12px -4px rgba(59,123,255,.6)}
 .logo b{font:800 21px/1 var(--font-h)} .logo b span{color:var(--coral)}
 .logo small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.nav{margin-left:auto;display:flex;gap:6px}
+.nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:1240px){.nav a{padding:7px 10px;font-size:14.5px}}
 .nav a{text-decoration:none;color:var(--ink);font-weight:600;padding:8px 14px;border-radius:999px;font-size:15px}
 .nav a:hover{background:var(--bg2)}
 .nav a[aria-current]{background:var(--ink);color:#fff}
-@media (max-width:700px){.logo small{display:none}.nav a{padding:7px 10px;font-size:14px}.top .in{gap:8px}}
+@media (max-width:700px){.logo small{display:none}.top .in{flex-wrap:wrap}.logo b{white-space:nowrap}.nav{flex-wrap:nowrap;overflow-x:auto;max-width:100%;margin-left:0;width:100%;justify-content:flex-start}.nav a{padding:7px 10px;font-size:14px;white-space:nowrap}.top .in{gap:6px 8px;height:auto;padding:8px 0}}
 
 /* ---------- chân trang ---------- */
 .foot{margin-top:auto;background:#fff;border-top:1px solid var(--line);padding:18px 0 22px;text-align:center;font-size:14px;color:var(--muted)}
@@ -272,3 +273,7 @@ dialog .db{padding:16px 18px}
   .paper{box-shadow:none;margin:0;page-break-after:always;break-after:page}
   @page{size:A4;margin:0}
 }
+
+.cc details>summary{display:flex;gap:6px;align-items:center;cursor:pointer;padding:3px 0}
+.cc details>summary::before{content:"▸";color:#99a;font-size:12px;width:10px}
+.cc details[open]>summary::before{content:"▾"}

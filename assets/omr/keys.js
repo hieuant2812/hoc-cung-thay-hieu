@@ -29,5 +29,24 @@
     setResults: (id, r) => LS.set("cham-kq-" + id, r),
     get: id => Kho.list().find(b => b.id === id)
   };
-  Object.assign(OMR, { pack, unpack, Kho });
+  /* chuyển bài chấm + kết quả giữa điện thoại và máy tính */
+  function exportKQ(ids) {
+    const L = Kho.list().filter(b => !ids || ids.includes(b.id));
+    return { type: "hcth-ketqua", v: 1, t: new Date().toISOString(), bai: L.map(b => Object.assign({}, b, { results: Kho.results(b.id), ds: LS.get("cham-ds-" + b.id, {}) })) };
+  }
+  function importKQ(o) {
+    if (!o || o.type !== "hcth-ketqua" || !Array.isArray(o.bai)) throw new Error("Không phải file kết quả chấm của trang Học cùng Thầy Hiếu");
+    let nb = 0, nr = 0;
+    o.bai.forEach(x => {
+      const { results, ds } = x; const b = Object.assign({}, x); delete b.results; delete b.ds;
+      const old = Kho.get(b.id); if (old) { b.meta = old.meta || b.meta; b.lopHoc = old.lopHoc || b.lopHoc; }
+      Kho.save(b); nb++;
+      const by = new Map(Kho.results(b.id).map(r => [r.sbd, r]));
+      (results || []).forEach(r => { const c = by.get(r.sbd); if (!c || (r.t || 0) >= (c.t || 0)) { by.set(r.sbd, r); nr++; } });
+      Kho.setResults(b.id, [...by.values()]);
+      if (ds && Object.keys(ds).length) LS.set("cham-ds-" + b.id, Object.assign({}, LS.get("cham-ds-" + b.id, {}), ds));
+    });
+    return { nb, nr };
+  }
+  Object.assign(OMR, { pack, unpack, Kho, exportKQ, importKQ });
 })(typeof window !== "undefined" ? window : globalThis);

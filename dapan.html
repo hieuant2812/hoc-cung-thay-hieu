@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Đáp số · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script>
+<style>
+body{background:#f4f6fb}body::before{display:none}
+.box{max-width:640px;margin:0 auto;padding:16px}
+.hd{background:linear-gradient(120deg,#10b3a3,#3b7bff);color:#fff;border-radius:20px;padding:16px 18px;margin-bottom:14px}
+.hd h1{margin:0;font:800 22px var(--font-h)}.hd div{opacity:.9;font-size:14px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.it{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px;text-align:center}
+.it b{display:block;font-size:13px;color:var(--muted)}.it span{font:800 22px var(--font-h);color:#1d2742}
+.it.hide span{filter:blur(7px)}
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="hd"><h1 id="t">Đáp số</h1><div id="c"></div></div>
+  <p class="small muted" style="margin:0 0 10px">Tự làm xong rồi mới xem nhé! Bấm vào từng ô để hiện đáp số. <a href="#" id="all">Hiện tất cả</a></p>
+  <div class="grid" id="g"></div>
+  <p class="small muted" style="text-align:center;margin-top:18px" id="foot"></p>
+</div>
+<script>
+(function () {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let o = null; try { o = JSON.parse(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+  const g = document.getElementById("g");
+  if (!o || !o.a) { g.innerHTML = `<div class="card">Không đọc được mã QR. Hãy quét lại mã trên phiếu.</div>`; return; }
+  document.getElementById("t").textContent = o.t || "Đáp số";
+  document.getElementById("c").textContent = "Mã phiếu " + (o.c || "") + " · " + o.a.length + " câu";
+  g.innerHTML = o.a.map((a, i) => `<div class="it hide"><b>Câu ${i + 1}</b><span>${esc(a)}</span></div>`).join("");
+  g.querySelectorAll(".it").forEach(x => x.onclick = () => x.classList.toggle("hide"));
+  document.getElementById("all").onclick = e => { e.preventDefault(); g.querySelectorAll(".it").forEach(x => x.classList.remove("hide")); };
+  document.getElementById("foot").textContent = (window.SITE && SITE.chanTrang) || "";
+})();
+</script>
+</body>
+</html>

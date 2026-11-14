@@ -77,6 +77,78 @@ Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục
 - Chấm: đưa trọn 4 ô vuông đen của phiếu vào khung, giữ yên — máy tự chụp, đọc SBD, mã đề, chấm theo thang điểm Bộ. Kiểm tra ảnh phiếu (xanh = đúng, đỏ = sai, xanh dương = đáp án) rồi bấm "Lưu và chấm phiếu tiếp".
 - Kết quả lưu trong điện thoại; mục Kết quả có thống kê, tải Excel/CSV, dán danh sách lớp (SBD – Họ tên) để hiện tên.
 
+- Phiếu **kèm tự luận**: ở trang Phiếu & chấm tích “Kèm phần tự luận ở mặt sau”. Mặt sau kẻ dòng chấm, có ô điểm tự luận và chữ kí giám khảo. In 2 mặt (A4 dọc lật theo cạnh dài; A5 – 2 phiếu/tờ lật theo cạnh ngắn). Máy chỉ chấm mặt trước.
+
+## 4b. Phân tích kết quả và đề ôn tập theo chỗ yếu
+- Trên điện thoại: mục **📈 Phân tích** trong ứng dụng chấm, gồm:
+  - tổng quan, phổ điểm, so sánh các lớp làm cùng đề;
+  - tỉ lệ đúng theo dạng, theo mức độ và từng câu;
+  - những câu nhiều em cùng chọn một phương án sai.
+- Trên máy tính (bảng lớn, xem nội dung câu sai, in báo cáo, tải Excel):
+  1. Trên điện thoại bấm **Gửi kết quả sang máy tính**.
+  2. Chuyển file `KetQua_….json` qua Zalo, Drive hoặc email.
+  3. Kéo thả file vào trang **Phân tích**.
+- **Phân tích theo dạng** cần “thông tin câu hỏi” (mã câu, dạng, mức):
+  - Có sẵn khi phân tích trên máy tính đã ra đề, hoặc khi bài được nạp bằng file `DapAn_ChamDienThoai.json`.
+  - Bài nạp bằng mã QR thì bấm “Gắn thông tin câu hỏi” và chọn file `DapAn_ChamDienThoai.json` trong gói đề.
+- **So sánh lớp**: mỗi lớp là một bài riêng, cùng đáp án (quét lại cùng mã QR). Đặt tên lớp rồi tích các lớp cần so sánh.
+- **Đề ôn tập theo chỗ yếu**: ở trang Phân tích chọn số dạng yếu và số câu từng phần, rồi bấm **Sinh đề ôn tập**.
+  - Trang Ra đề tự lập ma trận cho các dạng có tỉ lệ đúng thấp nhất, ưu tiên câu chưa dùng, rồi sinh đề.
+  - Thầy tải gói .zip, trong đó có đề, đáp án và lời giải.
+  - Nút “Trả lại ma trận trước đó” khôi phục ma trận đang soạn dở.
+
+## 4c. Sao lưu một chạm
+- Có ở trang chủ, trang Ra đề (bước 1), trang Phân tích và ứng dụng chấm (mục Bài kiểm tra).
+- **Sao lưu toàn bộ** tải về một file `SaoLuu_HocCungThayHieu_<ngày>.zip`, gồm:
+  - ngân hàng đề;
+  - mẫu ma trận;
+  - các đề đã ra (thông tin câu hỏi);
+  - bài chấm, kết quả, danh sách lớp;
+  - cài đặt.
+- Thầy cất file vào Google Drive. Đổi máy thì chọn **Khôi phục từ file** và chọn đúng file .zip đó, không cần giải nén.
+- Dữ liệu được **gộp**, không xoá dữ liệu đang có.
+
+## 4d. Trên lớp (`tren-lop.html`)
+- **Trình chiếu câu hỏi**:
+  - Chọn môn, lớp, dạng, mức độ và số câu từ ngân hàng trên máy.
+  - Câu hiện chữ to, có đồng hồ đếm ngược cho mỗi câu và nút hiện đáp án, lời giải. Nút ⟳ thay câu khác cùng dạng, cùng mức.
+  - Phím tắt: → câu sau, ← câu trước, A đáp án, L lời giải, T đồng hồ, +/− cỡ chữ, F toàn màn hình.
+  - Dưới câu hỏi có đường dẫn sang các mô phỏng cùng chương.
+- **Phiếu học tập (QR)**: chọn câu và bấm “Tạo phiếu”, rồi in.
+  - Mã QR trên phiếu mở trang đáp số (`dapan.html`) ngay trên điện thoại học sinh.
+  - Có thêm bản đáp án và lời giải cho giáo viên.
+- **Gọi tên ngẫu nhiên, chia nhóm**: dán danh sách lớp, mỗi dòng một tên.
+- **Đồng hồ**: đếm ngược hoặc bấm giờ, có chế độ toàn màn hình.
+- **Bảng vẽ**: nền trắng, lưới, hệ trục Oxy hoặc kẻ dòng. Vẽ được đồ thị `y = f(x)` (nhiều hàm, ngăn cách bằng dấu `;`), có tẩy, đoạn thẳng và lưu ảnh.
+- **Liên kết với mô phỏng**:
+  - Mỗi thẻ mô phỏng (Toán, Lí, Hoá lớp 10–12) có nút “🎯 Chiếu 5 câu luyện tập”, lấy câu từ các dạng liên quan.
+  - Cây ngân hàng ở trang Ra đề hiện các mô phỏng của từng chương.
+
+## 4e. Tự học (`luyentap.html`)
+- **Học sinh**:
+  - Chọn bộ luyện tập, rồi chọn dạng và mức độ, làm trên điện thoại. Mỗi câu được chấm ngay và có lời giải.
+  - Máy lưu tiến độ theo từng dạng.
+  - Mục **Sổ tay công thức** có Toán 10, 11, 12 theo chương, tìm kiếm được.
+- **Giáo viên** (tab “Giáo viên: tạo bộ luyện tập”):
+  - Chọn câu từ ngân hàng. Nên bỏ các câu đã dùng trong đề kiểm tra.
+  - Bấm nút tạo: máy tải về `LT_….json` và `index.json`.
+  - Tải **cả hai** file lên thư mục `data/luyentap/` của kho GitHub. Cũng có thể gửi file `LT_….json` cho học sinh mở trực tiếp.
+- Lưu ý: bộ luyện tập đưa lên mạng là công khai, nên chỉ chọn câu dành riêng cho luyện tập.
+
+## 4f. Công việc chuyên môn
+- **Ma trận và bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH**:
+  - Lấy ở trang Ra đề, bước 2, nút “⬇ Word (CV 7991)”. File này cũng có trong gói đề .zip.
+  - Khổ ngang, gồm cột TNKQ (nhiều lựa chọn, Đúng – Sai, trả lời ngắn), cột Tự luận và cột Tổng. Mức VD cao được tính vào cột Vận dụng.
+  - Khi đã sinh đề, bản đặc tả ghi số thứ tự câu (C1, C2…). Cột “Yêu cầu cần đạt” có sẵn dòng gợi ý, thầy chỉnh lại trong Word.
+- **Đề thi tốt nghiệp nhiều khối**:
+  - Trang Ra đề, tab lớp “🎓 Thi tốt nghiệp (nhiều khối)”: tích các khối 10, 11, 12 cần đưa vào đề.
+  - Ở bước 2, chọn dạng và mức độ như bình thường.
+- **Phiếu mẫu Bộ** (trang Phiếu & chấm): bố cục như phiếu thi tốt nghiệp, gồm 40 câu, 8 câu Đúng/Sai và 6 câu trả lời ngắn. Máy chấm tự nhận loại phiếu.
+- **Sổ điểm theo lớp** (trang Phân tích, tab “Sổ điểm”):
+  - Gom mọi bài đã chấm cùng tên lớp. Đặt được hệ số cho từng bài, có điểm trung bình, tải Excel được.
+- **Xếp hạng toàn khối** (tab “Xếp hạng”):
+  - Gom mọi lớp làm cùng một đề, xếp hạng học sinh và các lớp, có phổ điểm, tải Excel được.
+
 ## 5. Định dạng câu hỏi trong ngân hàng
 
 ```latex

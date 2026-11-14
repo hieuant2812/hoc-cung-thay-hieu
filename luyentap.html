@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tự học · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
+<style>
+.lt-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
+.lt-tabs button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;font:700 15px var(--font);cursor:pointer;color:#334}
+.lt-tabs button[aria-selected=true]{border-color:var(--teal);background:#e8faf6;color:#0b7a6c}
+.lt-pane{display:none}.lt-pane.on{display:block}
+.setc{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.set{background:#fff;border:2px solid var(--line);border-radius:16px;padding:12px;cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:3px}
+.set[aria-selected=true]{border-color:var(--teal);box-shadow:0 0 0 4px #d8f5ef}
+.set b{font-size:15.5px}.set span{font-size:13px;color:var(--muted)}
+.play{max-width:820px;margin:0 auto}
+.play .ex{font-size:17px;line-height:1.6}
+.play .opt{cursor:pointer;border:2px solid var(--line);border-radius:12px;padding:8px 12px;margin:6px 0;background:#fff}
+.play .opts{display:block!important}
+.play .opt.ok{border-color:#19a64a;background:#e6f6ea}.play .opt.no{border-color:#e0234e;background:#ffe9ee}
+.play .ds-row{align-items:center;gap:10px;padding:6px 0!important;border-bottom:1px dashed var(--line)}
+.dsb{display:inline-flex;gap:6px;margin-left:auto;flex:none}
+.dsb button{border:2px solid var(--line);background:#fff;border-radius:10px;padding:4px 12px;font:700 15px var(--font);cursor:pointer}
+.dsb button.on{border-color:#3b7bff;background:#eef4ff}.dsb button.ok{border-color:#19a64a;background:#e6f6ea}.dsb button.no{border-color:#e0234e;background:#ffe9ee}
+.fb{border-radius:14px;padding:10px 14px;margin-top:10px;font-weight:600}
+.fb.ok{background:#e6f6ea;color:#14632f}.fb.no{background:#ffe9ee;color:#a3123a}
+.pbar{height:10px;background:#eef1f7;border-radius:8px;overflow:hidden;margin:8px 0 14px}.pbar i{display:block;height:100%;background:linear-gradient(90deg,#10b3a3,#3b7bff)}
+.sotay h2{font:800 22px var(--font-h);margin:18px 0 8px}
+.sotay .mc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:10px}
+.sotay .mc h3{margin:0 0 6px;font-size:17px;color:#0b7a6c}
+.sotay .mc ul{margin:0;padding-left:20px;line-height:1.75}
+.sotay .mc li{margin:2px 0}
+.sotay .katex{font-size:1.06em}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.toc a{background:#e8faf6;color:#0b7a6c;border-radius:10px;padding:4px 10px;text-decoration:none;font-weight:600;font-size:14px}
+</style>
+</head>
+<body data-page="luyentap">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm" style="background:linear-gradient(120deg,#10b3a3,#2fb6e8 55%,#3b7bff)">
+    <h1>Tự học</h1>
+    <p>Luyện tập theo chương, dạng, mức độ ngay trên điện thoại — chấm ngay, có lời giải. Sổ tay công thức tra nhanh theo chương.</p>
+  </section>
+  <div class="lt-tabs" id="ltTabs">
+    <button data-t="lt">✍️ Luyện tập</button>
+    <button data-t="st">📘 Sổ tay công thức</button>
+    <button data-t="gv">🧑‍🏫 Giáo viên: tạo bộ luyện tập</button>
+  </div>
+
+  <!-- ===================== LUYỆN TẬP ===================== -->
+  <section class="lt-pane" id="lt">
+    <div id="ltSetup">
+      <h3 style="margin:0 0 8px">1. Chọn bộ câu hỏi</h3>
+      <div class="setc" id="sets"><div class="muted">Đang tải…</div></div>
+      <div class="small muted" style="margin-top:6px">Có file bộ luyện tập thầy cô gửi? <label class="btn ghost sm">📂 Mở file .json<input type="file" id="setFile" accept=".json" hidden></label></div>
+      <div id="ltCfg" class="card hidden" style="margin-top:14px"></div>
+    </div>
+    <div id="ltPlay" class="play hidden"></div>
+  </section>
+
+  <!-- ===================== SỔ TAY ===================== -->
+  <section class="lt-pane sotay" id="st">
+    <div class="row" style="gap:10px;align-items:end;flex-wrap:wrap"><label class="f">Lớp<select id="stLop"></select></label><label class="f" style="flex:1;min-width:220px">Tìm công thức<input type="text" id="stQ" placeholder="VD: đạo hàm, cấp số nhân, khoảng cách…"></label></div>
+    <div class="toc" id="stToc"></div>
+    <div id="stBody"></div>
+  </section>
+
+  <!-- ===================== GIÁO VIÊN ===================== -->
+  <section class="lt-pane" id="gv">
+    <div class="note blue">Bộ luyện tập là một <b>tập câu riêng</b> thầy chọn để học sinh tự luyện (có đáp án, lời giải). Vì sẽ đưa lên mạng, thầy nên chọn câu <b>không dùng cho kiểm tra</b>: tích “Bỏ các câu đã dùng trong đề kiểm tra” hoặc chọn mức Biết – Hiểu.</div>
+    <div class="grid2" style="align-items:start;gap:16px;margin-top:12px">
+      <div class="card"><h3 style="margin-top:0">1. Chọn câu từ ngân hàng trên máy</h3><div id="gvPick"></div></div>
+      <div class="card"><h3 style="margin-top:0">2. Xuất bộ luyện tập</h3>
+        <div style="display:grid;gap:10px">
+          <label class="f">Tên bộ<input type="text" id="gvTen" placeholder="VD: Toán 11 – Chương IX Đạo hàm"></label>
+          <label class="f" style="width:200px">Số câu tối đa mỗi dạng<input type="number" id="gvMax" min="1" value="30"></label>
+          <label class="chk"><input type="checkbox" id="gvUsed" checked> Bỏ các câu đã dùng trong đề kiểm tra (trang Ra đề)</label>
+          <button class="btn coral" id="gvGo">⬇ Tạo file bộ luyện tập</button>
+          <div id="gvMsg"></div>
+          <ol class="small" style="margin:0;padding-left:18px">
+            <li>Bấm nút trên: máy tải về <b>2 file</b> — file bộ câu (<code>LT_….json</code>) và <code>index.json</code> (danh sách các bộ).</li>
+            <li>Trên github.com, mở thư mục <code>data</code> → <code>luyentap</code> (lần đầu: Add file → Upload files, kéo 2 file vào và đổi đường dẫn thành <code>data/luyentap/</code>).</li>
+            <li>Tải <b>cả 2 file</b> lên thư mục đó rồi Commit. Học sinh mở trang Tự học là thấy bộ mới.</li>
+            <li>Cũng có thể gửi thẳng file <code>LT_….json</code> qua Zalo; học sinh bấm “Mở file .json”.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer id="foot"></footer>
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  const ROM = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+  const LVN = { NB: "Biết", TH: "Hiểu", VD: "Vận dụng", VDC: "VD cao" };
+  let tab = LS.get("lt-tab", "lt");
+  function setTab(t) { tab = t; LS.set("lt-tab", t); document.querySelectorAll("#ltTabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.t === t)); document.querySelectorAll(".lt-pane").forEach(p => p.classList.toggle("on", p.id === t)); if (t === "gv" && !gvApi) gvApi = ChonCau.mount($("gvPick"), { key: "gv", soCau: false }); }
+  document.querySelectorAll("#ltTabs button").forEach(b => b.onclick = () => setTab(b.dataset.t));
+
+  /* ================================================================ LUYỆN TẬP */
+  let SET = null, sets = [];
+  async function loadSets() {
+    try { const r = await fetch("data/luyentap/index.json", { cache: "no-store" }); sets = r.ok ? await r.json() : []; } catch (e) { sets = []; }
+    const loc = LS.get("lt-local", null); if (loc) sets.unshift({ local: true, ten: loc.ten, mon: loc.mon, lop: loc.lop, n: loc.q.length });
+    $("sets").innerHTML = sets.length ? sets.map((s, i) => `<button class="set" data-i="${i}"><b>${esc(s.ten)}</b><span>${esc(s.mon || "")} ${esc(s.lop || "")} · ${s.n} câu${s.local ? " · file đã mở trên máy này" : ""}</span>${progTxt(s)}</button>`).join("") : `<div class="card empty">Thầy cô chưa đưa bộ luyện tập nào lên. Nếu có file bộ luyện tập (.json), bấm “Mở file .json”.</div>`;
+    $("sets").querySelectorAll(".set").forEach(b => b.onclick = () => openSet(sets[+b.dataset.i]));
+  }
+  const progKey = s => "lt-prog-" + (s.file || "local-" + s.ten);
+  function progTxt(s) { const p = LS.get(progKey(s), null); if (!p || !p.n) return ""; return `<span>Đã làm ${p.n} câu · đúng ${Math.round(p.ok / p.n * 100)}%</span>`; }
+  $("setFile").onchange = async e => { const f = e.target.files[0]; e.target.value = ""; if (!f) return; try { const o = JSON.parse(await f.text()); if (!o.q) throw 0; LS.set("lt-local", o); await loadSets(); openSet(sets[0]); } catch (err) { alert("File này không phải bộ luyện tập."); } };
+  async function openSet(s) {
+    $("sets").querySelectorAll(".set").forEach(b => b.setAttribute("aria-selected", sets[+b.dataset.i] === s));
+    try { SET = s.local ? LS.get("lt-local") : await (await fetch("data/luyentap/" + s.file, { cache: "no-store" })).json(); } catch (e) { return alert("Không tải được bộ câu hỏi."); }
+    SET.meta = s;
+    const by = {}; SET.q.forEach(q => { (by[q.chuong] = by[q.chuong] || {}); by[q.chuong][q.dkey] = (by[q.chuong][q.dkey] || 0) + 1; });
+    const cfg = LS.get("lt-cfg", { n: 10, muc: ["NB", "TH", "VD", "VDC"] });
+    const T = ((window.CHUONG_TRINH || {})[SET.mon] || {})[SET.lop] || {};
+    const prog = LS.get(progKey(s), { n: 0, ok: 0, d: {} });
+    $("ltCfg").classList.remove("hidden");
+    $("ltCfg").innerHTML = `<h3 style="margin-top:0">2. Chọn phần muốn luyện — ${esc(SET.ten)}</h3>
+      <div style="max-height:320px;overflow:auto">${Object.entries(by).sort((a, b) => a[0] - b[0]).map(([c, ds]) => `<details open><summary><b>Chương ${ROM[c] || c}${T[c] ? ". " + esc(T[c][0]) : ""}</b></summary>${Object.entries(ds).map(([k, n]) => { const p = prog.d[k]; return `<label class="chk" style="display:flex"><input type="checkbox" value="${k}"> <span>${SET.dang && SET.dang[k] ? NHD.texToHtml(SET.dang[k]) : k} <span class="muted small">(${n} câu${p ? ` · em đã đúng ${p.ok}/${p.n}` : ""})</span></span></label>`; }).join("")}</details>`).join("")}</div>
+      <div class="row" style="gap:12px;flex-wrap:wrap;margin-top:10px;align-items:end"><span><b class="small">Mức độ:</b> ${["NB", "TH", "VD", "VDC"].map(m => `<label class="chk"><input type="checkbox" data-m="${m}"${cfg.muc.includes(m) ? " checked" : ""}> ${LVN[m]}</label>`).join("")}</span>
+      <label class="f" style="width:100px">Số câu<select id="ltN">${[5, 10, 15, 20, 30].map(n => `<option${n === cfg.n ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+      <button class="btn coral" id="ltGo" style="font-size:17px">▶ Bắt đầu luyện</button></div>
+      <div class="small muted" style="margin-top:6px">Không chọn dạng nào = lấy ngẫu nhiên trong cả bộ.</div>`;
+    $("ltGo").onclick = () => {
+      const dk = [...$("ltCfg").querySelectorAll("input[value]:checked")].map(x => x.value); const muc = [...$("ltCfg").querySelectorAll("[data-m]:checked")].map(x => x.dataset.m); const n = +$("ltN").value;
+      LS.set("lt-cfg", { n, muc });
+      let P = SET.q.filter(q => (!dk.length || dk.includes(q.dkey)) && muc.includes(q.muc)); if (!P.length) return alert("Không có câu nào phù hợp.");
+      const R = NHD.rng(Date.now() % 1e9); P = NHD.shuffle(P, R).slice(0, n);
+      play(P.map(q => ({ q, order: q.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], R) : [0, 1, 2, 3] })));
+    };
+    $("ltCfg").scrollIntoView({ behavior: "smooth" });
+  }
+  function norm(s) { return String(s == null ? "" : s).replace(/\$|\\,|\s/g, "").replace(/\{,\}/g, ",").replace(/\./g, ",").replace(/^\+/, "").replace(/^(-?)0+(\d)/, "$1$2").replace(/,0+$/, "").replace(/(,\d*?)0+$/, "$1"); }
+  function play(items) {
+    $("ltSetup").classList.add("hidden"); const box = $("ltPlay"); box.classList.remove("hidden");
+    let i = 0, ok = 0, pts = 0; const res = [];
+    const show = () => {
+      if (i >= items.length) return done();
+      const it = items[i], q = it.q;
+      box.innerHTML = `<div class="row" style="justify-content:space-between"><b>Câu ${i + 1}/${items.length}</b><span class="small muted">${esc(SET.dang && SET.dang[q.dkey] ? "" : q.dkey)} ${SET.dang && SET.dang[q.dkey] ? NHD.texToHtml(SET.dang[q.dkey]) : ""} · ${LVN[q.muc] || q.muc}</span><button class="btn ghost sm" id="pQuit">✕ Thoát</button></div>
+        <div class="pbar"><i style="width:${i / items.length * 100}%"></i></div><div class="card ex" id="pQ">${NHD.renderQuestion(it, i + 1, "", {})}</div><div id="pAct"></div><div id="pFb"></div>`;
+      $("pQuit").onclick = () => { if (confirm("Thoát lượt luyện tập này?")) back(); };
+      const fb = (good, txt) => { res.push({ dkey: q.dkey, good }); if (good) ok++; saveProg(q.dkey, good);
+        $("pFb").innerHTML = `<div class="fb ${good ? "ok" : "no"}">${good ? "✓ Chính xác!" : "✗ Chưa đúng."} ${txt || ""}</div>${q.loigiai ? `<div class="card ex" style="margin-top:8px"><div class="sol"><span class="lb">Lời giải.</span> ${NHD.texToHtml(q.loigiai)}</div></div>` : ""}<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn coral" id="pNext">${i + 1 < items.length ? "Câu tiếp →" : "Xem kết quả"}</button></div>`;
+        $("pNext").onclick = () => { i++; show(); window.scrollTo({ top: 0, behavior: "smooth" }); }; $("pNext").focus(); };
+      if (q.loai === "TN") {
+        const opts = $("pQ").querySelectorAll(".opt"); const right = it.order.indexOf(0);
+        opts.forEach((o, j) => o.onclick = () => { if ($("pNext")) return; o.classList.add(j === right ? "ok" : "no"); opts[right].classList.add("ok"); fb(j === right, j === right ? "" : `Đáp án đúng là <b>${"ABCD"[right]}</b>.`); });
+      } else if (q.loai === "DS") {
+        const rows = $("pQ").querySelectorAll(".ds-row"); const ch = [null, null, null, null];
+        rows.forEach((r, j) => { const d = document.createElement("span"); d.className = "dsb"; d.innerHTML = `<button data-v="1">Đúng</button><button data-v="0">Sai</button>`; r.appendChild(d); d.querySelectorAll("button").forEach(b => b.onclick = () => { if ($("pNext")) return; ch[j] = b.dataset.v === "1"; d.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); }); });
+        $("pAct").innerHTML = `<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn blue" id="pChk">Kiểm tra</button></div>`;
+        $("pChk").onclick = () => { if (ch.some(x => x == null)) return toast("Em chọn Đúng/Sai cho cả 4 ý nhé"); let c = 0; rows.forEach((r, j) => { const t = q.y[it.order[j]].d; const good = ch[j] === t; if (good) c++; r.querySelectorAll(".dsb button").forEach(b => { if ((b.dataset.v === "1") === t) b.classList.add("ok"); else if (b.classList.contains("on")) b.classList.add("no"); }); }); $("pAct").innerHTML = ""; fb(c === 4, `Em đúng ${c}/4 ý.`); };
+      } else {
+        $("pAct").innerHTML = `<div class="row" style="margin-top:10px;gap:8px"><input type="text" id="pIn" inputmode="decimal" placeholder="Nhập đáp số (dùng dấu phẩy cho số thập phân)" style="flex:1;font-size:18px"><button class="btn blue" id="pChk">Kiểm tra</button></div>`;
+        const chk = () => { const v = $("pIn").value.trim(); if (!v) return; $("pAct").innerHTML = ""; const good = norm(v) === norm(q.da); fb(good, good ? "" : `Đáp số đúng: <b>${NHD.texToHtml(q.da)}</b>.`); };
+        $("pChk").onclick = chk; $("pIn").onkeydown = e => { if (e.key === "Enter") chk(); }; $("pIn").focus();
+      }
+    };
+    const saveProg = (dk, good) => { const k = progKey(SET.meta); const p = LS.get(k, { n: 0, ok: 0, d: {} }); p.n++; if (good) p.ok++; const d = p.d[dk] = p.d[dk] || { n: 0, ok: 0 }; d.n++; if (good) d.ok++; LS.set(k, p); };
+    const done = () => {
+      const by = {}; res.forEach(r => { const x = by[r.dkey] = by[r.dkey] || { n: 0, ok: 0 }; x.n++; if (r.good) x.ok++; });
+      box.innerHTML = `<div class="card" style="text-align:center"><div style="font:800 54px var(--font-h);color:${ok / items.length >= .8 ? "#14873e" : ok / items.length >= .5 ? "#b37400" : "#d11a45"}">${ok}/${items.length}</div><p>${ok === items.length ? "Xuất sắc! 🎉" : ok / items.length >= .8 ? "Rất tốt! Tiếp tục phát huy nhé." : ok / items.length >= .5 ? "Khá rồi — xem lại lời giải các câu sai nhé." : "Cố lên! Em xem lại lí thuyết ở Sổ tay rồi luyện lại."}</p>
+        <div style="text-align:left;max-width:520px;margin:0 auto">${Object.entries(by).map(([k, x]) => `<div class="row" style="justify-content:space-between;border-bottom:1px dashed var(--line);padding:4px 0"><span>${SET.dang && SET.dang[k] ? NHD.texToHtml(SET.dang[k]) : k}</span><b>${x.ok}/${x.n}</b></div>`).join("")}</div>
+        <div class="row" style="justify-content:center;gap:10px;margin-top:14px"><button class="btn coral" id="pAgain">↻ Luyện lượt mới</button><button class="btn ghost" id="pBack">Chọn phần khác</button></div></div>`;
+      $("pAgain").onclick = () => { back(); $("ltGo").click(); }; $("pBack").onclick = back;
+    };
+    const back = () => { box.classList.add("hidden"); $("ltSetup").classList.remove("hidden"); loadSets().then(() => SET && SET.meta && $("sets").querySelectorAll(".set").forEach(b => b.setAttribute("aria-selected", sets[+b.dataset.i] && sets[+b.dataset.i].ten === SET.meta.ten))); };
+    show();
+  }
+
+  /* ================================================================ SỔ TAY */
+  function drawSoTay() {
+    const ST = window.SOTAY || {}; const lops = Object.keys(ST);
+    let lop = LS.get("lt-stlop", lops[lops.length - 1]); if (!ST[lop]) lop = lops[0];
+    $("stLop").innerHTML = lops.map(l => `<option value="${l}"${l === lop ? " selected" : ""}>${esc(ST[l].ten || "Lớp " + l)}</option>`).join("");
+    const q = ($("stQ").value || "").toLowerCase().normalize("NFC");
+    const C = (ST[lop] || {}).chuong || [];
+    const tex = s => String(s).split(/(\$\$[^$]+\$\$|\$[^$]+\$)/).map(p => { const m = p.match(/^\$\$([^$]+)\$\$$|^\$([^$]+)\$$/); if (m) { try { return katex.renderToString(m[1] || m[2], { throwOnError: false, displayMode: !!m[1] }); } catch (e) { return esc(p); } } return esc(p).replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>"); }).join("");
+    const hit = s => !q || s.toLowerCase().normalize("NFC").includes(q);
+    let toc = "", body = "";
+    C.forEach((c, i) => {
+      const mcs = c.muc.filter(m => hit(c.ten + " " + m.ten + " " + m.ds.join(" ")));
+      if (!mcs.length) return;
+      toc += `<a href="#st-${i}">${esc(c.ten.replace(/^Chương ([IVX]+)\..*/, "Ch. $1"))}</a>`;
+      body += `<h2 id="st-${i}">${esc(c.ten)}</h2>` + mcs.map(m => `<div class="mc"><h3>${esc(m.ten)}</h3><ul>${m.ds.map(d => `<li>${tex(d)}</li>`).join("")}</ul></div>`).join("");
+    });
+    $("stToc").innerHTML = toc; $("stBody").innerHTML = body || `<div class="card empty">Không tìm thấy.</div>`;
+    $("stLop").onchange = e => { LS.set("lt-stlop", e.target.value); drawSoTay(); };
+  }
+  $("stQ").oninput = drawSoTay;
+
+  /* ================================================================ GIÁO VIÊN */
+  let gvApi = null;
+  $("gvGo").onclick = async () => {
+    if (!gvApi) return;
+    const st = gvApi.state(); let P = gvApi.pool();
+    if ($("gvUsed").checked) { const used = new Set(LS.get("used|" + st.mon + "|" + st.lop, [])); P = P.filter(q => !used.has(q.id)); }
+    const mx = Math.max(1, +$("gvMax").value || 30); const by = {}; NHD.shuffle(P, NHD.rng(Date.now())).forEach(q => { (by[q.dkey] = by[q.dkey] || []); if (by[q.dkey].length < mx) by[q.dkey].push(q); });
+    const qs = Object.values(by).flat().map(q => { const o = Object.assign({}, q); delete o.k; delete o.ml; delete o.mon; return o; });
+    if (!qs.length) { $("gvMsg").innerHTML = `<div class="note red">Không có câu nào phù hợp.</div>`; return; }
+    const dang = {}; qs.forEach(q => dang[q.dkey] = (gvApi.bank().dang || {})[q.dkey] || "");
+    const ten = $("gvTen").value.trim() || `${st.mon} ${st.lop} – luyện tập`;
+    const slug = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "");
+    const file = "LT_" + slug(ten) + ".json";
+    const set = { ten, mon: st.mon, lop: st.lop, t: new Date().toISOString(), dang, q: qs };
+    let idx = []; try { const r = await fetch("data/luyentap/index.json", { cache: "no-store" }); if (r.ok) idx = await r.json(); } catch (e) {}
+    idx = idx.filter(x => x.file !== file); idx.push({ file, ten, mon: st.mon, lop: st.lop, n: qs.length, t: set.t });
+    const dl = (txt, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], { type: "application/json" })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1500); };
+    dl(JSON.stringify(set), file); setTimeout(() => dl(JSON.stringify(idx, null, 1), "index.json"), 600);
+    $("gvMsg").innerHTML = `<div class="note green">Đã tạo <b>${esc(file)}</b> (${qs.length} câu, ${Object.keys(by).length} dạng) và <b>index.json</b> (${idx.length} bộ). Thầy tải cả hai lên thư mục <code>data/luyentap/</code> của kho GitHub.</div>`;
+  };
+
+  setTab(tab); loadSets(); drawSoTay();
+})();
+</script>
+</body>
+</html>

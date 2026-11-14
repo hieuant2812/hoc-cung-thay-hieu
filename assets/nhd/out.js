@@ -252,5 +252,60 @@ ${box} & \textit{Thời gian làm bài: ${tq(info.phut)} phút, không kể th�
     return head + h + head2 + d2;
   }
 
-  NHD.Out = { LEVELS, soLines, fitLevel, applyLevel, preamble, headerTex, versionTex, keysTex, doc, versionBlocks, keysBlocks, paginate, pagesToPdf, printPages, waitFonts, matrixTables, partTitles };
+  /* Ma trận + bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH, xuất file Word (.doc)
+     pos (tuỳ chọn): {dkey|L|muc: [số câu…]} — số thứ tự câu trong đề để ghi vào bản đặc tả */
+  function matrix7991(M, idx, names, info, mon, pos) {
+    const w = NHD.Gen.diem(mon); const LV3 = ["B", "H", "V"]; const lvOf = m => m === "NB" ? "B" : m === "TH" ? "H" : "V";
+    const rows = idx.list.filter(d => M[d.dkey] && LOAI.some(L => Object.values(M[d.dkey][L] || {}).some(n => +n > 0)));
+    const cnt = (d, L, k) => ["NB", "TH", "VD", "VDC"].filter(m => lvOf(m) === k).reduce((a, m) => a + (+(((M[d.dkey] || {})[L] || {})[m]) || 0), 0);
+    const nums = (d, L, k) => { if (!pos) return ""; const a = []; ["NB", "TH", "VD", "VDC"].filter(m => lvOf(m) === k).forEach(m => a.push(...(pos[d.dkey + "|" + L + "|" + m] || []))); return a.sort((x, y) => x - y).map(n => "C" + n).join(", "); };
+    const TD = `style="border:1px solid #000;padding:2px 3px;font:10.5pt 'Times New Roman';text-align:center;vertical-align:middle"`;
+    const TL = `style="border:1px solid #000;padding:2px 4px;font:10.5pt 'Times New Roman';vertical-align:top"`;
+    const TH = `style="border:1px solid #000;padding:2px 2px;font:bold 10pt 'Times New Roman';text-align:center;vertical-align:middle;background:#f2f2f2"`;
+    const f = x => x ? String(+x.toFixed(2)).replace(".", ",") : "";
+    const grp = `<th ${TH} colspan="3">Nhiều lựa chọn</th><th ${TH} colspan="3">“Đúng – Sai”</th><th ${TH} colspan="3">Trả lời ngắn</th>`;
+    const sub = Array(5).fill(`<th ${TH}>B</th><th ${TH}>H</th><th ${TH}>VD</th>`).join("");
+    // gộp chương
+    const span = {}; rows.forEach(d => span[d.chuong] = (span[d.chuong] || 0) + 1);
+    const cols = (a, n, b) => `<colgroup>${a.map(w => `<col width="${w}" style="width:${w}pt">`).join("")}${Array(n).fill(`<col width="27" style="width:27pt">`).join("")}${b.map(w => `<col width="${w}" style="width:${w}pt">`).join("")}</colgroup>`;
+    let h = `<table width="780" style="border-collapse:collapse;width:780pt;table-layout:fixed">${cols([24, 110, 200], 15, [45])}<tr><th ${TH} rowspan="4">TT</th><th ${TH} rowspan="4">Chủ đề/<br>Chương</th><th ${TH} rowspan="4">Nội dung/đơn vị kiến thức</th><th ${TH} colspan="12">Mức độ đánh giá</th><th ${TH} colspan="3" rowspan="3">Tổng</th><th ${TH} rowspan="4">Tỉ lệ %<br>điểm</th></tr>
+      <tr><th ${TH} colspan="9">TNKQ</th><th ${TH} colspan="3" rowspan="2">Tự luận</th></tr><tr>${grp}</tr><tr>${sub}</tr>`;
+    const tot = {}; let i = 0, lastC = null, ptAll = 0;
+    rows.forEach(d => {
+      let rowPt = 0; const lvSum = { B: 0, H: 0, V: 0 };
+      const cells = LOAI.map(L => LV3.map(k => { const c = cnt(d, L, k); tot[L + k] = (tot[L + k] || 0) + c; lvSum[k] += c; rowPt += c * w[L]; return `<td ${TD}>${c || ""}</td>`; }).join("")).join("") + `<td ${TD}></td><td ${TD}></td><td ${TD}></td>`;
+      ptAll += rowPt; d._pt = rowPt;
+      const first = d.chuong !== lastC; if (first) { i++; lastC = d.chuong; }
+      h += `<tr>${first ? `<td ${TD} rowspan="${span[d.chuong]}">${i}</td><td ${TL} rowspan="${span[d.chuong]}"><b>${esc(names.chuong(d.chuong))}</b></td>` : ""}<td ${TL}>${esc(d.ten || d.dkey)}</td>${cells}${LV3.map(k => `<td ${TD}>${lvSum[k] || ""}</td>`).join("")}<td ${TD}>__PT_${d.dkey}__</td></tr>`;
+    });
+    rows.forEach(d => h = h.replace(`__PT_${d.dkey}__`, ptAll ? f(d._pt / ptAll * 100) + "%" : ""));
+    const totN = k => LOAI.reduce((a, L) => a + (tot[L + k] || 0), 0);
+    h += `<tr><td ${TH} colspan="3">Tổng số câu</td>${LOAI.map(L => LV3.map(k => `<td ${TH}>${tot[L + k] || 0}</td>`).join("")).join("")}<td ${TH}>0</td><td ${TH}>0</td><td ${TH}>0</td>${LV3.map(k => `<td ${TH}>${totN(k)}</td>`).join("")}<td ${TH}></td></tr>`;
+    const ptK = k => LOAI.reduce((a, L) => a + (tot[L + k] || 0) * w[L], 0);
+    const sc = ptAll ? 10 / ptAll : 1; // quy về thang 10
+    h += `<tr><td ${TH} colspan="3">Tổng số điểm</td>${LOAI.map(L => `<td ${TH} colspan="3">${f(LV3.reduce((a, k) => a + (tot[L + k] || 0), 0) * w[L] * sc)}</td>`).join("")}<td ${TH} colspan="3">0</td>${LV3.map(k => `<td ${TH}>${f(ptK(k) * sc)}</td>`).join("")}<td ${TH}>10,0</td></tr>`;
+    h += `<tr><td ${TH} colspan="3">Tỉ lệ %</td>${LOAI.map(L => `<td ${TH} colspan="3">${f(LV3.reduce((a, k) => a + (tot[L + k] || 0), 0) * w[L] * sc * 10)}%</td>`).join("")}<td ${TH} colspan="3">0%</td>${LV3.map(k => `<td ${TH}>${f(ptK(k) * sc * 10)}%</td>`).join("")}<td ${TH}>100%</td></tr></table>`;
+    // bản đặc tả
+    const MUCT = { B: "Biết", H: "Hiểu", V: "Vận dụng" };
+    let d2 = `<table width="780" style="border-collapse:collapse;width:780pt;table-layout:fixed">${cols([24, 95, 130, 207], 12, [])}<tr><th ${TH} rowspan="4">TT</th><th ${TH} rowspan="4">Chủ đề/<br>Chương</th><th ${TH} rowspan="4">Nội dung/đơn vị kiến thức</th><th ${TH} rowspan="4">Yêu cầu cần đạt</th><th ${TH} colspan="12">Số câu hỏi ở các mức độ đánh giá</th></tr>
+      <tr><th ${TH} colspan="9">TNKQ</th><th ${TH} colspan="3" rowspan="2">Tự luận</th></tr><tr>${grp}</tr><tr>${Array(4).fill(`<th ${TH}>B</th><th ${TH}>H</th><th ${TH}>VD</th>`).join("")}</tr>`;
+    i = 0; lastC = null;
+    rows.forEach(d => {
+      const ks = LV3.filter(k => LOAI.some(L => cnt(d, L, k)));
+      const yc = ks.map(k => `<b>${MUCT[k]}:</b><br>– ${esc(d.ten || d.dkey)}${k === "B" ? " (nhận biết công thức, khái niệm)." : k === "H" ? " (hiểu, tính toán trực tiếp)." : " (vận dụng giải quyết bài toán, bài toán thực tế)."}`).join("<br>");
+      const first = d.chuong !== lastC; if (first) { i++; lastC = d.chuong; }
+      d2 += `<tr>${first ? `<td ${TD} rowspan="${span[d.chuong]}">${i}</td><td ${TL} rowspan="${span[d.chuong]}"><b>${esc(names.chuong(d.chuong))}</b></td>` : ""}<td ${TL}>${esc(d.ten || d.dkey)}<br><i>${esc(names.bai(d.chuong, d.bai))}</i></td><td ${TL}>${yc}</td>` +
+        LOAI.map(L => LV3.map(k => { const c = cnt(d, L, k); return `<td ${TD}>${c ? (pos ? nums(d, L, k) || c : c) : ""}</td>`; }).join("")).join("") + `<td ${TD}></td><td ${TD}></td><td ${TD}></td></tr>`;
+    });
+    d2 += `<tr><td ${TH} colspan="4">Tổng số câu</td>${LOAI.map(L => LV3.map(k => `<td ${TH}>${tot[L + k] || 0}</td>`).join("")).join("")}<td ${TH}>0</td><td ${TH}>0</td><td ${TH}>0</td></tr></table>`;
+    const P = s => `<p style="text-align:center;font:bold 13pt 'Times New Roman';margin:4pt 0">${s}</p>`;
+    const hd = `<table style="width:100%;border:0"><tr><td style="text-align:center;font:11pt 'Times New Roman';width:40%">${esc((info.so || "SỞ GIÁO DỤC VÀ ĐÀO TẠO").replace("|", " "))}<br><b>${esc(info.truong || "TRƯỜNG ……")}</b><br>TỔ: ……………</td><td style="text-align:center;font:11pt 'Times New Roman'"><b>${esc(info.ky || "KIỂM TRA")}</b><br>NĂM HỌC ${esc(info.namHoc || "……")}<br>Môn: ${esc(info.monTen || mon)} – Lớp ${esc(info.lop || "")} · Thời gian: ${esc(info.phut || "…")} phút</td></tr></table>`;
+    const note = `<p style="font:italic 10.5pt 'Times New Roman';margin:4pt 0">Ghi chú: Mỗi câu “Đúng – Sai” gồm 4 ý; điểm Phần I ${String(w.TN).replace(".", ",")} đ/câu, Phần II tối đa 1 đ/câu, Phần III ${String(w.TLN).replace(".", ",")} đ/câu${Math.abs(ptAll - 10) > 1e-9 ? " (đã quy về thang điểm 10)" : ""}. B: Biết, H: Hiểu, VD: Vận dụng; mức “vận dụng cao” của ngân hàng được tính vào cột Vận dụng theo mẫu Công văn 7991/BGDĐT-GDTrH.${pos ? " Bản đặc tả ghi số thứ tự câu trong đề gốc/mã đề đầu tiên (C1 = câu 1 của phần tương ứng)." : ""}</p>`;
+    const body = hd + P("MA TRẬN ĐỀ KIỂM TRA") + h + note + `<br style="page-break-before:always" clear="all">` + P("BẢN ĐẶC TẢ ĐỀ KIỂM TRA") + d2;
+    return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Ma tran dac ta</title>
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+<style>@page{size:841.9pt 595.3pt;margin:30pt 28pt}@page WordSection1{size:841.9pt 595.3pt;mso-page-orientation:landscape;margin:30pt 28pt 30pt 28pt}div.WordSection1{page:WordSection1}table{mso-table-layout-alt:fixed}</style></head><body><div class="WordSection1">${body}</div></body></html>`;
+  }
+
+  NHD.Out = { matrix7991, LEVELS, soLines, fitLevel, applyLevel, preamble, headerTex, versionTex, keysTex, doc, versionBlocks, keysBlocks, paginate, pagesToPdf, printPages, waitFonts, matrixTables, partTitles };
 })(window);

@@ -6,7 +6,7 @@
 <title>Chấm phiếu · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script>
-<script src="assets/omr/layout.js"></script><script src="assets/omr/scan.js"></script><script src="assets/omr/keys.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/scan.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/saoluu.js"></script>
 <style>
 body{background:#f4f6fb}
 body::before{display:none}
@@ -14,7 +14,7 @@ body::before{display:none}
 .bar{position:sticky;top:0;z-index:20;background:#1d2742;color:#fff;display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
 .bar a{color:#fff;text-decoration:none;font-weight:700;font:800 18px var(--font-h)}
 .bar .sub{margin-left:auto;font-size:13px;opacity:.85;max-width:55%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nav3{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.nav3{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
 .nav3 button{border:0;background:none;padding:9px 4px 8px;font:600 13px var(--font);color:var(--muted);display:grid;gap:2px;justify-items:center;cursor:pointer}
 .nav3 button b{font-size:20px;line-height:1}
 .nav3 button[aria-selected=true]{color:var(--coral)}
@@ -64,6 +64,7 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
     <div id="qrBox" class="hidden"><div class="cam" style="aspect-ratio:1/1"><video id="qrVideo" playsinline muted></video><div class="msg">Đưa mã QR đáp án vào giữa khung</div></div><button class="btn ghost big-btn" id="qrStop" style="margin-top:8px">Huỷ</button></div>
     <div id="handBox" class="hidden card" style="margin-bottom:12px"></div>
     <div id="baiList"></div>
+    <details class="card" style="margin-top:14px"><summary><b>💾 Sao lưu dữ liệu</b> <span class="hint">— cất bài chấm và kết quả vào một file (Google Drive, Zalo…), đổi máy thì khôi phục</span></summary><div id="saoLuu" style="margin-top:10px"></div></details>
   </section>
 
   <!-- ===================== 2. CHẤM ===================== -->
@@ -82,6 +83,22 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
     <div id="result"></div>
   </section>
 
+  <!-- ===================== 4. PHÂN TÍCH ===================== -->
+  <section class="pg" id="pgPt">
+    <h2 style="margin:6px 0 4px" id="ptTitle">Phân tích kết quả</h2>
+    <div class="card" style="margin:8px 0;display:grid;gap:8px">
+      <label class="f">Tên lớp (để so sánh)<input type="text" id="ptLop" placeholder="VD: 11A1"></label>
+      <div id="ptCmp"></div>
+      <div class="row" style="gap:6px">
+        <button class="btn coral sm" id="ptOntap">📝 Sinh đề ôn tập theo chỗ yếu</button>
+        <button class="btn ghost sm" id="ptSend">📤 Gửi kết quả sang máy tính</button>
+        <label class="btn ghost sm">🧩 Gắn thông tin câu hỏi<input type="file" id="ptMeta" accept=".json,application/json" hidden></label>
+      </div>
+      <p class="hint" style="margin:0">Phân tích đầy đủ (bảng lớn, in báo cáo, xem nội dung câu sai) có ở trang <b>Phân tích</b> trên máy tính: bấm “Gửi kết quả sang máy tính”, chuyển file qua Zalo/Drive rồi mở ở trang đó.</p>
+    </div>
+    <div id="ptBox"></div>
+  </section>
+
   <!-- ===================== 3. KẾT QUẢ ===================== -->
   <section class="pg" id="pgKq">
     <h2 style="margin:6px 0 4px" id="kqTitle">Kết quả</h2>
@@ -91,6 +108,7 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
       <button class="btn ghost sm" id="csv">⬇ CSV</button>
       <button class="btn ghost sm" id="dsLop">👥 Danh sách lớp</button>
       <button class="btn ghost sm" id="kqClear">🗑 Xoá kết quả</button>
+      <button class="btn coral sm" id="kqPt">📈 Phân tích</button>
     </div>
     <div id="dsBox" class="hidden card" style="margin-bottom:10px">
       <p class="hint">Dán danh sách lớp, mỗi dòng: <b>SBD</b>, dấu Tab hoặc dấu phẩy, rồi <b>Họ tên</b> (chép thẳng từ Excel được).</p>
@@ -104,6 +122,7 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
   <button data-p="pgBai"><b>📋</b>Bài kiểm tra</button>
   <button data-p="pgCham"><b>📷</b>Chấm</button>
   <button data-p="pgKq"><b>📊</b>Kết quả</button>
+  <button data-p="pgPt"><b>📈</b>Phân tích</button>
 </nav>
 <script src="assets/omr/app.js"></script>
 </body>

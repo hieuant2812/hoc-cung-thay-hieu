@@ -4,10 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ra đề kiểm tra · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
-<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script>
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/lib/jszip.min.js"></script>
-<script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/lib/qrcode.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/lib/qrcode.js"></script>
 <script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/nhd/gen.js"></script><script src="assets/nhd/out.js"></script>
 </head>
 <body data-page="rade">
@@ -20,7 +20,9 @@
 
   <div class="tabs lg" role="tablist" aria-label="Môn" id="tmon"></div>
   <div class="tabs" role="tablist" aria-label="Lớp" id="tlop"></div>
+  <div class="card hidden" id="khoiBox" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:-4px 0 12px;padding:10px 14px;background:#fff8e8"></div>
 
+  <div id="ontapNote"></div>
   <div class="steps" role="tablist" id="steps">
     <button type="button" data-s="1"><span class="k">1</span><span><b>Ngân hàng đề</b><span id="s1i">Đăng file .tex / .zip</span></span></button>
     <button type="button" data-s="2"><span class="k">2</span><span><b>Ma trận</b><span id="s2i">Chọn dạng và mức độ</span></span></button>
@@ -50,6 +52,7 @@
     </div>
     <div class="tree" id="tree"></div>
     <div class="note blue small">Ngân hàng chỉ được lưu trong trình duyệt trên máy này (không gửi lên mạng). Sang máy khác thì đăng lại các file .zip. <b>Không đưa file ngân hàng lên GitHub.</b></div>
+    <details class="card" style="margin-top:14px"><summary><b>💾 Sao lưu / khôi phục</b> <span class="muted small">— ngân hàng, mẫu ma trận, đề đã ra, kết quả chấm: một file duy nhất</span></summary><div id="saoLuu" style="margin-top:10px"></div></details>
   </section>
 
   <!-- ============================================================ BƯỚC 2 -->
@@ -83,6 +86,7 @@
       <button class="btn ghost sm" id="tplSave" style="align-self:end">💾 Lưu ma trận thành mẫu</button>
       <button class="btn ghost sm" id="mxPrint" style="align-self:end">🖨 In ma trận + đặc tả</button>
       <button class="btn ghost sm" id="mxXls" style="align-self:end">⬇ Tải Excel</button>
+      <button class="btn blue sm" id="mxWord" style="align-self:end" title="Ma trận + bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH">⬇ Word (CV 7991)</button>
     </div>
     <div class="sum" id="mxSum"></div>
     <label class="chk small" style="margin:0 0 8px"><input type="checkbox" id="onlyUsed"> Chỉ hiện các dạng đã có số câu</label>
@@ -153,7 +157,7 @@
         </div>
         <div class="row" style="margin-top:10px">
           <label class="chk"><input type="checkbox" id="xLG" checked> Kèm file lời giải chi tiết</label>
-          <label class="chk"><input type="checkbox" id="xMT" checked> Kèm ma trận + đặc tả (Excel)</label>
+          <label class="chk"><input type="checkbox" id="xMT" checked> Kèm ma trận + đặc tả (Excel và Word theo CV 7991)</label>
           <span class="grow"></span>
           <button class="btn ghost" id="btnPrint">🖨 In ngay</button>
           <button class="btn coral" id="btnZip">⬇ Tải gói đề (.zip)</button>
@@ -180,6 +184,6 @@
   <dialog id="dlg"><div class="dh"><b id="dlgT"></b><span class="grow"></span><button class="btn ghost sm" onclick="dlg.close()">Đóng</button></div><div class="db" id="dlgB"></div></dialog>
 </main>
 <footer id="foot"></footer>
-<script src="assets/nhd/app.js"></script>
+<script src="assets/saoluu.js"></script><script src="assets/nhd/app.js"></script><script>SaoLuu.mount(document.getElementById("saoLuu"));</script>
 </body>
 </html>
