@@ -74,9 +74,14 @@ Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục
 - Trang **Phiếu & chấm** (`phieu.html`): chọn 1 trong 5 mẫu phiếu (15 phút khổ A5; 45, 60 phút in A4 hoặc thu nhỏ A5; Toán 90 phút 12–4–6; Lí/Hoá 50 phút 18–4–6), điền trường – kì kiểm tra rồi in (tỉ lệ 100%).
 - Ứng dụng chấm (`cham.html`) chạy ngay trên trình duyệt điện thoại (Safari/Chrome), không cần cài đặt. Cần mở qua địa chỉ https (GitHub Pages) để dùng được camera.
 - Nạp đáp án: trang Ra đề → bước 4 → mục **Chấm bằng điện thoại** có mã QR; quét bằng camera điện thoại là mở ứng dụng và nạp sẵn đáp án mọi mã đề. Cũng có thể mở file `DapAn_ChamDienThoai.json` (có trong gói đề) hoặc nhập đáp án bằng tay.
-- Chấm: đưa trọn 4 ô vuông đen của phiếu vào khung, giữ yên — máy tự chụp, đọc SBD, mã đề, chấm theo thang điểm Bộ. Kiểm tra ảnh phiếu (xanh = đúng, đỏ = sai, xanh dương = đáp án) rồi bấm "Lưu và chấm phiếu tiếp".
+- Chấm: đưa trọn 4 ô vuông đen của phiếu vào khung, giữ yên khoảng nửa giây — máy tự chụp, đọc SBD, mã đề, chấm theo thang điểm Bộ (khoảng 1 giây một phiếu, camera không bị đứng). Phiếu không cần nằm giữa khung, xoay ngang hay lộn ngược đều được.
+- **Tự lưu khi đọc rõ** (bật sẵn): phiếu đọc rõ — mã đề có trong đáp án, SBD đủ, không tô trùng — được lưu ngay, máy báo điểm rồi chờ phiếu tiếp. Phiếu có vấn đề thì dừng lại để kiểm tra ảnh (xanh = đúng, đỏ = sai, xanh dương = đáp án), sửa SBD/mã đề rồi bấm "Lưu và chấm phiếu tiếp". Tắt ô này nếu muốn xem từng phiếu.
+- **Phiếu A5 chưa cắt** (2 phiếu trên một tờ A4 ngang): chụp cả tờ, máy chấm và lưu cả 2 phiếu.
+- **📸 Chụp ảnh nét**: mở máy ảnh của điện thoại (nét hơn khung hình video) — dùng khi chỗ tối hoặc phiếu khó đọc. **🖼 Chấm từ ảnh có sẵn**: chọn nhiều ảnh cùng lúc (chụp trước cả lớp rồi chấm một lượt).
+- Phiếu không đọc được: máy rung, báo lí do (thiếu góc, sai mẫu phiếu…) và giữ lại ảnh. Bấm “📤 Tải ảnh chưa đọc được” để gửi kiểm tra.
 - Kết quả lưu trong điện thoại; mục Kết quả có thống kê, tải Excel/CSV, dán danh sách lớp (SBD – Họ tên) để hiện tên.
 
+- **In phiếu**: nút “⬇ Tải PDF khổ A4 để in” tạo file PDF khổ A4. Phiếu khổ A5 (15 phút, hoặc phiếu 45 hoặc 60 phút thu nhỏ) được ghép 2 phiếu trên 1 tờ A4 ngang, có đường cắt ở giữa. Khi in chọn tỉ lệ 100%, rồi cắt đôi tờ giấy.
 - Phiếu **kèm tự luận**: ở trang Phiếu & chấm tích “Kèm phần tự luận ở mặt sau”. Mặt sau kẻ dòng chấm, có ô điểm tự luận và chữ kí giám khảo. In 2 mặt (A4 dọc lật theo cạnh dài; A5 – 2 phiếu/tờ lật theo cạnh ngắn). Máy chỉ chấm mặt trước.
 
 ## 4b. Phân tích kết quả và đề ôn tập theo chỗ yếu

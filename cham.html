@@ -6,7 +6,7 @@
 <title>Chấm phiếu · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script>
-<script src="assets/omr/layout.js"></script><script src="assets/omr/scan.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/saoluu.js"></script>
+<script src="assets/omr/layout.js?v=6"></script><script src="assets/omr/scan.js?v=6"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/saoluu.js"></script>
 <style>
 body{background:#f4f6fb}
 body::before{display:none}
@@ -72,14 +72,17 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
     <div class="cam" id="cam">
       <video id="video" playsinline muted></video><canvas class="ov" id="ov"></canvas>
       <div class="guide"><i></i><i></i><i></i><i></i></div>
-      <div class="start" id="camStart"><div><div style="font-size:46px">📷</div><b style="font-size:18px">Bấm để mở camera</b><div class="hint" style="color:#ccd">Đặt phiếu trên mặt bàn phẳng, đủ sáng. Đưa cả 4 ô vuông đen vào khung vàng — máy tự chụp và chấm.</div></div></div>
+      <div class="start" id="camStart"><div><div style="font-size:46px">📷</div><b style="font-size:18px">Bấm để mở camera</b><div class="hint" style="color:#ccd">Đặt phiếu trên mặt bàn phẳng, đủ sáng. Đưa cả 4 ô vuông đen vào khung — máy tự chụp và chấm. Phiếu A5 chưa cắt: chụp cả tờ, máy chấm cả 2 phiếu.</div></div></div>
       <div class="msg" id="camMsg">Đang chờ…</div>
     </div>
     <div class="row" style="margin:10px 0;justify-content:center">
       <button class="btn ghost sm" id="torch">🔦 Đèn</button>
-      <label class="btn ghost sm">🖼 Chấm từ ảnh có sẵn<input type="file" id="photo" accept="image/*" hidden></label>
+      <label class="btn ghost sm">📸 Chụp ảnh nét<input type="file" id="snap" accept="image/*" capture="environment" hidden></label>
+      <label class="btn ghost sm">🖼 Chấm từ ảnh có sẵn<input type="file" id="photo" accept="image/*" multiple hidden></label>
       <label class="chk small"><input type="checkbox" id="beep" checked> Âm báo</label>
+      <label class="chk small"><input type="checkbox" id="autoSave" checked> Tự lưu khi đọc rõ</label>
     </div>
+    <div class="hint" id="camStat" style="text-align:center;margin:-4px 0 8px"></div>
     <div id="result"></div>
   </section>
 
@@ -124,6 +127,6 @@ textarea{width:100%;min-height:90px;font:14px ui-monospace,Menlo,monospace}
   <button data-p="pgKq"><b>📊</b>Kết quả</button>
   <button data-p="pgPt"><b>📈</b>Phân tích</button>
 </nav>
-<script src="assets/omr/app.js"></script>
+<script src="assets/omr/app.js?v=6"></script>
 </body>
 </html>
