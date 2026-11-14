@@ -1,0 +1,21 @@
+GÓI CẬP NHẬT 10 — Sửa lỗi tạo gói ngân hàng cho iPad
+====================================================
+
+Lỗi cũ: bấm "Tạo gói để đăng lên web" thì trình duyệt chỉ cho tải 1 file
+(nganhang.json), còn file nganhang.hcth bị chặn vì trang tải nhiều file liền nhau.
+
+Đã sửa:
+  - Tạo gói giờ chỉ tải về MỘT file: nganhang-<ngày>.zip
+    (bên trong có thư mục data/ gồm nganhang.json + nganhang....hcth).
+  - Có thêm nút "Tải gói (1 file .zip)" và nút tải từng file riêng, phòng khi
+    trình duyệt vẫn chặn.
+  - Trên iPad, nút "Nạp từ file" nhận thẳng file .zip (gửi qua AirDrop/Zalo/Drive),
+    không cần đưa lên GitHub. Chọn được nhiều file .hcth cùng lúc.
+
+Tải lên GitHub 5 file sau (giữ nguyên thư mục assets/):
+  assets/dongbo.js   index.html   rade.html   sw.js   HUONG-DAN.md
+
+Sau đó trên máy tính: Ra đề -> Dùng ngân hàng trên iPad -> Tạo gói -> được file .zip.
+  Cách A: giải nén .zip, kéo CẢ THƯ MỤC data vào GitHub (Add file -> Upload files).
+          iPad bấm "Lấy ngân hàng về máy này".
+  Cách B: gửi file .zip sang iPad, bấm "Nạp từ file" và chọn file .zip đó.

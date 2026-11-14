@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ra đề kiểm tra · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/docx.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/lib/qrcode.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/nhd/gen.js"></script><script src="assets/nhd/out.js"></script>
+</head>
+<body data-page="rade">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm rade">
+    <h1>Ra đề kiểm tra theo ma trận</h1>
+    <p>Đăng ngân hàng đề → lập ma trận → điền thông tin → sinh nhiều mã đề, xuất TeX hoặc PDF kèm đáp án tổng hợp.</p>
+  </section>
+
+  <div class="tabs lg" role="tablist" aria-label="Môn" id="tmon"></div>
+  <div class="tabs" role="tablist" aria-label="Lớp" id="tlop"></div>
+  <div class="card hidden" id="khoiBox" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:-4px 0 12px;padding:10px 14px;background:#fff8e8"></div>
+
+  <div id="ontapNote"></div>
+  <div class="steps" role="tablist" id="steps">
+    <button type="button" data-s="1"><span class="k">1</span><span><b>Ngân hàng đề</b><span id="s1i">Đăng file .tex / .zip</span></span></button>
+    <button type="button" data-s="2"><span class="k">2</span><span><b>Ma trận</b><span id="s2i">Chọn dạng và mức độ</span></span></button>
+    <button type="button" data-s="3"><span class="k">3</span><span><b>Thông tin đề</b><span>Sở, trường, kì kiểm tra</span></span></button>
+    <button type="button" data-s="4"><span class="k">4</span><span><b>Sinh và xuất đề</b><span>TeX · PDF · đáp án</span></span></button>
+  </div>
+
+  <!-- ============================================================ BƯỚC 1 -->
+  <section class="pane" id="p1">
+    <div class="drop" id="drop">
+      <div class="ico">📥</div>
+      <b>Kéo thả file .tex, file .zip hoặc cả thư mục ngân hàng vào đây</b>
+      <div class="muted small">Web tự tìm mọi câu <code>\cauTN</code>, <code>\cauDS</code>, <code>\cauTLN</code>, kể cả trong các file zip lồng nhau. Câu trùng mã sẽ được ghi đè.</div>
+      <div class="row" style="justify-content:center;margin-top:12px">
+        <label class="btn blue">Chọn file (.tex, .zip)<input type="file" id="fFiles" multiple accept=".tex,.zip" hidden></label>
+        <label class="btn ghost">Chọn cả thư mục<input type="file" id="fDir" webkitdirectory multiple hidden></label>
+      </div>
+      <div class="prog hidden" id="prog"><i></i></div>
+      <div class="small muted" id="progT"></div>
+    </div>
+    <div id="loadMsg"></div>
+    <div class="sum" id="bankSum"></div>
+    <div class="row">
+      <h3 style="margin:8px 0 0" id="treeTitle">Ngân hàng</h3><span class="grow"></span>
+      <input type="search" id="bankQ" placeholder="Tìm dạng…" style="width:220px">
+      <button class="btn ghost sm" id="btnClear">Xoá ngân hàng lớp này</button>
+    </div>
+    <div class="tree" id="tree"></div>
+    <div class="note blue small">Ngân hàng được lưu trong trình duyệt của máy này (không gửi lên mạng). Muốn dùng trên iPad hay máy khác mà không phải đăng lại file .tex: xem mục <b>Dùng trên iPad</b> ngay dưới. <b>Không đưa file .tex ngân hàng lên GitHub ở dạng thường.</b></div>
+    <div id="nhMoi"></div>
+    <details class="card" style="margin-top:14px" id="dbBox"><summary><b>📲 Dùng ngân hàng trên iPad / máy khác</b> <span class="muted small">— gói mã hoá đặt sẵn trên web, máy khác chỉ nhập mật khẩu một lần</span></summary>
+      <div id="dongBo" style="margin-top:10px"></div>
+      <div class="note blue small" style="margin-top:8px">Gói được nén và <b>mã hoá AES-256</b> bằng mật khẩu của thầy nên đặt trên GitHub công khai vẫn an toàn: không có mật khẩu thì không mở được. Khi ngân hàng thay đổi, tạo gói mới và đăng đè lên là mọi máy tự thấy bản mới.</div>
+    </details>
+    <details class="card" style="margin-top:14px"><summary><b>💾 Sao lưu / khôi phục</b> <span class="muted small">— ngân hàng, mẫu ma trận, đề đã ra, kết quả chấm: một file duy nhất</span></summary><div id="saoLuu" style="margin-top:10px"></div></details>
+  </section>
+
+  <!-- ============================================================ BƯỚC 2 -->
+  <section class="pane" id="p2">
+    <div class="grid2">
+      <fieldset>
+        <legend>Phạm vi kiến thức</legend>
+        <div class="row small" style="margin-bottom:6px"><button class="btn ghost sm" id="scAll">Chọn tất cả</button><button class="btn ghost sm" id="scNone">Bỏ chọn</button><span class="muted">Bấm để chọn chương đưa vào đề</span></div>
+        <div id="scope" style="display:grid;gap:6px"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Cấu trúc và mức độ</legend>
+        <div class="grid3">
+          <label class="f">Phần I (TN)<input type="number" id="cTN" min="0" max="60"></label>
+          <label class="f">Phần II (Đ/S)<input type="number" id="cDS" min="0" max="20"></label>
+          <label class="f">Phần III (TLN)<input type="number" id="cTLN" min="0" max="30"></label>
+        </div>
+        <div class="row" style="margin-top:10px" id="pctBox"></div>
+        <div class="small muted" id="ctNote" style="margin-top:8px"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn violet" id="btnSuggest">✨ Gợi ý ma trận tự động</button>
+          <button class="btn ghost sm" id="btnZero">Xoá hết số</button>
+        </div>
+      </fieldset>
+    </div>
+    <div class="row" style="margin:4px 0 8px">
+      <label class="f" style="min-width:240px">Mẫu ma trận đã lưu<select id="tplSel"><option value="">— chọn mẫu —</option></select></label>
+      <button class="btn ghost sm" id="tplLoad" style="align-self:end">Dùng mẫu</button>
+      <button class="btn ghost sm" id="tplDel" style="align-self:end">Xoá mẫu</button>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="tplSave" style="align-self:end">💾 Lưu ma trận thành mẫu</button>
+      <button class="btn ghost sm" id="mxPrint" style="align-self:end">🖨 In ma trận + đặc tả</button>
+      <button class="btn ghost sm" id="mxXls" style="align-self:end">⬇ Tải Excel</button>
+      <button class="btn blue sm" id="mxWord" style="align-self:end" title="Ma trận + bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH">⬇ Word (CV 7991)</button>
+    </div>
+    <div class="sum" id="mxSum"></div>
+    <label class="chk small" style="margin:0 0 8px"><input type="checkbox" id="onlyUsed"> Chỉ hiện các dạng đã có số câu</label>
+    <div class="mx-wrap"><table class="mx" id="mx"></table></div>
+    <p class="small muted">Mỗi ô: ô trên là số câu cần lấy, số nhỏ bên dưới là số câu đang có trong ngân hàng. Ô bị khoá là dạng chưa có câu ở mức đó.</p>
+  </section>
+
+  <!-- ============================================================ BƯỚC 3 -->
+  <section class="pane" id="p3">
+    <div class="grid2">
+      <fieldset>
+        <legend>Phần đầu đề</legend>
+        <div style="display:grid;gap:10px">
+          <label class="f">Sở<input type="text" id="iSo"></label>
+          <label class="f">Trường<input type="text" id="iTruong"></label>
+          <div class="grid2">
+            <label class="f">Kì kiểm tra<input type="text" id="iKy" list="kyList"></label>
+            <label class="f">Năm học<input type="text" id="iNam"></label>
+          </div>
+          <datalist id="kyList"><option>KIỂM TRA GIỮA KÌ I</option><option>KIỂM TRA CUỐI KÌ I</option><option>KIỂM TRA GIỮA KÌ II</option><option>KIỂM TRA CUỐI KÌ II</option><option>KIỂM TRA THƯỜNG XUYÊN</option><option>KIỂM TRA 45 PHÚT</option><option>THI THỬ TỐT NGHIỆP THPT</option><option>ĐỀ ÔN TẬP</option></datalist>
+          <div class="grid3">
+            <label class="f">Môn (in trên đề)<input type="text" id="iMon"></label>
+            <label class="f">Thời gian (phút)<input type="number" id="iPhut" min="5"></label>
+            <label class="f">Nhãn đề<select id="iLoai"><option>ĐỀ CHÍNH THỨC</option><option>ĐỀ THAM KHẢO</option><option>ĐỀ ÔN TẬP</option><option value="">(không ghi)</option></select></label>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Cách sinh đề</legend>
+        <div class="opt-cards">
+          <label class="oc"><input type="radio" name="mode" value="goc" checked><span><b>Một đề gốc → trộn nhiều mã</b><span>Mọi mã đề dùng chung bộ câu, chỉ đảo thứ tự câu và phương án.</span></span></label>
+          <label class="oc"><input type="radio" name="mode" value="khac"><span><b>Mỗi mã một bộ câu khác</b><span>Cùng dạng, cùng mức độ ở mỗi vị trí nhưng khác số liệu.</span></span></label>
+        </div>
+        <div class="grid3" style="margin-top:12px">
+          <label class="f">Số mã đề<input type="number" id="oSoMa" min="1" max="24"></label>
+          <label class="f">Mã đề đầu tiên<input type="text" id="oMaDau"></label>
+          <label class="f">Cách đánh mã<select id="oKieu"><option value="tang">Liên tiếp</option><option value="ngaunhien">Ngẫu nhiên 3 chữ số</option></select></label>
+        </div>
+        <div style="display:grid;gap:8px;margin-top:12px">
+          <label class="chk"><input type="checkbox" id="oTronCau" checked> Đảo thứ tự câu trong mỗi phần</label>
+          <label class="chk"><input type="checkbox" id="oTronY"> Phần II: đảo thứ tự các ý a), b), c), d)</label>
+          <label class="chk"><input type="checkbox" id="oMoi" checked> Ưu tiên câu chưa dùng ở các đề đã xuất trước đây <button class="btn ghost sm" id="btnHist" type="button" style="margin-left:6px">Xoá lịch sử</button></label>
+          <div class="small muted">Phương án Phần I luôn được đảo (trong ngân hàng phương án đúng đứng đầu).</div>
+          <div class="grid2">
+            <label class="f">Số trang tối đa mỗi mã đề<select id="oTrang"><option value="4">4 trang (1 tờ A3 gấp đôi / 2 tờ A4 in 2 mặt)</option><option value="2">2 trang (1 tờ A4 in 2 mặt)</option><option value="6">6 trang</option><option value="8">8 trang</option><option value="0">Không giới hạn</option></select></label>
+            <label class="f">Hạt giống trộn (đổi số → đề khác)<input type="number" id="oSeed"></label>
+          </div>
+          <div class="small muted">Web tự thu nhỏ hình, cỡ chữ (không dưới 10,5pt) và khoảng cách để mỗi mã đề vừa số trang đã chọn.</div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="row"><span class="grow"></span><button class="btn coral" id="go4">Tiếp: Sinh đề →</button></div>
+  </section>
+
+  <!-- ============================================================ BƯỚC 4 -->
+  <section class="pane" id="p4">
+    <div class="row">
+      <button class="btn coral" id="btnGen">🎲 Sinh đề</button>
+      <span class="muted small" id="genInfo">Đề được sinh từ ma trận ở bước 2.</span>
+    </div>
+    <div id="genMsg"></div>
+    <div id="genBox" class="hidden">
+      <fieldset style="margin-top:12px">
+        <legend>Xuất đề</legend>
+        <div class="opt-cards">
+          <label class="oc"><input type="radio" name="xuat" value="pdf" checked><span><b>File PDF + file TeX</b><span>Gói .zip gồm PDF từng mã đề, PDF đáp án và toàn bộ file .tex.</span></span></label>
+          <label class="oc"><input type="radio" name="xuat" value="tex"><span><b>Chỉ file TeX</b><span>Gói .zip các file .tex, mở bằng VS Code và biên dịch XeLaTeX.</span></span></label>
+          <label class="oc"><input type="radio" name="xuat" value="docx"><span><b>File Word (.docx)</b><span>Từng mã đề, đáp án, lời giải, ma trận + đặc tả. Công thức là Equation của Word, sửa được ngay trong Word.</span></span></label>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <label class="chk"><input type="checkbox" id="xLG" checked> Kèm file lời giải chi tiết</label>
+          <label class="chk"><input type="checkbox" id="xMT" checked> Kèm ma trận + đặc tả (Excel và Word theo CV 7991)</label>
+          <span class="grow"></span>
+          <button class="btn ghost" id="btnPrint">🖨 In ngay</button>
+          <button class="btn coral" id="btnZip">⬇ Tải gói đề (.zip)</button>
+        </div>
+        <div class="prog hidden" id="xprog"><i></i></div><div class="small muted" id="xprogT"></div>
+      </fieldset>
+      <fieldset>
+        <legend>📱 Chấm bằng điện thoại</legend>
+        <div class="row" style="align-items:flex-start;gap:18px">
+          <div id="keyQR" style="background:#fff;padding:6px;border-radius:12px;border:1px solid var(--line)"></div>
+          <div style="flex:1;min-width:240px">
+            <p style="margin:0 0 6px"><b>Quét mã này bằng camera điện thoại</b>: điện thoại mở ứng dụng chấm và nạp sẵn đáp án của tất cả mã đề.</p>
+            <p class="small muted" style="margin:0 0 8px" id="keyInfo"></p>
+            <div class="row"><button class="btn ghost sm" id="keyJson">⬇ Tải file đáp án (.json)</button><a class="btn ghost sm" href="phieu.html" target="_blank">🖨 In phiếu trả lời</a></div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="vtabs" id="vtabs"></div>
+      <div class="small muted noprint">Rê chuột vào một câu và bấm <b>⟳ Đổi câu</b> để thay bằng câu khác cùng dạng, cùng mức độ.</div>
+      <div class="preview" id="preview"></div>
+    </div>
+  </section>
+
+  <dialog id="dlg"><div class="dh"><b id="dlgT"></b><span class="grow"></span><button class="btn ghost sm" onclick="dlg.close()">Đóng</button></div><div class="db" id="dlgB"></div></dialog>
+</main>
+<footer id="foot"></footer>
+<script src="assets/saoluu.js"></script><script src="assets/dongbo.js?v=10"></script><script src="assets/nhd/app.js"></script><script>SaoLuu.mount(document.getElementById("saoLuu"));DongBo.mount(document.getElementById("dongBo"));DongBo.nhacBanMoi(document.getElementById("nhMoi"));</script>
+</body>
+</html>
