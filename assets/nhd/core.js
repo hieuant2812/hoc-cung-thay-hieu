@@ -670,5 +670,5 @@
     return q.da;
   }
 
-  Object.assign(NHD, { sideFig, esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, MUC, plainLen, findEnd });
+  Object.assign(NHD, { MACROS, sideFig, esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, MUC, plainLen, findEnd });
 })(window);

@@ -84,6 +84,68 @@ Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục
 - **In phiếu**: nút “⬇ Tải PDF khổ A4 để in” tạo file PDF khổ A4. Phiếu khổ A5 (15 phút, hoặc phiếu 45 hoặc 60 phút thu nhỏ) được ghép 2 phiếu trên 1 tờ A4 ngang, có đường cắt ở giữa. Khi in chọn tỉ lệ 100%, rồi cắt đôi tờ giấy.
 - Phiếu **kèm tự luận**: ở trang Phiếu & chấm tích “Kèm phần tự luận ở mặt sau”. Mặt sau kẻ dòng chấm, có ô điểm tự luận và chữ kí giám khảo. In 2 mặt (A4 dọc lật theo cạnh dài; A5 – 2 phiếu/tờ lật theo cạnh ngắn). Máy chỉ chấm mặt trước.
 
+## 4a. Dùng ngân hàng đề trên iPad / điện thoại (không phải đăng lại file .tex)
+
+Ngân hàng nằm trong trình duyệt của từng máy, nên máy mới sẽ trống. Thay vì đăng lại các file .tex, hãy đặt **một gói ngân hàng đã mã hoá** lên chính trang web; máy nào cần thì tải về một lần.
+
+**Bước 1 — trên máy tính (máy đang có ngân hàng).** Vào *Ra đề* → bước 1 → mở mục **📲 Dùng ngân hàng trên iPad / máy khác** → bấm **🔐 Tạo gói để đăng lên web** → đặt một mật khẩu (nhớ kĩ, ít nhất 6 kí tự). Trang tải về 2 file: `nganhang.json` và `nganhang.hcth`.
+
+**Bước 2 — đăng lên web.** Chép 2 file đó vào thư mục **`data/`** của trang rồi đăng lên GitHub như mọi lần (Add file → Upload files → Commit). Gói đã được nén và **mã hoá AES‑256** bằng mật khẩu của thầy: ai tải về cũng không mở được nếu không có mật khẩu, nên để trên GitHub công khai vẫn an toàn. Toàn bộ ngân hàng hơn 22 000 câu chỉ còn khoảng 1,6 MB.
+
+**Bước 3 — trên iPad (hay bất kì máy nào).** Mở trang → *Trang chủ* hoặc *Ra đề* → **📥 Lấy ngân hàng về máy này** → nhập mật khẩu. Vài giây là xong, sau đó dùng như trên máy tính: chọn ma trận, sinh đề, tải gói Word/PDF. Mật khẩu được nhớ sẵn nên lần sau không phải nhập lại.
+
+- Khi ngân hàng có thay đổi: tạo gói mới, đăng đè lên 2 file cũ. Máy nào mở trang cũng thấy dòng nhắc **“có bản mới”**.
+- Ngân hàng của máy nào vẫn nằm ở máy đó; gói trên web chỉ là bản sao để phát cho các máy. Máy tính vẫn là bản gốc.
+- Không có mạng vẫn dùng được: ngân hàng đã nằm trong máy rồi.
+
+### Cài trang web thành ứng dụng trên iPad (nên làm)
+
+Safari **tự xoá dữ liệu của trang web sau khoảng 7 ngày không mở** — ngân hàng vừa tải về có thể mất. Chỉ cần cài trang vào Màn hình chính là dữ liệu được giữ lâu dài:
+
+mở trang bằng **Safari** → nút **Chia sẻ** (hình ↑) → **Thêm vào MH chính** → Thêm.
+
+Sau khi cài: có biểu tượng riêng, mở toàn màn hình như một ứng dụng, **dùng được cả khi không có mạng** (ra đề, chấm phiếu, xem mô phỏng), và iPad không xoá ngân hàng nữa. Trang sẽ tự nhắc việc này khi thầy mở bằng iPad.
+
+## 4a2. Soạn kế hoạch bài dạy và kế hoạch giáo dục (`khbd.html`)
+
+Trang **Soạn bài** dựng sẵn kế hoạch bài dạy theo **Công văn 5512**, có tích hợp **Khung năng lực số** (Thông tư 02/2025/TT-BGDĐT) và **Khung năng lực AI** (Quyết định 2422/QĐ-BGDĐT) — đúng bộ mã thầy đang dùng (NLS 3.2.NC1a, 5.2.NC1b…; AI 10/11/12.C3.2, A1.2, A3.1).
+
+- Chọn lớp (Toán 10, 11, 12 và chuyên đề của cả ba khối) → chọn bài → tích các mục muốn đưa vào (hoạt động mở đầu, trải nghiệm công cụ số và phản biện AI, vận dụng thực tiễn, phiếu học tập, rubric, khung kí duyệt) → xem trước ngay bên phải.
+- **⬇ Tải file Word**: ra file .docx đúng mẫu CV 5512 với đủ bảng bốn bước và bốn cột (có cột *NLS/AI – GDĐĐ/ANQP*). **Công thức toán là Equation của Word**, bấm vào sửa trực tiếp, không cần MathType.
+- **⬇ Cả chương**: tải một lượt tất cả kế hoạch bài dạy của chương đang chọn, tiết PPCT tự đánh số nối tiếp.
+- Thẻ **Kế hoạch giáo dục cả năm** dựng Phụ lục I (theo bài học) và Phụ lục III (phân phối chương trình từng tiết) từ chính số tiết của các bài, cũng xuất ra Word.
+
+Dữ liệu bài học nằm ở `data/baihoc/t10.js`, `t11.js`, `t12.js`, `cd.js` — mỗi bài gồm yêu cầu cần đạt, mạch kiến thức, ví dụ mẫu có lời giải từng bước, bài toán thực tiễn, công cụ số và tình huống phản biện AI. Thầy cô sửa trực tiếp các file này là cả kế hoạch bài dạy lẫn bản trình chiếu đều đổi theo.
+
+## 4a3. Bản trình chiếu trên lớp (`beamer.html`)
+
+Soạn slide **Beamer** từ chính nội dung bài học ở trên, theo nguyên tắc trình chiếu: nền **bảng xanh – chữ phấn trắng**, chữ to, mỗi slide ít dòng, **lời giải hiện ra từng bước**.
+
+- Ba phối màu: bảng xanh, bảng đen, nền giấy; chọn tỉ lệ 16:9 hoặc 4:3 và cỡ chữ.
+- Tích “Chèn câu luyện tập lấy từ ngân hàng đề” để lấy sẵn câu hỏi của đúng bài đó trong ngân hàng, phương án được đảo và đáp án hiện sau một nhịp.
+- **⬇ Tải file .tex** (hoặc cả chương thành .zip) rồi mở bằng TeXShop/VS Code trên máy Mac và biên dịch bằng **XeLaTeX**.
+
+## 4a4. Trò chơi ôn tập trên lớp (`trochoi.html`)
+
+Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu hỏi lấy thẳng từ ngân hàng đề trên máy (chọn lớp – chương – dạng – mức độ). Không cần mạng, không cần học sinh có điện thoại.
+
+| Trò chơi | Cách chơi gọn |
+|---|---|
+| 🔔 Rung chuông vàng | Cả lớp viết đáp án ra bảng con, sai thì ngồi xuống; có một lượt cứu trợ; ai trụ lại cuối cùng thì thắng. |
+| 💎 Ai là triệu phú | 15 câu từ dễ lên khó theo đúng mức NB → TH → VD → VDC, có 50:50 (phím 5), hỏi ý kiến lớp (phím L), gọi tổ trợ giúp (phím T). |
+| 🧩 Lật mảnh ghép | Trả lời đúng mở một mảnh; đoán được từ khoá phía sau (phím K) được 30 điểm. Từ khoá do thầy cô tự đặt. |
+| 🏎️ Đua xe tiếp sức | Mỗi câu đúng xe của tổ tiến một ô, câu vận dụng cao tiến hai ô; về đích trước thì thắng. |
+| 🎡 Vòng quay may mắn | Quay trúng ô nào trả lời câu tương ứng; có ô nhân đôi, mất lượt, đổi tổ, câu khó +50; kèm nút gọi tên học sinh ngẫu nhiên. |
+| 🎱 Bingo đáp án | In phiếu Bingo cho cả lớp (mỗi phiếu xáo khác nhau), thầy cô đọc câu, học sinh tính rồi đánh dấu ô đáp án. Cần câu trả lời ngắn. |
+| 🐝 Ong tìm mật | Mỗi câu đúng ong bay lên một tầng, tổ nào tới hũ mật trước thì thắng. |
+| 🏔️ Đường lên đỉnh | Bốn vòng: Khởi động, Vượt chướng ngại vật, Tăng tốc (trả lời càng nhanh điểm càng cao), Về đích chọn gói 10/20/30. |
+| 🃏 Lật thẻ ghi nhớ | Lật hai thẻ để ghép câu hỏi với đáp án; ghép trúng được 20 điểm và đi tiếp, sai thì chuyển lượt. |
+| 🗺️ Truy tìm kho báu | Vượt từng chặng trên bản đồ, càng về cuối điểm mỗi chặng càng cao. |
+
+- Trước khi chơi: mở mục **Chuẩn bị**, chọn nguồn câu hỏi, đặt thời gian mỗi câu, sĩ số, số tổ và tên tổ (có chọn màu), từ khoá mảnh ghép, dán danh sách lớp.
+- Trong lúc chơi: **Space** hiện đáp án, **Enter** sang câu tiếp, **G** xem lời giải, **1–4** hoặc **A–D** chọn phương án, **1–6** chấm điểm cho tổ, **Esc** thoát. Máy tự chiếu toàn màn hình.
+- Điểm của các tổ hiện ngay trên đầu màn hình, cuối trò có bảng xếp hạng và được lưu lại trong máy.
+
 ## 4b. Phân tích kết quả và đề ôn tập theo chỗ yếu
 - Trên điện thoại: mục **📈 Phân tích** trong ứng dụng chấm, gồm:
   - tổng quan, phổ điểm, so sánh các lớp làm cùng đề;
@@ -153,6 +215,48 @@ Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục
   - Gom mọi bài đã chấm cùng tên lớp. Đặt được hệ số cho từng bài, có điểm trung bình, tải Excel được.
 - **Xếp hạng toàn khối** (tab “Xếp hạng”):
   - Gom mọi lớp làm cùng một đề, xếp hạng học sinh và các lớp, có phổ điểm, tải Excel được.
+
+## 4a5. Học sinh dự thi bằng điện thoại (quét QR chọn tên)
+
+Ba trò **Rung chuông vàng**, **Đua xe tiếp sức**, **Ai là triệu phú** cho phép cả lớp dự thi bằng điện thoại: các em quét mã QR hiện trên màn chiếu, chọn đúng tên mình trong danh sách lớp rồi bấm đáp án. Máy chấm tự động, thầy cô không phải đếm tay.
+
+### Chuẩn bị (làm một lần)
+
+1. Tải cả thư mục web về máy (máy Mac của thầy cô).
+2. Mở **Terminal**, chuyển vào thư mục đó rồi chạy:
+
+```bash
+cd ~/Downloads/hoc-cung-thay-hieu     # đường dẫn tới thư mục web
+python3 maychu.py
+```
+
+3. Cửa sổ Terminal in ra địa chỉ, ví dụ `http://192.168.1.12:8080/trochoi.html`. **Mở địa chỉ đó bằng trình duyệt trên máy thầy cô** (không mở bằng cách nhấp đúp vào file).
+4. Máy thầy cô và điện thoại học sinh phải **dùng chung một wifi** (wifi nhà trường hoặc phát 4G từ điện thoại thầy cô).
+5. Muốn dừng máy chủ: bấm `Ctrl + C` trong Terminal.
+
+> Không chạy máy chủ thì web vẫn dùng bình thường, 10 trò chơi vẫn chơi được theo cách tính điểm cho tổ.
+
+### Khi tổ chức trò chơi
+
+1. Vào **Trò chơi**, phần *Chuẩn bị*:
+   - Dán danh sách lớp vào ô “Danh sách lớp”, mỗi dòng một em, muốn chia tổ thì ghi `Nguyễn Văn An, Tổ 1`.
+   - Hoặc bấm **📄 Nạp từ Excel / CSV** rồi chọn file `.xlsx` xuất từ sổ điểm (web tự tìm cột *Họ và tên* và cột *Tổ*).
+   - Tích **“Học sinh dự thi bằng điện thoại”**. Dòng chữ xanh phía trên cho biết đã nối được với máy chủ hay chưa.
+   - Bỏ tích “Gửi cả đề lên điện thoại” nếu muốn các em nhìn đề trên màn chiếu, điện thoại chỉ còn 4 nút A, B, C, D.
+2. Chọn câu hỏi như bình thường rồi bấm vào trò chơi → màn hình hiện **mã QR cỡ lớn và mã phòng 4 chữ số**.
+3. Các em quét QR, chọn tên mình. Màn chiếu đếm số em đã vào.
+4. Bấm **Bắt đầu thi** (hoặc Enter).
+5. Mỗi câu: màn chiếu hiện đề, điện thoại hiện các phương án. Khi đủ số em trả lời, máy tự công bố đáp án kèm biểu đồ số em chọn mỗi phương án.
+   - *Rung chuông vàng*: bạn nào sai sẽ tự dừng cuộc chơi, màn chiếu hiện tên; còn ≤ 3 bạn thì có lượt cứu trợ cho cả lớp trở lại.
+   - *Đua xe tiếp sức*: tổ có bạn trả lời đúng tiến 1 ô, tổ **cả tổ cùng đúng** được thưởng thêm 1 ô.
+   - *Ai là triệu phú*: trợ giúp “hỏi ý kiến lớp” (phím `L`) lấy đúng số liệu bình chọn của lớp.
+6. Điểm mỗi em tính theo độ chính xác **và tốc độ** (trả lời sớm được nhiều điểm hơn). Kết thúc có bảng xếp hạng 15 bạn dẫn đầu.
+
+### Vài lưu ý
+
+- Tên trong danh sách không cần gõ dấu chính xác tuyệt đối, máy so khớp không phân biệt hoa thường và dấu.
+- Một tên chỉ vào được một máy; em nào lỡ thoát thì mở lại link cũ là tiếp tục được.
+- Danh sách lớp và kết quả chỉ nằm trong bộ nhớ máy thầy cô, tắt máy chủ là xoá hết, không gửi đi đâu.
 
 ## 5. Định dạng câu hỏi trong ngân hàng
 

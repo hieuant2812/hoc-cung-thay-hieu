@@ -73,6 +73,26 @@
       <span style="flex:1"><b style="font:700 20px var(--font-h)">Phân tích kết quả</b><br><span class="muted small">Tỉ lệ đúng từng câu, dạng và mức độ lớp còn yếu, phổ điểm, so sánh các lớp, lỗi sai chung — và sinh đề ôn tập đúng chỗ yếu.</span></span>
       <span class="btn coral">Mở →</span>
     </a>
+    <a class="card" href="khbd.html" style="display:block;text-decoration:none;color:inherit;background:linear-gradient(120deg,#fff4e6,#ffeef5)">
+      <b style="font:700 20px var(--font-h)">📝 Soạn kế hoạch bài dạy</b>
+      <p class="muted small" style="margin:4px 0 10px">Kế hoạch bài dạy theo Công văn 5512 kèm năng lực số và năng lực AI, kế hoạch giáo dục cả năm. Tích chọn rồi tải file Word, công thức là Equation sửa được ngay.</p>
+      <span class="btn coral">Mở →</span>
+    </a>
+    <a class="card" href="trochoi.html" style="display:block;text-decoration:none;color:inherit;background:linear-gradient(120deg,#fff0e6,#f0e9ff)">
+      <b style="font:700 20px var(--font-h)">🎲 Trò chơi ôn tập</b>
+      <p class="muted small" style="margin:4px 0 10px">Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia: rung chuông vàng, triệu phú, lật mảnh ghép, đua xe, vòng quay… câu hỏi lấy từ ngân hàng đề.</p>
+      <span class="btn coral">Mở →</span>
+    </a>
+    <a class="card" href="beamer.html" style="display:block;text-decoration:none;color:inherit;background:linear-gradient(120deg,#e9f6ef,#eef3ff)">
+      <b style="font:700 20px var(--font-h)">📽 Bản trình chiếu trên lớp</b>
+      <p class="muted small" style="margin:4px 0 10px">Slide Beamer nền bảng xanh phấn trắng, lời giải hiện từng bước, lấy đúng nội dung bài đã soạn. Tải file .tex biên dịch bằng XeLaTeX.</p>
+      <span class="btn coral">Mở →</span>
+    </a>
+    <div class="card" style="background:linear-gradient(120deg,#eef4ff,#e9fbff)">
+      <b style="font:700 20px var(--font-h)">📲 Ngân hàng trên iPad</b>
+      <p class="muted small" style="margin:4px 0 10px">Lấy ngân hàng câu hỏi từ trang web về máy đang dùng (iPad, điện thoại, máy ở trường) — chỉ cần nhập mật khẩu một lần, không phải đăng lại file .tex.</p>
+      <div id="dongBo"></div>
+    </div>
     <div class="card" style="background:linear-gradient(120deg,#eafaf1,#e8f4ff)">
       <b style="font:700 20px var(--font-h)">💾 Sao lưu dữ liệu</b>
       <p class="muted small" style="margin:4px 0 10px">Một file chứa toàn bộ ngân hàng đề, mẫu ma trận, đề đã ra, bài chấm và kết quả trên máy này. Cất vào Google Drive; đổi máy thì khôi phục lại.</p>
@@ -87,12 +107,13 @@
   </div>
 </main>
 <footer id="foot"></footer>
-<script src="assets/nhd/store.js"></script><script src="assets/saoluu.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/nhd/store.js"></script><script src="assets/saoluu.js"></script><script src="assets/dongbo.js"></script>
 <script>
 document.getElementById("hTitle").textContent = SITE.tenWeb;
 document.getElementById("hSlogan").textContent = SITE.khauHieu;
 document.getElementById("sSim").textContent = (window.SIMS || []).length;
 SaoLuu.mount(document.getElementById("saoLuu"));
+DongBo.mount(document.getElementById("dongBo"));
 NHD.Store.count().then(n => document.getElementById("sQ").textContent = n.toLocaleString("vi-VN")).catch(() => {});
 </script>
 </body>

@@ -1,0 +1,22 @@
+{
+  "name": "Học cùng Thầy Hiếu",
+  "short_name": "Thầy Hiếu",
+  "description": "Mô phỏng tương tác, ra đề theo ma trận, chấm phiếu trắc nghiệm và phân tích kết quả.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#3b7bff",
+  "lang": "vi",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Ra đề", "url": "./rade.html" },
+    { "name": "Chấm phiếu", "url": "./cham.html" },
+    { "name": "Trên lớp", "url": "./tren-lop.html" }
+  ]
+}

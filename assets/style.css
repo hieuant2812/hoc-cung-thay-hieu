@@ -277,3 +277,11 @@ dialog .db{padding:16px 18px}
 .cc details>summary{display:flex;gap:6px;align-items:center;cursor:pointer;padding:3px 0}
 .cc details>summary::before{content:"▸";color:#99a;font-size:12px;width:10px}
 .cc details[open]>summary::before{content:"▾"}
+
+/* nhắc cài vào Màn hình chính trên iPad */
+.nhac-cai{position:fixed;left:10px;right:10px;bottom:10px;z-index:60;display:flex;gap:10px;align-items:flex-start;
+  background:#0f1b33;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:14px;line-height:1.45}
+.nhac-cai b{color:#9ec5ff}
+.nhac-cai button{flex:none;background:rgba(255,255,255,.14);color:#fff;border:0;border-radius:9px;width:30px;height:30px;font-size:15px;cursor:pointer}
+@media(min-width:720px){.nhac-cai{left:auto;right:16px;max-width:460px}}
+.db .note code{background:rgba(0,0,0,.06);padding:1px 5px;border-radius:5px}

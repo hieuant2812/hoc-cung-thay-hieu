@@ -322,6 +322,41 @@
     if (withSol) ex.versions.forEach((V, i) => out.push({ name: "LoiGiai_" + V.ma, pages: Out.paginate(Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true }), (p, n) => `Trang ${p}/${n} – Lời giải mã ${V.ma}`, LV) }));
     return out;
   }
+  /* ---- xuất Word: dựng HTML từ các khối đã có rồi đổi sang .docx (assets/docx.js) */
+  function blocksHtml(blocks, npages) { return `<div class="ex docx-ex">${blocks.map(b => b.html).join("")}</div>`.replace(/<span class="npages">[^<]*<\/span>/g, npages || "…"); }
+  async function toDocx(html, opt) {
+    const host = document.createElement("div"); host.className = "paper"; host.style.cssText = "position:fixed;left:-30000px;top:0;width:680px;background:#fff;padding:0"; host.innerHTML = html; document.body.appendChild(host);
+    try { return await Docx.fromHtml(host, Object.assign({ size: 12, margins: { top: 1.5, bottom: 1.5, left: 2, right: 1.5 } }, opt || {})); } finally { host.remove(); }
+  }
+  async function zipDocx(z, I, withSol, fill) {
+    await loadScript("assets/lib/html2canvas.min.js"); await Out.waitFonts();
+    const folder = `De_${slug(st.mon)}${st.lop}_${slug(I.ky || "KiemTra")}_Word`; const F = z.folder(folder);
+    const LV = ex.lv; NHD.figScale = (LV || Out.LEVELS[0]).fig; const n = ex.versions.length; let done = 0; const step = () => { done++; fill.style.width = (5 + 90 * done / (2 * n + 3)).toFixed(0) + "%"; };
+    let all = "";
+    for (let i = 0; i < n; i++) {
+      const V = ex.versions[i]; const blocks = Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma); const np = Out.paginate(blocks, () => "", LV).length;
+      const h = blocksHtml(blocks, np); $("xprogT").textContent = `Đang tạo Word mã đề ${V.ma}…`;
+      F.file(`De_${V.ma}.docx`, await toDocx(h, { title: `Đề ${V.ma}` })); step(); all += h + '<div class="pagebreak"></div>';
+    }
+    const kh = blocksHtml(Out.keysBlocks(allKeys(), st.mon)); $("xprogT").textContent = "Đang tạo bảng đáp án…";
+    F.file("DapAn_TongHop.docx", await toDocx(kh, { title: "Đáp án" })); step(); all += kh;
+    if (withSol) {
+      let lg = "";
+      for (let i = 0; i < n; i++) { const V = ex.versions[i]; $("xprogT").textContent = `Đang tạo lời giải mã ${V.ma}…`; lg += blocksHtml(Out.versionBlocks(Gen.partsOf(ex, i), I, V.ma, { dapan: true, loigiai: true })) + (i < n - 1 ? '<div class="pagebreak"></div>' : ""); step(); }
+      F.file("LoiGiai_ChiTiet.docx", await toDocx(lg, { title: "Lời giải chi tiết" })); all += '<div class="pagebreak"></div>' + lg;
+    }
+    if (ex.mode === "goc") F.file("DeGoc_KemDapAn.docx", await toDocx(blocksHtml(Out.versionBlocks(partsBase(), I, "GỐC", { dapan: true, loigiai: withSol })), { title: "Đề gốc" }));
+    if ($("xMT").checked && Gen.totals(M, st.mon).n) {
+      $("xprogT").textContent = "Đang tạo ma trận, bản đặc tả…";
+      const mh = `<div data-sect="landscape">${Out.matrix7991(M, idx, names, I, st.mon, posOfEx(), true)}</div>`;
+      F.file("MaTran_DacTa_CV7991.docx", await toDocx(mh, { title: "Ma trận và bản đặc tả", orientation: "landscape", size: 11, margins: { top: 1.2, bottom: 1.2, left: 1.2, right: 1.2 } }));
+      all += '<div class="pagebreak"></div>' + mh;
+    }
+    step(); $("xprogT").textContent = "Đang tạo file gộp…";
+    F.file("TatCa_TrongMotFile.docx", await toDocx(all, { title: I.ky || "Đề kiểm tra" }));
+    if (window.OMR) F.file("DapAn_ChamDienThoai.json", JSON.stringify(baiCham(), null, 1));
+    F.file("HUONG_DAN.txt", ["GÓI ĐỀ KIỂM TRA (WORD) — tạo bởi trang Học cùng Thầy Hiếu", "", "De_<mã>.docx — từng mã đề; DapAn_TongHop.docx — bảng đáp án; LoiGiai_ChiTiet.docx — lời giải; MaTran_DacTa_CV7991.docx — ma trận + bản đặc tả (trang ngang); TatCa_TrongMotFile.docx — gộp tất cả.", "Công thức là Equation của Word (Cambria Math): bấm đúp để sửa, không cần MathType. Nếu Word hỏi chuyển đổi, chọn Giữ nguyên.", "Hình vẽ là ảnh PNG nét cao; muốn sửa hình, dùng file TeX trong gói LaTeX."].join("\n"));
+  }
   $("btnPrint").onclick = async () => {
     if (!ex) return; await Out.waitFonts();
     const P = allPages(false); markUsed();
@@ -331,7 +366,8 @@
     if (!ex) return;
     const btn = $("btnZip"); btn.disabled = true; const bar = $("xprog"); bar.classList.remove("hidden"); const fill = bar.firstElementChild; fill.style.width = "3%";
     try {
-      const I = info(); const z = new JSZip(); const withPdf = document.querySelector("input[name=xuat]:checked").value === "pdf"; const withSol = $("xLG").checked;
+      const I = info(); const z = new JSZip(); const kind = document.querySelector("input[name=xuat]:checked").value; const withPdf = kind === "pdf"; const withSol = $("xLG").checked;
+      if (kind === "docx") { await zipDocx(z, I, withSol, fill); const blob = await z.generateAsync({ type: "blob", compression: "DEFLATE" }); fill.style.width = "100%"; download(blob, `De_${slug(st.mon)}${st.lop}_${slug(I.ky || "KiemTra")}_Word.zip`); markUsed(); $("xprogT").textContent = "Xong! Gói Word đã được tải về."; btn.disabled = false; setTimeout(() => bar.classList.add("hidden"), 1500); return; }
       const folder = `De_${slug(st.mon)}${st.lop}_${slug(I.ky || "KiemTra")}`;
       const T = z.folder(folder + "/TeX");
       const opt = {};

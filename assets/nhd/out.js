@@ -254,7 +254,7 @@ ${box} & \textit{Thời gian làm bài: ${tq(info.phut)} phút, không kể th�
 
   /* Ma trận + bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH, xuất file Word (.doc)
      pos (tuỳ chọn): {dkey|L|muc: [số câu…]} — số thứ tự câu trong đề để ghi vào bản đặc tả */
-  function matrix7991(M, idx, names, info, mon, pos) {
+  function matrix7991(M, idx, names, info, mon, pos, bodyOnly) {
     const w = NHD.Gen.diem(mon); const LV3 = ["B", "H", "V"]; const lvOf = m => m === "NB" ? "B" : m === "TH" ? "H" : "V";
     const rows = idx.list.filter(d => M[d.dkey] && LOAI.some(L => Object.values(M[d.dkey][L] || {}).some(n => +n > 0)));
     const cnt = (d, L, k) => ["NB", "TH", "VD", "VDC"].filter(m => lvOf(m) === k).reduce((a, m) => a + (+(((M[d.dkey] || {})[L] || {})[m]) || 0), 0);
@@ -302,6 +302,7 @@ ${box} & \textit{Thời gian làm bài: ${tq(info.phut)} phút, không kể th�
     const hd = `<table style="width:100%;border:0"><tr><td style="text-align:center;font:11pt 'Times New Roman';width:40%">${esc((info.so || "SỞ GIÁO DỤC VÀ ĐÀO TẠO").replace("|", " "))}<br><b>${esc(info.truong || "TRƯỜNG ……")}</b><br>TỔ: ……………</td><td style="text-align:center;font:11pt 'Times New Roman'"><b>${esc(info.ky || "KIỂM TRA")}</b><br>NĂM HỌC ${esc(info.namHoc || "……")}<br>Môn: ${esc(info.monTen || mon)} – Lớp ${esc(info.lop || "")} · Thời gian: ${esc(info.phut || "…")} phút</td></tr></table>`;
     const note = `<p style="font:italic 10.5pt 'Times New Roman';margin:4pt 0">Ghi chú: Mỗi câu “Đúng – Sai” gồm 4 ý; điểm Phần I ${String(w.TN).replace(".", ",")} đ/câu, Phần II tối đa 1 đ/câu, Phần III ${String(w.TLN).replace(".", ",")} đ/câu${Math.abs(ptAll - 10) > 1e-9 ? " (đã quy về thang điểm 10)" : ""}. B: Biết, H: Hiểu, VD: Vận dụng; mức “vận dụng cao” của ngân hàng được tính vào cột Vận dụng theo mẫu Công văn 7991/BGDĐT-GDTrH.${pos ? " Bản đặc tả ghi số thứ tự câu trong đề gốc/mã đề đầu tiên (C1 = câu 1 của phần tương ứng)." : ""}</p>`;
     const body = hd + P("MA TRẬN ĐỀ KIỂM TRA") + h + note + `<br style="page-break-before:always" clear="all">` + P("BẢN ĐẶC TẢ ĐỀ KIỂM TRA") + d2;
+    if (bodyOnly) return body;
     return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>Ma tran dac ta</title>
 <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
 <style>@page{size:841.9pt 595.3pt;margin:30pt 28pt}@page WordSection1{size:841.9pt 595.3pt;mso-page-orientation:landscape;margin:30pt 28pt 30pt 28pt}div.WordSection1{page:WordSection1}table{mso-table-layout-alt:fixed}</style></head><body><div class="WordSection1">${body}</div></body></html>`;

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kế hoạch bài dạy · Học cùng Thầy Hiếu</title>
+<meta name="description" content="Soạn kế hoạch bài dạy Toán THPT theo Công văn 5512, tích hợp năng lực số và năng lực AI, xuất file Word có công thức Equation.">
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<script src="config.js"></script><script src="assets/site.js"></script>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/docx.js"></script>
+<style>
+.kb{display:grid;grid-template-columns:330px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.kb{grid-template-columns:1fr}}
+.kb .side{position:sticky;top:12px}
+.kb .side .card{padding:14px}
+.kb label.f{display:block;margin:8px 0 2px;font-weight:600;font-size:13px;color:#445}
+.kb input,.kb select{width:100%;padding:7px 9px;border:1px solid #cfd8e8;border-radius:9px;font:inherit;font-size:14px}
+.kb .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kb .chk{display:flex;gap:7px;align-items:flex-start;margin:5px 0;font-size:14px}
+.kb .chk input{width:auto;margin-top:3px}
+.prev{background:#fff;border:1px solid #e3e8f2;border-radius:14px;padding:26px 30px;max-height:78vh;overflow:auto;font-family:"Times New Roman",Times,serif;font-size:15px;line-height:1.5}
+.prev .title{text-align:center;font-size:17px;margin:10px 0 4px}
+.prev .center{text-align:center}.prev .right{text-align:right}
+.prev .h2{margin:16px 0 6px;font-size:16px}
+.prev .h2b{margin:16px 0 6px;text-align:center;background:#eef3ff;padding:5px;border-radius:6px}
+.prev .h3{margin:12px 0 4px;color:#16407a}
+.prev table{border-collapse:collapse;width:100%;margin:6px 0 12px}
+.prev th,.prev td{border:1px solid #333;padding:5px 7px;vertical-align:top;font-size:13.5px}
+.prev th{background:#eef3ff;text-align:center;font-size:13px}
+.prev .pagebreak{border-top:2px dashed #bbb;margin:18px 0}
+.prev p{margin:5px 0}
+.nlsbox{max-height:150px;overflow:auto;border:1px solid #e3e8f2;border-radius:9px;padding:7px;background:#fafbff}
+</style>
+</head>
+<body data-page="khbd">
+<header id="top"></header>
+<main class="wrap">
+  <h1 style="font:800 26px var(--font-h);margin:6px 0 2px">Kế hoạch bài dạy &amp; Kế hoạch giáo dục</h1>
+  <p class="muted" style="margin:0 0 14px">Theo Công văn 5512/BGDĐT-GDTrH, tích hợp Khung năng lực số (Thông tư 02/2025/TT-BGDĐT) và Khung năng lực AI (Quyết định 2422/QĐ-BGDĐT). Tích chọn rồi tải về file Word — công thức toán là Equation của Word, sửa được ngay.</p>
+
+  <div class="tabs" id="tabs" style="margin-bottom:14px">
+    <button class="on" data-t="bai">📘 Kế hoạch bài dạy</button>
+    <button data-t="nam">🗓 Kế hoạch giáo dục cả năm</button>
+  </div>
+
+  <div class="kb">
+    <div class="side">
+      <div class="card">
+        <label class="f">Lớp / chương trình</label>
+        <select id="selLop">
+          <option value="10">Toán 10</option><option value="11" selected>Toán 11</option><option value="12">Toán 12</option>
+          <option value="CD10">Chuyên đề Toán 10</option><option value="CD11">Chuyên đề Toán 11</option><option value="CD12">Chuyên đề Toán 12</option>
+        </select>
+        <div id="paneBai">
+          <label class="f">Bài học</label><select id="selBai"></select>
+          <div class="two"><div><label class="f">Số tiết</label><input type="number" id="soTiet" min="1" max="8"></div>
+            <div><label class="f">Tiết PPCT bắt đầu</label><input type="number" id="tietBatDau" min="1" value="1"></div></div>
+          <div class="two"><div><label class="f">Ngày soạn</label><input id="ngaySoan" placeholder=".../.../2026"></div>
+            <div><label class="f">Ngày dạy</label><input id="ngayDay" placeholder=".../.../2026"></div></div>
+          <label class="f">Mã năng lực số (chọn 1–3 mã)</label>
+          <div class="nlsbox" id="nlsBox"></div>
+          <label class="f">Đưa vào kế hoạch</label>
+          <label class="chk"><input type="checkbox" id="cMoDau" checked> Hoạt động mở đầu từ tình huống thực tế</label>
+          <label class="chk"><input type="checkbox" id="cSoAI" checked> Hoạt động trải nghiệm công cụ số + phản biện AI</label>
+          <label class="chk"><input type="checkbox" id="cVanDung" checked> Hoạt động vận dụng thực tiễn</label>
+          <label class="chk"><input type="checkbox" id="cVeNha" checked> Tổng kết và hướng dẫn về nhà</label>
+          <label class="chk"><input type="checkbox" id="cPhieu" checked> Phiếu học tập số 1 (bảng rà soát AI)</label>
+          <label class="chk"><input type="checkbox" id="cRubric" checked> Bảng tiêu chí đánh giá (Rubric)</label>
+          <label class="chk"><input type="checkbox" id="cKy" checked> Khung kí duyệt cuối văn bản</label>
+        </div>
+        <div id="paneNam" class="hidden">
+          <div class="two"><div><label class="f">Số tiết/tuần</label><input type="number" id="tietTuan" min="2" max="5" value="3"></div>
+            <div><label class="f">Năm học</label><input id="namHoc" placeholder="2026 – 2027"></div></div>
+          <p class="small muted" style="margin-top:8px">Kế hoạch giáo dục được lập tự động từ số tiết của từng bài: Phụ lục I (theo bài học) và Phụ lục III (phân phối chương trình từng tiết).</p>
+        </div>
+        <hr style="border:0;border-top:1px solid #eef1f7;margin:12px 0">
+        <label class="f">Thông tin chung</label>
+        <input id="truong" placeholder="Trường THPT…" style="margin-bottom:6px">
+        <div class="two"><input id="gv" placeholder="Giáo viên soạn"><input id="toTruong" placeholder="Tổ trưởng chuyên môn"></div>
+        <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn coral" id="btnWord">⬇ Tải file Word</button>
+          <button class="btn ghost sm" id="btnAll">⬇ Cả chương (.zip)</button>
+          <button class="btn ghost sm" id="btnPrint">🖨 In</button>
+        </div>
+        <div id="msg" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="prev" id="prev"></div>
+  </div>
+</main>
+<footer id="foot"></footer>
+<script src="data/chuongtrinh.js"></script>
+<script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t12.js"></script><script src="data/baihoc/cd.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/khbd.js"></script>
+<script>
+(function(){
+  const $=id=>document.getElementById(id); let tab="bai";
+  const S=window.SITE||{};
+  $("truong").value=S.truong||""; $("gv").value=S.giaoVien||"Nguyễn Hoàng Minh Hiếu"; $("toTruong").value=localStorage.getItem("khbd-to")||"";
+  ["truong","gv","toTruong","namHoc"].forEach(k=>{const v=localStorage.getItem("khbd-"+k); if(v)$(k).value=v;});
+  Object.keys(KHBD.NLS).forEach(m=>{
+    const l=document.createElement("label"); l.className="chk";
+    l.innerHTML=`<input type="checkbox" value="${m}" ${["3.2.NC1a","5.2.NC1b"].includes(m)?"checked":""}><span><b>${m}</b> — ${KHBD.NLS[m]}</span>`;
+    $("nlsBox").appendChild(l);
+  });
+  const nlsChon=()=>[...$("nlsBox").querySelectorAll("input:checked")].map(x=>x.value).slice(0,3);
+  function fillBai(){
+    const lop=$("selLop").value; const ds=KHBD.dsBai(lop);
+    $("selBai").innerHTML=ds.map(b=>`<option value="${b.bai}"${KHBD.data(lop,b.bai)?"":" disabled"}>Chương ${b.chuong} · Bài ${b.bai}: ${b.ten}${KHBD.data(lop,b.bai)?"":" (chưa có dữ liệu)"}</option>`).join("");
+    const dau=ds.find(b=>KHBD.data(lop,b.bai)); if(dau)$("selBai").value=dau.bai;
+    syncTiet();
+  }
+  function syncTiet(){ const B=KHBD.data($("selLop").value,+$("selBai").value); $("soTiet").value=B?B.t:2; }
+  function opt(){
+    return {lop:$("selLop").value,bai:+$("selBai").value,soTiet:+$("soTiet").value||undefined,tietBatDau:+$("tietBatDau").value||1,
+      ngaySoan:$("ngaySoan").value,ngayDay:$("ngayDay").value,truong:$("truong").value,gv:$("gv").value,toTruong:$("toTruong").value,
+      nls:nlsChon(),moDau:$("cMoDau").checked,soAI:$("cSoAI").checked,vanDung:$("cVanDung").checked,veNha:$("cVeNha").checked,
+      phieu:$("cPhieu").checked,rubric:$("cRubric").checked,kiDuyet:$("cKy").checked,
+      tietTuan:+$("tietTuan").value||3,namHoc:$("namHoc").value,to:"TOÁN – TIN HỌC"};
+  }
+  function ve(){
+    const o=opt();
+    $("prev").innerHTML = tab==="bai" ? KHBD.render(o) : KHBD.keHoach(o.lop,o);
+    ["truong","gv","toTruong","namHoc"].forEach(k=>localStorage.setItem("khbd-"+k,$(k).value));
+  }
+  const slug=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").replace(/[^A-Za-z0-9]+/g,"");
+  async function toDocx(html,title){
+    const host=document.createElement("div"); host.style.cssText="position:fixed;left:-99999px;top:0;width:900px"; host.innerHTML=html; document.body.appendChild(host);
+    try{ return await Docx.fromHtml(host,{title,size:12,font:"Times New Roman",margins:{top:1.5,bottom:1.5,left:2,right:1.5}}); } finally{ host.remove(); }
+  }
+  const tai=(blob,name)=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);};
+  const note=(k,t)=>$("msg").innerHTML=`<div class="note ${k} small">${t}</div>`;
+  $("btnWord").onclick=async()=>{
+    const o=opt(); const b=$("btnWord"); b.disabled=true; note("blue","Đang tạo file Word…");
+    try{
+      if(tab==="bai"){ const C=KHBD.chuong(o.lop,o.bai);
+        tai(await toDocx(KHBD.render(o),"KHBD"),`khbd-toan${o.lop}-bai${o.bai}-${slug(C.tenBai).toLowerCase()}.docx`);
+      } else tai(await toDocx(KHBD.keHoach(o.lop,o),"KHGD"),`khgd-toan${o.lop}-${slug(o.namHoc||"")||"canam"}.docx`);
+      note("green","Đã tải về. Mở bằng Word, công thức là Equation sửa được ngay.");
+    }catch(e){ note("red","Lỗi: "+e.message); }
+    b.disabled=false;
+  };
+  $("btnAll").onclick=async()=>{
+    const o=opt(); const ds=KHBD.dsBai(o.lop).filter(b=>KHBD.data(o.lop,b.bai));
+    const cur=KHBD.chuong(o.lop,o.bai); const ch=ds.filter(b=>b.chuong===cur.so);
+    const b=$("btnAll"); b.disabled=true;
+    try{
+      const z=new JSZip(); let tiet=1;
+      for(let i=0;i<ch.length;i++){
+        note("blue",`Đang tạo ${i+1}/${ch.length}: Bài ${ch[i].bai}…`);
+        const oo=Object.assign({},o,{bai:ch[i].bai,soTiet:KHBD.data(o.lop,ch[i].bai).t,tietBatDau:tiet}); tiet+=oo.soTiet;
+        z.file(`khbd-toan${o.lop}-bai${ch[i].bai}-${slug(ch[i].ten).toLowerCase()}.docx`, await toDocx(KHBD.render(oo),"KHBD"));
+      }
+      tai(await z.generateAsync({type:"blob"}),`KHBD_Toan${o.lop}_Chuong${cur.so}.zip`);
+      note("green",`Đã tải ${ch.length} kế hoạch bài dạy của chương ${cur.so}.`);
+    }catch(e){ note("red","Lỗi: "+e.message); }
+    b.disabled=false;
+  };
+  $("btnPrint").onclick=()=>{ const w=window.open("","_blank");
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>In</title><link rel="stylesheet" href="assets/katex/katex.min.css"><style>body{font-family:"Times New Roman",serif;font-size:13pt;margin:2cm}table{border-collapse:collapse;width:100%}th,td{border:1px solid #000;padding:4px 6px;vertical-align:top;font-size:11pt}.title{text-align:center;font-size:14pt}.center{text-align:center}.right{text-align:right}.h2b{text-align:center;font-weight:700}.pagebreak{page-break-after:always}</style></head><body>${$("prev").innerHTML}</body></html>`);
+    w.document.close(); setTimeout(()=>w.print(),700); };
+  $("tabs").onclick=e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t;
+    [...$("tabs").children].forEach(x=>x.classList.toggle("on",x===b));
+    $("paneBai").classList.toggle("hidden",tab!=="bai"); $("paneNam").classList.toggle("hidden",tab==="bai"); ve();};
+  $("selLop").onchange=()=>{fillBai();ve();}; $("selBai").onchange=()=>{syncTiet();ve();};
+  ["soTiet","tietBatDau","ngaySoan","ngayDay","truong","gv","toTruong","tietTuan","namHoc"].forEach(k=>$(k).addEventListener("input",ve));
+  ["cMoDau","cSoAI","cVanDung","cVeNha","cPhieu","cRubric","cKy"].forEach(k=>$(k).addEventListener("change",ve));
+  $("nlsBox").addEventListener("change",ve);
+  fillBai(); ve();
+})();
+</script>
+</body>
+</html>
