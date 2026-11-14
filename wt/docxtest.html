@@ -1,0 +1,21 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/katex/katex.min.css"><link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/katex/katex.min.js"></script><script src="/assets/lib/jszip.min.js"></script><script src="/assets/lib/html2canvas.min.js"></script>
+<script src="/assets/nhd/core.js"></script><script src="/assets/docx.js"></script></head><body>
+<div id="doc">
+<h2>KIỂM TRA XUẤT WORD – CÔNG THỨC EQUATION</h2>
+<p><b>Câu 1.</b> Cho hàm số $y=\dfrac{2x+1}{x-1}$. Tiệm cận đứng là $x=1$; $\displaystyle\lim_{x\to 1^+}y=+\infty$.</p>
+<p><b>Câu 2.</b> Tính $I=\displaystyle\int_0^1 (x^2+\sqrt{x})\,\mathrm{d}x$ và $S=\sum_{k=1}^{n}\dfrac{1}{k(k+1)}$; $\vec{a}\cdot\vec{b}=|\vec a||\vec b|\cos\varphi$, $\overline{x}=\dfrac{1}{n}\sum n_ix_i$, $\widehat{BAC}=60^\circ$, $\sqrt[3]{27}=3$.</p>
+<p>Hệ: $\begin{cases}x+y=5\\ 2x-y=1\end{cases}$; ma trận $A=\begin{pmatrix}1&2\\3&4\end{pmatrix}$; $\left(\dfrac{a}{b}\right)^{2}$; $f'(x)=3x^2-6x$; $\log_2 8=3$; $e^{x^2+1}$; $P(A\mid B)=\dfrac{P(AB)}{P(B)}$; $C_n^k=\dfrac{n!}{k!(n-k)!}$; $2{,}5\;\text{cm}$; $\Delta=b^2-4ac$; $\alpha\in\left[0;\dfrac{\pi}{2}\right]$; $|x-1|\le 2$.</p>
+<div class="tex-center" data-tex="\int_{0}^{\pi}\sin x\,\mathrm{d}x = 2" data-display="1"></div>
+<table style="width:100%"><colgroup><col style="width:10%"><col style="width:30%"><col style="width:30%"><col style="width:30%"></colgroup>
+<tr><th>TT</th><th>Nội dung</th><th>Mức độ</th><th>Công thức</th></tr>
+<tr><td>1</td><td rowspan="2">Hàm số</td><td>Nhận biết</td><td>$y=ax^3+bx^2+cx+d$</td></tr>
+<tr><td>2</td><td colspan="2" style="text-align:center">Thông hiểu – $\dfrac{1}{2}$</td></tr></table>
+<div id="fig"></div>
+<div data-sect="landscape"><h3>TRANG NGANG – MA TRẬN</h3><table><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>$x^2$</td></tr></table></div>
+</div>
+<script>
+document.querySelectorAll('#doc p, #doc td, #doc h2').forEach(el=>{ el.innerHTML = NHD.texToHtml(el.innerHTML.replace(/&amp;/g,'&')); });
+document.getElementById('fig').innerHTML = NHD.texToHtml("\\begin{center}\\begin{tikzpicture}[scale=1]\\draw[->] (-2,0)--(2,0) node[right]{$x$};\\draw[->] (0,-1)--(0,2) node[above]{$y$};\\draw[domain=-1.4:1.4,smooth] plot (\\x,{\\x*\\x});\\end{tikzpicture}\\end{center}");
+window.make = async () => { const b = await Docx.fromHtml(document.getElementById('doc'), {title:'test'}); return b; };
+</script></body></html>

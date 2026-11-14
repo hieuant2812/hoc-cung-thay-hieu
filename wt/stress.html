@@ -1,0 +1,8 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/katex/katex.min.css"><link rel="stylesheet" href="/assets/style.css">
+<script src="/assets/katex/katex.min.js"></script><script src="/assets/lib/jszip.min.js"></script><script src="/assets/lib/html2canvas.min.js"></script>
+<script src="/assets/nhd/core.js"></script><script src="/assets/docx.js"></script></head><body>
+<div class="paper ex" id="doc" style="width:700px"></div>
+<script>
+window.prep = async () => { const t = await (await fetch('/wt/stress.tex')).text(); const P = NHD.parseBank(t, 'stress.tex', 11); let h = ''; P.questions.forEach((q, i) => { const order = q.loai==='TN' ? [0,1,2,3] : q.loai==='DS' ? [0,1,2,3] : [0]; h += NHD.renderQuestion({ q, order }, i + 1, 'key', { sol: true }); }); document.getElementById('doc').innerHTML = h; return [P.questions.length, P.errors.length]; };
+window.make = async () => Docx.fromHtml(document.getElementById('doc'), { title: 'stress' });
+</script></body></html>

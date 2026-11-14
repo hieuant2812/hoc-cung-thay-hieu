@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
 <script src="assets/katex/katex.min.js"></script>
-<script src="assets/lib/jszip.min.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/docx.js"></script>
 <script src="assets/omr/layout.js"></script><script src="assets/omr/keys.js"></script><script src="assets/omr/phantich.js"></script><script src="assets/lib/qrcode.js"></script>
 <script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/nhd/gen.js"></script><script src="assets/nhd/out.js"></script>
 </head>
@@ -51,7 +51,12 @@
       <button class="btn ghost sm" id="btnClear">Xoá ngân hàng lớp này</button>
     </div>
     <div class="tree" id="tree"></div>
-    <div class="note blue small">Ngân hàng chỉ được lưu trong trình duyệt trên máy này (không gửi lên mạng). Sang máy khác thì đăng lại các file .zip. <b>Không đưa file ngân hàng lên GitHub.</b></div>
+    <div class="note blue small">Ngân hàng được lưu trong trình duyệt của máy này (không gửi lên mạng). Muốn dùng trên iPad hay máy khác mà không phải đăng lại file .tex: xem mục <b>Dùng trên iPad</b> ngay dưới. <b>Không đưa file .tex ngân hàng lên GitHub ở dạng thường.</b></div>
+    <div id="nhMoi"></div>
+    <details class="card" style="margin-top:14px" id="dbBox"><summary><b>📲 Dùng ngân hàng trên iPad / máy khác</b> <span class="muted small">— gói mã hoá đặt sẵn trên web, máy khác chỉ nhập mật khẩu một lần</span></summary>
+      <div id="dongBo" style="margin-top:10px"></div>
+      <div class="note blue small" style="margin-top:8px">Gói được nén và <b>mã hoá AES-256</b> bằng mật khẩu của thầy nên đặt trên GitHub công khai vẫn an toàn: không có mật khẩu thì không mở được. Khi ngân hàng thay đổi, tạo gói mới và đăng đè lên là mọi máy tự thấy bản mới.</div>
+    </details>
     <details class="card" style="margin-top:14px"><summary><b>💾 Sao lưu / khôi phục</b> <span class="muted small">— ngân hàng, mẫu ma trận, đề đã ra, kết quả chấm: một file duy nhất</span></summary><div id="saoLuu" style="margin-top:10px"></div></details>
   </section>
 
@@ -154,6 +159,7 @@
         <div class="opt-cards">
           <label class="oc"><input type="radio" name="xuat" value="pdf" checked><span><b>File PDF + file TeX</b><span>Gói .zip gồm PDF từng mã đề, PDF đáp án và toàn bộ file .tex.</span></span></label>
           <label class="oc"><input type="radio" name="xuat" value="tex"><span><b>Chỉ file TeX</b><span>Gói .zip các file .tex, mở bằng VS Code và biên dịch XeLaTeX.</span></span></label>
+          <label class="oc"><input type="radio" name="xuat" value="docx"><span><b>File Word (.docx)</b><span>Từng mã đề, đáp án, lời giải, ma trận + đặc tả. Công thức là Equation của Word, sửa được ngay trong Word.</span></span></label>
         </div>
         <div class="row" style="margin-top:10px">
           <label class="chk"><input type="checkbox" id="xLG" checked> Kèm file lời giải chi tiết</label>
@@ -184,6 +190,6 @@
   <dialog id="dlg"><div class="dh"><b id="dlgT"></b><span class="grow"></span><button class="btn ghost sm" onclick="dlg.close()">Đóng</button></div><div class="db" id="dlgB"></div></dialog>
 </main>
 <footer id="foot"></footer>
-<script src="assets/saoluu.js"></script><script src="assets/nhd/app.js"></script><script>SaoLuu.mount(document.getElementById("saoLuu"));</script>
+<script src="assets/saoluu.js"></script><script src="assets/dongbo.js"></script><script src="assets/nhd/app.js"></script><script>SaoLuu.mount(document.getElementById("saoLuu"));DongBo.mount(document.getElementById("dongBo"));DongBo.nhacBanMoi(document.getElementById("nhMoi"));</script>
 </body>
 </html>
