@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tự học · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
-<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t12.js"></script><script src="data/sotaybai-10.js"></script><script src="data/sotaybai-11.js"></script><script src="data/sotaybai-12.js"></script><script src="assets/lib/html2canvas.min.js"></script><script src="assets/lib/jspdf.umd.min.js"></script><script src="assets/sotay.js"></script>
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="assets/lophoc.js"></script><script src="assets/sotay.js?v=3"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
 <style>
@@ -54,6 +54,7 @@
     <button data-t="gv">🧑‍🏫 Giáo viên: tạo bộ luyện tập</button>
   </div>
 
+  <div id="lhBar"></div>
   <!-- ===================== LUYỆN TẬP ===================== -->
   <section class="lt-pane" id="lt">
     <div id="ltSetup">
@@ -119,6 +120,7 @@
     const loc = LS.get("lt-local", null); if (loc) sets.unshift({ local: true, ten: loc.ten, mon: loc.mon, lop: loc.lop, n: loc.q.length });
     $("sets").innerHTML = sets.length ? sets.map((s, i) => `<button class="set" data-i="${i}"><b>${esc(s.ten)}</b><span>${esc(s.mon || "")} ${esc(s.lop || "")} · ${s.n} câu${s.local ? " · file đã mở trên máy này" : ""}</span>${progTxt(s)}</button>`).join("") : `<div class="card empty">Thầy cô chưa đưa bộ luyện tập nào lên. Nếu có file bộ luyện tập (.json), bấm “Mở file .json”.</div>`;
     $("sets").querySelectorAll(".set").forEach(b => b.onclick = () => openSet(sets[+b.dataset.i]));
+    const mh = location.hash.match(/^#lt\/(.+)$/); if (mh) { const f = decodeURIComponent(mh[1]); const s0 = sets.find(x => x.file === f); if (s0) { setTab("lt"); openSet(s0); } }
   }
   const progKey = s => "lt-prog-" + (s.file || "local-" + s.ten);
   function progTxt(s) { const p = LS.get(progKey(s), null); if (!p || !p.n) return ""; return `<span>Đã làm ${p.n} câu · đúng ${Math.round(p.ok / p.n * 100)}%</span>`; }
@@ -177,6 +179,7 @@
     const saveProg = (dk, good) => { const k = progKey(SET.meta); const p = LS.get(k, { n: 0, ok: 0, d: {} }); p.n++; if (good) p.ok++; const d = p.d[dk] = p.d[dk] || { n: 0, ok: 0 }; d.n++; if (good) d.ok++; LS.set(k, p); };
     const done = () => {
       const by = {}; res.forEach(r => { const x = by[r.dkey] = by[r.dkey] || { n: 0, ok: 0 }; x.n++; if (r.good) x.ok++; });
+      if (window.LopHoc) { const ct = {}; Object.entries(by).forEach(([k, x]) => ct[k] = { n: x.n, ok: x.ok, ten: (SET.dang && SET.dang[k]) ? String(SET.dang[k]).replace(/\$/g, "").slice(0, 90) : k }); LopHoc.gui({ loai: "luyentap", noidung: SET.ten, diem: ok, socau: items.length, chitiet: ct }); window.dispatchEvent(new Event("lophoc-capnhat")); }
       box.innerHTML = `<div class="card" style="text-align:center"><div style="font:800 54px var(--font-h);color:${ok / items.length >= .8 ? "#14873e" : ok / items.length >= .5 ? "#b37400" : "#d11a45"}">${ok}/${items.length}</div><p>${ok === items.length ? "Xuất sắc! 🎉" : ok / items.length >= .8 ? "Rất tốt! Tiếp tục phát huy nhé." : ok / items.length >= .5 ? "Khá rồi — xem lại lời giải các câu sai nhé." : "Cố lên! Em xem lại lí thuyết ở Sổ tay rồi luyện lại."}</p>
         <div style="text-align:left;max-width:520px;margin:0 auto">${Object.entries(by).map(([k, x]) => `<div class="row" style="justify-content:space-between;border-bottom:1px dashed var(--line);padding:4px 0"><span>${SET.dang && SET.dang[k] ? NHD.texToHtml(SET.dang[k]) : k}</span><b>${x.ok}/${x.n}</b></div>`).join("")}</div>
         <div class="row" style="justify-content:center;gap:10px;margin-top:14px"><button class="btn coral" id="pAgain">↻ Luyện lượt mới</button><button class="btn ghost" id="pBack">Chọn phần khác</button></div></div>`;
@@ -232,6 +235,9 @@
   function setSub(v) { stSub = v; LS.set("lt-stsub", v); document.querySelectorAll("#stSub button").forEach(b => b.setAttribute("aria-selected", b.dataset.s === v)); $("stBai").classList.toggle("hidden", v !== "bai"); $("stNhanh").classList.toggle("hidden", v !== "nhanh"); if (v === "bai" && !stMounted && window.SoTayBai) { stMounted = true; SoTayBai.mount($("stBai")); } }
   document.querySelectorAll("#stSub button").forEach(b => b.onclick = () => setSub(b.dataset.s));
   if (/^#st\//.test(location.hash)) { tab = "st"; stSub = "bai"; }
+  if (/^#lt\//.test(location.hash)) tab = "lt";
+  window.addEventListener("hashchange", () => { if (/^#st\//.test(location.hash) && tab !== "st") { setTab("st"); setSub("bai"); } if (/^#lt\//.test(location.hash)) loadSets(); });
+  if (window.LopHoc) LopHoc.thanh($("lhBar"));
   setTab(tab); loadSets(); drawSoTay(); setSub(stSub);
 })();
 </script>

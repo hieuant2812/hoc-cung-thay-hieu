@@ -10,7 +10,7 @@
     const ten = S.tenWeb || "Học cùng Thầy Hiếu"; const m = ten.match(/^(.*?)(Thầy.*)$/);
     h.className = "top";
     h.innerHTML = `<div class="wrap in"><a class="logo" href="index.html"><span class="mk">H</span><span><b>${m ? esc(m[1]) + "<span>" + esc(m[2]) + "</span>" : esc(ten)}</b><small>${esc(S.truong || "")}</small></span></a>
-      <nav class="nav">${[["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tren-lop", "Trên lớp"], ["luyentap", "Tự học"], ["rade", "Ra đề"], ["phieu", "Phiếu & chấm"], ["phantich", "Phân tích"], ["khbd", "Soạn bài"], ["beamer", "Trình chiếu"], ["trochoi", "Trò chơi"]].map(([k, t]) => `<a href="${k}.html"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div>`;
+      <nav class="nav">${[["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tren-lop", "Trên lớp"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["rade", "Ra đề"], ["phieu", "Phiếu & chấm"], ["phantich", "Phân tích"], ["khbd", "Soạn bài"], ["beamer", "Trình chiếu"], ["trochoi", "Trò chơi"], ["lophoc", "Lớp học"]].map(([k, t]) => `<a href="${k}.html"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div>`;
   }
   function footer() {
     const f = document.getElementById("foot"); if (!f) return;
@@ -18,7 +18,7 @@
     f.innerHTML = `<div class="wrap"><div class="dots">${["blue", "teal", "green", "sun", "coral", "pink", "violet"].map(c => `<i style="background:var(--${c})"></i>`).join("")}</div>
       <div class="slogan">“${esc((S.khauHieu || "").replace(/\.$/, ""))}”</div>
       <div class="dev">${esc(S.chanTrang || "")}</div>
-      <div class="small">© ${new Date().getFullYear()} ${esc(S.tenWeb || "")}</div></div>`;
+      <div class="small">© ${new Date().getFullYear()} ${esc(S.tenWeb || "")}${S.phienBan ? ` · Phiên bản ${esc(S.phienBan)}` : ""}</div></div>`;
   }
   window.toast = function (msg, ms) {
     const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t);
@@ -34,7 +34,25 @@
     add("meta", { name: "apple-mobile-web-app-title", content: "Thầy Hiếu" });
     add("meta", { name: "theme-color", content: "#3b7bff" });
     add("meta", { name: "mobile-web-app-capable", content: "yes" });
-    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) navigator.serviceWorker.register("sw.js").catch(() => {});
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+      const coCu = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.register("sw.js").then(reg => {
+        reg.update().catch(() => {});
+        reg.addEventListener("updatefound", () => {
+          const w = reg.installing; if (!w || !coCu) return;
+          w.addEventListener("statechange", () => { if (w.state === "installed") baoCapNhat(); });
+        });
+      }).catch(() => {});
+    }
+  }
+  /* có phiên bản mới của web: mời tải lại để dùng ngay */
+  function baoCapNhat() {
+    if (document.querySelector(".bao-moi")) return;
+    const b = document.createElement("div"); b.className = "bao-moi";
+    b.style.cssText = "position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:300;background:#1d2742;color:#fff;border-radius:14px;padding:10px 14px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);font:600 14.5px var(--font,system-ui);max-width:calc(100% - 24px)";
+    b.innerHTML = `<span>🔄 Web vừa có bản cập nhật mới.</span><button style="border:0;border-radius:10px;padding:6px 12px;font:700 14px inherit;background:#2fb35a;color:#fff;cursor:pointer">Tải lại</button><button aria-label="Đóng" style="border:0;background:none;color:#aab;font-size:18px;cursor:pointer">×</button>`;
+    const [nut, dong] = b.querySelectorAll("button"); nut.onclick = () => location.reload(); dong.onclick = () => b.remove();
+    document.body.appendChild(b);
   }
   /* trên iPad: nhắc cài vào Màn hình chính — Safari chỉ giữ ngân hàng lâu dài khi đã cài */
   function nhacCai() {

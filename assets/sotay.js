@@ -18,12 +18,30 @@
   const bien = m => `--nm:${m[0]};--nt:${m[1]};--nd:${tron(m[0], "#1d2742", .48)}`;
   const LAMA = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
+  /* ---------- nạp dần thư viện, dữ liệu (chỉ khi cần) ---------- */
+  const daNap = {};
+  const nap = src => daNap[src] || (daNap[src] = new Promise((ok, loi) => {
+    if ([...document.scripts].some(s => s.getAttribute("src") === src)) return ok();
+    const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => { delete daNap[src]; loi(new Error("Không tải được " + src)); }; document.head.appendChild(s);
+  }));
+  const napLop = lop => Promise.all([`data/baihoc/t${lop}.js`, `data/sotaybai-${lop}.js`].map(nap));
+  const napHinh = () => nap("assets/hinhve.js").then(() => Promise.all(["data/hinhve-bai.js", "data/hinhve-sotay.js"].map(nap)));
+  const napPDF = () => Promise.all(["assets/lib/html2canvas.min.js", "assets/lib/jspdf.umd.min.js"].map(nap));
+  /* hình vẽ: đổi màu phấn (nền bảng) sang màu in trên nền trắng */
+  const MAUHV = { "--chu": "#1d2742", "--vang": "#d98a00", "--xanh": "#0f9e8f", "--hong": "#e8553a", "--tim": "#7c4ddb", "--luc": "#2a9d50" };
+  function hinh(h, ten) {
+    if (!G.HinhVe || !h) return "";
+    let sv; try { sv = G.HinhVe.svg(h); } catch (e) { return ""; }
+    sv = sv.replace(/var\((--[a-z]+)\)/g, (m, v) => MAUHV[v] || "#1d2742").replace('class="hv"', 'class="hv" width="100%"');
+    return `<figure class="hvb"><div style="max-width:${Math.round((h.w || 5) * 62)}px;margin:auto">${sv}</div>${ten ? `<figcaption>${tex(ten)}</figcaption>` : ""}</figure>`;
+  }
+
   /* ---------- đọc dữ liệu dạng văn bản ---------- */
   const cache = {};
   function docLop(lop) {
     if (cache[lop]) return cache[lop];
     const raw = (G.SOTAYBAI || {})[lop]; const out = {};
-    if (!raw) return (cache[lop] = out);
+    if (!raw) return out;
     let bai = null, dang = null;
     raw.split(/\r?\n/).forEach(line => {
       const l = line.trim(); if (!l) return;
@@ -107,6 +125,17 @@
 .stv .ft{display:none}
 .stv.pdf .lgbtn,.stv.pdf .nav2{display:none!important}
 .stv.pdf .lg{display:block!important}
+.stv figure.hvb{margin:0;background:#fbfcff;border:1px solid #e6eaf4;border-radius:14px;padding:10px 10px 8px;text-align:center}
+.stv figure.hvb figcaption{font-size:13.5px;color:#55607a;margin-top:4px;line-height:1.45}
+.stv .hvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.stv .vdh{display:grid;grid-template-columns:1fr minmax(200px,300px);gap:14px;align-items:start}
+@media (max-width:640px){.stv .vdh{grid-template-columns:1fr}}
+.stv .hoc{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.stv .hoc button{border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:6px 14px;font:700 13.5px var(--font);cursor:pointer}
+.stv .hoc button.on{background:#fff;color:var(--nm)}
+.stb-ch em.tdo{font-style:normal;font-size:11.5px;background:#fff;border-radius:999px;padding:0 7px;margin-left:4px;color:var(--nm)}
+.stv.pdf .hoc{display:none}
+@media print{.stv .hoc{display:none!important}}
 /* sơ đồ tư duy */
 .mm{position:relative;padding:22px 18px 26px;background:radial-gradient(circle at 50% 45%,#fff 0,#fbfcff 55%,#f3f6fd 100%)}
 .mm svg.ln{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
@@ -154,7 +183,7 @@
   function mount(root) {
     if (!document.getElementById("stbCss")) { const st = document.createElement("style"); st.id = "stbCss"; st.textContent = CSS; document.head.appendChild(st); }
     const LS = { get: (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
-    const lops = Object.keys(G.SOTAYBAI || {}).filter(l => Object.keys(CT(l)).length);
+    const lops = ["10", "11", "12"].filter(l => Object.keys(CT(l)).length);
     let st = LS.get("stb-vt", { lop: lops[0], k: "b1" });
     const h = (location.hash.match(/^#st\/(\d+)\/(b\d+|c\d+)$/) || []);
     if (h[1]) st = { lop: h[1], k: h[2] };
@@ -179,31 +208,51 @@
     function chuongCua(lop, k) { const C = dsChuong(lop); if (k[0] === "c") return C.find(c => c.so === +k.slice(1)); return C.find(c => c.bai.some(b => b.so === +k.slice(1))); }
 
     function veNav() {
-      const lop = st.lop, D = docLop(lop), C = dsChuong(lop);
+      const lop = st.lop, D = docLop(lop), C = dsChuong(lop), dh = G.LopHoc ? G.LopHoc.daHoc() : {};
       const cur = chuongCua(lop, st.k); if (moChuong == null && cur) moChuong = cur.so;
       const khop = (c, b) => !q || (c.ten + " " + b.ten + " " + ((D[b.so] || {}).dang || []).map(x => x.t).join(" ")).toLowerCase().includes(q);
       $(".stb-ds").innerHTML = C.map(c => {
         const bs = c.bai.filter(b => khop(c, b)); if (!bs.length) return "";
         const mo = q || c.so === moChuong;
-        return `<div class="stb-ch${mo ? " mo" : ""}" style="${bien(c.mau)}"><button data-c="${c.so}"><b>${LAMA[c.so] || c.so}</b><span>${esc(c.ten)}</span></button><div class="ds">${bs.map(b => `<a href="#st/${lop}/b${b.so}" data-k="b${b.so}" class="${st.k === "b" + b.so ? "on" : ""}">Bài ${b.so}. ${esc(b.ten)}</a>`).join("")}<a href="#st/${lop}/c${c.so}" data-k="c${c.so}" class="mm${st.k === "c" + c.so ? " on" : ""}">🧠 Sơ đồ tư duy chương ${LAMA[c.so] || c.so}</a></div></div>`;
+        return `<div class="stb-ch${mo ? " mo" : ""}" style="${bien(c.mau)}"><button data-c="${c.so}"><b>${LAMA[c.so] || c.so}</b><span>${esc(c.ten)}${(() => { const n = c.bai.filter(b => (dh[lop + "/b" + b.so] || {}).s === "hoc").length; return n ? ` <em class="tdo">${n}/${c.bai.length}</em>` : ""; })()}</span></button><div class="ds">${bs.map(b => { const s = (dh[lop + "/b" + b.so] || {}).s; return `<a href="#st/${lop}/b${b.so}" data-k="b${b.so}" class="${st.k === "b" + b.so ? "on" : ""}">${s === "hoc" ? "✅ " : s === "on" ? "🔁 " : ""}Bài ${b.so}. ${esc(b.ten)}</a>`; }).join("")}<a href="#st/${lop}/c${c.so}" data-k="c${c.so}" class="mm${st.k === "c" + c.so ? " on" : ""}">🧠 Sơ đồ tư duy chương ${LAMA[c.so] || c.so}</a></div></div>`;
       }).join("") || `<div class="muted small" style="padding:8px">Không tìm thấy.</div>`;
       root.querySelectorAll(".stb-ch>button").forEach(b => b.onclick = () => { moChuong = moChuong === +b.dataset.c ? -1 : +b.dataset.c; veNav(); });
       root.querySelectorAll(".stb-ds a").forEach(a => a.onclick = ev => { ev.preventDefault(); st = { lop, k: a.dataset.k }; history.replaceState(null, "", a.getAttribute("href")); ve(); if (innerWidth < 880) $("#stbIn").scrollIntoView({ behavior: "smooth" }); });
       root.querySelectorAll(".stb-lop button").forEach(b => b.classList.toggle("on", b.dataset.l === String(lop)));
     }
 
+    let luot = 0;
     function ve() {
+      const l = ++luot;
+      if (!G.SOTAYBAI || !G.SOTAYBAI[st.lop] || !G.HinhVe || !G.HINHST) {
+        $("#stbIn").innerHTML = `<div class="card muted">⏳ Đang tải nội dung…</div>`;
+        Promise.all([napLop(st.lop), napHinh()]).then(() => { if (l === luot) ve2(); }, e => { $("#stbIn").innerHTML = `<div class="card">⚠️ ${esc(e.message)}. Kiểm tra kết nối mạng rồi tải lại trang.</div>`; });
+        return;
+      }
+      ve2();
+    }
+    function ve2() {
       LS.set("stb-vt", st); veNav();
       const lop = st.lop, c = chuongCua(lop, st.k);
       const out = $("#stbIn");
       if (!c) { out.innerHTML = `<div class="card">Chưa có dữ liệu.</div>`; return; }
       root.querySelector('[data-a="png"]').classList.toggle("hidden", st.k[0] !== "c");
       out.innerHTML = st.k[0] === "c" ? htmlSoDo(lop, c) : htmlBai(lop, c, +st.k.slice(1));
+      out.querySelectorAll(".hoc button").forEach(bt => bt.onclick = () => {
+        const ma = lop + "/" + st.k, cur = (G.LopHoc.daHoc()[ma] || {}).s, moi = cur === bt.dataset.h ? null : bt.dataset.h;
+        const lam = () => { const b0 = c.bai.find(x => "b" + x.so === st.k); G.LopHoc.datDaHoc(ma, `Toán ${lop} – Bài ${b0.so}. ${b0.ten}`, moi); ve2(); G.dispatchEvent(new Event("lophoc-capnhat")); if (moi === "hoc") toastX("Tuyệt! Em đã hoàn thành bài này 🎉"); };
+        if (moi && G.LopHoc.url() && !G.LopHoc.hs()) G.LopHoc.hoiTen(h => lam()); else lam();
+      });
       out.querySelectorAll(".lgbtn").forEach(b => b.onclick = () => { const lg = b.nextElementSibling; const an = lg.classList.toggle("hidden"); b.textContent = an ? "👁 Xem lời giải mẫu" : "🙈 Ẩn lời giải"; });
       out.querySelectorAll(".nav2 a").forEach(a => a.onclick = ev => { ev.preventDefault(); st = { lop, k: a.dataset.k }; moChuong = null; history.replaceState(null, "", a.getAttribute("href")); ve(); out.scrollIntoView({ behavior: "smooth" }); });
       const mm = out.querySelector(".mm"); if (mm) requestAnimationFrame(() => noiDay(mm));
     }
 
+    function nutHoc(lop, k) {
+      if (!G.LopHoc) return "";
+      const s = (G.LopHoc.daHoc()[lop + "/" + k] || {}).s;
+      return `<div class="hoc"><button data-h="hoc" class="${s === "hoc" ? "on" : ""}">${s === "hoc" ? "✅ Em đã học bài này" : "☐ Đánh dấu đã học"}</button><button data-h="on" class="${s === "on" ? "on" : ""}">🔁 Cần ôn lại</button></div>`;
+    }
     function lanCan(lop, k) {
       const ds = []; dsChuong(lop).forEach(c => { c.bai.forEach(b => ds.push({ k: "b" + b.so, ten: "Bài " + b.so + ". " + b.ten })); ds.push({ k: "c" + c.so, ten: "🧠 Sơ đồ tư duy chương " + (LAMA[c.so] || c.so) }); });
       const i = ds.findIndex(x => x.k === k); return [ds[i - 1], ds[i + 1]];
@@ -219,13 +268,16 @@
       const md = (bh.md || []).filter(m => m && (m.y || []).length);
       const lt = md.length ? md.map(m => `<div class="k"><h4>${tex(m.t)}</h4><ul>${m.y.map(y => `<li>${tex(y)}</li>`).join("")}</ul></div>`).join("")
         : (d.m.length ? `<div class="k"><h4>Kiến thức trọng tâm</h4><ul>${d.m.map(y => `<li>${tex(y)}</li>`).join("")}</ul></div>` : "");
+      const hb = (((G.HINH || {})[lop] || {})[b.so] || []).map(x => hinh(x.h, x.ten)).filter(Boolean);
+      const hinhBai = hb.length ? `<div class="hvs">${hb.join("")}</div>` : "";
+      const hd = ((G.HINHST || {})[lop] || {})[b.so] || {};
       const yc = (bh.yc || []).length ? `<div class="yc"><b>🎯 Em cần đạt:</b><ul>${bh.yc.map(y => `<li>${tex(y)}</li>`).join("")}</ul></div>` : "";
       const dg = d.dang.map((x, i) => `<div class="dg"><div class="t"><div class="so">${i + 1}</div><div><span>Dạng ${i + 1}</span><h4>${tex(x.t)}</h4></div></div><div class="c">
         ${x.p ? `<div class="pp"><b>Phương pháp:</b> ${tex(x.p)}</div>` : ""}
-        <div class="vd"><b class="lb">Ví dụ.</b> ${tex(x.d)}</div>
+        ${hd[i + 1] ? `<div class="vdh"><div class="vd"><b class="lb">Ví dụ.</b> ${tex(x.d)}</div>${hinh(hd[i + 1].h, hd[i + 1].ten)}</div>` : `<div class="vd"><b class="lb">Ví dụ.</b> ${tex(x.d)}</div>`}
         <button class="lgbtn">👁 Xem lời giải mẫu</button><div class="lg hidden"><b>Lời giải</b><ol>${x.g.map(g => `<li>${tex(g)}</li>`).join("")}</ol></div></div></div>`).join("");
-      return `<article class="stv" style="${bien(c.mau)}"><div class="hd"><small>Toán ${lop} · Chương ${LAMA[c.so] || c.so}. ${esc(c.ten)}</small><h2>Bài ${b.so}. ${esc(b.ten)}</h2><p>Tóm tắt lí thuyết và ${d.dang.length} dạng bài tập tiêu biểu có lời giải mẫu</p></div>
-        <div class="bd">${yc}<h3 class="sec"><i>📘</i>Tóm tắt lí thuyết</h3><div class="lt">${lt || '<div class="muted">Đang cập nhật.</div>'}</div>
+      return `<article class="stv" style="${bien(c.mau)}"><div class="hd"><small>Toán ${lop} · Chương ${LAMA[c.so] || c.so}. ${esc(c.ten)}</small><h2>Bài ${b.so}. ${esc(b.ten)}</h2><p>Tóm tắt lí thuyết và ${d.dang.length} dạng bài tập tiêu biểu có lời giải mẫu · <a href="tailieu.html#${lop}/b${b.so}" style="color:#fff;font-weight:700">📄 Đề cương bài này</a></p>${nutHoc(lop, "b" + b.so)}</div>
+        <div class="bd">${yc}<h3 class="sec"><i>📘</i>Tóm tắt lí thuyết</h3><div class="lt">${lt || '<div class="muted">Đang cập nhật.</div>'}</div>${hinhBai}
         <h3 class="sec"><i>✍️</i>Các dạng bài tập tiêu biểu</h3>${dg || '<div class="muted">Đang cập nhật.</div>'}${nav2(lop, "b" + b.so)}</div><div class="ft">${CHAN}</div></article>`;
     }
 
@@ -293,9 +345,9 @@
       return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 80);
     }
     async function taiPDF(btn) {
-      if (!G.html2canvas || !G.jspdf) { alert("Thiếu thư viện tạo PDF. Thầy cô/em có thể bấm 🖨 In rồi chọn “Lưu thành PDF”."); return; }
       const cu = btn.textContent; btn.textContent = "⏳ Đang tạo PDF…"; btn.disabled = true;
       try {
+        await napPDF();
         const soDo = st.k[0] === "c";
         const rong = soDo ? 1180 : 794;
         const r = await chupAnh(rong); if (!r) return;
@@ -339,9 +391,9 @@
       finally { btn.textContent = cu; btn.disabled = false; }
     }
     async function taiPNG(btn) {
-      if (!G.html2canvas) return;
       const cu = btn.textContent; btn.textContent = "⏳ Đang tạo ảnh…"; btn.disabled = true;
       try {
+        await napPDF();
         const r = await chupAnh(1180); const W = r.canvas.width, s = W / 1180, Hc = r.canvas.height + Math.round(40 * s);
         const pg = document.createElement("canvas"); pg.width = W; pg.height = Hc; const ctx = pg.getContext("2d");
         ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, Hc); ctx.drawImage(r.canvas, 0, 0);
@@ -354,5 +406,6 @@
     ve();
   }
 
+  const toastX = m => { if (G.toast) G.toast(m); };
   G.SoTayBai = { mount, docLop, dsChuong };
 })(window);

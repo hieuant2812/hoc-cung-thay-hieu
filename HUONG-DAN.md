@@ -212,12 +212,45 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
     - Nút **⬇ Tải PDF phần đang xem** (bài: khổ A4 dọc, lời giải hiện đầy đủ; sơ đồ: A4 ngang), **🖼 Tải ảnh sơ đồ (PNG)** và **🖨 In**. Mọi trang in/PDF có chân trang “GV: ThS Nguyễn Hoàng Minh Hiếu - GV Toán THPT An Nhơn Tây”.
     - Gửi học sinh đường link thẳng tới một bài, ví dụ `luyentap.html#st/12/b13` (Toán 12, bài 13) hoặc sơ đồ chương `luyentap.html#st/11/c7`.
     - Nội dung dạng bài nằm trong `data/sotaybai-10.js`, `-11.js`, `-12.js` (viết dạng văn bản: `@số bài`, `m:` ý chính sơ đồ, `# tên dạng`, `p:` phương pháp, `d:` đề, `g:` từng bước giải) — thầy sửa, thêm trực tiếp được.
+    - **Hình vẽ minh hoạ**: phần lí thuyết có hình của bài; các dạng hình học, đồ thị, xác suất (sơ đồ cây) có hình đặt cạnh ví dụ — thêm, sửa trong `data/hinhve-sotay.js`.
+    - Học sinh bấm **☐ Đánh dấu đã học** / **🔁 Cần ôn lại** ở đầu mỗi bài; cột trái hiện ✅ và tiến độ từng chương.
     - **⚡ Tra công thức nhanh**: sổ tay công thức theo chương như trước, tìm kiếm được.
 - **Giáo viên** (tab “Giáo viên: tạo bộ luyện tập”):
   - Chọn câu từ ngân hàng. Nên bỏ các câu đã dùng trong đề kiểm tra.
   - Bấm nút tạo: máy tải về `LT_….json` và `index.json`.
   - Tải **cả hai** file lên thư mục `data/luyentap/` của kho GitHub. Cũng có thể gửi file `LT_….json` cho học sinh mở trực tiếp.
 - Lưu ý: bộ luyện tập đưa lên mạng là công khai, nên chỉ chọn câu dành riêng cho luyện tập.
+
+## 4e1. Tài liệu học tập — đề cương theo bài (`tailieu.html`)
+
+Đề cương Toán 10, 11, 12 của thầy (trích từ file TeX) đặt ở mục **Tài liệu** trên thanh menu.
+
+- **Học sinh** chỉ thấy **bản học sinh**: lí thuyết có chỗ trống để điền (đường chấm), ví dụ minh hoạ, bài tập luyện tập, câu hỏi trắc nghiệm, đề ôn tập chương — **không có** nội dung chỗ điền, lời giải, đáp số, đáp án. Trên web chỉ đăng file bản học sinh (`data/decuong/hs-*.json`), nên học sinh không thể xem được đáp án kể cả khi mở mã nguồn trang.
+- Mỗi bài, mỗi đề có nút **🖨 In** và **⬇ Tải PDF** (chân trang “GV: ThS Nguyễn Hoàng Minh Hiếu - GV Toán THPT An Nhơn Tây”). Link thẳng tới một bài: `tailieu.html#12/b13`, đề ôn chương: `tailieu.html#12/o4`.
+- **Giáo viên** bấm **🔑 Giáo viên** (cột trái) → có nút chuyển **Bản học sinh / Bản giáo viên** và chọn nguồn:
+  - *Đề cương đã đăng trên web*: bấm **🔑 Mở bản giáo viên đã đăng**, nhập mật khẩu → xem bản đầy đủ (chỗ điền tô đỏ, lời giải, đáp án, bảng đáp án đề ôn) trên bất kì máy nào.
+  - *Đề cương đang soạn trên máy này*: bản đang sửa, chỉ có trên trình duyệt của máy thầy.
+
+**Mỗi năm học — sửa, thêm rồi xuất bản (giống thêm ngân hàng đề):**
+1. Tài liệu → 🔑 Giáo viên → **✏️ Soạn & xuất bản đề cương**. Nhập **Năm học**.
+2. **📂 Nạp file TeX / zip**: chọn các file zip đề cương thầy đang có (nạp cùng lúc được nhiều zip; file bìa, file chính tự bỏ qua). Nhớ nạp **đủ cả học kì I và II**.
+3. Bấm tên file để mở: bên trái sửa mã TeX, bên phải xem trước **bản GV / bản HS** ngay khi gõ; tự lưu. **＋ Thêm bài mới** tạo khung bài đúng mẫu của từng lớp.
+4. Hình TikZ có sẵn hiện ngay. Hình TikZ **mới** hiện ô “Hình chưa có ảnh”: thầy biên dịch trên máy, chụp/xuất ảnh PNG hoặc SVG rồi bấm vào ô đó để tải ảnh lên.
+5. **📤 Xuất bản lên web** → đặt mật khẩu bản giáo viên → tải về `XuatBan_DeCuong_<ngày>.zip` → kéo thư mục `data` trong gói lên GitHub → Commit. Học sinh thấy bản mới ngay.
+6. **⬇ Tải TeX (.zip)** để lấy lại các file TeX đã sửa, biên dịch bản in bằng XeLaTeX như trước.
+
+Mẫu file TeX được nhận dạng: Toán 10 `\bai{n}{..}` + `\phan{A|B|C}`, `vd`/`\loigiai`, `bt`, đề ôn `dethi`/`cau`/`\choice`/`\ydung`/`\traloi`; Toán 11 `\section{..}` + `\lythuyet`/`\vidumuc`/`\baitapmuc`, đề ôn `\dethi{..}{Đề n}`/`\pa{\T..}`/`\D`/`\S`/`\dapso{..}{..}{..}{..}`; Toán 12 `\baihoc{n}{..}` + `\lithuyet`/`\viduminhhoa`/`\subsubsection` (dạng)/`loigiai`/`\luyentap`/`\phanbt`/`bai`+`\dapso`, đề ôn `deontap`/`\dapan`.
+
+## 4e2. Lớp học: kết nối học sinh với giáo viên (`lophoc.html`)
+
+Học sinh nhập **họ tên, lớp** một lần trên máy của em. Mỗi lượt luyện tập (điểm, dạng đúng/sai) và mỗi bài Sổ tay em đánh dấu “đã học / cần ôn” được gửi về **Google Trang tính của thầy**. Mất mạng thì web tự xếp hàng đợi và gửi lại khi có mạng.
+
+**Cài một lần (khoảng 5 phút):** mở `lophoc.html` → thẻ **⚙️ Cài đặt kết nối**, làm theo 6 bước (tạo Trang tính → Apps Script → dán mã → đổi `KHOA_GV` → Triển khai ứng dụng web “Bất kỳ ai” → chép URL `/exec`). Dán URL vào `config.js` (`lopHoc: { url: "…/exec" }`) rồi tải `config.js` lên GitHub. Khoá giáo viên chỉ nhập trên máy thầy, không ghi vào `config.js`.
+
+- **📌 Giao bài:** chọn lớp (VD `12A1`, cả khối `12`, hoặc `TẤT CẢ`), chọn bài Sổ tay / sơ đồ chương / bộ luyện tập, đặt hạn → học sinh lớp đó thấy ngay ở đầu trang Tự học, bài làm xong có dấu ✅. Nút **Chép link gửi Zalo**.
+- **📊 Kết quả học sinh:** lọc theo lớp, theo ngày; bảng từng học sinh (số bài đã học, cần ôn, lượt luyện, tỉ lệ đúng, lần cuối hoạt động); bài được học nhiều/ít; **dạng cả lớp sai nhiều nhất**; **Xuất Excel (CSV)**.
+- Chưa cài URL thì web vẫn chạy bình thường, tiến độ chỉ lưu trên máy học sinh.
+- Dữ liệu nằm trong Trang tính của thầy (Google Drive), không ai khác xem được nếu không có khoá giáo viên.
 
 ## 4f. Công việc chuyên môn
 - **Ma trận và bản đặc tả theo mẫu Phụ lục Công văn 7991/BGDĐT-GDTrH**:
