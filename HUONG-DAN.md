@@ -207,7 +207,12 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
 - **Học sinh**:
   - Chọn bộ luyện tập, rồi chọn dạng và mức độ, làm trên điện thoại. Mỗi câu được chấm ngay và có lời giải.
   - Máy lưu tiến độ theo từng dạng.
-  - Mục **Sổ tay công thức** có Toán 10, 11, 12 theo chương, tìm kiếm được.
+  - Mục **Sổ tay kiến thức** có hai phần:
+    - **📚 Theo bài học** (Toán 10, 11, 12): bấm vào bài ở cột trái để hiện *tóm tắt lí thuyết* và *5 dạng bài tập tiêu biểu* (phương pháp, ví dụ, nút “Xem lời giải mẫu”). Cuối mỗi chương có **🧠 Sơ đồ tư duy** tổng hợp kiến thức chương.
+    - Nút **⬇ Tải PDF phần đang xem** (bài: khổ A4 dọc, lời giải hiện đầy đủ; sơ đồ: A4 ngang), **🖼 Tải ảnh sơ đồ (PNG)** và **🖨 In**. Mọi trang in/PDF có chân trang “GV: ThS Nguyễn Hoàng Minh Hiếu - GV Toán THPT An Nhơn Tây”.
+    - Gửi học sinh đường link thẳng tới một bài, ví dụ `luyentap.html#st/12/b13` (Toán 12, bài 13) hoặc sơ đồ chương `luyentap.html#st/11/c7`.
+    - Nội dung dạng bài nằm trong `data/sotaybai-10.js`, `-11.js`, `-12.js` (viết dạng văn bản: `@số bài`, `m:` ý chính sơ đồ, `# tên dạng`, `p:` phương pháp, `d:` đề, `g:` từng bước giải) — thầy sửa, thêm trực tiếp được.
+    - **⚡ Tra công thức nhanh**: sổ tay công thức theo chương như trước, tìm kiếm được.
 - **Giáo viên** (tab “Giáo viên: tạo bộ luyện tập”):
   - Chọn câu từ ngân hàng. Nên bỏ các câu đã dùng trong đề kiểm tra.
   - Bấm nút tạo: máy tải về `LT_….json` và `index.json`.

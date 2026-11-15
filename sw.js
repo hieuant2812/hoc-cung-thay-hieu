@@ -2,7 +2,7 @@
    Nguyên tắc: trang HTML luôn thử lấy bản mới trước (để sửa đổi của thầy hiện ra ngay),
    các file tĩnh (js, css, font, hình) dùng bản đã lưu rồi âm thầm cập nhật.
    Không bao giờ lưu đệm gói ngân hàng (.hcth) để khỏi chiếm dung lượng. */
-const V = "hcth-v14";
+const V = "hcth-v15";
 const SHELL = [
   "./", "./index.html", "./rade.html", "./cham.html", "./phieu.html", "./phantich.html",
   "./tren-lop.html", "./luyentap.html", "./mophong.html", "./dapan.html", "./khbd.html", "./beamer.html", "./trochoi.html", "./hs.html",
@@ -14,6 +14,7 @@ const SHELL = [
   "./assets/khbd.js", "./assets/beamer.js", "./assets/trochoi.js", "./data/chuongtrinh.js",
   "./data/baihoc/t10.js", "./data/baihoc/t11.js", "./data/baihoc/t11-them.js", "./data/baihoc/t12.js", "./data/baihoc/cd.js",
   "./data/khbdgoc.js", "./data/hinhve-bai.js", "./assets/hinhve.js",
+  "./data/sotay.js", "./data/sotaybai-10.js", "./data/sotaybai-11.js", "./data/sotaybai-12.js", "./assets/sotay.js", "./assets/lib/html2canvas.min.js",
   "./assets/lib/jszip.min.js", "./assets/lib/jspdf.umd.min.js", "./assets/lib/qrcode.js",
   "./assets/katex/katex.min.css", "./assets/katex/katex.min.js",
   "./assets/icon-192.png", "./assets/icon-512.png", "./assets/favicon.svg"

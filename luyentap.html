@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Tự học · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
-<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script>
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t12.js"></script><script src="data/sotaybai-10.js"></script><script src="data/sotaybai-11.js"></script><script src="data/sotaybai-12.js"></script><script src="assets/lib/html2canvas.min.js"></script><script src="assets/lib/jspdf.umd.min.js"></script><script src="assets/sotay.js"></script>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
 <style>
@@ -34,6 +34,9 @@
 .sotay .mc ul{margin:0;padding-left:20px;line-height:1.75}
 .sotay .mc li{margin:2px 0}
 .sotay .katex{font-size:1.06em}
+.st-sub{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px;width:max-content;max-width:100%}
+.st-sub button{border:0;background:none;border-radius:10px;padding:8px 14px;font:700 14.5px var(--font);cursor:pointer;color:#556}
+.st-sub button[aria-selected=true]{background:linear-gradient(135deg,#10b3a3,#3b7bff);color:#fff}
 .toc{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .toc a{background:#e8faf6;color:#0b7a6c;border-radius:10px;padding:4px 10px;text-decoration:none;font-weight:600;font-size:14px}
 </style>
@@ -43,11 +46,11 @@
 <main class="wrap">
   <section class="hero sm" style="background:linear-gradient(120deg,#10b3a3,#2fb6e8 55%,#3b7bff)">
     <h1>Tự học</h1>
-    <p>Luyện tập theo chương, dạng, mức độ ngay trên điện thoại — chấm ngay, có lời giải. Sổ tay công thức tra nhanh theo chương.</p>
+    <p>Luyện tập theo chương, dạng, mức độ ngay trên điện thoại — chấm ngay, có lời giải. Sổ tay kiến thức theo từng bài: tóm tắt lí thuyết, dạng bài có giải mẫu, sơ đồ tư duy.</p>
   </section>
   <div class="lt-tabs" id="ltTabs">
     <button data-t="lt">✍️ Luyện tập</button>
-    <button data-t="st">📘 Sổ tay công thức</button>
+    <button data-t="st">📘 Sổ tay kiến thức</button>
     <button data-t="gv">🧑‍🏫 Giáo viên: tạo bộ luyện tập</button>
   </div>
 
@@ -64,9 +67,13 @@
 
   <!-- ===================== SỔ TAY ===================== -->
   <section class="lt-pane sotay" id="st">
+    <div class="st-sub" id="stSub"><button data-s="bai" aria-selected="true">📚 Theo bài học · lí thuyết, dạng bài, sơ đồ tư duy</button><button data-s="nhanh">⚡ Tra công thức nhanh</button></div>
+    <div id="stBai"></div>
+    <div id="stNhanh" class="hidden">
     <div class="row" style="gap:10px;align-items:end;flex-wrap:wrap"><label class="f">Lớp<select id="stLop"></select></label><label class="f" style="flex:1;min-width:220px">Tìm công thức<input type="text" id="stQ" placeholder="VD: đạo hàm, cấp số nhân, khoảng cách…"></label></div>
     <div class="toc" id="stToc"></div>
     <div id="stBody"></div>
+    </div>
   </section>
 
   <!-- ===================== GIÁO VIÊN ===================== -->
@@ -221,7 +228,11 @@
     $("gvMsg").innerHTML = `<div class="note green">Đã tạo <b>${esc(file)}</b> (${qs.length} câu, ${Object.keys(by).length} dạng) và <b>index.json</b> (${idx.length} bộ). Thầy tải cả hai lên thư mục <code>data/luyentap/</code> của kho GitHub.</div>`;
   };
 
-  setTab(tab); loadSets(); drawSoTay();
+  let stSub = LS.get("lt-stsub", "bai"), stMounted = false;
+  function setSub(v) { stSub = v; LS.set("lt-stsub", v); document.querySelectorAll("#stSub button").forEach(b => b.setAttribute("aria-selected", b.dataset.s === v)); $("stBai").classList.toggle("hidden", v !== "bai"); $("stNhanh").classList.toggle("hidden", v !== "nhanh"); if (v === "bai" && !stMounted && window.SoTayBai) { stMounted = true; SoTayBai.mount($("stBai")); } }
+  document.querySelectorAll("#stSub button").forEach(b => b.onclick = () => setSub(b.dataset.s));
+  if (/^#st\//.test(location.hash)) { tab = "st"; stSub = "bai"; }
+  setTab(tab); loadSets(); drawSoTay(); setSub(stSub);
 })();
 </script>
 </body>
