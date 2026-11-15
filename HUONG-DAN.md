@@ -88,11 +88,14 @@ Mỗi lần cập nhật bằng GitHub Desktop: chép file mới vào thư mục
 
 Ngân hàng nằm trong trình duyệt của từng máy, nên máy mới sẽ trống. Thay vì đăng lại các file .tex, hãy đặt **một gói ngân hàng đã mã hoá** lên chính trang web; máy nào cần thì tải về một lần.
 
-**Bước 1 — trên máy tính (máy đang có ngân hàng).** Vào *Ra đề* → bước 1 → mở mục **📲 Dùng ngân hàng trên iPad / máy khác** → bấm **🔐 Tạo gói để đăng lên web** → đặt một mật khẩu (nhớ kĩ, ít nhất 6 kí tự). Trang tải về 2 file: `nganhang.json` và `nganhang.hcth`.
+**Bước 1 — trên máy tính (máy đang có ngân hàng).** Vào *Ra đề* → bước 1 → mở mục **📲 Dùng ngân hàng trên iPad / máy khác** → bấm **🔐 Tạo gói để đăng lên web** → đặt một mật khẩu (nhớ kĩ, ít nhất 6 kí tự). Trang tải về **một file** `nganhang-<ngày>.zip` (bên trong là thư mục `data` gồm `nganhang.json` và một hoặc vài file `nganhang….hcth`). Nếu trình duyệt không tự tải, bấm nút **⬇ Tải gói (1 file .zip)** hiện ngay bên dưới.
 
-**Bước 2 — đăng lên web.** Chép 2 file đó vào thư mục **`data/`** của trang rồi đăng lên GitHub như mọi lần (Add file → Upload files → Commit). Gói đã được nén và **mã hoá AES‑256** bằng mật khẩu của thầy: ai tải về cũng không mở được nếu không có mật khẩu, nên để trên GitHub công khai vẫn an toàn. Toàn bộ ngân hàng hơn 22 000 câu chỉ còn khoảng 1,6 MB.
+**Bước 2 — chọn một trong hai cách đưa sang iPad.**
 
-**Bước 3 — trên iPad (hay bất kì máy nào).** Mở trang → *Trang chủ* hoặc *Ra đề* → **📥 Lấy ngân hàng về máy này** → nhập mật khẩu. Vài giây là xong, sau đó dùng như trên máy tính: chọn ma trận, sinh đề, tải gói Word/PDF. Mật khẩu được nhớ sẵn nên lần sau không phải nhập lại.
+- *Cách A — qua trang web (iPad nào cũng tự lấy được):* nhấp đúp file .zip để giải nén → được thư mục **`data`** → vào GitHub chọn *Add file → Upload files* → **kéo cả thư mục `data`** vào → *Commit changes*. Chờ 1–2 phút để trang cập nhật. Gói đã được nén và **mã hoá AES‑256** bằng mật khẩu của thầy nên để trên GitHub công khai vẫn an toàn.
+- *Cách B — không cần GitHub:* gửi file .zip sang iPad (AirDrop, Zalo, Google Drive…), lưu vào ứng dụng Tệp.
+
+**Bước 3 — trên iPad.** Mở trang → *Trang chủ* hoặc *Ra đề* → với cách A bấm **📥 Lấy ngân hàng về máy này**; với cách B bấm **📂 Nạp từ file (.zip hoặc .hcth)** rồi chọn chính file .zip. Nhập mật khẩu, vài giây là xong. Mật khẩu được nhớ sẵn nên lần sau không phải nhập lại.
 
 - Khi ngân hàng có thay đổi: tạo gói mới, đăng đè lên 2 file cũ. Máy nào mở trang cũng thấy dòng nhắc **“có bản mới”**.
 - Ngân hàng của máy nào vẫn nằm ở máy đó; gói trên web chỉ là bản sao để phát cho các máy. Máy tính vẫn là bản gốc.
@@ -119,11 +122,20 @@ Dữ liệu bài học nằm ở `data/baihoc/t10.js`, `t11.js`, `t12.js`, `cd.j
 
 ## 4a3. Bản trình chiếu trên lớp (`beamer.html`)
 
-Soạn slide **Beamer** từ chính nội dung bài học ở trên, theo nguyên tắc trình chiếu: nền **bảng xanh – chữ phấn trắng**, chữ to, mỗi slide ít dòng, **lời giải hiện ra từng bước**.
+Soạn slide **Beamer** cho trọn một bài học, theo nguyên tắc trình chiếu: nền **bảng xanh – chữ phấn trắng**, chữ to, **lời giải hiện ra từng bước**.
 
+**Nội dung lấy từ đâu**
+- **Toán 10, Toán 12, Chuyên đề 12:** lấy thẳng từ **kế hoạch bài dạy của thầy** (các file Word đã gửi, trích sẵn vào `data/khbdgoc.js`). Mỗi tiết có slide mở đầu tiết; mỗi hoạt động có slide giới thiệu (tên, thời gian, mục tiêu) rồi **đủ 4 bước**: *Bước 1 Chuyển giao nhiệm vụ* (nhiệm vụ, ví dụ) → *Bước 2 Thực hiện nhiệm vụ* (việc học sinh làm, gợi ý) → *Bước 3 Báo cáo, thảo luận* (lời giải, kết quả hiện từng dòng) → *Bước 4 Kết luận, nhận định* (khung chốt kiến thức). Cuối mỗi tiết có hướng dẫn về nhà.
+- Sau mỗi hoạt động hình thành kiến thức có thêm **ví dụ minh hoạ** với lời giải từng bước.
+- **Toán 11** (chưa có file kế hoạch bài dạy của thầy): mỗi mục trong SGK thành một hoạt động 4 bước gồm câu hỏi khám phá, ví dụ có lời giải, khung chốt kiến thức và **bài luyện tập nhanh** có đáp số.
+- **Hình vẽ minh hoạ** tự vẽ cho các bài hình học và đồ thị (vectơ, hệ thức lượng, đường tròn, ba đường conic, đường tròn lượng giác, hình chóp, hình hộp, góc – khoảng cách trong không gian, đồ thị hàm số, tiệm cận, diện tích hình phẳng, Oxyz, mặt phẳng, mặt cầu…).
+
+**Cách dùng**
+- Chọn lớp, bài; ô **Tiết dạy** cho phép xuất cả bài hoặc chỉ một tiết để chiếu đúng tiết đang dạy.
 - Ba phối màu: bảng xanh, bảng đen, nền giấy; chọn tỉ lệ 16:9 hoặc 4:3 và cỡ chữ.
-- Tích “Chèn câu luyện tập lấy từ ngân hàng đề” để lấy sẵn câu hỏi của đúng bài đó trong ngân hàng, phương án được đảo và đáp án hiện sau một nhịp.
-- **⬇ Tải file .tex** (hoặc cả chương thành .zip) rồi mở bằng TeXShop/VS Code trên máy Mac và biên dịch bằng **XeLaTeX**.
+- Tích “Chèn câu luyện tập lấy từ ngân hàng đề” để chèn câu hỏi của đúng bài vào hoạt động Luyện tập (phương án đảo, đáp án hiện sau một nhịp).
+- **⬇ Tải file .tex** (hoặc cả chương thành .zip) rồi mở bằng TeXShop/VS Code trên máy Mac, biên dịch bằng **XeLaTeX** (biên dịch 2 lần để thanh tiến trình ở chân trang chính xác).
+- Muốn sửa nội dung slide: sửa trong file .tex, hoặc gửi lại kế hoạch bài dạy đã sửa để trích lại.
 
 ## 4a4. Trò chơi ôn tập trên lớp (`trochoi.html`)
 

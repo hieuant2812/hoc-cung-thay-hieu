@@ -44,13 +44,35 @@
 .sl .katex{font-size:1.02em}
 .sl ul.pa{columns:2;margin-left:16px}
 .slno{position:absolute;right:14px;bottom:10px;font-size:13px;color:var(--xanh)}
+.sl{padding:0 0 18px}
+.sl>*:not(.dau):not(.vach):not(.slno){margin-left:26px;margin-right:26px}
+.sl .dau{background:var(--khung);padding:9px 22px 7px;border-bottom:4px solid var(--sac,var(--vang));margin-bottom:12px}
+.sl .dau h3{display:inline;border:0;margin:0;padding:0;font-size:24px;color:var(--sac,var(--vang))}
+.sl .dau .nb{display:inline-block;color:var(--nen);font:700 12px var(--font-b);padding:2px 8px;border-radius:6px;margin-right:8px;vertical-align:4px}
+.sl .dau .nh{font-size:15px;opacity:.75;margin-right:12px}
+.sl .dau .phu{font-size:14px;opacity:.85;margin-top:2px}
+.sl.tt,.sl.tiet,.sl.hdbia{padding:26px 30px}
+.sl.tiet,.sl.hdbia{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.sl.tiet .lon,.sl.hdbia .lon{font:700 40px "Times New Roman",serif;color:var(--sac)}
+.sl.hdbia .loai{font-size:20px;letter-spacing:.5px}
+.sl.tiet .pp,.sl.hdbia .pp{font-size:15px;opacity:.75;margin:4px 0}
+.sl .tt2{font:700 21px "Times New Roman",serif;color:var(--sac,var(--vang));margin:10px 0}
+.sl.tiet ul,.sl.hdbia .blk{text-align:left;align-self:stretch}
+.sl .cot{display:grid;grid-template-columns:57% 41%;gap:2%;align-items:start}
+.sl .hinh{text-align:center}.sl .hinh svg{max-height:300px}.sl .hinh.to svg{max-height:360px}
+.sl .hinh .cap{font-size:13px;color:var(--xanh);margin-top:4px}
+.sl li.tm{list-style:none;color:var(--vang);font-weight:700;margin-left:-14px}
+.sl .cam{text-align:center;color:var(--xanh);font-size:22px;margin-top:18px}
+.sl .blk{border-left:6px solid var(--sac,var(--vang))}.sl .blk>b{color:var(--sac,var(--vang))}
+.sl li{font-size:17px;margin:6px 0}.sl p{font-size:17px}
+.thongke{font-size:13px;margin-top:8px}
 </style>
 </head>
 <body data-page="beamer">
 <header id="top"></header>
 <main class="wrap">
   <h1 style="font:800 26px var(--font-h);margin:6px 0 2px">Bản trình chiếu trên lớp (Beamer)</h1>
-  <p class="muted" style="margin:0 0 14px">Nền bảng xanh – chữ phấn trắng, chữ to dễ nhìn từ cuối lớp, lời giải hiện ra từng bước. Xuất file <b>.tex</b> biên dịch bằng XeLaTeX, nội dung lấy từ chính bài học đã soạn trong Kế hoạch bài dạy.</p>
+  <p class="muted" style="margin:0 0 14px">Nền bảng xanh – chữ phấn trắng, chữ to dễ nhìn từ cuối lớp, lời giải hiện ra từng bước. Mỗi bài đủ các tiết, mỗi hoạt động đủ 4 bước (chuyển giao – thực hiện – báo cáo – kết luận) lấy từ chính kế hoạch bài dạy của thầy, kèm ví dụ minh hoạ có lời giải từng bước và hình vẽ cho các bài hình học. Xuất file <b>.tex</b> biên dịch bằng XeLaTeX.</p>
   <div class="bm">
     <div class="side">
       <div class="card" style="padding:14px">
@@ -58,6 +80,8 @@
         <select id="selLop"><option value="10">Toán 10</option><option value="11" selected>Toán 11</option><option value="12">Toán 12</option>
           <option value="CD10">Chuyên đề Toán 10</option><option value="CD11">Chuyên đề Toán 11</option><option value="CD12">Chuyên đề Toán 12</option></select>
         <label class="f">Bài học</label><select id="selBai"></select>
+        <label class="f">Tiết dạy</label><select id="selTiet"><option value="all">Cả bài (tất cả các tiết)</option></select>
+        <div id="tkBox" class="thongke muted"></div>
         <label class="f">Phối màu bảng</label>
         <div class="mau" id="mau">
           <button data-m="bangxanh" class="on" style="background:#1C3B32">Bảng xanh</button>
@@ -71,7 +95,7 @@
         <label class="f">Phông chữ (máy phải có)</label><input id="font" value="Times New Roman">
         <label class="f">Nội dung slide</label>
         <label class="chk"><input type="checkbox" id="cMucTieu" checked> Slide mục tiêu bài học</label>
-        <label class="chk"><input type="checkbox" id="cViDu" checked> Ví dụ mẫu, lời giải hiện từng bước</label>
+        <label class="chk"><input type="checkbox" id="cViDu" checked> Thêm ví dụ minh hoạ, lời giải hiện từng bước</label>
         <label class="chk"><input type="checkbox" id="cThucTien" checked> Bài toán vận dụng thực tiễn</label>
         <label class="chk"><input type="checkbox" id="cAI" checked> Slide thử thách công cụ số &amp; AI</label>
         <label class="chk"><input type="checkbox" id="cCungCo" checked> Slide củng cố, bài tập về nhà</label>
@@ -93,8 +117,9 @@
 </main>
 <footer id="foot"></footer>
 <script src="data/chuongtrinh.js"></script>
-<script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t12.js"></script><script src="data/baihoc/cd.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/khbd.js"></script><script src="assets/beamer.js"></script>
+<script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t11-them.js"></script><script src="data/baihoc/t12.js"></script><script src="data/baihoc/cd.js"></script>
+<script src="data/khbdgoc.js"></script><script src="data/hinhve-bai.js"></script><script src="assets/hinhve.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/khbd.js"></script><script src="assets/beamer.js?v=2"></script>
 <script>
 (function(){
   const $=id=>document.getElementById(id); const S=window.SITE||{};
@@ -108,13 +133,19 @@
     $("selBai").innerHTML=ds.map(b=>`<option value="${b.bai}"${KHBD.data(lop,b.bai)?"":" disabled"}>Chương ${b.chuong} · Bài ${b.bai}: ${b.ten}</option>`).join("");
     const d=ds.find(b=>KHBD.data(lop,b.bai)); if(d)$("selBai").value=d.bai;
   }
-  function opt(){ return {lop:$("selLop").value,bai:+$("selBai").value,mau,tiLe:$("tiLe").value,coChu:$("coChu").value,font:$("font").value,
+  function fillTiet(){
+    const tk=Beamer.thongKe({lop:$("selLop").value,bai:+$("selBai").value,cauHoi:[]});
+    $("selTiet").innerHTML='<option value="all">Cả bài (tất cả các tiết)</option>'+tk.tiet.map(t=>`<option value="${t.so}">Tiết ${t.so}${t.ten?": "+t.ten.slice(0,60):""}</option>`).join("");
+  }
+  function opt(){ return {lop:$("selLop").value,bai:+$("selBai").value,tiet:$("selTiet").value,mau,tiLe:$("tiLe").value,coChu:$("coChu").value,font:$("font").value,
     truong:$("truong").value,gv:$("gv").value,chanTrang:($("gv").value?"GV: "+$("gv").value:"")+($("truong").value?" - "+$("truong").value.replace(/^Trường\s+/i,""):""),
     mucTieu:$("cMucTieu").checked,viDu:$("cViDu").checked,thucTien:$("cThucTien").checked,ai:$("cAI").checked,cungCo:$("cCungCo").checked,cauHoi}; }
   function ve(){
     const o=opt(), c=MAU[mau];
     const p=$("prev"); p.style.cssText=`--nen:${c[0]};--chu:${c[1]};--vang:${c[2]};--hong:${c[3]};--xanh:${c[4]};--khung:${c[5]};--tim:${c[6]};--luc:${c[7]}`;
     p.innerHTML=Beamer.xemTruoc(o);
+    const tk=Beamer.thongKe(o);
+    $("tkBox").innerHTML=`${tk.nguon==="khbd"?"✅ Theo <b>kế hoạch bài dạy của thầy</b>":"Theo dữ liệu bài học (SGK)"} · ${tk.soTiet} tiết · ${tk.soHD} hoạt động · <b>${tk.soSlide}</b> slide${tk.soHinh?" · "+tk.soHinh+" hình vẽ":""}`;
     [...p.querySelectorAll(".sl")].forEach((s,i)=>{const n=document.createElement("div");n.className="slno";n.textContent=i+1;s.appendChild(n);});
     $("ctPrev").textContent=o.chanTrang;
     localStorage.setItem("bm-truong",$("truong").value); localStorage.setItem("bm-gv",$("gv").value);
@@ -137,22 +168,23 @@
   const tai=(b,n)=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);};
   const slug=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/[^A-Za-z0-9]+/g,"").toLowerCase();
   $("btnTex").onclick=()=>{const o=opt(),C=KHBD.chuong(o.lop,o.bai);
-    tai(new Blob([Beamer.render(o)],{type:"text/x-tex;charset=utf-8"}),`slide-toan${o.lop}-bai${o.bai}-${slug(C.tenBai)}.tex`);
+    tai(new Blob([Beamer.render(o)],{type:"text/x-tex;charset=utf-8"}),`slide-toan${o.lop}-bai${o.bai}${o.tiet&&o.tiet!=="all"?"-tiet"+o.tiet:""}-${slug(C.tenBai)}.tex`);
     $("msg").innerHTML=`<div class="note green small">Đã tải file .tex. Mở bằng TeXShop/VS Code rồi biên dịch <b>XeLaTeX</b>.</div>`;};
   $("btnCh").onclick=async()=>{const o=opt(),C=KHBD.chuong(o.lop,o.bai);
     const ch=KHBD.dsBai(o.lop).filter(b=>b.chuong===C.so&&KHBD.data(o.lop,b.bai));
-    const z=new JSZip(); ch.forEach(b=>z.file(`slide-toan${o.lop}-bai${b.bai}-${slug(b.ten)}.tex`,Beamer.render(Object.assign({},o,{bai:b.bai,cauHoi:[]}))));
+    const z=new JSZip(); ch.forEach(b=>z.file(`slide-toan${o.lop}-bai${b.bai}-${slug(b.ten)}.tex`,Beamer.render(Object.assign({},o,{bai:b.bai,tiet:"all",cauHoi:[]}))));
     tai(await z.generateAsync({type:"blob"}),`Slide_Toan${o.lop}_Chuong${C.so}.zip`);
     $("msg").innerHTML=`<div class="note green small">Đã tải ${ch.length} bản trình chiếu của chương ${C.so}.</div>`;};
   $("mau").onclick=e=>{const b=e.target.closest("button"); if(!b)return; mau=b.dataset.m;
     [...$("mau").children].forEach(x=>x.classList.toggle("on",x===b)); ve();};
   $("cNganHang").onchange=async()=>{$("nhBox").classList.toggle("hidden",!$("cNganHang").checked); await layCau(); ve();};
   $("soCau").onchange=async()=>{await layCau(); ve();};
-  $("selLop").onchange=async()=>{fillBai(); await layCau(); ve();};
-  $("selBai").onchange=async()=>{await layCau(); ve();};
+  $("selLop").onchange=async()=>{fillBai(); fillTiet(); await layCau(); ve();};
+  $("selBai").onchange=async()=>{fillTiet(); await layCau(); ve();};
+  $("selTiet").onchange=ve;
   ["tiLe","coChu","font","truong","gv"].forEach(k=>$(k).addEventListener("input",ve));
   ["cMucTieu","cViDu","cThucTien","cAI","cCungCo"].forEach(k=>$(k).addEventListener("change",ve));
-  fillBai(); ve();
+  fillBai(); fillTiet(); ve();
 })();
 </script>
 </body>

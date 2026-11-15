@@ -74,7 +74,7 @@
     const y = (m.y || []).map(x => "<br>• " + T(x)).join("");
     return hd(`HOẠT ĐỘNG 2.${i + 1}. HÌNH THÀNH KIẾN THỨC — ${m.t.toUpperCase()}`, o.phutKT || 20,
       `Học sinh hình thành và phát biểu được kiến thức về ${m.t.toLowerCase()}; vận dụng vào ví dụ mẫu.`,
-      [["<b>Bước 1: Chuyển giao nhiệm vụ.</b> Giáo viên yêu cầu học sinh đọc sách giáo khoa phần tương ứng và trả lời câu hỏi dẫn dắt để rút ra kiến thức trọng tâm.",
+      [["<b>Bước 1: Chuyển giao nhiệm vụ.</b> Giáo viên yêu cầu học sinh đọc sách giáo khoa phần tương ứng và trả lời câu hỏi dẫn dắt để rút ra kiến thức trọng tâm." + (m.kp ? "<br><b>Câu hỏi khám phá:</b> " + T(m.kp) : "") + (m.kpd ? "<br><i>Dự kiến trả lời:</i> " + T(m.kpd) : ""),
         "Học sinh đọc sách giáo khoa, trao đổi nhóm bàn và ghi nhận kiến thức.",
         "<b>Kiến thức trọng tâm:</b>" + y, "Tự học, tư duy và lập luận toán học."],
        ["<b>Bước 2: Thực hiện nhiệm vụ.</b> Giáo viên phân tích, làm rõ từng ý; lưu ý điều kiện áp dụng và những chỗ học sinh hay nhầm." + (vd ? " Giao ví dụ: " + T(vd.d) : ""),
@@ -83,8 +83,8 @@
        ["<b>Bước 3: Báo cáo, thảo luận.</b> Giáo viên gọi học sinh lên bảng trình bày lời giải ví dụ, học sinh khác nhận xét.",
         "Học sinh lên bảng trình bày; lớp theo dõi, nhận xét và chữa bài.",
         vd ? "<b>Lời giải.</b>" + (vd.g || []).map((s, k) => `<br>${k + 1}) ${T(s)}`).join("") : "Lời giải của học sinh.", "Giao tiếp toán học."],
-       ["<b>Bước 4: Kết luận, nhận định.</b> Giáo viên chốt kiến thức, nhấn mạnh điều kiện áp dụng và cách trình bày chuẩn mực.",
-        "Học sinh hoàn thiện bài vào vở.", "Kiến thức được chốt và ghi nhớ.", "Chính xác, khoa học."]]);
+       ["<b>Bước 4: Kết luận, nhận định.</b> Giáo viên chốt kiến thức, nhấn mạnh điều kiện áp dụng và cách trình bày chuẩn mực." + (m.lt ? "<br><b>Luyện tập nhanh:</b> " + T(m.lt.d) : ""),
+        "Học sinh hoàn thiện bài vào vở" + (m.lt ? " và làm bài luyện tập nhanh." : "."), m.lt ? "<b>Đáp số luyện tập:</b> " + T(m.lt.da) : "Kiến thức được chốt và ghi nhớ.", "Chính xác, khoa học."]]);
   }
   function hdSoAI(B, o) {
     const cs = CS[B.cs] || CS.geogebra; const ai = B.ai || {};
