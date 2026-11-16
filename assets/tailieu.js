@@ -174,10 +174,10 @@
   function mount(root) {
     if (!document.getElementById("tlCss")) { const st = document.createElement("style"); st.id = "tlCss"; st.textContent = CSS; document.head.appendChild(st); }
     const S = { lop: LS.get("tl-lop", "12"), k: LS.get("tl-k", ""), iDe: 0, ban: "hs", nguon: "web", moCh: null };
-    const mh = /^#(1[0-2])\/([bo]\d+)$/.exec(location.hash); if (mh) { S.lop = mh[1]; S.k = mh[2]; }
+    const mh = /^#([6-9]|1[0-2])\/([bot]\d+)$/.exec(location.hash); if (mh) { S.lop = mh[1]; S.k = mh[2]; }
     const DATA = { web: {}, gv: {}, may: {} };   // web: bản HS đã đăng; gv: bản GV giải mã; may: đề cương đang soạn
     let INDEX = null, laGV = sessionStorage.getItem("tl-gv") === "1";
-    root.innerHTML = `<div class="tl"><aside class="tl-nav"><div class="tl-lop">${["10", "11", "12"].map(l => `<button data-l="${l}">Lớp ${l}</button>`).join("")}</div><div class="small muted tl-nam"></div><div class="tl-ds"></div>
+    root.innerHTML = `<div class="tl"><aside class="tl-nav"><div class="small muted" style="margin:0 0 3px 2px">THCS</div><div class="tl-lop">${["6", "7", "8", "9"].map(l => `<button data-l="${l}">${l}</button>`).join("")}</div><div class="small muted" style="margin:4px 0 3px 2px">THPT</div><div class="tl-lop">${["10", "11", "12"].map(l => `<button data-l="${l}">Lớp ${l}</button>`).join("")}</div><div class="small muted tl-nam"></div><div class="tl-ds"></div>
       <div class="tl-gv"><button class="btn sm ghost" data-a="gv">🔑 Giáo viên</button></div></aside>
       <div><div class="tl-bar"><div class="ban hidden"><button data-b="hs">Bản học sinh</button><button data-b="gv">Bản giáo viên</button></div><select class="nguon hidden" title="Nguồn dữ liệu"><option value="web">Đề cương đã đăng trên web</option><option value="may">Đề cương đang soạn trên máy này</option></select><button class="btn sm ghost" data-a="in">🖨 In</button><button class="btn sm green" data-a="pdf">⬇ Tải PDF</button></div><div id="tlIn"></div></div></div>`;
     const $ = s => root.querySelector(s);
@@ -216,6 +216,7 @@
       $(".ban").classList.toggle("hidden", !laGV); $(".nguon").classList.toggle("hidden", !laGV);
       root.querySelectorAll(".ban button").forEach(b => b.classList.toggle("on", b.dataset.b === S.ban));
       const out = $("#tlIn");
+      if (+S.lop <= 9) { $(".nguon").classList.add("hidden"); return hienTHCS(out); }
       if (S.k === "soan") return soan(out);
       let D; try { D = await layDuLieu(); } catch (e) { out.innerHTML = `<div class="card">Không tải được đề cương (${esc(e.message)}).</div>`; return; }
       if (S.ban === "gv" && S.nguon === "web" && !DATA.gv[S.lop] && laGV) { out.innerHTML = `<div class="card">Chưa mở bản giáo viên của lớp ${S.lop}. Bấm <b>🔑 Mở bản giáo viên</b> ở cột trái (nhập mật khẩu), hoặc chọn nguồn <b>Đề cương đang soạn trên máy này</b>.</div>`; veNav(null); return; }
@@ -265,6 +266,49 @@
         const pt = await DongBo.unseal(buf, pass);
         DATA.gv[S.lop] = JSON.parse(new TextDecoder().decode(pt)); S.ban = "gv"; S.nguon = "web"; $(".nguon").value = "web"; hien();
       } catch (e) { alert(e.message || "Không mở được."); }
+    }
+
+    /* ---------------- THCS: bài tập theo dạng (ngân hàng Toán 6–9) ---------------- */
+    const THCS = { ml: null, hs: {}, gv: {} };
+    async function hienTHCS(out) {
+      const k = S.lop;
+      try {
+        if (!THCS.ml) THCS.ml = await (await fetch("data/thcs/mucluc.json")).json();
+        if (!THCS.hs[k]) THCS.hs[k] = await (await fetch(`data/thcs/hs-${k}.json`)).json();
+        if (laGV && S.ban === "gv" && !THCS.gv[k] && G.ThcsBank) { const g = await ThcsBank.tatCa(k); if (Object.keys(g).length) THCS.gv[k] = g; }
+      } catch (e) { out.innerHTML = `<div class="card">Không tải được tài liệu Toán ${k} (${esc(e.message)}).</div>`; return; }
+      const ML = THCS.ml[k] || {}, chs = Object.keys(ML).sort((a, b) => a - b);
+      const ds = []; chs.forEach(c => Object.keys(ML[c].bai).sort((a, b) => a - b).forEach(b => ds.push({ k: "t" + b, ch: c, ten: `Bài ${b}. ${ML[c].bai[b].ten}` })));
+      if (!S.k || !ds.some(x => x.k === S.k)) S.k = ds[0].k; LS.set("tl-k", S.k);
+      $(".tl-nam").textContent = "Bài tập theo dạng · Toán " + k;
+      const cur = ds.find(x => x.k === S.k); if (S.moCh == null || !ML[S.moCh]) S.moCh = cur.ch;
+      $(".tl-ds").innerHTML = chs.map((c, i) => { const m = MAU[i % MAU.length]; const items = ds.filter(x => x.ch === c);
+        return `<div class="tl-ch${S.moCh === c ? " mo" : ""}" style="--nm:${m[0]};--nt:${m[1]}"><button data-c="${c}"><b>${c}</b><span>${esc(ML[c].ten)}</span></button><div class="ds">${items.map(x => `<a href="#" data-k="${x.k}" class="${x.k === S.k ? "on" : ""}">${esc(x.ten)}</a>`).join("")}</div></div>`; }).join("");
+      root.querySelectorAll(".tl-ch>button").forEach(b => b.onclick = () => { S.moCh = S.moCh === b.dataset.c ? -1 : b.dataset.c; hienTHCS(out); });
+      root.querySelectorAll(".tl-ds a").forEach(a => a.onclick = ev => { ev.preventDefault(); S.k = a.dataset.k; S.iDe = 0; hienTHCS(out); if (innerWidth < 880) out.scrollIntoView({ behavior: "smooth" }); });
+      const g = $(".tl-gv");
+      g.innerHTML = laGV ? `<b class="small">🧑‍🏫 Chế độ giáo viên</b><a class="btn sm green" href="rade-thcs.html">📝 Ra đề Toán THCS</a><button class="btn sm ghost" data-a="thoat">Thoát chế độ GV</button>` : `<button class="btn sm ghost" data-a="gv">🔑 Giáo viên</button>`;
+      g.querySelectorAll("button").forEach(b => b.onclick = () => { if (b.dataset.a === "gv") moGV(); else { laGV = false; sessionStorage.removeItem("tl-gv"); S.ban = "hs"; hien(); } });
+      const gv = S.ban === "gv" && laGV, nguon = gv && THCS.gv[k] ? THCS.gv[k] : THCS.hs[k];
+      const bai = S.k.slice(1), C = ML[cur.ch], B = C.bai[bai], bo = S.iDe || 0, N = 10;
+      const dangs = Object.keys(B.dang).sort();
+      const iCh = chs.indexOf(cur.ch), mau = MAU[iCh % MAU.length];
+      const i = ds.findIndex(x => x.k === S.k), a = ds[i - 1], b2 = ds[i + 1];
+      const nav = `<div class="nav2">${a ? `<a href="#" data-k="${a.k}">← Trước<b>${esc(a.ten)}</b></a>` : "<span></span>"}${b2 ? `<a class="r" href="#" data-k="${b2.k}">Tiếp theo →<b>${esc(b2.ten)}</b></a>` : ""}</div>`;
+      const the = dangs.map((dk, j) => {
+        const info = B.dang[dk], D = nguon[info.ma] || THCS.hs[k][info.ma]; if (!D) return "";
+        const tl = D.cau.filter(q => q.loai === "TL"), tn = D.cau.filter(q => q.loai === "TN");
+        const lay = arr => arr.slice(bo * N, bo * N + N);
+        const tlH = lay(tl).map((q, t) => `<li>${ve(q.de)}${gv && q.lg ? `<div class="lgv"><b>Lời giải.</b> ${ve(q.lg)}</div>` : ""}</li>`).join("");
+        const tnH = lay(tn).map((q, t) => `<div class="cau"><b>Câu ${bo * N + t + 1}.</b> ${ve(q.de)}<div class="pa">${q.pa.map((p, x) => `<span class="${gv && q.da === x ? "dung" : ""}"><b>${"ABCD"[x]}.</b> ${ve(p)}</span>`).join("")}</div></div>`).join("");
+        return `<div class="vdc"><div class="vt">Dạng ${j + 1}. ${esc(info.ten)}</div><div class="vb">${tlH ? `<div class="nhomt">Tự luận</div><ol class="btl" start="${bo * N + 1}" style="counter-reset:bt ${bo * N}">${tlH}</ol>` : ""}${tnH ? `<div class="nhomt">Trắc nghiệm</div>${tnH}` : ""}</div></div>`;
+      }).join("");
+      const soBo = Math.max(...dangs.map(dk => { const D = THCS.hs[k][B.dang[dk].ma]; return D ? Math.ceil(D.cau.filter(q => q.loai === "TL").length / N) : 1; }), 1);
+      out.innerHTML = `<article class="tv" style="${bien(mau)}"><div class="hd"><small>Toán ${k} · Chương ${cur.ch}. ${esc(C.ten)}</small><h2>Bài ${bai}. ${esc(B.ten)}</h2><p>${gv ? (THCS.gv[k] ? "Bản giáo viên — có lời giải, đáp án" : "Máy này chưa có ngân hàng có lời giải — nạp ở trang Ra đề THCS") : "Bài tập luyện tập theo dạng — mỗi bộ 10 bài tự luận và 10 câu trắc nghiệm"}</p></div>
+        <div class="bd"><div class="tl-bar" style="justify-content:flex-start;margin:4px 0 8px">${Array.from({ length: soBo }, (_, x) => `<button class="btn sm ${x === bo ? "violet" : "ghost"}" data-bo="${x}">Bộ ${x + 1}</button>`).join("")}</div>${the}${nav}</div><div class="ft">${CHAN}</div></article>`;
+      out.querySelectorAll("[data-bo]").forEach(x => x.onclick = () => { S.iDe = +x.dataset.bo; hienTHCS(out); });
+      out.querySelectorAll(".nav2 a").forEach(x => x.onclick = ev => { ev.preventDefault(); S.k = x.dataset.k; S.iDe = 0; hienTHCS(out); out.scrollIntoView({ behavior: "smooth" }); });
+      root.querySelectorAll(".tl-lop button").forEach(b => b.classList.toggle("on", b.dataset.l === S.lop));
     }
 
     /* ---------------- soạn & xuất bản ---------------- */

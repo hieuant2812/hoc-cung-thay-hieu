@@ -20,7 +20,7 @@
   }
   function tuyChon(s, i) {
     let j = i; while (j < s.length && (s[j] === " " || s[j] === "\t")) j++;
-    if (s[j] === "[") { let d = 0; for (let k = j; k < s.length; k++) { if (s[k] === "[") d++; else if (s[k] === "]") { d--; if (!d) return [s.slice(j + 1, k), k + 1]; } } }
+    if (s[j] === "[" && !s.startsWith("[[HINH:", j)) { let d = 0; for (let k = j; k < s.length; k++) { if (s[k] === "[") d++; else if (s[k] === "]") { d--; if (!d) return [s.slice(j + 1, k), k + 1]; } } }
     return [null, i];
   }
   const boCach = (s, i) => { while (i < s.length && " \t\n".includes(s[i])) i++; return i; };

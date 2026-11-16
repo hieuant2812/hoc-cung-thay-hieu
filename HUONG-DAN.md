@@ -241,6 +241,19 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
 
 Mẫu file TeX được nhận dạng: Toán 10 `\bai{n}{..}` + `\phan{A|B|C}`, `vd`/`\loigiai`, `bt`, đề ôn `dethi`/`cau`/`\choice`/`\ydung`/`\traloi`; Toán 11 `\section{..}` + `\lythuyet`/`\vidumuc`/`\baitapmuc`, đề ôn `\dethi{..}{Đề n}`/`\pa{\T..}`/`\D`/`\S`/`\dapso{..}{..}{..}{..}`; Toán 12 `\baihoc{n}{..}` + `\lithuyet`/`\viduminhhoa`/`\subsubsection` (dạng)/`loigiai`/`\luyentap`/`\phanbt`/`bai`+`\dapso`, đề ôn `deontap`/`\dapan`.
 
+## 4e1b. Tài liệu Toán THCS và Ra đề Toán THCS
+
+**Tài liệu (lớp 6–9)** — mục Tài liệu, chọn lớp 6, 7, 8, 9: mỗi bài SGK (KNTT) hiện các dạng bài trong ngân hàng của thầy, mỗi dạng 10 bài tự luận + 10 câu trắc nghiệm một bộ, chuyển **Bộ 1 → Bộ 5** để có thêm bài. Học sinh chỉ thấy đề (file `data/thcs/hs-*.json` không chứa lời giải, đáp án). Giáo viên bấm 🔑 Giáo viên → Bản giáo viên thấy lời giải, đáp án (lấy từ ngân hàng đã nạp trên máy). In / tải PDF như các bài khác. Link: `tailieu.html#8/t34`.
+
+**Ra đề THCS** (`rade-thcs.html`, menu “Ra đề THCS”):
+1. **Nạp ngân hàng** một lần trên mỗi máy: chọn file zip ngân hàng Toán 6–9 (hoặc các file `.tex` dạng `NH_8H2_C9_B34_D01.tex`). Ngân hàng chỉ nằm trong trình duyệt máy thầy. Dùng trên iPad: 🔒 *Tạo gói mã hoá* → tải `nganhang-thcs.hcth` lên GitHub thư mục `data/thcs/` → trên iPad bấm ☁️ *Tải từ web* + mật khẩu.
+2. **Thông tin đề**: khối, loại đề (giữa kì / cuối kì TN 3đ + TL 7đ; tự luận 100%; 15 phút TN hoặc TL; ôn tập chương; đề tham khảo tuyển sinh 10 TP.HCM; phiếu bài tập), tên trường, năm học, số mã đề, trộn câu / trộn phương án.
+3. **Phạm vi**: tick chương, bài (nút nhanh Học kì I / II / Cả năm).
+4. **Ma trận**: web tự phân bổ số câu TN (NB/TH/VD) và số ý TL (NB/TH/VD/VDC) cho từng bài theo loại đề; thầy sửa trực tiếp từng ô.
+5. **🎲 Tạo đề**: bốc câu đúng bài, đúng mức (thiếu thì lấy mức gần nhất và ghi chú), không lấy hai câu cùng bộ số liệu, ưu tiên mỗi dạng một câu; tự luận gom theo chương thành Bài 1, 2, 3… có ý a), b), c), câu có sẵn nhiều ý đứng riêng, ý vận dụng cao để cuối; điểm tự luận tự chia theo mức độ, tổng 10 điểm.
+6. Tab **Đề gốc**: rê chuột vào câu → **🔄 đổi** để thay câu khác cùng bài, cùng mức. Các tab mã đề, **Đáp án – HDC** (bảng đáp án từng mã + lời giải, điểm từng ý), **Ma trận – Đặc tả**.
+7. Xuất: **Word** (gói zip: từng mã đề, đáp án – HDC, ma trận – đặc tả; công thức là Equation của Word), **TeX** (biên dịch XeLaTeX), **In / PDF**.
+
 ## 4e2. Lớp học: kết nối học sinh với giáo viên (`lophoc.html`)
 
 Học sinh nhập **họ tên, lớp** một lần trên máy của em. Mỗi lượt luyện tập (điểm, dạng đúng/sai) và mỗi bài Sổ tay em đánh dấu “đã học / cần ôn” được gửi về **Google Trang tính của thầy**. Mất mạng thì web tự xếp hàng đợi và gửi lại khi có mạng.

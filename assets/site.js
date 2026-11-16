@@ -10,7 +10,7 @@
     const ten = S.tenWeb || "Học cùng Thầy Hiếu"; const m = ten.match(/^(.*?)(Thầy.*)$/);
     h.className = "top";
     h.innerHTML = `<div class="wrap in"><a class="logo" href="index.html"><span class="mk">H</span><span><b>${m ? esc(m[1]) + "<span>" + esc(m[2]) + "</span>" : esc(ten)}</b><small>${esc(S.truong || "")}</small></span></a>
-      <nav class="nav">${[["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tren-lop", "Trên lớp"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["rade", "Ra đề"], ["phieu", "Phiếu & chấm"], ["phantich", "Phân tích"], ["khbd", "Soạn bài"], ["beamer", "Trình chiếu"], ["trochoi", "Trò chơi"], ["lophoc", "Lớp học"]].map(([k, t]) => `<a href="${k}.html"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div>`;
+      <nav class="nav">${[["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tren-lop", "Trên lớp"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["rade", "Ra đề"], ["rade-thcs", "Ra đề THCS"], ["phieu", "Phiếu & chấm"], ["phantich", "Phân tích"], ["khbd", "Soạn bài"], ["beamer", "Trình chiếu"], ["trochoi", "Trò chơi"], ["lophoc", "Lớp học"]].map(([k, t]) => `<a href="${k}.html"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div>`;
   }
   function footer() {
     const f = document.getElementById("foot"); if (!f) return;
