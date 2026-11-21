@@ -40,7 +40,9 @@
 "assets/omr/phantich.js",
 "assets/omr/scan.js",
 "assets/omr/worker.js",
+"assets/phieucuoigio.js",
 "assets/rade-thcs.js",
+"assets/trinhchieu.js",
 "assets/trochoi.js",
 "beamer.html",
 "cham.html",
@@ -52,6 +54,7 @@
 "data/baihoc/t12.js",
 "data/hinhve-bai.js",
 "data/khbdgoc.js",
+"data/ppct-chuyende.js",
 "data/thcs/mucluc.json",
 "khbd.html",
 "lophoc.html",
@@ -62,5 +65,5 @@
 "tren-lop.html",
 "trochoi.html"
 ],
-"gvKB": 3131
+"gvKB": 3594
 }

@@ -162,7 +162,43 @@
   }
 
   /* ---------------------------------------------------------------- toàn bộ kế hoạch bài dạy */
+  /* KHBD gốc của tổ/thầy (data/khbdgoc.js): giữ nguyên tiết, hoạt động, 4 bước GV – HS – sản phẩm */
+  const goc = (lop, bai) => (((G.KHBDGOC || {})[lop] || {})[bai]) || null;
+  const nl = s => T(String(s || "")).replace(/\n/g, "<br>");
+  function renderGoc(o, K) {
+    const C = chuong(o.lop, o.bai); const B = data(o.lop, o.bai) || {};
+    const tenBai = C.tenBai || K.ten || "";
+    const tieu = String(o.lop).startsWith("CD") ? `CHUYÊN ĐỀ ${C.so}. BÀI ${o.bai}: ${tenBai.toUpperCase()}` : `BÀI ${o.bai}: ${tenBai.toUpperCase()}`;
+    const pp = K.tiet.map(t => (t.ppct || "").replace(/^PPCT\s*/i, "")).filter(Boolean);
+    let h = `<p class="right"><i>Ngày soạn: ${esc(o.ngaySoan || ".../.../20...")}<br>Ngày dạy: ${esc(o.ngayDay || ".../.../20...")}</i></p>
+      <p class="title"><b>${esc(tieu)}</b></p>
+      <p class="center">Môn học: ${esc(lopTen(o.lop))} | Thời gian thực hiện: ${K.tiet.length} tiết${pp.length ? " (" + esc(pp.join(", ")) + ")" : ""}<br>
+      ${esc(o.truong || "")}${o.gv ? " — Giáo viên thực hiện: " + esc(o.gv) : ""}</p>
+      <p class="h2"><b>I. MỤC TIÊU</b></p><p><b>1. Về kiến thức</b></p><p>${(K.kt && K.kt.length ? K.kt : (B.yc || [])).map(x => "– " + T(x)).join("<br>")}</p>
+      <p><b>2. Về năng lực</b></p><p>– Năng lực tư duy và lập luận toán học; mô hình hoá toán học; giải quyết vấn đề toán học; giao tiếp toán học; sử dụng công cụ, phương tiện học toán.<br>– Năng lực số và năng lực AI: theo các mã chỉ báo ghi trong từng hoạt động.</p>
+      <p><b>3. Về phẩm chất</b></p><p>– Chăm chỉ, trách nhiệm, trung thực (khai báo mức độ sử dụng AI trong sản phẩm học tập).</p>
+      <p class="h2"><b>II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</b></p><p>Sách giáo khoa ${esc(lopTen(o.lop))}, máy chiếu, máy tính cầm tay, phiếu học tập; thiết bị số theo hướng dẫn của giáo viên.</p>
+      <p class="h2"><b>III. TIẾN TRÌNH DẠY HỌC</b></p>`;
+    K.tiet.forEach(t => {
+      h += `<p class="h2b"><b>TIẾT ${esc(t.so)}${t.ten ? ": " + esc(String(t.ten).toUpperCase()) : ""}</b>${t.ppct ? ` <i>(${esc(t.ppct)})</i>` : ""}</p>`;
+      t.hd.forEach(x => {
+        h += `<p class="h3"><b>HOẠT ĐỘNG ${esc(x.so)}. ${esc(String(x.ten || "").toUpperCase())}${x.phut ? ` (${x.phut} phút)` : ""}</b></p>
+          ${x.mt ? `<p><b>a) Mục tiêu:</b> ${nl(x.mt)}</p>` : ""}${x.nd ? `<p><b>b) Nội dung:</b> ${nl(x.nd)}</p>` : ""}${x.sp ? `<p><b>c) Sản phẩm:</b> ${nl(x.sp)}</p>` : ""}
+          <p><b>d) Tổ chức thực hiện:</b></p>`;
+        if ((x.b || []).length) h += `<table class="hd"><colgroup><col style="width:38%"><col style="width:34%"><col style="width:28%"></colgroup>
+          <tr><th>HOẠT ĐỘNG CỦA GIÁO VIÊN</th><th>HOẠT ĐỘNG CỦA HỌC SINH</th><th>DỰ KIẾN SẢN PHẨM</th></tr>
+          ${x.b.map(b => `<tr><td><b>Bước ${b.n}: ${esc(b.ten || "")}</b><br>${nl(b.gv)}</td><td>${nl(b.hs)}</td><td>${nl(b.sp)}</td></tr>`).join("")}</table>`;
+      });
+    });
+    if (o.kiDuyet !== false) h += `<table class="ky"><colgroup><col style="width:34%"><col style="width:33%"><col style="width:33%"></colgroup>
+        <tr><td class="center"><b>DUYỆT CỦA BAN GIÁM HIỆU</b></td><td class="center"><b>TỔ TRƯỞNG CHUYÊN MÔN</b></td><td class="center"><b>GIÁO VIÊN SOẠN</b></td></tr>
+        <tr><td class="center" style="height:70px">&nbsp;</td><td class="center">${esc(o.toTruong || "")}</td><td class="center">${esc(o.gv || "")}</td></tr></table>`;
+    return h;
+  }
+
   function render(o) {
+    const K0 = o.theoGoc !== false ? goc(o.lop, o.bai) : null;
+    if (K0 && K0.tiet && K0.tiet.length) return renderGoc(o, K0);
     const B = data(o.lop, o.bai); if (!B) return `<p>Chưa có dữ liệu cho bài này.</p>`;
     const C = chuong(o.lop, o.bai);
     const soTiet = o.soTiet || B.t || 2;
@@ -264,5 +300,5 @@
     return h;
   }
 
-  G.KHBD = { render, keHoach, dsBai, data, chuong, lopTen, NLS, AI, CS, aiMa };
+  G.KHBD = { render, keHoach, dsBai, data, chuong, lopTen, NLS, AI, CS, aiMa, goc };
 })(window);

@@ -66,6 +66,8 @@
 .sl .blk{border-left:6px solid var(--sac,var(--vang))}.sl .blk>b{color:var(--sac,var(--vang))}
 .sl li{font-size:17px;margin:6px 0}.sl p{font-size:17px}
 .thongke{font-size:13px;margin-top:8px}
+#prev.to .sl li,#prev.to .sl p{font-size:22px}#prev.to .sl .dau h3{font-size:26px}
+#prev .sl{cursor:zoom-in}
 </style>
 </head>
 <body data-page="beamer">
@@ -92,6 +94,7 @@
           <div><label class="f">Tỉ lệ</label><select id="tiLe"><option value="169">16:9</option><option value="43">4:3</option></select></div>
           <div><label class="f">Cỡ chữ</label><select id="coChu"><option>11</option><option selected>12</option><option>14</option></select></div>
         </div>
+        <label class="chk" style="margin-top:8px"><input type="checkbox" id="cChuTo"> <span><b>Chữ to cho lớp đông</b> — 14pt, không thu nhỏ chữ, ít dòng mỗi slide</span></label>
         <label class="f">Phông chữ (máy phải có)</label><input id="font" value="Times New Roman">
         <label class="f">Nội dung slide</label>
         <label class="chk"><input type="checkbox" id="cMucTieu" checked> Slide mục tiêu bài học</label>
@@ -104,6 +107,8 @@
         <hr style="border:0;border-top:1px solid #eef1f7;margin:12px 0">
         <div class="two"><input id="truong" placeholder="Trường"><input id="gv" placeholder="Giáo viên"></div>
         <p class="small muted" style="margin:6px 0 0">Chân trang slide: <span id="ctPrev"></span></p>
+        <button class="btn green" id="btnChieu" style="width:100%;margin-top:12px;font-size:17px">▶ Trình chiếu ngay trên web</button>
+        <p class="small muted" style="margin:4px 0 0">Không cần biên dịch. Chạm đúp một slide bên phải để chiếu từ slide đó. Phím ← → hoặc chạm hai bên màn hình để chuyển; <b>B</b> bật bút ghi bảng.</p>
         <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
           <button class="btn coral" id="btnTex">⬇ Tải file .tex</button>
           <button class="btn ghost sm" id="btnCh">⬇ Cả chương (.zip)</button>
@@ -119,7 +124,7 @@
 <script src="data/chuongtrinh.js"></script>
 <script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t11-them.js"></script><script src="data/baihoc/t12.js"></script><script src="data/baihoc/cd.js"></script>
 <script src="data/khbdgoc.js"></script><script src="data/hinhve-bai.js"></script><script src="assets/hinhve.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/khbd.js"></script><script src="assets/beamer.js?v=2"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/khbd.js"></script><script src="assets/beamer.js?v=3"></script><script src="assets/butve.js"></script><script src="assets/trinhchieu.js"></script>
 <script>
 (function(){
   const $=id=>document.getElementById(id); const S=window.SITE||{};
@@ -139,11 +144,11 @@
   }
   function opt(){ return {lop:$("selLop").value,bai:+$("selBai").value,tiet:$("selTiet").value,mau,tiLe:$("tiLe").value,coChu:$("coChu").value,font:$("font").value,
     truong:$("truong").value,gv:$("gv").value,chanTrang:($("gv").value?"GV: "+$("gv").value:"")+($("truong").value?" - "+$("truong").value.replace(/^Trường\s+/i,""):""),
-    mucTieu:$("cMucTieu").checked,viDu:$("cViDu").checked,thucTien:$("cThucTien").checked,ai:$("cAI").checked,cungCo:$("cCungCo").checked,cauHoi}; }
+    mucTieu:$("cMucTieu").checked,viDu:$("cViDu").checked,thucTien:$("cThucTien").checked,ai:$("cAI").checked,cungCo:$("cCungCo").checked,chuTo:$("cChuTo").checked,cauHoi}; }
   function ve(){
     const o=opt(), c=MAU[mau];
     const p=$("prev"); p.style.cssText=`--nen:${c[0]};--chu:${c[1]};--vang:${c[2]};--hong:${c[3]};--xanh:${c[4]};--khung:${c[5]};--tim:${c[6]};--luc:${c[7]}`;
-    p.innerHTML=Beamer.xemTruoc(o);
+    p.innerHTML=Beamer.xemTruoc(o); p.classList.toggle("to",o.chuTo);
     const tk=Beamer.thongKe(o);
     $("tkBox").innerHTML=`${tk.nguon==="khbd"?"✅ Theo <b>kế hoạch bài dạy của thầy</b>":"Theo dữ liệu bài học (SGK)"} · ${tk.soTiet} tiết · ${tk.soHD} hoạt động · <b>${tk.soSlide}</b> slide${tk.soHinh?" · "+tk.soHinh+" hình vẽ":""}`;
     [...p.querySelectorAll(".sl")].forEach((s,i)=>{const n=document.createElement("div");n.className="slno";n.textContent=i+1;s.appendChild(n);});
@@ -183,7 +188,14 @@
   $("selBai").onchange=async()=>{fillTiet(); await layCau(); ve();};
   $("selTiet").onchange=ve;
   ["tiLe","coChu","font","truong","gv"].forEach(k=>$(k).addEventListener("input",ve));
-  ["cMucTieu","cViDu","cThucTien","cAI","cCungCo"].forEach(k=>$(k).addEventListener("change",ve));
+  ["cMucTieu","cViDu","cThucTien","cAI","cCungCo","cChuTo"].forEach(k=>$(k).addEventListener("change",ve));
+  try{ $("cChuTo").checked=localStorage.getItem("bm-chuto")==="1"; }catch(e){}
+  $("cChuTo").addEventListener("change",()=>{try{localStorage.setItem("bm-chuto",$("cChuTo").checked?"1":"0");}catch(e){}});
+  function chieu(tu){ const o=opt(); const ds=[...$("prev").querySelectorAll(".sl")]; if(!ds.length) return;
+    TrinhChieu.mo({slides:ds,bien:$("prev").style.cssText,batDau:tu||0,chuTo:o.chuTo,khoa:"bm|"+o.lop+"|"+o.bai+"|"+o.tiet,
+      khiThoat:i=>{const s=ds[i]; if(s) s.scrollIntoView({block:"center"});}}); }
+  $("btnChieu").onclick=()=>chieu(0);
+  $("prev").addEventListener("dblclick",e=>{const s=e.target.closest(".sl"); if(s) chieu([...$("prev").querySelectorAll(".sl")].indexOf(s));});
   fillBai(); fillTiet(); ve();
 })();
 </script>

@@ -58,6 +58,7 @@
   <!-- ===================== LUYỆN TẬP ===================== -->
   <section class="lt-pane" id="lt">
     <div id="ltSetup">
+      <div id="soSai" class="card hidden" style="margin-bottom:14px;background:linear-gradient(120deg,#fff4f0,#fff9e8)"></div>
       <h3 style="margin:0 0 8px">1. Chọn bộ câu hỏi</h3>
       <div class="setc" id="sets"><div class="muted">Đang tải…</div></div>
       <div class="small muted" style="margin-top:6px">Có file bộ luyện tập thầy cô gửi? <label class="btn ghost sm">📂 Mở file .json<input type="file" id="setFile" accept=".json" hidden></label></div>
@@ -113,9 +114,49 @@
   function setTab(t) { tab = t; LS.set("lt-tab", t); document.querySelectorAll("#ltTabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.t === t)); document.querySelectorAll(".lt-pane").forEach(p => p.classList.toggle("on", p.id === t)); if (t === "gv" && !gvApi) gvApi = ChonCau.mount($("gvPick"), { key: "gv", soCau: false }); }
   document.querySelectorAll("#ltTabs button").forEach(b => b.onclick = () => setTab(b.dataset.t));
 
+  /* ================================================================ SỔ LỖI SAI — ôn lại câu làm sai sau 1, 3, 7 ngày */
+  const NGAY = 864e5, NAC = [1, 3, 7];
+  const SoSai = {
+    ds: () => LS.get("lt-sosai", []),
+    luu: d => LS.set("lt-sosai", d.slice(0, 400)),
+    khoa: q => (q.lop || "") + "|" + (q.id || q.dkey + "|" + String(q.de).slice(0, 60)),
+    ghi(q, dung, tenDang) {
+      const d = SoSai.ds(), k = SoSai.khoa(q), i = d.findIndex(x => x.k === k), now = Date.now();
+      if (i < 0) { if (!dung) d.unshift({ k, q, tenDang: tenDang || "", nac: 0, han: now + NAC[0] * NGAY, sai: 1, t: now }); SoSai.luu(d); return; }
+      const x = d[i];
+      if (dung) { if (now < x.han - 3600e3) return; x.nac++; if (x.nac >= NAC.length) d.splice(i, 1); else x.han = now + NAC[x.nac] * NGAY; }   // đúng khi đã đến hạn → lên nấc; đúng ở nấc cuối → rời sổ
+      else { x.nac = 0; x.han = now + NAC[0] * NGAY; x.sai++; }
+      SoSai.luu(d);
+    },
+    denHan: () => SoSai.ds().filter(x => x.han <= Date.now() + 3600e3),
+    ve() {
+      const d = SoSai.ds(), h = SoSai.denHan(), el = $("soSai");
+      if (!d.length) { el.classList.add("hidden"); return; }
+      el.classList.remove("hidden");
+      const sau = d.filter(x => x.han > Date.now() + 3600e3).sort((a, b) => a.han - b.han)[0];
+      const byD = {}; d.forEach(x => { const t = x.tenDang || x.q.dkey; byD[t] = (byD[t] || 0) + 1; });
+      el.innerHTML = `<div class="row" style="justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div><b style="font-size:18px">📕 Sổ lỗi sai của em</b>
+        <div class="small muted">${d.length} câu trong sổ · ${h.length ? `<b style="color:#d11a45">${h.length} câu đến hạn ôn hôm nay</b>` : `chưa có câu đến hạn${sau ? " — câu tiếp theo vào " + new Date(sau.han).toLocaleDateString("vi-VN") : ""}`}</div>
+        <div class="small muted">Câu sai được hỏi lại sau 1 ngày → 3 ngày → 7 ngày; làm đúng cả 3 lần thì rời sổ.</div></div>
+        <div class="row" style="gap:8px"><button class="btn coral" id="ssOn"${h.length ? "" : " disabled"}>🔁 Ôn ${h.length || ""} câu đến hạn</button><button class="btn ghost sm" id="ssXem">Xem sổ</button></div></div>
+        <div id="ssDs" class="hidden small" style="margin-top:8px">${Object.entries(byD).sort((a, b) => b[1] - a[1]).map(([t, n]) => `<div style="border-bottom:1px dashed var(--line);padding:3px 0">${NHD.texToHtml(t)} <b>· ${n} câu</b></div>`).join("")}
+        <button class="btn ghost sm" id="ssXoa" style="margin-top:8px">Xoá sổ</button></div>`;
+      $("ssXem").onclick = () => $("ssDs").classList.toggle("hidden");
+      $("ssXoa").onclick = () => { if (confirm("Xoá toàn bộ sổ lỗi sai trên máy này?")) { SoSai.luu([]); SoSai.ve(); } };
+      $("ssOn").onclick = () => {
+        const L = SoSai.denHan(); if (!L.length) return;
+        const dang = {}; L.forEach(x => { dang[x.q.dkey] = x.tenDang || dang[x.q.dkey] || ""; });
+        SET = { ten: "Ôn sổ lỗi sai", mon: "Toán", lop: L[0].q.lop, dang, q: L.map(x => x.q), meta: { file: "so-loi-sai", ten: "Ôn sổ lỗi sai" } };
+        const R = NHD.rng(Date.now() % 1e9);
+        play(NHD.shuffle(L, R).slice(0, 20).map(x => ({ q: x.q, order: x.q.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], R) : [0, 1, 2, 3] })));
+      };
+    }
+  };
+
   /* ================================================================ LUYỆN TẬP */
   let SET = null, sets = [];
   async function loadSets() {
+    SoSai.ve();
     try { const r = await fetch("data/luyentap/index.json", { cache: "no-store" }); sets = r.ok ? await r.json() : []; } catch (e) { sets = []; }
     const loc = LS.get("lt-local", null); if (loc) sets.unshift({ local: true, ten: loc.ten, mon: loc.mon, lop: loc.lop, n: loc.q.length });
     $("sets").innerHTML = sets.length ? sets.map((s, i) => `<button class="set" data-i="${i}"><b>${esc(s.ten)}</b><span>${esc(s.mon || "")} ${esc(s.lop || "")} · ${s.n} câu${s.local ? " · file đã mở trên máy này" : ""}</span>${progTxt(s)}</button>`).join("") : `<div class="card empty">Thầy cô chưa đưa bộ luyện tập nào lên. Nếu có file bộ luyện tập (.json), bấm “Mở file .json”.</div>`;
@@ -159,7 +200,7 @@
       box.innerHTML = `<div class="row" style="justify-content:space-between"><b>Câu ${i + 1}/${items.length}</b><span class="small muted">${esc(SET.dang && SET.dang[q.dkey] ? "" : q.dkey)} ${SET.dang && SET.dang[q.dkey] ? NHD.texToHtml(SET.dang[q.dkey]) : ""} · ${LVN[q.muc] || q.muc}</span><button class="btn ghost sm" id="pQuit">✕ Thoát</button></div>
         <div class="pbar"><i style="width:${i / items.length * 100}%"></i></div><div class="card ex" id="pQ">${NHD.renderQuestion(it, i + 1, "", { hinh: true })}</div><div id="pAct"></div><div id="pFb"></div>`;
       $("pQuit").onclick = () => { if (confirm("Thoát lượt luyện tập này?")) back(); };
-      const fb = (good, txt) => { res.push({ dkey: q.dkey, good }); if (good) ok++; saveProg(q.dkey, good);
+      const fb = (good, txt) => { res.push({ dkey: q.dkey, good }); if (good) ok++; saveProg(q.dkey, good); SoSai.ghi(q, good, SET.dang && SET.dang[q.dkey]);
         $("pFb").innerHTML = `<div class="fb ${good ? "ok" : "no"}">${good ? "✓ Chính xác!" : "✗ Chưa đúng."} ${txt || ""}</div>${q.loigiai ? `<div class="card ex" style="margin-top:8px"><div class="sol"><span class="lb">Lời giải.</span> ${NHD.texToHtml(q.loigiai)}</div></div>` : ""}<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn coral" id="pNext">${i + 1 < items.length ? "Câu tiếp →" : "Xem kết quả"}</button></div>`;
         $("pNext").onclick = () => { i++; show(); window.scrollTo({ top: 0, behavior: "smooth" }); }; $("pNext").focus(); };
       if (q.loai === "TN") {

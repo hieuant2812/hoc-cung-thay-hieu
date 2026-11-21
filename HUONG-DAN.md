@@ -394,3 +394,13 @@ python3 maychu.py
 - Danh sách file nhóm Công cụ giáo viên nằm ở `data/ngoaituyen.json`. Trang mới chưa có trong danh sách vẫn được lưu khi mở lần đầu.
 - Trang chủ chia khối Học sinh / Giáo viên; khối Giáo viên tự thu gọn trên máy học sinh. Menu: 5 mục cho học sinh + "🧑‍🏫 Giáo viên ▾".
 - jsPDF (phieu.html) và html2canvas (rade-thcs.html) chỉ nạp khi bấm xuất: `napThuVien(src)` trong `site.js`.
+
+## Gói 20 — trình chiếu trên web, phiếu cuối giờ, sổ lỗi sai, KHBD Toán 11, chuyên đề (22/11/2026)
+- **Beamer → ▶ Trình chiếu ngay trên web** (`assets/trinhchieu.js`): không cần XeLaTeX; lời giải hiện từng dòng; ← → / chạm hai bên / vuốt để chuyển; gõ số + Enter nhảy slide; **B** bút ghi bảng (nét vẽ lưu riêng từng slide); F toàn màn hình; Esc thoát. Chạm đúp một slide ở bản xem trước để chiếu từ slide đó.
+- **Chữ to cho lớp đông**: 14pt, không thu nhỏ chữ, tự chia slide thưa hơn (cả bản .tex và bản chiếu web).
+- **KHBD Toán 11** HK2 (Bài 18–33) và **Chuyên đề 11** (Bài 1–12) của tổ Toán đã nhập vào `data/khbdgoc.js`; số tiết PPCT lấy từ KHGD của trường. Công thức MathType trong file chuyên đề được đọc từ mã TeX lưu sẵn bên trong.
+- **Soạn bài**: ô "Theo KHBD của tổ/thầy" — bài nào đã có KHBD gốc thì xuất Word giữ nguyên tiết, hoạt động, bảng 4 bước (công thức Equation của Word).
+- **Phân bổ 35 tiết chuyên đề** (`data/ppct-chuyende.js`): mỗi chuyên đề 10 hoặc 15 tiết; kiểm tra chuyên đề gộp vào tiết "Bài tập cuối chuyên đề". Sửa file này là cả web cập nhật.
+- **Trên lớp → 🎫 Phiếu cuối giờ**: 3 câu trắc nghiệm, học sinh trả lời bằng điện thoại (hs.html, mã phòng); xem tỉ lệ đúng từng câu; kết quả tự lưu sang trang Phân tích (lớp lấy từ danh sách ở tab Gọi tên).
+- **Tự học → 📕 Sổ lỗi sai**: câu làm sai được hỏi lại sau 1 → 3 → 7 ngày; đúng cả 3 lần thì rời sổ. Lưu trên máy học sinh.
+- **Chuyên đề 10, 11**: thêm 27 mục kiến thức có ví dụ, lời giải từng bước; 15 hình minh hoạ (`G.HINH.CD10`, `G.HINH.CD11` trong `data/hinhve-bai.js`). Tên bài Chuyên đề 11 Bài 4–5, Chuyên đề 12 Bài 1–2 theo đúng SGK KNTT.

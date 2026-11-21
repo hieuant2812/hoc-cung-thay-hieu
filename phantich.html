@@ -71,7 +71,7 @@ table.kqt th{background:#fbf6ee}
   const $ = id => document.getElementById(id);
   const { Kho, Stats } = OMR;
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  let cur = localStorage.getItem("pt-cur") || "", A = null;
+  let cur = (location.hash.length > 1 ? decodeURIComponent(location.hash.slice(1)) : "") || localStorage.getItem("pt-cur") || "", A = null;   // phantich.html#<id bài> (phiếu cuối giờ mở thẳng tới bài vừa lưu)
   const bank = {}; // "Toán|11" → Map(id → câu)
   async function loadBank(mon, lop) {
     const k = mon + "|" + lop; if (bank[k]) return bank[k];

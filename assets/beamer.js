@@ -158,13 +158,15 @@
     const K = ((G.KHBDGOC || {})[o.lop] || {})[o.bai];
     const tiet = K && K.tiet && K.tiet.length ? tuKHBD(K) : tuBaiHoc(B, o);
     const mt = (K && K.kt && K.kt.length) ? K.kt : (B.yc || []);
-    const hinh = ((G.HINH || {})[String(o.lop).replace("CD", "")] || {})[o.bai] || [];
-    return { B, C, K, tiet, mt, hinh: String(o.lop).startsWith("CD") ? [] : hinh, nguon: K ? "khbd" : "baihoc" };
+    const hinh = ((G.HINH || {})[String(o.lop)] || {})[o.bai] || [];   // chuyên đề tra G.HINH.CD10…, không lẫn sang bài SGK cùng số
+    return { B, C, K, tiet, mt, hinh, nguon: K ? "khbd" : "baihoc" };
   }
 
   /* ================================================================ dựng danh sách slide trừu tượng */
   const dai = arr => arr.reduce((a, t) => a + String(t).replace(/\$[^$]*\$/g, m => " ".repeat(Math.ceil(m.length * .55))).length + 18 + 40 * Math.min(3, (String(t).match(/\\dfrac|\\displaystyle|\\int|\\sum|\\lim/g) || []).length), 0);
+  let HE = 1, CHU_TO = false;   // chế độ "chữ to cho lớp đông": ít dòng mỗi slide, không thu nhỏ chữ
   function chia(items, max) {
+    max = max * HE;
     const out = []; let cur = [], n = 0;
     items.forEach(t => {
       const l = dai([t]);
@@ -176,6 +178,7 @@
   }
 
   function dsSlide(o) {
+    CHU_TO = !!o.chuTo; HE = CHU_TO ? 0.72 : 1;
     const M = moHinh(o); const { B, C } = M;
     const S = [];
     const tenBai = `Bài ${o.bai}: ${C.tenBai || (M.K && M.K.ten) || ""}`;
@@ -275,7 +278,7 @@
 % Nội dung bám sát kế hoạch bài dạy: mỗi hoạt động đủ 4 bước
 % Phối màu: ${bo.ten}
 % ================================================================
-\\documentclass[aspectratio=${o.tiLe || "169"},${o.coChu || 12}pt,xcolor={dvipsnames}]{beamer}
+\\documentclass[aspectratio=${o.tiLe || "169"},${o.chuTo ? 14 : (o.coChu || 12)}pt,xcolor={dvipsnames}]{beamer}
 \\usepackage{fontspec}
 \\usepackage{amsmath,amssymb}
 \\usepackage{tikz}
@@ -340,7 +343,7 @@
 `;
   }
 
-  const coChu = items => { const n = dai(items); return n > 470 ? "\\footnotesize" : n > 300 ? "\\small" : ""; };
+  const coChu = items => { if (CHU_TO) return ""; const n = dai(items); return n > 470 ? "\\footnotesize" : n > 300 ? "\\small" : ""; };
   function khoiTex(k) {
     const nhom = (items, hien, kieu, mau) => {
       const fs = coChu(items);
@@ -386,7 +389,7 @@ ${HinhVe.tikz(Object.assign({}, s.hinh.h, { w: Math.min(s.hinh.h.w || 5, 5.4), h
       case "bia": return `\\begin{frame}[plain]
 \\begin{center}
 \\begin{tikzpicture}\\foreach \\c/\\x in {phanvang/0,phanngoc/1.35,phancam/2.7,phantim/4.05,phanluc/5.4}{\\fill[\\c] (\\x,0) rectangle ++(1.2,0.12);}\\end{tikzpicture}\\\\[1em]
-{\\color{phanngoc}\\large ${tex(o.truong || "")}}\\\\[1.3em]
+${o.truong ? `{\\color{phanngoc}\\large ${tex(o.truong)}}\\\\[1.3em]` : "\\mbox{}\\\\[0.6em]"}
 {\\color{phanvang}\\LARGE\\bfseries ${tex(s.tenBai.toUpperCase())}}\\\\[0.6em]
 {\\color{chuphan}\\large ${tex(s.chuong)}}\\\\[1.5em]
 {\\color{phanluc}\\normalsize Giáo viên: ${tex(o.gv || "")}}\\\\[0.3em]
@@ -454,6 +457,7 @@ ${ngan ? `\\begin{columns}[T]\\begin{column}{0.48\\textwidth}${pa[0]}\\\\[0.4em]
     s += `\\title{${tex(S[0].tenBai)}}\n\\author{${tex(oo.gv || "")}}\n\\date{}\n\n\\begin{document}\n\n`;
     S.forEach(x => { s += slideTex(x, oo); });
     s += `\\end{document}\n`;
+    if (oo.chuTo) { const i = s.indexOf("\\begin{document}"); s = s.slice(0, i) + s.slice(i).replace(/\{\\small\\begin\{itemize\}/g, "{\\begin{itemize}").replace(/\\end\{hopmau\}\{\\color\{phanngoc\}\\footnotesize /g, "\\end{hopmau}{\\color{phanngoc}").replace(/(\{Mục tiêu\})\\small /g, "$1"); }
     return s;
   }
 
@@ -462,13 +466,13 @@ ${ngan ? `\\begin{columns}[T]\\begin{column}{0.48\\textwidth}${pa[0]}\\\\[0.4em]
   function xemTruoc(o) {
     const T = s => (G.NHD && NHD.texToHtml) ? NHD.texToHtml(s) : esc(s);
     const S = dsSlide(o);
-    const ds = (items, kieu, mau) => { let so = 0; return `<ul class="${kieu === "so" ? "buoc" : ""}">${items.map((t, i) => {
+    const ds = (items, kieu, mau, tatCa) => { let so = 0; return `<ul class="${kieu === "so" ? "buoc" : ""}${tatCa ? " tatca" : ""}">${items.map((t, i) => {
       if (/:\s*$/.test(t) && t.length < 90) return `<li class="tm">${T(t)}</li>`;
       if (kieu === "so") return `<li><span class="n" style="background:${MAU_CSS[mau] || "var(--hong)"}">${++so}</span><span>${T(t)}</span></li>`;
       return `<li>${T(t)}</li>`;
     }).join("")}</ul>`; };
-    const khoi = k => k.t === "ds" ? ds(k.items) : k.t === "buoc" ? ds(k.items, "so", k.mau)
-      : k.t === "hop" ? `<div class="blk" style="--sac:${MAU_CSS[k.mau]}"><b>${esc(k.ten)}</b>${ds(k.items)}</div>` : "";
+    const khoi = k => k.t === "ds" ? ds(k.items, "", "", k.hien) : k.t === "buoc" ? ds(k.items, "so", k.mau, k.hien)
+      : k.t === "hop" ? `<div class="blk" style="--sac:${MAU_CSS[k.mau]}"><b>${esc(k.ten)}</b>${ds(k.items, "", "", k.hien !== false)}</div>` : "";
     const dau = s => `<div class="dau">${s.buoc ? `<span class="nb" style="background:${MAU_CSS[SAC_BUOC[s.buoc]]}">Bước ${s.buoc}</span>` : ""}${s.nhan ? `<span class="nh">${esc(s.nhan)}</span>` : ""}<h3>${esc(s.tieu)}</h3>${s.phu ? `<div class="phu">${T(s.phu)}</div>` : ""}</div>`;
     return S.map(s => {
       const sac = MAU_CSS[s.sac] || "var(--vang)";

@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
 <script src="assets/katex/katex.min.js"></script><script src="assets/lib/qrcode.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script><script src="assets/butve.js"></script><script src="assets/hinhtudong.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script><script src="assets/butve.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/phongmang.js"></script><script src="assets/omr/keys.js"></script><script src="assets/phieucuoigio.js"></script>
 <style>
 .tl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
 .tl-tabs button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;font:700 15px var(--font);cursor:pointer;color:#334}
@@ -88,6 +88,8 @@
           <label class="f">Thời gian mỗi câu<select id="tcTime"><option value="0">Không đếm giờ</option><option value="30">30 giây</option><option value="45">45 giây</option><option value="60">1 phút</option><option value="90">1 phút 30 giây</option><option value="120">2 phút</option><option value="180">3 phút</option><option value="300">5 phút</option></select></label>
           <label class="chk"><input type="checkbox" id="tcSol" checked> Có nút xem lời giải</label>
           <button class="btn coral" id="tcGo" style="font-size:18px;padding:14px">▶ Bắt đầu trình chiếu</button>
+          <button class="btn green" id="pcGo" style="font-size:17px;padding:12px">🎫 Phiếu cuối giờ — 3 câu trả lời bằng điện thoại</button>
+          <div class="small muted" style="margin-top:-4px">Lấy ngẫu nhiên 3 câu trắc nghiệm trong phần đã chọn ở mục 1; học sinh vào <b>hs.html</b> nhập mã phòng. Kết quả tự lưu sang trang <b>Phân tích</b>.</div>
           <div class="small muted">Phím tắt: <b>→ / Space</b> câu sau · <b>←</b> câu trước · <b>Đ</b> hoặc <b>A</b> hiện đáp án · <b>L</b> lời giải · <b>T</b> bắt đầu/dừng giờ · <b>+ / −</b> cỡ chữ · <b>F</b> toàn màn hình · <b>Esc</b> thoát.<br>✏️ <b>Ghi bảng</b> (góc dưới trái màn hình chiếu): <b>B</b> bút · <b>H</b> dạ quang · <b>R</b> thước · <b>K</b> laser · <b>E</b> tẩy · <b>W</b> bảng trắng nháp · <b>Ctrl/⌘+Z</b> hoàn tác. Nét vẽ giữ riêng cho từng câu, đi theo khi cuộn và đổi cỡ chữ; nút 📷 lưu ảnh câu kèm nét vẽ.</div>
           <div id="tcMsg"></div>
         </div>
@@ -290,6 +292,15 @@
     const base = location.href.replace(/[^/]*$/, "");
     w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc($("phtTen").value)}</title><base href="${base}"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css"><style>@page{size:A4;margin:12mm 14mm}body{background:#fff;margin:0}.page{page-break-after:always;font:12pt 'Times New Roman'}.page:last-child{page-break-after:auto}.ex .q{break-inside:avoid}</style></head><body>${phtPages}<script>setTimeout(()=>print(),700)<\/script></body></html>`);
     w.document.close();
+  };
+
+  $("pcGo").onclick = () => {
+    const tn = pick1.pool().filter(q => q.loai === "TN" && (q.pa || []).length === 4);
+    if (!tn.length) { $("tcMsg").innerHTML = `<div class="note red">Chưa có câu trắc nghiệm nào trong phần đã chọn — thầy chọn dạng ở mục 1 (cần ngân hàng trên máy này).</div>`; return; }
+    const R = NHD.rng(NHD.hash("pc|" + Date.now())); const cau = NHD.shuffle(tn, R).slice(0, 3);
+    const st = pick1.state ? pick1.state() : {}; const D = LS.get("tl-ds", {});
+    let dang = {}; try { const bk = pick1.bank && pick1.bank(); dang = (bk && bk.dang) || {}; } catch (e) {}
+    PhieuCuoiGio.mo({ cau, ds: D, dang, lop: LS.get("tl-ds-cur", Object.keys(D)[0]), giay: +$("tcTime").value || 60, ten: st.lop ? "Toán " + st.lop : "" });
   };
 
   /* ================================================================ GỌI TÊN + CHIA NHÓM */

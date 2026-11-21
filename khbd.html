@@ -61,6 +61,7 @@
           <label class="f">Mã năng lực số (chọn 1–3 mã)</label>
           <div class="nlsbox" id="nlsBox"></div>
           <label class="f">Đưa vào kế hoạch</label>
+          <label class="chk" id="gocBox" style="background:#eafaf1;border-radius:8px;padding:6px 8px"><input type="checkbox" id="cGoc" checked> <span><b>Theo KHBD của tổ/thầy</b> — giữ nguyên tiết, hoạt động, 4 bước <span class="small muted" id="gocInfo"></span></span></label>
           <label class="chk"><input type="checkbox" id="cMoDau" checked> Hoạt động mở đầu từ tình huống thực tế</label>
           <label class="chk"><input type="checkbox" id="cSoAI" checked> Hoạt động trải nghiệm công cụ số + phản biện AI</label>
           <label class="chk"><input type="checkbox" id="cVanDung" checked> Hoạt động vận dụng thực tiễn</label>
@@ -92,7 +93,7 @@
 <footer id="foot"></footer>
 <script src="data/chuongtrinh.js"></script>
 <script src="data/baihoc/t10.js"></script><script src="data/baihoc/t11.js"></script><script src="data/baihoc/t11-them.js"></script><script src="data/baihoc/t12.js"></script><script src="data/baihoc/cd.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/khbd.js"></script>
+<script src="data/khbdgoc.js"></script><script src="assets/nhd/core.js"></script><script src="assets/khbd.js"></script>
 <script>
 (function(){
   const $=id=>document.getElementById(id); let tab="bai";
@@ -117,10 +118,11 @@
       ngaySoan:$("ngaySoan").value,ngayDay:$("ngayDay").value,truong:$("truong").value,gv:$("gv").value,toTruong:$("toTruong").value,
       nls:nlsChon(),moDau:$("cMoDau").checked,soAI:$("cSoAI").checked,vanDung:$("cVanDung").checked,veNha:$("cVeNha").checked,
       phieu:$("cPhieu").checked,rubric:$("cRubric").checked,kiDuyet:$("cKy").checked,
-      tietTuan:+$("tietTuan").value||3,namHoc:$("namHoc").value,to:"TOÁN – TIN HỌC"};
+      tietTuan:+$("tietTuan").value||3,namHoc:$("namHoc").value,to:"TOÁN – TIN HỌC",theoGoc:$("cGoc").checked};
   }
   function ve(){
-    const o=opt();
+    const o=opt(); const K=KHBD.goc&&KHBD.goc(o.lop,o.bai);
+    $("gocBox").style.display=K?"":"none"; if(K) $("gocInfo").textContent="("+K.tiet.length+" tiết · "+K.tiet.reduce((a,t)=>a+t.hd.length,0)+" hoạt động)";
     $("prev").innerHTML = tab==="bai" ? KHBD.render(o) : KHBD.keHoach(o.lop,o);
     ["truong","gv","toTruong","namHoc"].forEach(k=>localStorage.setItem("khbd-"+k,$(k).value));
   }
@@ -163,7 +165,7 @@
   $("tabs").onclick=e=>{const b=e.target.closest("button"); if(!b)return; tab=b.dataset.t;
     [...$("tabs").children].forEach(x=>x.classList.toggle("on",x===b));
     $("paneBai").classList.toggle("hidden",tab!=="bai"); $("paneNam").classList.toggle("hidden",tab==="bai"); ve();};
-  $("selLop").onchange=()=>{fillBai();ve();}; $("selBai").onchange=()=>{syncTiet();ve();};
+  $("selLop").onchange=()=>{fillBai();ve();}; $("selBai").onchange=()=>{syncTiet();ve();}; $("cGoc").onchange=ve;
   ["soTiet","tietBatDau","ngaySoan","ngayDay","truong","gv","toTruong","tietTuan","namHoc"].forEach(k=>$(k).addEventListener("input",ve));
   ["cMoDau","cSoAI","cVanDung","cVeNha","cPhieu","cRubric","cKy"].forEach(k=>$(k).addEventListener("change",ve));
   $("nlsBox").addEventListener("change",ve);
