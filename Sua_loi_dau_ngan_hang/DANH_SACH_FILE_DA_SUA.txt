@@ -1,0 +1,65 @@
+Sửa lỗi dấu và hệ số do bộ sinh đề để lại (chỉ sửa bên trong công thức $...$):
+  a+-b  → a-b        (vd: 5m+-2=18 → 5m-2=18)
+  a--b  → a+b        (vd: \dfrac{18--2}{5} → \dfrac{18+2}{5};  f'(x)--1 → f'(x)+1)
+  1x, -1x → x, -x    (vd: y=-1x^2+39x → y=-x^2+39x;  \sqrt{1x} → \sqrt{x})
+  1(x+y) → (x+y)
+Giá trị toán học không đổi. Nét vẽ TikZ (--) không bị động tới.
+
+Cách cập nhật:
+- Ngân hàng THPT (Ra đề): vào Ra đề, nạp lại các file .tex dưới đây (file mới ghi đè câu cũ cùng mã).
+- Ngân hàng THCS: vào Ra đề THCS → Nạp, chọn các file trong thư mục NganHang_THCS_6_9.
+- Đề cương TeX và bộ TS10: thay file gốc trên máy thầy bằng file trong gói (web đã được cập nhật sẵn).
+
+Danh sách file:
+NganHang_MoRong_10_11_12/T11/T11_ChuongII_III_TeX/C2/T11_D09_dayso.tex: 1 dòng sửa
+NganHang_MoRong_10_11_12/T11/T11_ChuongII_III_TeX/C2/T11_D10_csc.tex: 2 dòng sửa
+NganHang_MoRong_10_11_12/T10/C2/T10_D08_bpt_nhanbiet.tex: 1 dòng sửa
+NganHang_MoRong_10_11_12/T10/C1/T10_D01_menhde_nhanbiet.tex: 1 dòng sửa
+NganHang_MoRong_10_11_12/T10/C7/T10_D45_viet_ptdt.tex: 2 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C1/nganhang/C1_ungdungdaoham/B1_dondieu_cuctri/D05_dothi_dau_fphay.tex: 5 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C1/nganhang/C1_ungdungdaoham/B4_khaosat/D04_songhiem_tuonggiao.tex: 6 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C1/nganhang/C1_ungdungdaoham/B3_tiemcan/D03_tiemcan_xien.tex: 85 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C1/nganhang/C1_ungdungdaoham/B5_ungdung_thucte/D01_chuyendong.tex: 9 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B7_hetruc/D06_trungdiem_trongtam.tex: 9 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B8_bieuthuc/D07_phepToan_toado.tex: 16 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B8_bieuthuc/D11_ungdung_thucte.tex: 11 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B8_bieuthuc/D09_cungphuong_thanghang.tex: 12 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B8_bieuthuc/D08_tichvohuong_goc.tex: 21 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B8_bieuthuc/D10_toadohoa_hinhhoc.tex: 3 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B6_vecto/D03_tichvohuong_goc3d.tex: 12 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_toan12_C2/nganhang/C2_vecto_toado/B6_vecto/D01_vecto_cacphepToan.tex: 10 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_HK2_C4_C5_C6/nganhang/C4_nguyenham_tichphan/B13_ungdunghinhhoc/D02_dientich_hai_dothi.tex: 3 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_HK2_C4_C5_C6/nganhang/C4_nguyenham_tichphan/B11_nguyenham/D04_nguyenham_dieukien_thucte.tex: 1 dòng sửa
+NganHang_MoRong_10_11_12/T12/nganhang_HK2_C4_C5_C6/nganhang/C4_nguyenham_tichphan/B12_tichphan/D01_tinhchat_tichphan.tex: 21 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C1_B3_D01.tex: 11 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C3_B7_D01.tex: 9 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H1_C2_B6_D03.tex: 12 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C1_B2_D02.tex: 19 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H2_C6_B18_D03.tex: 27 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C1_B1_D02.tex: 14 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C2_B4_D02.tex: 2 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H1_C1_B4_D02.tex: 13 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H2_C6_B18_D02.tex: 8 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H2_C7_B28_D02.tex: 10 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H1_C1_B2_D01.tex: 3 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H2_C7_B25_D01.tex: 4 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_7H2_C7_B28_D02.tex: 16 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H1_C2_B8_D01.tex: 58 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H1_C2_B8_D02.tex: 3 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H2_C7_B28_D03.tex: 75 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_7H2_C7_B25_D03.tex: 15 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_7H2_C7_B24_D01.tex: 10 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_9H2_C6_B20_D02.tex: 18 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H1_C2_B9_D01.tex: 4 dòng sửa
+NganHang_THCS_6_9/02_TeX/NH_8H2_C6_B24_D02.tex: 26 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C2_BAI7.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C5_BAI14.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C5_ONTAP2.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C1_ONTAP1.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C5_ONTAP1.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C4_BAI11.tex: 1 dòng sửa
+DeCuong_TeX_10_12/decuong12/decuong12/TOAN12/TOAN12_C2_BAI8.tex: 1 dòng sửa
+TS10_TeX/TS10_De42.tex: 1 dòng sửa
+NganHang_ThucTe_10_12/NGAN_HANG_THUC_TE_T10/T10_C6_B16_TT02_D72.tex
+NganHang_ThucTe_10_12/NGAN_HANG_THUC_TE_T10/T10_C6_B17_TT03_D73.tex
+NganHang_ThucTe_10_12/NGAN_HANG_THUC_TE_T12/T12_C4_B13_TT05_D75.tex

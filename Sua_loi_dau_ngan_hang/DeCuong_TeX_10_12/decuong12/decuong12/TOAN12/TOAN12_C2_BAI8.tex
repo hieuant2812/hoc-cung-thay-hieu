@@ -1,0 +1,427 @@
+%% ==================================================================
+%% TOAN12_C2_BAI8.tex -- Toán 12, Chương II, Bài 8
+%% Cấu trúc: Lí thuyết trọng tâm -> Ví dụ minh hoạ (chừa chỗ trống) -> Bài tập luyện tập
+%% ==================================================================
+\baihoc{8}{Biểu thức toạ độ của các phép toán vectơ}[Biểu thức toạ độ các phép toán vectơ]
+
+\lithuyet
+
+\begin{congthuc}[Biểu thức toạ độ của phép cộng, phép trừ hai vectơ, phép nhân một số với một vectơ]
+Trong không gian $Oxyz$, cho hai vectơ $\vec a=(x;y;z)$ và $\vec b=(x';y';z')$. Ta có:
+\begin{itemize}
+  \item $\vec a+\vec b=(x+x';\ y+y';\ z+z')$;
+  \item $\vec a-\vec b=(x-x';\ y-y';\ z-z')$;
+  \item $k\vec a=(kx;\ ky;\ kz)$ với $k$ là một số thực.
+\end{itemize}
+\end{congthuc}
+
+\begin{nhanxet}
+Vectơ $\vec a=(x;y;z)$ cùng phương với vectơ $\vec b=(x';y';z')\ne\vec0$ khi và chỉ khi tồn tại số thực $k$ sao cho $\begin{cases}x=kx'\\y=ky'\\z=kz'.\end{cases}$
+\end{nhanxet}
+
+\begin{congthuc}[Toạ độ trung điểm đoạn thẳng, toạ độ trọng tâm tam giác]
+\begin{minipage}[c]{.66\linewidth}
+Trong không gian $Oxyz$, cho ba điểm không thẳng hàng $A(x_A;y_A;z_A)$, $B(x_B;y_B;z_B)$ và $C(x_C;y_C;z_C)$. Khi đó:
+\begin{itemize}
+  \item Toạ độ trung điểm của đoạn thẳng $AB$ là
+  \[\left(\dfrac{x_A+x_B}{2};\ \dfrac{y_A+y_B}{2};\ \dfrac{z_A+z_B}{2}\right);\]
+  \item Toạ độ trọng tâm của tam giác $ABC$ là
+  \[\left(\dfrac{x_A+x_B+x_C}{3};\ \dfrac{y_A+y_B+y_C}{3};\ \dfrac{z_A+z_B+z_C}{3}\right).\]
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[c]{.31\linewidth}\centering
+\begin{tikzpicture}[scale=.95,font=\small,x={(-0.55cm,-0.45cm)},y={(1cm,0cm)},z={(0cm,1cm)}]
+  \draw[truc] (0,0,0)--(2.6,0,0) node[below left]{$x$}; \draw[truc] (0,0,0)--(0,3.2,0) node[right]{$y$}; \draw[truc] (0,0,0)--(0,0,2.4) node[above]{$z$};
+  \coordinate (A) at (1.8,.6,1.4); \coordinate (B) at (.3,2.8,1.9); \coordinate (C) at (1.6,2.4,.3);
+  \fill[dcnen] (A)--(B)--(C)--cycle; \draw[dcdam,line width=.7pt] (A)--(B)--(C)--cycle;
+  \coordinate (G) at ($(A)!2/3!($(B)!.5!(C)$)$); \coordinate (M) at ($(A)!.5!(B)$);
+  \draw[an] (A)--($(B)!.5!(C)$); \node[diem] at (G){}; \node[diem,fill=dcchinh] at (M){};
+  \node[left] at (A){$A$}; \node[above] at (B){$B$}; \node[right] at (C){$C$}; \node[below] at (G){$G$}; \node[above left] at (M){$M$};
+  \node[above left] at (0,0,0){$O$};
+\end{tikzpicture}
+\end{minipage}
+\end{congthuc}
+
+\begin{congthuc}[Biểu thức toạ độ của tích vô hướng]
+Trong không gian $Oxyz$, tích vô hướng của hai vectơ $\vec a=(x;y;z)$ và $\vec b=(x';y';z')$ được xác định bởi công thức:
+\[\vec a\cdot\vec b=xx'+yy'+zz'.\]
+\end{congthuc}
+
+\begin{nhanxet}
+\begin{itemize}
+  \item Hai vectơ $\vec a$ và $\vec b$ vuông góc với nhau nếu và chỉ nếu $xx'+yy'+zz'=0$.
+  \item Nếu $\vec a=(x;y;z)$ thì $|\vec a|=\sqrt{\vec a\cdot\vec a}=\sqrt{x^2+y^2+z^2}$.
+  \item Nếu $\vec a=(x;y;z)$ và $\vec b=(x';y';z')$ là hai vectơ khác $\vec0$ thì
+  \[\cos(\vec a,\vec b)=\frac{\vec a\cdot\vec b}{|\vec a|\cdot|\vec b|}=\frac{xx'+yy'+zz'}{\sqrt{x^2+y^2+z^2}\cdot\sqrt{x'^2+y'^2+z'^2}}.\]
+\end{itemize}
+\end{nhanxet}
+
+\begin{chuy}
+Nếu $A(x_A;y_A;z_A)$ và $B(x_B;y_B;z_B)$ thì
+\[AB=\big|\vt{AB}\big|=\sqrt{(x_B-x_A)^2+(y_B-y_A)^2+(z_B-z_A)^2}.\]
+Đặc biệt, khi $B$ trùng $O$ ta nhận được công thức $OA=\sqrt{x_A^2+y_A^2+z_A^2}$.
+\end{chuy}
+
+%% ------------------------------------------------ VÍ DỤ
+\viduminhhoa
+\subsubsection{Tính toán theo toạ độ}
+\begin{vidu}
+Cho $\vec a=(1;2;-2)$, $\vec b=(3;0;4)$. Tính $\vec a\cdot\vec b$ và $\cos(\vec a,\vec b)$.
+\begin{loigiai}
+\giai $\vec a\cdot\vec b=3+0-8=-5$; $|\vec a|=3$, $|\vec b|=5$; $\cos(\vec a,\vec b)=\dfrac{-5}{15}=-\dfrac13$.
+\end{loigiai}
+\end{vidu}
+\begin{vidu}
+Cho $A(1;0;2)$, $B(2;1;3)$, $C(3;1;0)$. Tìm toạ độ điểm $D$ sao cho $ABCD$ là hình bình hành.
+\begin{loigiai}
+\giai $\vt{AB}=(1;1;1)$, $\vt{AC}=(2;1;-2)$ không cùng phương nên $A,B,C$ không thẳng hàng. $ABCD$ là hình bình hành $\Leftrightarrow\vt{AB}=\vt{DC}\Leftrightarrow D=C-\vt{AB}=(2;0;-1)$.
+\end{loigiai}
+\end{vidu}
+\subsubsection{Vận dụng toạ độ vào bài toán thực tiễn}
+\begin{vidu}
+Radar phát hiện một máy bay bay với vận tốc và hướng không đổi từ $A(800;500;7)$ đến $B(940;550;8)$ trong $10$ phút (đơn vị km). Tìm toạ độ máy bay sau $5$ phút tiếp theo.
+\begin{loigiai}
+\giai Gọi vị trí là $C$. Ta có $\vt{BC}=\dfrac12\vt{AB}=(70;25;0{,}5)$ nên $C(1010;575;8{,}5)$.
+\end{loigiai}
+\end{vidu}
+\subsubsection{Tìm điểm thoả điều kiện cực trị (nâng cao)}
+\begin{vidu}
+Cho $A(1;2;3)$, $B(3;0;-1)$. Tìm điểm $M$ thuộc mặt phẳng $(Oxy)$ sao cho $MA^2+MB^2$ nhỏ nhất.
+\begin{loigiai}
+\giai Trung điểm $I(2;1;1)$. $MA^2+MB^2=2MI^2+\dfrac{AB^2}{2}$ nhỏ nhất khi $M$ là hình chiếu của $I$ lên $(Oxy)$: $M(2;1;0)$.
+\end{loigiai}
+\end{vidu}
+
+\begin{viduds}
+Cho $\vec a=(1;-2;2)$, $\vec b=(2;1;-2)$.
+\begin{dungsai}
+  \y $\vec a\cdot\vec b=-4$. \oDS
+  \y $|\vec a+\vec b|=\sqrt{10}$. \oDS
+  \y $\cos(\vec a,\vec b)=-\dfrac49$. \oDS
+  \y $\vec a$ vuông góc với $\vec a+\vec b$. \oDS
+\end{dungsai}
+\begin{loigiai}
+\tuduy Tính trước các ``nguyên liệu'': $\vec a\cdot\vec b$, $|\vec a|$, $|\vec b|$, $\vec a+\vec b$. Ý d) dùng tính chất $\vec a\cdot(\vec a+\vec b)=|\vec a|^2+\vec a\cdot\vec b$, không cần tính lại toạ độ.
+\giai $\vec a\cdot\vec b=2-2-4=-4$; $|\vec a|=|\vec b|=3$; $\vec a+\vec b=(3;-1;0)$. a) \textbf{Đúng}. b) \textbf{Đúng}. c) \textbf{Đúng}. d) \textbf{Sai}: $\vec a\cdot(\vec a+\vec b)=9-4=5\ne0$.
+\end{loigiai}
+\end{viduds}
+
+\subsubsection{Bài toán thực tế}
+\begin{vidu}
+Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(7;0;2)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(4;2;0)$ (đơn vị: m). Tìm công (J) sinh bởi lực $\vec F$.
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai $A=\vec F\cdot\vec d=28$. Kết quả: $28$.
+\end{loigiai}
+\end{vidu}
+\begin{vidu}
+Trong không gian $Oxyz$ (đơn vị: mét), mặt đất là mặt phẳng $(Oxy)$, hai flycam đang bay ở các vị trí $A(-10;-10;25)$ và $B(-6;7;7)$. Tìm khoảng cách từ flycam ở $B$ đến điểm $H$ trên mặt đất nằm ngay dưới $A$ (đơn vị: $\text{ m}$) (làm tròn kết quả đến hàng phần mười).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai $H(-10;-10;0)$, $BH=\sqrt{354}$. Kết quả: $18{,}8$.
+\end{loigiai}
+\end{vidu}
+\begin{vidu}
+Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(6;1;2)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(9;8;0)$ (đơn vị: m). Tìm quãng đường dịch chuyển (m) (làm tròn kết quả đến hàng phần mười).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai $|\vec d|=\sqrt{145}$. Kết quả: $12$.
+\end{loigiai}
+\end{vidu}
+\begin{viduds}
+Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(5;1;4)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(6;7;0)$ (đơn vị: m). Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Lực $\vec F$ có độ lớn $\sqrt{42}$ N. \oDS
+  \y Côsin của góc giữa $\vec F$ và $\vec d$ bằng $\dfrac{37 \sqrt{3570}}{1785}$. \oDS
+  \y Công sinh bởi lực $\vec F$ bằng $33$ J. \oDS
+  \y Thùng hàng dịch chuyển được $\dfrac{2 \sqrt{85}}{3}$ m. \oDS
+\end{dungsai}
+\begin{loigiai}
+\giai $|\vec d|=\sqrt{85}$. $A=\vec F\cdot\vec d=37$. $\cos(\vec F,\vec d)=\dfrac{\vec F\cdot\vec d}{|\vec F|\cdot|\vec d|}=\dfrac{37 \sqrt{3570}}{3570}$. $|\vec F|=\sqrt{42}$. a) Đúng. b) Sai: giá trị đúng là $\dfrac{37 \sqrt{3570}}{3570}$. c) Sai: giá trị đúng là $37$. d) Sai: giá trị đúng là $\sqrt{85}$.
+\end{loigiai}
+\end{viduds}
+
+%% ------------------------------------------------ BÀI TẬP
+\luyentap
+\phanbt{Trắc nghiệm nhiều phương án lựa chọn}
+\begin{bai}Cho $\vec a=(2;-1;3)$, $\vec b=(1;4;-2)$. Tích vô hướng $\vec a\cdot\vec b$ bằng
+\pa{$-8$}{$8$}{$-4$}{$0$}\dapso{A.}\end{bai}
+\begin{bai}Độ dài của vectơ $\vec u=(2;-2;1)$ bằng
+\pa{$3$}{$9$}{$\sqrt5$}{$1$}\dapso{A.}\end{bai}
+\begin{bai}Cho $A(1;2;3)$, $B(-1;0;4)$, $C(3;-2;2)$. Trọng tâm tam giác $ABC$ là
+\pa{$(1;0;3)$}{$(3;0;9)$}{$(1;1;3)$}{$(0;0;3)$}\dapso{A.}\end{bai}
+\begin{bai}Cho $A(1;2;-1)$, $B(3;4;3)$. Độ dài đoạn $AB$ bằng
+\pa{$2\sqrt6$}{$24$}{$\sqrt6$}{$6$}\dapso{A. $\sqrt{4+4+16}$.}\end{bai}
+\begin{bai}Cho ba điểm $A(1;1;1)$, $B(2;3;4)$, $C(a;b;7)$ thẳng hàng. Giá trị của $a+b$ là
+\pa{$8$}{$6$}{$7$}{$5$}\dapso{A. $\vt{AC}=2\vt{AB}$ nên $C(3;5;7)$.}\end{bai}
+
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt đất là mặt phẳng $(Oxy)$, hai flycam đang bay ở các vị trí $A(-9;-9;20)$ và $B(-9;5;18)$. Khoảng cách từ flycam ở $B$ đến điểm $H$ trên mặt đất nằm ngay dưới $A$ bằng
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\pa{$\dfrac{4 \sqrt{130}}{3}\,\text{ m}$.}{$2 \sqrt{130}\,\text{ m}$.}{$3 \sqrt{130}\,\text{ m}$.}{$\sqrt{130}\,\text{ m}$.}
+\dapso{B. $H(-9;-9;0)$, $BH=2 \sqrt{130}$.}\end{bai}
+\begin{bai}Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(2;1;4)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(9;3;0)$ (đơn vị: m). Côsin của góc giữa lực $\vec F$ và hướng dịch chuyển bằng
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\pa{$\dfrac{\sqrt{210}}{20}$.}{$\dfrac{\sqrt{210}}{15}$.}{$\dfrac{\sqrt{210}}{30}$.}{$\dfrac{\sqrt{210}}{45}$.}
+\dapso{C. $\cos(\vec F,\vec d)=\dfrac{\vec F\cdot\vec d}{|\vec F|\cdot|\vec d|}=\dfrac{\sqrt{210}}{30}$.}\end{bai}
+\begin{bai}Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(3;5;2)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(4;8;0)$ (đơn vị: m). Côsin của góc giữa lực $\vec F$ và hướng dịch chuyển bằng
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\pa{$\dfrac{13 \sqrt{190}}{190}$.}{$\dfrac{13 \sqrt{190}}{190} + 1$.}{$\dfrac{13 \sqrt{190}}{285}$.}{$\dfrac{13 \sqrt{190}}{95}$.}
+\dapso{A. $\cos(\vec F,\vec d)=\dfrac{\vec F\cdot\vec d}{|\vec F|\cdot|\vec d|}=\dfrac{13 \sqrt{190}}{190}$.}\end{bai}
+\begin{bai}Một cột ăng-ten thẳng đứng cao $6$ m được giữ bởi hai sợi cáp nối từ đỉnh cột $T(0;0;6)$ xuống hai điểm neo $A(3;0;0)$ và $B(0;4;0)$ trên mặt đất (đơn vị: m). Khoảng cách (m) giữa hai điểm neo bằng
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.224,-0.918) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(3.600,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\draw[line width=2pt,gray] (0.000,0.000)--(0.000,2.800); \fill (0.000,2.800) circle (.05) node[left]{$T$};
+\draw[thick] (0.000,2.800)--(-0.936,-0.702) node[below left]{$A$}; \draw[thick] (0.000,2.800)--(2.800,0.000) node[below right]{$B$};
+\end{tikzpicture}}
+
+\pa{$5$.}{$10$.}{$1$.}{$7$.}
+\dapso{A. $AB=5$.}\end{bai}
+
+\phanbt{Trắc nghiệm đúng/sai}
+\begin{bai}Trong không gian $Oxyz$, cho tam giác $ABC$ với $A(1;0;1)$, $B(0;-3;1)$, $C(4;-1;4)$.
+\begin{dungsai}
+  \y Trọng tâm tam giác là $G\left(\frac53;-\frac43;2\right)$. \oDS
+  \y $\vt{AB}\cdot\vt{AC}=0$, tức là $\widehat{BAC}=90^\circ$. \oDS
+  \y $BC=\sqrt{29}$. \oDS
+  \y Chu vi tam giác $ABC$ bằng $3\sqrt{10}$. \oDS
+\end{dungsai}
+\dapso{a) Đúng; b) Đúng; c) Đúng; d) Sai (chu vi bằng $\sqrt{10}+\sqrt{19}+\sqrt{29}$).}\end{bai}
+\begin{bai}Chọn hệ trục $Oxyz$ (đơn vị km) gắn với một khu du lịch. Một khinh khí cầu bay thẳng đều từ vị trí $A(2;3;1)$ đến vị trí $B(8;11;1)$ hết $30$ phút.
+\begin{dungsai}
+  \y Quãng đường $AB$ dài $10$ km. \oDS
+  \y Tốc độ của khinh khí cầu là $20$ km/h. \oDS
+  \y Sau $15$ phút kể từ khi ở $A$, khinh khí cầu ở vị trí $(5;7;1)$. \oDS
+  \y Góc giữa hướng bay $\vt{AB}$ và vectơ $\vec i$ xấp xỉ $37^\circ$. \oDS
+\end{dungsai}
+\dapso{a) Đúng; b) Đúng; c) Đúng (trung điểm $AB$); d) Sai ($\cos=\frac6{10}$, góc $\approx53^\circ$).}\end{bai}
+
+\begin{bai}Một cột ăng-ten thẳng đứng cao $8$ m được giữ bởi hai sợi cáp nối từ đỉnh cột $T(0;0;8)$ xuống hai điểm neo $A(3;0;0)$ và $B(0;4;0)$ trên mặt đất (đơn vị: m). Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.224,-0.918) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(3.600,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\draw[line width=2pt,gray] (0.000,0.000)--(0.000,2.800); \fill (0.000,2.800) circle (.05) node[left]{$T$};
+\draw[thick] (0.000,2.800)--(-0.936,-0.702) node[below left]{$A$}; \draw[thick] (0.000,2.800)--(2.800,0.000) node[below right]{$B$};
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Sợi cáp $TA$ dài $\sqrt{73}$ m. \oDS
+  \y Hai điểm neo cách nhau $5$ m. \oDS
+  \y Tích vô hướng $\overrightarrow{TA}\cdot\overrightarrow{TB}$ bằng $64$. \oDS
+  \y Góc giữa hai sợi cáp xấp xỉ $37\,^\circ$. \oDS
+\end{dungsai}
+\dapso{$TA=\sqrt{73}=\sqrt{73}$. $AB=5$. $\overrightarrow{TA}=(3;0;-8)$, $\overrightarrow{TB}=(0;4;-8)$, tích vô hướng $=64$. $\cos\widehat{ATB}=\dfrac{16 \sqrt{365}}{365}$, $\widehat{ATB}\approx 33{,}1^\circ$. a) Đúng. b) Đúng. c) Đúng. d) Sai: giá trị đúng là $33\,^\circ$.}\end{bai}
+\begin{bai}Ba trạm quan trắc được đặt tại các vị trí $A(-5;6;0)$, $B(1;6;2)$, $C(-8;-3;1)$ trong hệ trục $Oxyz$ (đơn vị: km). Một trạm điều phối được đặt tại trọng tâm $G$ của tam giác $ABC$. Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[gray!10] (0,0)--(4.5,.4)--(2.2,2.6)--cycle; \draw[thick] (0,0) node[below left]{$A$}--(4.5,.4) node[below right]{$B$}--(2.2,2.6) node[above]{$C$}--cycle;
+\draw[dashed] (0,0)--(3.35,1.5) (4.5,.4)--(1.1,1.3) (2.2,2.6)--(2.25,.2); \fill (2.233,1) circle (.06) node[right]{$G$};
+\foreach \p in {(0,0),(4.5,.4),(2.2,2.6)}{\filldraw[fill=white] \p circle (.07);}
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Hoành độ của trạm điều phối bằng $-6$. \oDS
+  \y Tổng các toạ độ của trạm điều phối bằng $0$. \oDS
+  \y Trạm điều phối cách trạm $C$ là $\sqrt{13}$ km. \oDS
+  \y Khoảng cách giữa hai trạm $A$ và $B$ bằng $2 \sqrt{10}$ km. \oDS
+\end{dungsai}
+\dapso{$x_G=\dfrac{-5+1-8}{3}=-4$. $G(-4;3;1)$. $GC=2 \sqrt{13}$. $AB=2 \sqrt{10}$. a) Sai: giá trị đúng là $-4$. b) Đúng. c) Sai: giá trị đúng là $2 \sqrt{13}$. d) Đúng.}\end{bai}
+
+\phanbt{Trả lời ngắn}
+\begin{bai}Tính góc (đơn vị độ) giữa hai vectơ $\vec a=(1;1;0)$ và $\vec b=(0;1;1)$.\otraloi\dapso{$60$.}\end{bai}
+\begin{bai}Một radar đặt tại gốc toạ độ có phạm vi theo dõi $30$ km. Một tàu ở vị trí $(25;15;-10)$ (km). Tính khoảng cách từ tàu đến radar (km, làm tròn đến hàng phần mười).\otraloi\dapso{$30{,}8$ km $>30$ km nên radar không phát hiện được.}\end{bai}
+\begin{bai}Cho $A(2;1;-1)$, $B(3;3;1)$, $C(4;0;1)$. Tính số đo góc $\widehat{BAC}$ (đơn vị độ, làm tròn đến hàng đơn vị).\otraloi\dapso{$64$. $\vt{AB}=(1;2;2)$, $\vt{AC}=(2;-1;2)$, $\cos=\frac49$.}\end{bai}
+\begin{bai}Cho $A(1;-2;3)$, $B(5;4;1)$. Điểm $M(a;b;c)$ thuộc mặt phẳng $(Ozx)$ sao cho $MA^2+MB^2$ nhỏ nhất. Tính $a+b+c$.\otraloi\dapso{$5$. Trung điểm $I(3;1;2)$, $M$ là hình chiếu của $I$ lên $(Ozx)$: $M(3;0;2)$.}\end{bai}
+\begin{bai}Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(3;2;0)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(9;3;0)$ (đơn vị: m). Tìm côsin của góc giữa lực $\vec F$ và hướng dịch chuyển (làm tròn kết quả đến hàng phần trăm).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+\otraloi
+\dapso{0,96. $\cos(\vec F,\vec d)=\dfrac{\vec F\cdot\vec d}{|\vec F|\cdot|\vec d|}=\dfrac{11 \sqrt{130}}{130}$. Kết quả: $0{,}96$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt đất là mặt phẳng $(Oxy)$, hai flycam đang bay ở các vị trí $A(-2;-9;18)$ và $B(8;-4;8)$. Tìm khoảng cách giữa hai flycam (đơn vị: $\text{ m}$).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+\otraloi
+\dapso{15. $AB=\sqrt{225}=15$. Kết quả: $15$.}\end{bai}
+\begin{bai}Một cột ăng-ten thẳng đứng cao $6$ m được giữ bởi hai sợi cáp nối từ đỉnh cột $T(0;0;6)$ xuống hai điểm neo $A(4;0;0)$ và $B(0;3;0)$ trên mặt đất (đơn vị: m). Tìm số đo góc $\widehat{ATB}$ (làm tròn đến hàng đơn vị của độ) (đơn vị: $^\circ$).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.224,-0.918) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(3.600,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\draw[line width=2pt,gray] (0.000,0.000)--(0.000,2.800); \fill (0.000,2.800) circle (.05) node[left]{$T$};
+\draw[thick] (0.000,2.800)--(-0.936,-0.702) node[below left]{$A$}; \draw[thick] (0.000,2.800)--(2.800,0.000) node[below right]{$B$};
+\end{tikzpicture}}
+\otraloi
+\dapso{42. $\cos\widehat{ATB}=\dfrac{6 \sqrt{65}}{65}$, $\widehat{ATB}\approx 41{,}9^\circ$. Kết quả: $42$.}\end{bai}
+\phieutln
+
+\phanbt{Tự luận}
+\begin{bai}Cho $A(1;2;0)$, $B(3;0;2)$, $C(0;1;3)$. Chứng minh $A$, $B$, $C$ là ba đỉnh của một tam giác cân; tính chu vi tam giác và $\cos\widehat{BAC}$.
+\dongke{8}
+\dapso{$\vt{AB}=(2;-2;2)$, $\vt{AC}=(-1;-1;3)$ không cùng phương. $AB=2\sqrt3$, $AC=BC=\sqrt{11}$ nên tam giác cân tại $C$. Chu vi $2\sqrt3+2\sqrt{11}$. $\cos\widehat{BAC}=\dfrac{6}{2\sqrt3\cdot\sqrt{11}}=\dfrac{\sqrt{33}}{11}$.}\end{bai}
+\begin{bai}Với ba điểm $A$, $B$, $C$ ở bài trên, tìm toạ độ điểm $D$ để $ABCD$ là hình bình hành và toạ độ tâm của hình bình hành đó.
+\dongke{6}
+\dapso{$\vt{AB}=\vt{DC}\Rightarrow D=C-\vt{AB}=(-2;3;1)$. Tâm là trung điểm $AC$: $\left(\frac12;\frac32;\frac32\right)$.}\end{bai}
+\begin{bai}Một thùng hàng được kéo trên sàn (mặt phẳng $(Oxy)$) bởi một lực không đổi $\vec F=(3;-3;4)$ (đơn vị: N) và dịch chuyển theo vectơ $\vec d=(4;1;0)$ (đơn vị: m). Tìm côsin của góc giữa lực $\vec F$ và hướng dịch chuyển (làm tròn kết quả đến hàng phần trăm).
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[pattern=north east lines] (-.3,-.15) rectangle (5,0); \draw[thick] (-.3,0)--(5,0);
+\filldraw[fill=gray!30] (0,0) rectangle (1.2,.8); \draw[->,very thick] (1.2,.6)--(2.6,1.5) node[above]{$\vec F$};
+\draw[->,thick] (.6,-.45)--(4,-.45) node[below,midway]{$\vec d$ (dịch chuyển)}; \draw (1.7,.6) arc (0:33:.5); \node at (1.95,.75){$\alpha$}; \draw[dashed] (1.2,.6)--(2.3,.6);
+\end{tikzpicture}}
+
+\dongke{6}
+\dapso{$\cos(\vec F,\vec d)=\dfrac{\vec F\cdot\vec d}{|\vec F|\cdot|\vec d|}=\dfrac{9 \sqrt{2}}{34}$. Kết quả: $0{,}37$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt đất là mặt phẳng $(Oxy)$, hai flycam đang bay ở các vị trí $A(4;-8;5)$ và $B(4;3;19)$. Tìm trung điểm $M$ của đoạn $AB$ có cao độ.
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\dongke{6}
+\dapso{$M(4;-\dfrac{5}{2};12)$. Kết quả: $12$.}\end{bai}
+
+\phanbt{Bài tập tự luận rèn luyện}
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(1;2;-1)$, $B(3;0;1)$ và $C(2;-1;3)$.
+\begin{enumerate}[label=\alph*)]
+\item Tìm toạ độ của các vectơ $\overrightarrow{AB}$ và $\overrightarrow{AC}$.
+\item Tính độ dài các đoạn thẳng $AB$ và $AC$.
+\item Tính tích vô hướng $\overrightarrow{AB}\cdot\overrightarrow{AC}$.
+\item Tính côsin của góc $\widehat{BAC}$ và số đo góc đó (làm tròn đến hàng phần mười của độ).
+\item Tìm toạ độ trọng tâm $G$ của tam giác $ABC$.
+\item Tìm toạ độ điểm $D$ sao cho $ABCD$ là hình bình hành.
+\end{enumerate}
+\dapso{a) $(2;-2;2)$, $(1;-3;4)$. b) $AB=2\sqrt3$, $AC=\sqrt{26}$. c) $16$. d) $\cos\widehat{BAC}=\dfrac{16}{2\sqrt3\cdot\sqrt{26}}=\dfrac8{\sqrt{78}}\approx0{,}906$; $\widehat{BAC}\approx25{,}1^\circ$. e) $G\left(2;\dfrac13;1\right)$. f) $\overrightarrow{AD}=\overrightarrow{BC}$: $D(0;1;1)$.}\end{bai}
+
+\begin{bai}Cho hai vectơ $\vec a=(1;-2;2)$ và $\vec b=(3;0;-4)$. Hai vectơ này có độ dài là những số nguyên rất “đẹp”, vì thế em có thể tính nhẩm phần lớn các kết quả.
+\begin{enumerate}[label=\alph*)]
+\item Tính $|\vec a|$ và $|\vec b|$.
+\item Tính $\vec a\cdot\vec b$.
+\item Tính côsin của góc giữa $\vec a$ và $\vec b$; góc này nhọn hay tù?
+\item Tìm toạ độ và độ dài của vectơ $2\vec a-\vec b$.
+\item Tìm toạ độ vectơ $\vec c$ cùng hướng với $\vec a$ và có độ dài bằng $6$.
+\item Hai vectơ $\vec a+\vec b$ và $\vec a-\vec b$ có vuông góc với nhau không? Giải thích bằng cách tính tích vô hướng của chúng.
+\end{enumerate}
+\dapso{a) $3$ và $5$. b) $-5$. c) $\cos=-\dfrac13$: góc tù ($\approx109{,}5^\circ$). d) $(-1;-4;8)$, độ dài $9$. e) $\vec c=2\vec a=(2;-4;4)$. f) $(\vec a+\vec b)\cdot(\vec a-\vec b)=|\vec a|^2-|\vec b|^2=-16\ne0$: không vuông góc.}\end{bai}
+
+\begin{bai}Đội bay biểu diễn của câu lạc bộ thiết bị bay không người lái đặt bộ điều khiển tại gốc $O$ của hệ trục $Oxyz$, mặt phẳng $(Oxy)$ là mặt đất, đơn vị trên các trục là mét. Ở một thời điểm, hai flycam đang ở các vị trí $P(40;30;20)$ và $Q(-10;50;25)$.
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+\begin{enumerate}[label=\alph*)]
+\item Tính khoảng cách từ bộ điều khiển đến flycam $P$ (làm tròn đến hàng phần trăm).
+\item Tính khoảng cách giữa hai flycam (làm tròn đến hàng phần trăm).
+\item Đạo diễn muốn đặt một quả bóng phát sáng ở chính giữa hai flycam. Tìm toạ độ vị trí đó.
+\item Tính góc $\widehat{POQ}$ (làm tròn đến hàng phần mười của độ).
+\item Flycam $P$ bay thẳng đến vị trí của $Q$ hết $10$ giây. Tính tốc độ trung bình của nó (làm tròn đến hàng phần trăm).
+\item Tính khoảng cách giữa hai điểm trên mặt đất nằm ngay dưới hai flycam.
+\end{enumerate}
+\dapso{a) $10\sqrt{29}\approx53{,}85$ m. b) $15\sqrt{13}\approx54{,}08$ m. c) $(15;40;22{,}5)$. d) $\cos=\dfrac{1\,600}{10\sqrt{29}\cdot5\sqrt{129}}\approx0{,}523$; góc $\approx58{,}5^\circ$. e) $\approx5{,}41$ m/s. f) $\sqrt{50^2+20^2}=10\sqrt{29}\approx53{,}85$ m.}\end{bai}
+
+\begin{bai}Bạn Nam kéo một chiếc xe trượt tuyết đồ chơi trên một mặt sân phẳng nằm ngang, coi như mặt phẳng $(Oxy)$ với trục $Oz$ hướng thẳng đứng lên trên. Lực kéo của Nam được biểu diễn bởi vectơ $\vec F=(20;0;15)$ (đơn vị: N), còn xe dịch chuyển theo vectơ $\vec d=(50;0;0)$ (đơn vị: m). Nhớ rằng công của lực bằng tích vô hướng của vectơ lực và vectơ dịch chuyển.
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\fill[gray!15] (-.3,-.2) rectangle (5,0); \draw (-.3,0)--(5,0); \filldraw[fill=gray!40] (0,.1) rectangle (1.3,.5); \draw[thick] (-.1,.05)--(1.4,.05) to[out=0,in=-90] (1.6,.3);
+\draw[->,very thick] (1.4,.4)--(2.8,1.45) node[above]{$\vec F$}; \draw[->] (.6,-.45)--(3.6,-.45) node[midway,below]{$\vec d$};
+\end{tikzpicture}}
+\begin{enumerate}[label=\alph*)]
+\item Tính độ lớn của lực kéo.
+\item Tính quãng đường xe đi được.
+\item Tính công mà lực $\vec F$ sinh ra.
+\item Tính góc giữa lực kéo và mặt sân (làm tròn đến hàng phần mười của độ).
+\item Nếu xe dịch chuyển theo vectơ $\vec d'=(30;40;0)$ thì công của lực $\vec F$ là bao nhiêu?
+\item Hãy chỉ ra một hướng dịch chuyển trên mặt sân mà khi đó lực $\vec F$ không sinh công. Giải thích.
+\end{enumerate}
+\dapso{a) $25$ N. b) $50$ m. c) $1\,000$ J. d) $\cos=\dfrac{20}{25}=0{,}8$: góc $\approx36{,}9^\circ$. e) $600$ J. f) Chẳng hạn hướng $(0;1;0)$: $\vec F\cdot(0;1;0)=0$.}\end{bai}
+
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(1;1;1)$, $B(3;2;3)$ và $C(-1;3;2)$. Khi đọc đề, có bạn cho rằng ba điểm này “chẳng có gì đặc biệt”; em hãy chứng minh điều ngược lại.
+\begin{enumerate}[label=\alph*)]
+\item Tìm toạ độ các vectơ $\overrightarrow{AB}$, $\overrightarrow{AC}$.
+\item Chứng minh tam giác $ABC$ cân tại $A$.
+\item Chứng minh tam giác $ABC$ vuông tại $A$.
+\item Tính độ dài cạnh $BC$.
+\item Tính diện tích tam giác $ABC$.
+\item Tìm toạ độ điểm $D$ để $ABDC$ là hình vuông.
+\end{enumerate}
+\dapso{a) $(2;1;2)$, $(-2;2;1)$. b) $AB=AC=3$. c) $\overrightarrow{AB}\cdot\overrightarrow{AC}=0$. d) $3\sqrt2$. e) $\dfrac92$. f) $D=B+C-A=(1;4;4)$.}\end{bai}

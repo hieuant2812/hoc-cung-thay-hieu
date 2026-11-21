@@ -1,0 +1,742 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=1.8cm,bottom=1.8cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage{tasks}
+\usepackage{tikz}
+\settasks{label=\textbf{\Alph*.},label-width=1.5em,item-indent=2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small Ngân hàng bài tập Toán 9 -- 9H1-C1-B3-D01}
+\cfoot{\small Trang \thepage}
+\newif\ifloigiai
+\loigiaitrue
+\newenvironment{cauhoi}[2]{%
+  \par\medskip\noindent\rule{\textwidth}{0.4pt}\par\nopagebreak
+  \noindent\textbf{[#1]}\hfill{\scriptsize\ttfamily #2}\par\nopagebreak\smallskip}{\par}
+\newcommand{\loigiai}[1]{\ifloigiai\par\smallskip\noindent\textit{Lời giải.} #1\par\fi}
+\newcommand{\dapan}[1]{\ifloigiai\par\smallskip\noindent\textit{Đáp án:} \textbf{#1}\par\fi}
+\begin{document}
+\begin{center}
+{\Large\textbf{NGÂN HÀNG BÀI TẬP TOÁN 9}}\\[3pt]
+\textbf{Chương 1. Phương trình và hệ hai phương trình bậc nhất hai ẩn}\\[2pt]
+\textbf{Bài 3. Giải bài toán bằng cách lập hệ phương trình}\\[2pt]
+\textbf{Dạng D01: Toán chuyển động}\\[2pt]
+\textit{Mã dạng: 9H1-C1-B3-D01 \quad 50 bài tự luận + 50 câu trắc nghiệm \quad (VD: 50)}
+\end{center}
+\textbf{Quy ước mã câu:} \textit{khối, học kì, chương, bài, dạng, loại (TL/TN), mức độ, số thứ tự}.\par Ví dụ: \texttt{9H1-C1-B3-D01-TL-NB-001}.\par Để in bản cho học sinh, đặt \verb|\loigiaifalse| ngay sau \verb|\loigiaitrue|.
+\section*{Phần I. Tự luận}
+\begin{cauhoi}{Bài 1}{9H1-C1-B3-D01-TL-VD-001}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $200$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $20$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=200$, tức là $x+y=100$. Đi cùng chiều: $20(x-y)=200$, tức là $x-y=10$. Giải hệ ta được $x=55$, $y=45$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 45 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 2}{9H1-C1-B3-D01-TL-VD-002}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $560$ km. Nếu hai xe đi ngược chiều thì sau $8$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $8(x+y)=560$, tức là $x+y=70$. Đi cùng chiều: $14(x-y)=560$, tức là $x-y=40$. Giải hệ ta được $x=55$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 3}{9H1-C1-B3-D01-TL-VD-003}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $690$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $46$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=690$, tức là $x+y=115$. Đi cùng chiều: $46(x-y)=690$, tức là $x-y=15$. Giải hệ ta được $x=65$, $y=50$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 50 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 4}{9H1-C1-B3-D01-TL-VD-004}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $510$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $34$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=510$, tức là $x+y=85$. Đi cùng chiều: $34(x-y)=510$, tức là $x-y=15$. Giải hệ ta được $x=50$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 5}{9H1-C1-B3-D01-TL-VD-005}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $225$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=225$, tức là $x+y=75$. Đi cùng chiều: $5(x-y)=225$, tức là $x-y=45$. Giải hệ ta được $x=60$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 6}{9H1-C1-B3-D01-TL-VD-006}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $160$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $4$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=160$, tức là $x+y=80$. Đi cùng chiều: $4(x-y)=160$, tức là $x-y=40$. Giải hệ ta được $x=60$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 7}{9H1-C1-B3-D01-TL-VD-007}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $100$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=100$, tức là $x+y=50$. Đi cùng chiều: $10(x-y)=100$, tức là $x-y=10$. Giải hệ ta được $x=30$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 30 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 8}{9H1-C1-B3-D01-TL-VD-008}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $50$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=50$, tức là $x+y=50$. Đi cùng chiều: $5(x-y)=50$, tức là $x-y=10$. Giải hệ ta được $x=30$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 30 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 9}{9H1-C1-B3-D01-TL-VD-009}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $285$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $19$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=285$, tức là $x+y=95$. Đi cùng chiều: $19(x-y)=285$, tức là $x-y=15$. Giải hệ ta được $x=55$, $y=40$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 40 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 10}{9H1-C1-B3-D01-TL-VD-010}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $160$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=160$, tức là $x+y=80$. Đi cùng chiều: $8(x-y)=160$, tức là $x-y=20$. Giải hệ ta được $x=50$, $y=30$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 30 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 11}{9H1-C1-B3-D01-TL-VD-011}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $455$ km. Nếu hai xe đi ngược chiều thì sau $7$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $7(x+y)=455$, tức là $x+y=65$. Đi cùng chiều: $13(x-y)=455$, tức là $x-y=35$. Giải hệ ta được $x=50$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 12}{9H1-C1-B3-D01-TL-VD-012}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $45$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $3$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=45$, tức là $x+y=45$. Đi cùng chiều: $3(x-y)=45$, tức là $x-y=15$. Giải hệ ta được $x=30$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 30 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 13}{9H1-C1-B3-D01-TL-VD-013}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $150$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=150$, tức là $x+y=75$. Đi cùng chiều: $10(x-y)=150$, tức là $x-y=15$. Giải hệ ta được $x=45$, $y=30$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 30 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 14}{9H1-C1-B3-D01-TL-VD-014}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $60$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $2$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=60$, tức là $x+y=60$. Đi cùng chiều: $2(x-y)=60$, tức là $x-y=30$. Giải hệ ta được $x=45$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 15}{9H1-C1-B3-D01-TL-VD-015}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $90$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $9$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=90$, tức là $x+y=90$. Đi cùng chiều: $9(x-y)=90$, tức là $x-y=10$. Giải hệ ta được $x=50$, $y=40$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 40 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 16}{9H1-C1-B3-D01-TL-VD-016}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $80$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=80$, tức là $x+y=80$. Đi cùng chiều: $8(x-y)=80$, tức là $x-y=10$. Giải hệ ta được $x=45$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 17}{9H1-C1-B3-D01-TL-VD-017}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $75$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=75$, tức là $x+y=75$. Đi cùng chiều: $5(x-y)=75$, tức là $x-y=15$. Giải hệ ta được $x=45$, $y=30$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 30 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 18}{9H1-C1-B3-D01-TL-VD-018}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $280$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $4(x+y)=280$, tức là $x+y=70$. Đi cùng chiều: $14(x-y)=280$, tức là $x-y=20$. Giải hệ ta được $x=45$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 19}{9H1-C1-B3-D01-TL-VD-019}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $330$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=330$, tức là $x+y=110$. Đi cùng chiều: $11(x-y)=330$, tức là $x-y=30$. Giải hệ ta được $x=70$, $y=40$ (thoả mãn). Vậy vận tốc xe từ A là 70 km/h, xe từ B là 40 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 20}{9H1-C1-B3-D01-TL-VD-020}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $600$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $20$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=600$, tức là $x+y=100$. Đi cùng chiều: $20(x-y)=600$, tức là $x-y=30$. Giải hệ ta được $x=65$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 21}{9H1-C1-B3-D01-TL-VD-021}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=120$, tức là $x+y=60$. Đi cùng chiều: $6(x-y)=120$, tức là $x-y=20$. Giải hệ ta được $x=40$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 22}{9H1-C1-B3-D01-TL-VD-022}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=120$, tức là $x+y=60$. Đi cùng chiều: $12(x-y)=120$, tức là $x-y=10$. Giải hệ ta được $x=35$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 35 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 23}{9H1-C1-B3-D01-TL-VD-023}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $480$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $16$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=480$, tức là $x+y=80$. Đi cùng chiều: $16(x-y)=480$, tức là $x-y=30$. Giải hệ ta được $x=55$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 24}{9H1-C1-B3-D01-TL-VD-024}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $180$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $9$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=180$, tức là $x+y=90$. Đi cùng chiều: $9(x-y)=180$, tức là $x-y=20$. Giải hệ ta được $x=55$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 25}{9H1-C1-B3-D01-TL-VD-025}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $195$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=195$, tức là $x+y=65$. Đi cùng chiều: $13(x-y)=195$, tức là $x-y=15$. Giải hệ ta được $x=40$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 26}{9H1-C1-B3-D01-TL-VD-026}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $60$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $3$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=60$, tức là $x+y=60$. Đi cùng chiều: $3(x-y)=60$, tức là $x-y=20$. Giải hệ ta được $x=40$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 27}{9H1-C1-B3-D01-TL-VD-027}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $280$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $7$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $4(x+y)=280$, tức là $x+y=70$. Đi cùng chiều: $7(x-y)=280$, tức là $x-y=40$. Giải hệ ta được $x=55$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 28}{9H1-C1-B3-D01-TL-VD-028}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $450$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=450$, tức là $x+y=75$. Đi cùng chiều: $10(x-y)=450$, tức là $x-y=45$. Giải hệ ta được $x=60$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 29}{9H1-C1-B3-D01-TL-VD-029}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=240$, tức là $x+y=80$. Đi cùng chiều: $8(x-y)=240$, tức là $x-y=30$. Giải hệ ta được $x=55$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 30}{9H1-C1-B3-D01-TL-VD-030}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $390$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $26$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $6(x+y)=390$, tức là $x+y=65$. Đi cùng chiều: $26(x-y)=390$, tức là $x-y=15$. Giải hệ ta được $x=40$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 31}{9H1-C1-B3-D01-TL-VD-031}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $360$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $18$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $4(x+y)=360$, tức là $x+y=90$. Đi cùng chiều: $18(x-y)=360$, tức là $x-y=20$. Giải hệ ta được $x=55$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 55 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 32}{9H1-C1-B3-D01-TL-VD-032}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $180$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=180$, tức là $x+y=90$. Đi cùng chiều: $6(x-y)=180$, tức là $x-y=30$. Giải hệ ta được $x=60$, $y=30$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 30 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 33}{9H1-C1-B3-D01-TL-VD-033}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $440$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $22$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $4(x+y)=440$, tức là $x+y=110$. Đi cùng chiều: $22(x-y)=440$, tức là $x-y=20$. Giải hệ ta được $x=65$, $y=45$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 45 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 34}{9H1-C1-B3-D01-TL-VD-034}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=120$, tức là $x+y=120$. Đi cùng chiều: $6(x-y)=120$, tức là $x-y=20$. Giải hệ ta được $x=70$, $y=50$ (thoả mãn). Vậy vận tốc xe từ A là 70 km/h, xe từ B là 50 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 35}{9H1-C1-B3-D01-TL-VD-035}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $150$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=150$, tức là $x+y=75$. Đi cùng chiều: $6(x-y)=150$, tức là $x-y=25$. Giải hệ ta được $x=50$, $y=25$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 25 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 36}{9H1-C1-B3-D01-TL-VD-036}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $90$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=90$, tức là $x+y=45$. Đi cùng chiều: $6(x-y)=90$, tức là $x-y=15$. Giải hệ ta được $x=30$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 30 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 37}{9H1-C1-B3-D01-TL-VD-037}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $4$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=120$, tức là $x+y=60$. Đi cùng chiều: $4(x-y)=120$, tức là $x-y=30$. Giải hệ ta được $x=45$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 45 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 38}{9H1-C1-B3-D01-TL-VD-038}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $140$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=140$, tức là $x+y=70$. Đi cùng chiều: $14(x-y)=140$, tức là $x-y=10$. Giải hệ ta được $x=40$, $y=30$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 30 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 39}{9H1-C1-B3-D01-TL-VD-039}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $24$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=240$, tức là $x+y=120$. Đi cùng chiều: $24(x-y)=240$, tức là $x-y=10$. Giải hệ ta được $x=65$, $y=55$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 55 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 40}{9H1-C1-B3-D01-TL-VD-040}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $200$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $4(x+y)=200$, tức là $x+y=50$. Đi cùng chiều: $10(x-y)=200$, tức là $x-y=20$. Giải hệ ta được $x=35$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 35 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 41}{9H1-C1-B3-D01-TL-VD-041}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $210$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $7$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $3(x+y)=210$, tức là $x+y=70$. Đi cùng chiều: $7(x-y)=210$, tức là $x-y=30$. Giải hệ ta được $x=50$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 50 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 42}{9H1-C1-B3-D01-TL-VD-042}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=240$, tức là $x+y=120$. Đi cùng chiều: $12(x-y)=240$, tức là $x-y=20$. Giải hệ ta được $x=70$, $y=50$ (thoả mãn). Vậy vận tốc xe từ A là 70 km/h, xe từ B là 50 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 43}{9H1-C1-B3-D01-TL-VD-043}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $525$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $21$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $5(x+y)=525$, tức là $x+y=105$. Đi cùng chiều: $21(x-y)=525$, tức là $x-y=25$. Giải hệ ta được $x=65$, $y=40$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 40 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 44}{9H1-C1-B3-D01-TL-VD-044}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=120$, tức là $x+y=120$. Đi cùng chiều: $12(x-y)=120$, tức là $x-y=10$. Giải hệ ta được $x=65$, $y=55$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 55 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 45}{9H1-C1-B3-D01-TL-VD-045}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $275$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $5(x+y)=275$, tức là $x+y=55$. Đi cùng chiều: $11(x-y)=275$, tức là $x-y=25$. Giải hệ ta được $x=40$, $y=15$ (thoả mãn). Vậy vận tốc xe từ A là 40 km/h, xe từ B là 15 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 46}{9H1-C1-B3-D01-TL-VD-046}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $130$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=130$, tức là $x+y=130$. Đi cùng chiều: $13(x-y)=130$, tức là $x-y=10$. Giải hệ ta được $x=70$, $y=60$ (thoả mãn). Vậy vận tốc xe từ A là 70 km/h, xe từ B là 60 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 47}{9H1-C1-B3-D01-TL-VD-047}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $260$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $26$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=260$, tức là $x+y=130$. Đi cùng chiều: $26(x-y)=260$, tức là $x-y=10$. Giải hệ ta được $x=70$, $y=60$ (thoả mãn). Vậy vận tốc xe từ A là 70 km/h, xe từ B là 60 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 48}{9H1-C1-B3-D01-TL-VD-048}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $80$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $2$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $(x+y)=80$, tức là $x+y=80$. Đi cùng chiều: $2(x-y)=80$, tức là $x-y=40$. Giải hệ ta được $x=60$, $y=20$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 20 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 49}{9H1-C1-B3-D01-TL-VD-049}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $220$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $2(x+y)=220$, tức là $x+y=110$. Đi cùng chiều: $11(x-y)=220$, tức là $x-y=20$. Giải hệ ta được $x=65$, $y=45$ (thoả mãn). Vậy vận tốc xe từ A là 65 km/h, xe từ B là 45 km/h.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 50}{9H1-C1-B3-D01-TL-VD-050}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $475$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $19$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\loigiai{Gọi vận tốc xe từ A là $x$ (km/h) và xe từ B là $y$ (km/h), $x>y>0$. Đi ngược chiều: $5(x+y)=475$, tức là $x+y=95$. Đi cùng chiều: $19(x-y)=475$, tức là $x-y=25$. Giải hệ ta được $x=60$, $y=35$ (thoả mãn). Vậy vận tốc xe từ A là 60 km/h, xe từ B là 35 km/h.}
+\end{cauhoi}
+\clearpage\section*{Phần II. Trắc nghiệm}
+\begin{cauhoi}{Câu 1}{9H1-C1-B3-D01-TN-VD-001}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $200$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $20$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 40\ \text{km/h}$
+\task $50\ \text{km/h};\ 50\ \text{km/h}$
+\task $55\ \text{km/h};\ 45\ \text{km/h}$
+\task $45\ \text{km/h};\ 55\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 2}{9H1-C1-B3-D01-TN-VD-002}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $560$ km. Nếu hai xe đi ngược chiều thì sau $8$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 20\ \text{km/h}$
+\task $15\ \text{km/h};\ 55\ \text{km/h}$
+\task $55\ \text{km/h};\ 15\ \text{km/h}$
+\task $60\ \text{km/h};\ 10\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 3}{9H1-C1-B3-D01-TN-VD-003}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $690$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $46$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 65\ \text{km/h}$
+\task $65\ \text{km/h};\ 50\ \text{km/h}$
+\task $60\ \text{km/h};\ 55\ \text{km/h}$
+\task $70\ \text{km/h};\ 45\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 4}{9H1-C1-B3-D01-TN-VD-004}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $510$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $34$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $35\ \text{km/h};\ 50\ \text{km/h}$
+\task $45\ \text{km/h};\ 40\ \text{km/h}$
+\task $50\ \text{km/h};\ 35\ \text{km/h}$
+\task $55\ \text{km/h};\ 30\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 5}{9H1-C1-B3-D01-TN-VD-005}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $225$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $55\ \text{km/h};\ 20\ \text{km/h}$
+\task $15\ \text{km/h};\ 60\ \text{km/h}$
+\task $65\ \text{km/h};\ 10\ \text{km/h}$
+\task $60\ \text{km/h};\ 15\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 6}{9H1-C1-B3-D01-TN-VD-006}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $160$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $4$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 20\ \text{km/h}$
+\task $20\ \text{km/h};\ 60\ \text{km/h}$
+\task $55\ \text{km/h};\ 25\ \text{km/h}$
+\task $65\ \text{km/h};\ 15\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 7}{9H1-C1-B3-D01-TN-VD-007}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $100$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $35\ \text{km/h};\ 15\ \text{km/h}$
+\task $20\ \text{km/h};\ 30\ \text{km/h}$
+\task $30\ \text{km/h};\ 20\ \text{km/h}$
+\task $25\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 8}{9H1-C1-B3-D01-TN-VD-008}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $50$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $35\ \text{km/h};\ 15\ \text{km/h}$
+\task $25\ \text{km/h};\ 25\ \text{km/h}$
+\task $20\ \text{km/h};\ 30\ \text{km/h}$
+\task $30\ \text{km/h};\ 20\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 9}{9H1-C1-B3-D01-TN-VD-009}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $285$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $19$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 35\ \text{km/h}$
+\task $40\ \text{km/h};\ 55\ \text{km/h}$
+\task $55\ \text{km/h};\ 40\ \text{km/h}$
+\task $50\ \text{km/h};\ 45\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 10}{9H1-C1-B3-D01-TN-VD-010}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $160$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $30\ \text{km/h};\ 50\ \text{km/h}$
+\task $45\ \text{km/h};\ 35\ \text{km/h}$
+\task $50\ \text{km/h};\ 30\ \text{km/h}$
+\task $55\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 11}{9H1-C1-B3-D01-TN-VD-011}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $455$ km. Nếu hai xe đi ngược chiều thì sau $7$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 15\ \text{km/h}$
+\task $55\ \text{km/h};\ 10\ \text{km/h}$
+\task $45\ \text{km/h};\ 20\ \text{km/h}$
+\task $15\ \text{km/h};\ 50\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 12}{9H1-C1-B3-D01-TN-VD-012}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $45$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $3$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $15\ \text{km/h};\ 30\ \text{km/h}$
+\task $25\ \text{km/h};\ 20\ \text{km/h}$
+\task $30\ \text{km/h};\ 15\ \text{km/h}$
+\task $35\ \text{km/h};\ 10\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 13}{9H1-C1-B3-D01-TN-VD-013}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $150$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 25\ \text{km/h}$
+\task $30\ \text{km/h};\ 45\ \text{km/h}$
+\task $40\ \text{km/h};\ 35\ \text{km/h}$
+\task $45\ \text{km/h};\ 30\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 14}{9H1-C1-B3-D01-TN-VD-014}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $60$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $2$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $45\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 45\ \text{km/h}$
+\task $50\ \text{km/h};\ 10\ \text{km/h}$
+\task $40\ \text{km/h};\ 20\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 15}{9H1-C1-B3-D01-TN-VD-015}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $90$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $9$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 50\ \text{km/h}$
+\task $55\ \text{km/h};\ 35\ \text{km/h}$
+\task $50\ \text{km/h};\ 40\ \text{km/h}$
+\task $45\ \text{km/h};\ 45\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 16}{9H1-C1-B3-D01-TN-VD-016}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $80$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $35\ \text{km/h};\ 45\ \text{km/h}$
+\task $50\ \text{km/h};\ 30\ \text{km/h}$
+\task $40\ \text{km/h};\ 40\ \text{km/h}$
+\task $45\ \text{km/h};\ 35\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 17}{9H1-C1-B3-D01-TN-VD-017}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $75$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $5$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $30\ \text{km/h};\ 45\ \text{km/h}$
+\task $40\ \text{km/h};\ 35\ \text{km/h}$
+\task $45\ \text{km/h};\ 30\ \text{km/h}$
+\task $50\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 18}{9H1-C1-B3-D01-TN-VD-018}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $280$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 30\ \text{km/h}$
+\task $45\ \text{km/h};\ 25\ \text{km/h}$
+\task $50\ \text{km/h};\ 20\ \text{km/h}$
+\task $25\ \text{km/h};\ 45\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 19}{9H1-C1-B3-D01-TN-VD-019}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $330$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $65\ \text{km/h};\ 45\ \text{km/h}$
+\task $75\ \text{km/h};\ 35\ \text{km/h}$
+\task $70\ \text{km/h};\ 40\ \text{km/h}$
+\task $40\ \text{km/h};\ 70\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 20}{9H1-C1-B3-D01-TN-VD-020}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $600$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $20$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 40\ \text{km/h}$
+\task $70\ \text{km/h};\ 30\ \text{km/h}$
+\task $35\ \text{km/h};\ 65\ \text{km/h}$
+\task $65\ \text{km/h};\ 35\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 21}{9H1-C1-B3-D01-TN-VD-021}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $20\ \text{km/h};\ 40\ \text{km/h}$
+\task $40\ \text{km/h};\ 20\ \text{km/h}$
+\task $45\ \text{km/h};\ 15\ \text{km/h}$
+\task $35\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 22}{9H1-C1-B3-D01-TN-VD-022}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 20\ \text{km/h}$
+\task $30\ \text{km/h};\ 30\ \text{km/h}$
+\task $35\ \text{km/h};\ 25\ \text{km/h}$
+\task $25\ \text{km/h};\ 35\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 23}{9H1-C1-B3-D01-TN-VD-023}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $480$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $16$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 20\ \text{km/h}$
+\task $50\ \text{km/h};\ 30\ \text{km/h}$
+\task $25\ \text{km/h};\ 55\ \text{km/h}$
+\task $55\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 24}{9H1-C1-B3-D01-TN-VD-024}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $180$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $9$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 30\ \text{km/h}$
+\task $50\ \text{km/h};\ 40\ \text{km/h}$
+\task $55\ \text{km/h};\ 35\ \text{km/h}$
+\task $35\ \text{km/h};\ 55\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 25}{9H1-C1-B3-D01-TN-VD-025}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $195$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $45\ \text{km/h};\ 20\ \text{km/h}$
+\task $35\ \text{km/h};\ 30\ \text{km/h}$
+\task $40\ \text{km/h};\ 25\ \text{km/h}$
+\task $25\ \text{km/h};\ 40\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 26}{9H1-C1-B3-D01-TN-VD-026}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $60$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $3$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $20\ \text{km/h};\ 40\ \text{km/h}$
+\task $35\ \text{km/h};\ 25\ \text{km/h}$
+\task $40\ \text{km/h};\ 20\ \text{km/h}$
+\task $45\ \text{km/h};\ 15\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 27}{9H1-C1-B3-D01-TN-VD-027}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $280$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $7$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 20\ \text{km/h}$
+\task $55\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 55\ \text{km/h}$
+\task $60\ \text{km/h};\ 10\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 28}{9H1-C1-B3-D01-TN-VD-028}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $450$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 60\ \text{km/h}$
+\task $55\ \text{km/h};\ 20\ \text{km/h}$
+\task $65\ \text{km/h};\ 10\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 29}{9H1-C1-B3-D01-TN-VD-029}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $8$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $25\ \text{km/h};\ 55\ \text{km/h}$
+\task $50\ \text{km/h};\ 30\ \text{km/h}$
+\task $60\ \text{km/h};\ 20\ \text{km/h}$
+\task $55\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 30}{9H1-C1-B3-D01-TN-VD-030}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $390$ km. Nếu hai xe đi ngược chiều thì sau $6$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $26$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 25\ \text{km/h}$
+\task $45\ \text{km/h};\ 20\ \text{km/h}$
+\task $35\ \text{km/h};\ 30\ \text{km/h}$
+\task $25\ \text{km/h};\ 40\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 31}{9H1-C1-B3-D01-TN-VD-031}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $360$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $18$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $50\ \text{km/h};\ 40\ \text{km/h}$
+\task $60\ \text{km/h};\ 30\ \text{km/h}$
+\task $55\ \text{km/h};\ 35\ \text{km/h}$
+\task $35\ \text{km/h};\ 55\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 32}{9H1-C1-B3-D01-TN-VD-032}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $180$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $55\ \text{km/h};\ 35\ \text{km/h}$
+\task $30\ \text{km/h};\ 60\ \text{km/h}$
+\task $65\ \text{km/h};\ 25\ \text{km/h}$
+\task $60\ \text{km/h};\ 30\ \text{km/h}$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 33}{9H1-C1-B3-D01-TN-VD-033}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $440$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $22$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $45\ \text{km/h};\ 65\ \text{km/h}$
+\task $70\ \text{km/h};\ 40\ \text{km/h}$
+\task $65\ \text{km/h};\ 45\ \text{km/h}$
+\task $60\ \text{km/h};\ 50\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 34}{9H1-C1-B3-D01-TN-VD-034}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $75\ \text{km/h};\ 45\ \text{km/h}$
+\task $70\ \text{km/h};\ 50\ \text{km/h}$
+\task $65\ \text{km/h};\ 55\ \text{km/h}$
+\task $50\ \text{km/h};\ 70\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 35}{9H1-C1-B3-D01-TN-VD-035}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $150$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $55\ \text{km/h};\ 20\ \text{km/h}$
+\task $50\ \text{km/h};\ 25\ \text{km/h}$
+\task $45\ \text{km/h};\ 30\ \text{km/h}$
+\task $25\ \text{km/h};\ 50\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 36}{9H1-C1-B3-D01-TN-VD-036}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $90$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $6$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $30\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 30\ \text{km/h}$
+\task $25\ \text{km/h};\ 20\ \text{km/h}$
+\task $35\ \text{km/h};\ 10\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 37}{9H1-C1-B3-D01-TN-VD-037}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $4$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $45\ \text{km/h};\ 15\ \text{km/h}$
+\task $50\ \text{km/h};\ 10\ \text{km/h}$
+\task $15\ \text{km/h};\ 45\ \text{km/h}$
+\task $40\ \text{km/h};\ 20\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 38}{9H1-C1-B3-D01-TN-VD-038}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $140$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $14$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $30\ \text{km/h};\ 40\ \text{km/h}$
+\task $40\ \text{km/h};\ 30\ \text{km/h}$
+\task $35\ \text{km/h};\ 35\ \text{km/h}$
+\task $45\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 39}{9H1-C1-B3-D01-TN-VD-039}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $24$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $65\ \text{km/h};\ 55\ \text{km/h}$
+\task $55\ \text{km/h};\ 65\ \text{km/h}$
+\task $70\ \text{km/h};\ 50\ \text{km/h}$
+\task $60\ \text{km/h};\ 60\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 40}{9H1-C1-B3-D01-TN-VD-040}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $200$ km. Nếu hai xe đi ngược chiều thì sau $4$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $10$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 10\ \text{km/h}$
+\task $30\ \text{km/h};\ 20\ \text{km/h}$
+\task $35\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 35\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 41}{9H1-C1-B3-D01-TN-VD-041}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $210$ km. Nếu hai xe đi ngược chiều thì sau $3$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $7$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $55\ \text{km/h};\ 15\ \text{km/h}$
+\task $50\ \text{km/h};\ 20\ \text{km/h}$
+\task $20\ \text{km/h};\ 50\ \text{km/h}$
+\task $45\ \text{km/h};\ 25\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 42}{9H1-C1-B3-D01-TN-VD-042}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $240$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $70\ \text{km/h};\ 50\ \text{km/h}$
+\task $65\ \text{km/h};\ 55\ \text{km/h}$
+\task $50\ \text{km/h};\ 70\ \text{km/h}$
+\task $75\ \text{km/h};\ 45\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 43}{9H1-C1-B3-D01-TN-VD-043}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $525$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $21$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $40\ \text{km/h};\ 65\ \text{km/h}$
+\task $60\ \text{km/h};\ 45\ \text{km/h}$
+\task $65\ \text{km/h};\ 40\ \text{km/h}$
+\task $70\ \text{km/h};\ 35\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 44}{9H1-C1-B3-D01-TN-VD-044}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $120$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $12$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $55\ \text{km/h};\ 65\ \text{km/h}$
+\task $65\ \text{km/h};\ 55\ \text{km/h}$
+\task $60\ \text{km/h};\ 60\ \text{km/h}$
+\task $70\ \text{km/h};\ 50\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 45}{9H1-C1-B3-D01-TN-VD-045}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $275$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $45\ \text{km/h};\ 10\ \text{km/h}$
+\task $35\ \text{km/h};\ 20\ \text{km/h}$
+\task $40\ \text{km/h};\ 15\ \text{km/h}$
+\task $15\ \text{km/h};\ 40\ \text{km/h}$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 46}{9H1-C1-B3-D01-TN-VD-046}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $130$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $13$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $65\ \text{km/h};\ 65\ \text{km/h}$
+\task $70\ \text{km/h};\ 60\ \text{km/h}$
+\task $75\ \text{km/h};\ 55\ \text{km/h}$
+\task $60\ \text{km/h};\ 70\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 47}{9H1-C1-B3-D01-TN-VD-047}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $260$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $26$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $70\ \text{km/h};\ 60\ \text{km/h}$
+\task $60\ \text{km/h};\ 70\ \text{km/h}$
+\task $75\ \text{km/h};\ 55\ \text{km/h}$
+\task $65\ \text{km/h};\ 65\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 48}{9H1-C1-B3-D01-TN-VD-048}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $80$ km. Nếu hai xe đi ngược chiều thì sau $1$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $2$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $65\ \text{km/h};\ 15\ \text{km/h}$
+\task $60\ \text{km/h};\ 20\ \text{km/h}$
+\task $55\ \text{km/h};\ 25\ \text{km/h}$
+\task $20\ \text{km/h};\ 60\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 49}{9H1-C1-B3-D01-TN-VD-049}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $220$ km. Nếu hai xe đi ngược chiều thì sau $2$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $11$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $70\ \text{km/h};\ 40\ \text{km/h}$
+\task $65\ \text{km/h};\ 45\ \text{km/h}$
+\task $60\ \text{km/h};\ 50\ \text{km/h}$
+\task $45\ \text{km/h};\ 65\ \text{km/h}$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 50}{9H1-C1-B3-D01-TN-VD-050}
+Hai xe máy xuất phát cùng lúc từ hai địa điểm A và B cách nhau $475$ km. Nếu hai xe đi ngược chiều thì sau $5$ giờ gặp nhau; nếu hai xe đi cùng chiều (xe từ A đuổi theo xe từ B) thì sau $19$ giờ xe từ A đuổi kịp xe từ B. Tính vận tốc mỗi xe.
+\begin{tasks}(2)
+\task $60\ \text{km/h};\ 35\ \text{km/h}$
+\task $65\ \text{km/h};\ 30\ \text{km/h}$
+\task $55\ \text{km/h};\ 40\ \text{km/h}$
+\task $35\ \text{km/h};\ 60\ \text{km/h}$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\clearpage\section*{Bảng đáp án trắc nghiệm}
+\begin{center}\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+1. C & 2. C & 3. B & 4. C & 5. D & 6. A & 7. C & 8. D & 9. C & 10. C\\\hline
+11. A & 12. C & 13. D & 14. A & 15. C & 16. D & 17. C & 18. B & 19. C & 20. D\\\hline
+21. B & 22. C & 23. D & 24. C & 25. C & 26. C & 27. B & 28. A & 29. D & 30. A\\\hline
+31. C & 32. D & 33. C & 34. B & 35. B & 36. A & 37. A & 38. B & 39. A & 40. C\\\hline
+41. B & 42. A & 43. C & 44. B & 45. C & 46. B & 47. A & 48. B & 49. B & 50. A\\\hline
+\end{tabular}\end{center}
+\end{document}

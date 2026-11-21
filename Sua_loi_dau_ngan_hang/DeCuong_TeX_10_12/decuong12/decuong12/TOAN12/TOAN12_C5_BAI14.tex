@@ -1,0 +1,582 @@
+%% ==================================================================
+%% TOAN12_C5_BAI14.tex -- Toán 12, Chương V, Bài 14
+%% Cấu trúc: Lí thuyết trọng tâm -> Ví dụ minh hoạ (chừa chỗ trống) -> Bài tập luyện tập
+%% ==================================================================
+\baihoc{14}{Phương trình mặt phẳng}
+
+\lithuyet
+
+\begin{dinhnghia}[Vectơ pháp tuyến của mặt phẳng]
+\begin{minipage}[c]{.62\linewidth}
+Vectơ $\vec n\ne\vec0$ được gọi là \textbf{vectơ pháp tuyến} của mặt phẳng $(\alpha)$ nếu giá của $\vec n$ vuông góc với $(\alpha)$.
+
+\smallskip\textbf{\color{dcnhan}Chú ý.}
+\begin{itemize}
+  \item Mặt phẳng hoàn toàn xác định khi biết một điểm và một vectơ pháp tuyến của nó.
+  \item Nếu $\vec n$ là một vectơ pháp tuyến của mặt phẳng $(\alpha)$ thì $k\vec n$ (với $k$ là một số khác $0$) cũng là một vectơ pháp tuyến của $(\alpha)$.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[c]{.35\linewidth}\centering
+\begin{tikzpicture}[scale=.9,font=\small]
+  \fill[dcnen,draw=dcdam,line width=.7pt] (0,0)--(3.2,0)--(4,1.2)--(.8,1.2)--cycle;
+  \node at (.55,.25){$(\alpha)$};
+  \draw[vecto,dcnhan] (2,.6)--(2,2.2) node[right]{$\vec n$};
+  \fill[dcdam] (2,.6) circle (1.3pt);
+  \draw[dcdam] (2,.78)--(2.18,.78)--(2.18,.6);
+\end{tikzpicture}
+\end{minipage}
+\end{dinhnghia}
+
+\begin{dinhnghia}[Tích có hướng của hai vectơ]
+\begin{minipage}[c]{.62\linewidth}
+Trong không gian $Oxyz$, cho hai vectơ $\vec u=(a;b;c)$ và $\vec v=(a';b';c')$. Khi đó vectơ
+\[\vec n=(bc'-b'c;\ ca'-c'a;\ ab'-a'b)\]
+vuông góc với cả hai vectơ $\vec u$ và $\vec v$, được gọi là \textbf{tích có hướng} của $\vec u$ và $\vec v$, kí hiệu là $[\vec u,\vec v]$.
+\end{minipage}\hfill
+\begin{minipage}[c]{.35\linewidth}\centering
+\begin{tikzpicture}[scale=.9,font=\small]
+  \draw[vecto,dcchinh] (0,0)--(-1,-.8) node[left]{$\vec u$};
+  \draw[vecto,dcchinh] (0,0)--(1.6,0) node[right]{$\vec v$};
+  \draw[vecto,dcnhan] (0,0)--(0,1.6) node[above]{$[\vec u,\vec v]$};
+\end{tikzpicture}
+\end{minipage}
+\end{dinhnghia}
+
+\begin{chuy}
+\begin{itemize}
+  \item $[\vec u,\vec v]=\vec0$ khi và chỉ khi $\vec u$, $\vec v$ cùng phương.
+  \item Với bốn số $x,y,x',y'$, ta kí hiệu $\begin{vmatrix}x&y\\x'&y'\end{vmatrix}=xy'-x'y$. Khi đó tích có hướng của $\vec u=(a;b;c)$ và $\vec v=(a';b';c')$ là
+  \[[\vec u,\vec v]=\left(\begin{vmatrix}b&c\\b'&c'\end{vmatrix};\ \begin{vmatrix}c&a\\c'&a'\end{vmatrix};\ \begin{vmatrix}a&b\\a'&b'\end{vmatrix}\right).\]
+\end{itemize}
+\end{chuy}
+
+\begin{dinhnghia}[Cặp vectơ chỉ phương của mặt phẳng]
+\begin{itemize}
+  \item Trong không gian $Oxyz$, hai vectơ $\vec u$, $\vec v$ được gọi là \textbf{cặp vectơ chỉ phương} của mặt phẳng $(P)$ nếu chúng không cùng phương và có giá nằm trong hoặc song song với mặt phẳng $(P)$.
+  \item Nếu $\vec u$, $\vec v$ là cặp vectơ chỉ phương của $(P)$ thì $[\vec u,\vec v]$ là một vectơ pháp tuyến của $(P)$.
+\end{itemize}
+\end{dinhnghia}
+
+\begin{dinhnghia}[Phương trình tổng quát của mặt phẳng]
+Trong không gian $Oxyz$, mỗi mặt phẳng đều có phương trình dạng $Ax+By+Cz+D=0$, trong đó $A$, $B$, $C$ không đồng thời bằng $0$, được gọi là \textbf{phương trình tổng quát} của mặt phẳng đó.
+
+\smallskip\textbf{\color{dcnhan}Chú ý.} Trong không gian $Oxyz$, mỗi phương trình $Ax+By+Cz+D=0$ (các hệ số $A$, $B$, $C$ không đồng thời bằng $0$) xác định một mặt phẳng nhận $\vec n=(A;B;C)$ làm một vectơ pháp tuyến.
+\end{dinhnghia}
+
+\begin{congthuc}[Lập phương trình tổng quát của mặt phẳng]
+\begin{itemize}
+  \item \textbf{Đi qua một điểm và biết vectơ pháp tuyến.} Nếu mặt phẳng $(\alpha)$ đi qua điểm $M_0(x_0;y_0;z_0)$ và có vectơ pháp tuyến $\vec n=(A;B;C)$ thì có phương trình là:
+  \[A(x-x_0)+B(y-y_0)+C(z-z_0)=0\Leftrightarrow Ax+By+Cz+D=0,\ \text{với } D=-(Ax_0+By_0+Cz_0).\]
+  \item \textbf{Đi qua điểm $M$ và biết cặp vectơ chỉ phương $\vec u$, $\vec v$:} tìm vectơ pháp tuyến $\vec n=[\vec u,\vec v]$, rồi lập phương trình tổng quát của mặt phẳng đi qua $M$ và có vectơ pháp tuyến $\vec n$.
+  \item \textbf{Đi qua ba điểm không thẳng hàng $A$, $B$, $C$:} tìm cặp vectơ chỉ phương $\vt{AB}$, $\vt{AC}$; tìm vectơ pháp tuyến $\vec n=\big[\vt{AB},\vt{AC}\big]$; lập phương trình tổng quát của mặt phẳng đi qua $A$ và có vectơ pháp tuyến $\vec n$.
+\end{itemize}
+\end{congthuc}
+
+\begin{kienthuc}[Phương trình mặt phẳng theo đoạn chắn]
+\begin{minipage}[c]{.6\linewidth}
+Mặt phẳng $(\alpha)$ không đi qua gốc toạ độ và cắt ba trục $Ox$, $Oy$, $Oz$ tương ứng tại các điểm $A(a;0;0)$, $B(0;b;0)$, $C(0;0;c)$ ($a,b,c\ne0$) có phương trình
+\[\frac xa+\frac yb+\frac zc=1.\]
+\end{minipage}\hfill
+\begin{minipage}[c]{.37\linewidth}\centering
+\begin{tikzpicture}[scale=.85,font=\scriptsize,x={(-0.5cm,-0.45cm)},y={(1cm,0cm)},z={(0cm,1cm)}]
+  \fill[dcchinh!15] (2.2,0,0)--(0,2.4,0)--(0,0,2)--cycle;
+  \draw[truc] (0,0,0)--(3,0,0) node[below left]{$x$}; \draw[truc] (0,0,0)--(0,3.2,0) node[right]{$y$}; \draw[truc] (0,0,0)--(0,0,2.6) node[above]{$z$};
+  \draw[dcdam,line width=.8pt] (2.2,0,0)--(0,2.4,0)--(0,0,2)--cycle;
+  \node[left] at (2.2,0,0){$A(a;0;0)$}; \node[below right] at (0,2.4,0){$B(0;b;0)$}; \node[right] at (0,0,2){$C(0;0;c)$};
+  \node[above left] at (0,0,0){$O$};
+\end{tikzpicture}
+\end{minipage}
+\end{kienthuc}
+
+\begin{congthuc}[Điều kiện để hai mặt phẳng vuông góc, song song]
+Trong không gian $Oxyz$, cho hai mặt phẳng $(\alpha)\colon Ax+By+Cz+D=0$, $(\beta)\colon A'x+B'y+C'z+D'=0$, với hai vectơ pháp tuyến $\vec n=(A;B;C)$, $\vec n'=(A';B';C')$ tương ứng. Khi đó:
+\begin{itemize}
+  \item $(\alpha)\perp(\beta)\Leftrightarrow\vec n\perp\vec n'\Leftrightarrow AA'+BB'+CC'=0$.
+  \item $(\alpha)\parallel(\beta)\Leftrightarrow\begin{cases}\vec n'=k\vec n\\D'\ne kD\end{cases}$ với $k$ nào đó.
+\end{itemize}
+\hinh{\begin{tikzpicture}[scale=.75,font=\small]
+  \begin{scope}
+    \fill[dcnen,draw=dcdam] (0,0)--(3,0)--(3.8,1)--(.8,1)--cycle;
+    \fill[dcvang,draw=dcdam,opacity=.9] (.8,1)--(0,0)--(0,2)--(.8,3)--cycle;
+    \draw[vecto,dcnhan] (2.3,.5)--(2.3,1.9) node[right]{$\vec n'$};
+    \draw[vecto,dcchinh] (.5,1.9)--(1.6,1.9) node[right]{$\vec n$};
+    \node at (1.9,-.5){$(\alpha)\perp(\beta)$};
+  \end{scope}
+  \begin{scope}[xshift=6.2cm]
+    \fill[dcnen,draw=dcdam] (0,0)--(3,0)--(3.8,1)--(.8,1)--cycle;
+    \fill[dcnen,draw=dcdam] (0,1.6)--(3,1.6)--(3.8,2.6)--(.8,2.6)--cycle;
+    \draw[vecto,dcchinh] (2,.5)--(2,1.25) node[right]{$\vec n'$};
+    \draw[vecto,dcchinh] (2,2.1)--(2,2.9) node[right]{$\vec n$};
+    \node at (1.9,-.5){$(\alpha)\parallel(\beta)$};
+  \end{scope}
+\end{tikzpicture}}
+\end{congthuc}
+
+\begin{chuy}
+\begin{itemize}
+  \item Nếu hai mặt phẳng vuông góc với nhau thì vectơ pháp tuyến của mặt phẳng này có giá song song hoặc nằm trong mặt phẳng kia.
+  \item Nếu hai mặt phẳng song song với nhau thì vectơ pháp tuyến của mặt phẳng này cũng là vectơ pháp tuyến của mặt phẳng kia.
+  \item Hai mặt phẳng $(\alpha)$ và $(\beta)$ trùng nhau khi và chỉ khi tồn tại số $k$ khác $0$ sao cho $A'=kA$, $B'=kB$, $C'=kC$, $D'=kD$.
+\end{itemize}
+\end{chuy}
+
+\begin{congthuc}[Khoảng cách từ một điểm đến một mặt phẳng]
+\begin{minipage}[c]{.62\linewidth}
+Trong không gian $Oxyz$, khoảng cách từ điểm $M(x_0;y_0;z_0)$ đến mặt phẳng $(P)\colon Ax+By+Cz+D=0$ là:
+\[\mathrm d\big(M,(P)\big)=\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}.\]
+\end{minipage}\hfill
+\begin{minipage}[c]{.35\linewidth}\centering
+\begin{tikzpicture}[scale=.85,font=\small]
+  \fill[dcnen,draw=dcdam,line width=.7pt] (0,0)--(3.2,0)--(4,1.2)--(.8,1.2)--cycle;
+  \node at (.6,.25){$(P)$};
+  \draw[dcnhan,line width=1pt] (2.2,.6)--(2.2,2.2);
+  \fill[dcdam] (2.2,2.2) circle (1.5pt) node[right]{$M$}; \fill[dcdam] (2.2,.6) circle (1.5pt) node[below right]{$N$};
+  \draw[dcdam] (2.2,.78)--(2.38,.78)--(2.38,.6);
+\end{tikzpicture}
+\end{minipage}
+\end{congthuc}
+
+%% ------------------------------------------------ VÍ DỤ
+\viduminhhoa
+\subsubsection{Vectơ pháp tuyến, cặp vectơ chỉ phương, tích có hướng}
+\begin{vidu}
+Trong không gian $Oxyz$, cho $\vec u=(1;-2;0)$ và $\vec v=(3;1;-4)$. Tính $[\vec u,\vec v]$.
+\begin{loigiai}
+$[\vec u,\vec v]=\left(\begin{vmatrix}-2&0\\1&-4\end{vmatrix};\begin{vmatrix}0&1\\-4&3\end{vmatrix};\begin{vmatrix}1&-2\\3&1\end{vmatrix}\right)=(8;4;7)$.
+\end{loigiai}
+\end{vidu}
+
+\begin{vidu}
+Trong không gian $Oxyz$, cho mặt phẳng $(\alpha)\colon x+2y-z+1=0$. a) Chỉ ra một vectơ pháp tuyến của $(\alpha)$. b) Vectơ $\vec m=(2;4;-2)$ có là vectơ pháp tuyến của $(\alpha)$ không? c) Trong hai điểm $A(1;3;2)$, $B(1;1;4)$, điểm nào thuộc $(\alpha)$?
+\begin{loigiai}
+a) $\vec n=(1;2;-1)$. b) Có, vì $\vec m=2\vec n$. c) $1+6-2+1\ne0$, $1+2-4+1=0$: chỉ $B$ thuộc $(\alpha)$.
+\end{loigiai}
+\end{vidu}
+
+\subsubsection{Lập phương trình mặt phẳng}
+\begin{vidu}
+Trong không gian $Oxyz$, viết phương trình mặt phẳng $(\alpha)$: a) đi qua $M(2;-1;0)$ và có vectơ pháp tuyến $\vec n=(3;-4;6)$; b) đi qua $M(1;2;-4)$ và vuông góc với trục $Oz$.
+\begin{loigiai}
+a) $3(x-2)-4(y+1)+6z=0\Leftrightarrow3x-4y+6z-10=0$. b) Vectơ pháp tuyến $\vec k=(0;0;1)$: $z+4=0$.
+\end{loigiai}
+\end{vidu}
+
+\begin{vidu}
+Trong không gian $Oxyz$, cho ba điểm $A(2;1;-1)$, $B(3;2;1)$, $C(3;1;4)$. a) Chứng minh $A$, $B$, $C$ không thẳng hàng. b) Viết phương trình mặt phẳng $(ABC)$.
+\begin{loigiai}
+a) $\vt{AB}=(1;1;2)$, $\vt{AC}=(1;0;5)$ không cùng phương. b) $\vec n=\big[\vt{AB},\vt{AC}\big]=(5;-3;-1)$; $(ABC)\colon5(x-2)-3(y-1)-(z+1)=0\Leftrightarrow5x-3y-z-8=0$.
+\end{loigiai}
+\end{vidu}
+
+\begin{vidu}
+Trong không gian $Oxyz$, viết phương trình mặt phẳng $(P)$ đi qua hai điểm $A(1;2;-2)$, $B(2;4;1)$ và vuông góc với mặt phẳng $(Q)\colon x+3y+z-1=0$.
+\begin{loigiai}
+$(P)$ có cặp vectơ chỉ phương $\vt{AB}=(1;2;3)$ và $\vec n_Q=(1;3;1)$, nên $\vec n_P=\big[\vt{AB},\vec n_Q\big]=(-7;2;1)$. $(P)\colon-7(x-1)+2(y-2)+(z+2)=0\Leftrightarrow7x-2y-z-5=0$.
+\end{loigiai}
+\end{vidu}
+
+\begin{vidu}
+Trong không gian $Oxyz$, viết phương trình mặt phẳng đi qua ba điểm $A(2;0;0)$, $B(0;3;0)$, $C(0;0;-1)$.
+\begin{loigiai}
+Phương trình theo đoạn chắn: $\dfrac x2+\dfrac y3+\dfrac z{-1}=1\Leftrightarrow3x+2y-6z-6=0$.
+\end{loigiai}
+\end{vidu}
+
+\subsubsection{Vị trí tương đối của hai mặt phẳng}
+\begin{vidu}
+Trong không gian $Oxyz$, xét vị trí tương đối của các cặp mặt phẳng: a) $(\alpha)\colon x-3y+2z+1=0$ và $(\beta)\colon5x+y-z+2=0$; b) $(P)\colon x+2y-2z+1=0$ và $(Q)\colon2x+4y-4z+5=0$.
+\begin{loigiai}
+a) $1\cdot5+(-3)\cdot1+2\cdot(-1)=0$ nên $(\alpha)\perp(\beta)$. b) $\vec n_Q=2\vec n_P$ và $5\ne2\cdot1$ nên $(P)\parallel(Q)$.
+\end{loigiai}
+\end{vidu}
+
+\subsubsection{Khoảng cách từ một điểm đến một mặt phẳng}
+\begin{vidu}
+Trong không gian $Oxyz$: a) Tính khoảng cách từ $M(1;2;-1)$ đến $(P)\colon x+2y-2z+5=0$. b) Tính khoảng cách giữa hai mặt phẳng song song $(P)\colon x+y+z+2=0$ và $(Q)\colon x+y+z+6=0$.
+\begin{loigiai}
+a) $\mathrm d(M,(P))=\dfrac{|1+4+2+5|}{\sqrt{1+4+4}}=4$. b) Lấy $A(-2;0;0)\in(P)$: $\mathrm d((P),(Q))=\mathrm d(A,(Q))=\dfrac{|-2+6|}{\sqrt3}=\dfrac{4\sqrt3}3$.
+\end{loigiai}
+\end{vidu}
+
+\begin{vidu}
+Góc quan sát ngang của một camera là $115^\circ$. Trong không gian $Oxyz$, camera đặt tại điểm $C(1;2;4)$ và chiếu thẳng về phía mặt phẳng $(P)\colon x+2y+2z+3=0$. Hỏi vùng quan sát được trên $(P)$ là hình tròn có bán kính bằng bao nhiêu (làm tròn đến hàng phần mười)?
+\hinh{\begin{tikzpicture}[scale=.6,font=\scriptsize]
+  \fill[dcnen,draw=dcdam] (-2.6,0)--(2.2,0)--(3,.9)--(-1.8,.9)--cycle;
+  \draw[dcchinh,dashed] (.2,.45) ellipse (1.6 and .3);
+  \draw[dcdam] (.2,3)--(-1.4,.45) (.2,3)--(1.8,.45); \draw[dcnhan,line width=.8pt] (.2,3)--(.2,.45);
+  \fill (.2,3) circle (1.5pt) node[above]{$C$};
+\end{tikzpicture}}
+\begin{loigiai}
+Khoảng cách từ $C$ đến $(P)$: $h=\dfrac{|1+4+8+3|}{3}=\dfrac{16}3$. Bán kính $r=h\cdot\tan57{,}5^\circ\approx8{,}4$.
+\end{loigiai}
+\end{vidu}
+
+\begin{viduds}
+Trong không gian $Oxyz$, cho mặt phẳng $(P)\colon2x-y+2z-3=0$ và điểm $M(1;1;1)$. Xét tính đúng sai của các mệnh đề sau:
+\begin{dungsai}
+  \y Vectơ $\vec n=(2;-1;2)$ là một vectơ pháp tuyến của $(P)$. \oDS
+  \y Điểm $M$ thuộc mặt phẳng $(P)$. \oDS
+  \y Khoảng cách từ gốc toạ độ $O$ đến $(P)$ bằng $3$. \oDS
+  \y Mặt phẳng $(Q)\colon2x-y+2z+3=0$ song song với $(P)$ và khoảng cách giữa chúng bằng $2$. \oDS
+\end{dungsai}
+\begin{loigiai}
+\tuduy Đọc vectơ pháp tuyến; thay toạ độ; áp dụng công thức khoảng cách; hai mặt phẳng song song có cùng vectơ pháp tuyến.
+
+a) \textbf{Đúng}. b) \textbf{Đúng}: $2-1+2-3=0$. c) \textbf{Sai}: $\mathrm d(O,(P))=\dfrac33=1$. d) \textbf{Đúng}: $M\in(P)$, $\mathrm d(M,(Q))=\dfrac{|2-1+2+3|}3=2$.
+\end{loigiai}
+\end{viduds}
+\subsubsection{Bài toán thực tế}
+\begin{vidu}
+Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(4;0;0)$, $B(0;3;0)$, $C(0;0;4)$. Một đèn nhỏ đặt tại điểm $E(2;1;3)$. Khoảng cách (mét) từ đèn đến tấm kính bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai Mặt phẳng $(ABC)\colon \dfrac{x}{4}+\dfrac{y}{3}+\dfrac{z}{4}=1\Leftrightarrow 3x+4y+3z-12=0$. $d=\dfrac{|28|}{\sqrt{544}}\approx 1{,}2$. Đáp số: $1{,}2$.
+\end{loigiai}
+\end{vidu}
+\begin{vidu}
+Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon 12x-3y+4z-7=0$. Một flycam đang ở vị trí $F(-2;-4;11)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai $d(F,(P))=\dfrac{|25|}{13}=\dfrac{25}{13}$ (m). Đáp số: $1{,}92$.
+\end{loigiai}
+\end{vidu}
+\begin{vidu}
+Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(5;0;0)$, $B(0;4;0)$, $C(0;0;4)$. Một đèn nhỏ đặt tại điểm $E(3;1;1)$. Khoảng cách (mét) từ đèn đến tấm kính bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\begin{loigiai}
+\giai Mặt phẳng $(ABC)\colon \dfrac{x}{5}+\dfrac{y}{4}+\dfrac{z}{4}=1\Leftrightarrow 4x+5y+5z-20=0$. $d=\dfrac{|8|}{\sqrt{1056}}\approx 0{,}25$. Đáp số: $0{,}25$.
+\end{loigiai}
+\end{vidu}
+\begin{viduds}
+Trong một hệ trục $Oxyz$ (đơn vị: m), một tấm kính phẳng được đặt đi qua ba điểm $A(6;0;0)$, $B(0;6;0)$, $C(0;0;3)$. Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Khoảng cách từ điểm $E(3;5;0)$ đến tấm kính bằng $36$ m. \oDS
+  \y Điểm $M(3;3;0)$ nằm trên tấm kính. \oDS
+  \y Mặt phẳng chứa tấm kính có một vectơ pháp tuyến là $(1;1;2)$. \oDS
+  \y Tấm kính nằm trên mặt phẳng $x+y+2z+6=0$. \oDS
+\end{dungsai}
+\begin{loigiai}
+\giai Phương trình đoạn chắn $\dfrac{x}{6}+\dfrac{y}{6}+\dfrac{z}{3}=1\Leftrightarrow x+y+2z-6=0$. a) Sai: phải chia cho độ dài vectơ pháp tuyến. b) Đúng. c) Đúng. d) Sai: phương trình đúng là $x+y+2z-6=0$.
+\end{loigiai}
+\end{viduds}
+
+%% ------------------------------------------------ BÀI TẬP
+\luyentap
+\phanbt{Trắc nghiệm nhiều phương án lựa chọn}
+\begin{bai}Trong không gian $Oxyz$, phương trình của mặt phẳng toạ độ $(Oxy)$ là
+\pa{$x+y+z=0$}{$y=0$}{$z=0$}{$x=0$}\dapso{C. }\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng đi qua điểm $M(0;0;2)$ và có vectơ pháp tuyến $\vec n=(1;1;-2)$ có phương trình là
+\pa{$x-y-2z+4=0$}{$x+y-2z-4=0$}{$z+2=0$}{$x+y-2z+4=0$}\dapso{D. $(x-x_0)+\dots=0\Leftrightarrow x+y-2z+4=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, điểm nào dưới đây thuộc mặt phẳng $(P)\colon 2x+y+z-5=0$?
+\pa{$Q(0;1;2)$}{$Q(0;-1;2)$}{$Q(2;1;2)$}{$Q(1;0;3)$}\dapso{D. Thay toạ độ vào phương trình $(P)$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng $(P)\colon 3x-3y-2z+1=0$ có một vectơ pháp tuyến là
+\pa{$\vec n=(3;-3;1)$}{$\vec n=(3;-3;-2)$}{$\vec n=(-3;-2;1)$}{$\vec n=(3;3;-2)$}\dapso{B. $(P)$ có vectơ pháp tuyến $\vec n=(3;-3;-2)$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng đi qua điểm $M(-2;-2;0)$ và song song với mặt phẳng $(Q)\colon 2x+3y-z+4=0$ có phương trình là
+\pa{$2x+3y-z-10=0$}{$2x+3y-z+11=0$}{$3x+2y-z=0$}{$2x+3y-z+10=0$}\dapso{D. Mặt phẳng cần tìm có vectơ pháp tuyến $(2;3;-1)$: $2x+3y-z+10=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, cho hai điểm $A(3;1;3)$ và $B(1;-2;1)$. Mặt phẳng trung trực của đoạn thẳng $AB$ có phương trình là
+\pa{$4x-y+4z-\dfrac{33}{2}=0$}{$2x+3y+2z-\dfrac{13}{2}=0$}{$2x+3y+2z+2=0$}{$2x+3y+2z-15=0$}\dapso{B. Đi qua trung điểm $I(2;- \dfrac{1}{2};2)$, vectơ pháp tuyến $\vt{AB}=(-2;-3;-2)$: $2x+3y+2z-\dfrac{13}{2}=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(-1;1;3)$, $B(-2;-1;2)$, $C(2;-1;-2)$. Phương trình mặt phẳng $(ABC)$ là
+\pa{$9x-8y+8z-7=0$}{$x-y+z-1=0$}{$x+2y+z-4=0$}{$x-y+z=0$}\dapso{B. $\vt{AB}=(-1;-2;-1)$, $\vt{AC}=(3;-2;-5)$, $\vec n=[\vt{AB},\vt{AC}]=(8;-8;8)$; $(ABC)\colon x-y+z-1=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, khoảng cách từ điểm $M(1;-2;1)$ đến mặt phẳng $(P)\colon x+y-2z+7=0$ bằng
+\pa{$4$}{$\dfrac{2 \sqrt{6}}{3}$}{$1 + \dfrac{2 \sqrt{6}}{3}$}{$\dfrac{2}{3}$}\dapso{B. $\mathrm d(M,(P))=\dfrac{4}{\sqrt{6}}=\dfrac{2 \sqrt{6}}{3}$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, khoảng cách giữa hai mặt phẳng song song $(P)\colon x-2y+2z+4=0$ và $(Q)\colon x-2y+2z-5=0$ bằng
+\pa{$\dfrac{1}{3}$}{$3$}{$4$}{$9$}\dapso{B. Lấy một điểm thuộc $(P)$ rồi tính khoảng cách đến $(Q)$: $d=\dfrac{|4-(-5)|}{3}=3$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng $(P)\colon \dfrac x1+\dfrac y2+\dfrac z4=1$ cắt các trục $Ox$, $Oy$, $Oz$ lần lượt tại $A$, $B$, $C$. Thể tích khối tứ diện $OABC$ bằng
+\pa{$\dfrac{8}{3}$}{$8$}{$\dfrac{4}{3}$}{$4$}\dapso{C. $V=\dfrac16\cdot1\cdot2\cdot4=\dfrac{4}{3}$.}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(8;0;0)$, $B(0;6;0)$, $C(0;0;3)$. Một đèn nhỏ đặt tại điểm $E(7;4;1)$. Khoảng cách (mét) từ đèn đến tấm kính (làm tròn đến hàng phần trăm) là
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\pa{$2{,}73$ m}{$4{,}45$ m}{$2{,}23$ m}{$7{,}31$ m}
+\dapso{C. Mặt phẳng $(ABC)\colon \dfrac{x}{8}+\dfrac{y}{6}+\dfrac{z}{3}=1\Leftrightarrow 3x+4y+8z-24=0$. $d=\dfrac{|126|}{\sqrt{3204}}\approx 2{,}23$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon -6x+6y+7z=0$. Một flycam đang ở vị trí $F(-6;6;6)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi là
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\pa{$\dfrac{228}{11}$ m}{$\dfrac{125}{11}$ m}{$114$ m}{$\dfrac{114}{11}$ m}
+\dapso{D. $d(F,(P))=\dfrac{|114|}{11}=\dfrac{114}{11}$ (m).}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(4;0;0)$, $B(0;5;0)$, $C(0;0;4)$. Một đèn nhỏ đặt tại điểm $E(1;4;2)$. Khoảng cách (mét) từ đèn đến tấm kính (làm tròn đến hàng phần trăm) là
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\pa{$2{,}71$ m}{$6{,}28$ m}{$1{,}85$ m}{$1{,}35$ m}
+\dapso{D. Mặt phẳng $(ABC)\colon \dfrac{x}{4}+\dfrac{y}{5}+\dfrac{z}{4}=1\Leftrightarrow 5x+4y+5z-20=0$. $d=\dfrac{|44|}{\sqrt{1056}}\approx 1{,}35$.}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(8;0;0)$, $B(0;6;0)$, $C(0;0;4)$. Một đèn nhỏ đặt tại điểm $E(3;2;1)$. Khoảng cách (mét) từ đèn đến tấm kính (làm tròn đến hàng phần trăm) là
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\pa{$0{,}63$ m}{$0{,}13$ m}{$0{,}02$ m}{$0{,}26$ m}
+\dapso{B. Mặt phẳng $(ABC)\colon \dfrac{x}{8}+\dfrac{y}{6}+\dfrac{z}{4}=1\Leftrightarrow 3x+4y+6z-24=0$. $d=\dfrac{|-8|}{\sqrt{3904}}\approx 0{,}13$.}\end{bai}
+
+\phanbt{Trắc nghiệm đúng/sai}
+\begin{bai}Trong không gian $Oxyz$, cho mặt phẳng $(P)\colon x+2y-2z+5=0$.
+\begin{dungsai}
+  \y Vectơ $\vec n=(2;4;-4)$ là một vectơ pháp tuyến của $(P)$. \oDS
+  \y Điểm $A(0;0;\dfrac{5}{2})$ thuộc $(P)$. \oDS
+  \y Khoảng cách từ điểm $M(1;1;1)$ đến $(P)$ bằng $2$. \oDS
+  \y Mặt phẳng $(Q)\colon 2x+y-2z-1=0$ vuông góc với $(P)$. \oDS
+\end{dungsai}
+\dapso{a) Đ. b) Đ. c) Đ. d) S. $(2;4;-4)=2(1;2;-2)$; $d(M,(P))=2$; $(1;2;-2)\cdot(2;1;2)=0$, còn $(1;2;-2)\cdot(2;1;-2)=8\ne0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(1;0;0)$, $B(0;2;0)$, $C(0;0;3)$.
+\begin{dungsai}
+  \y Mặt phẳng $(ABC)$ có phương trình $\dfrac x1+\dfrac y2+\dfrac z3=1$. \oDS
+  \y Vectơ $\vec n=(6;3;2)$ là một vectơ pháp tuyến của $(ABC)$. \oDS
+  \y Khoảng cách từ gốc toạ độ $O$ đến $(ABC)$ bằng $\dfrac67$. \oDS
+  \y Thể tích khối tứ diện $OABC$ bằng $1$. \oDS
+\end{dungsai}
+\dapso{a) Đ. b) Đ. c) Đ. d) Đ. $(ABC)\colon 6x+3y+2z-6=0$; $d(O,(ABC))=\dfrac{6}{7}$; $V=\dfrac{1\cdot2\cdot3}{6}=1$.}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: m), một tấm kính phẳng được đặt đi qua ba điểm $A(8;0;0)$, $B(0;3;0)$, $C(0;0;4)$. Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Tấm kính nằm trên mặt phẳng $3x+8y+6z-24=0$. \oDS
+  \y Khoảng cách từ điểm $E(6;2;1)$ đến tấm kính bằng $64$ m. \oDS
+  \y Tấm kính nằm trên mặt phẳng $3x+8y+6z+24=0$. \oDS
+  \y Điểm $M(4;\dfrac{3}{2};0)$ nằm trên tấm kính. \oDS
+\end{dungsai}
+\dapso{Phương trình đoạn chắn $\dfrac{x}{8}+\dfrac{y}{3}+\dfrac{z}{4}=1\Leftrightarrow 3x+8y+6z-24=0$. a) Đúng. b) Sai: phải chia cho độ dài vectơ pháp tuyến. c) Sai: phương trình đúng là $3x+8y+6z-24=0$. d) Đúng.}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: m), một tấm kính phẳng được đặt đi qua ba điểm $A(6;0;0)$, $B(0;4;0)$, $C(0;0;4)$. Xét tính đúng sai của các mệnh đề sau:
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+
+\begin{dungsai}
+  \y Tấm kính nằm trên mặt phẳng $2x+3y+3z-12=0$. \oDS
+  \y Khoảng cách từ điểm $E(3;3;1)$ đến tấm kính bằng $\dfrac{3 \sqrt{22}}{11}$ m. \oDS
+  \y Khoảng cách từ điểm $E(3;3;1)$ đến tấm kính bằng $48$ m. \oDS
+  \y Tấm kính nằm trên mặt phẳng $2x+3y+3z+12=0$. \oDS
+\end{dungsai}
+\dapso{Phương trình đoạn chắn $\dfrac{x}{6}+\dfrac{y}{4}+\dfrac{z}{4}=1\Leftrightarrow 2x+3y+3z-12=0$. a) Đúng. b) Đúng. c) Sai: phải chia cho độ dài vectơ pháp tuyến. d) Sai: phương trình đúng là $2x+3y+3z-12=0$.}\end{bai}
+
+\phanbt{Trả lời ngắn}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng đi qua ba điểm $A(3;0;-2)$, $B(1;2;-1)$, $C(0;-2;3)$ có phương trình dạng $ax+by+cz+d=0$ với $a$, $b$, $c$, $d$ là các số nguyên tối giản (ước chung lớn nhất bằng $1$) và $a>0$ (nếu $a=0$ thì xét hệ số khác $0$ đầu tiên dương). Tính $a+b+c+d$.\otraloi\dapso{13. $\vec n=(12;7;10)$; $12x+7y+10z-16=0$; tổng bằng $13$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, tính khoảng cách từ điểm $M(-2;2;0)$ đến mặt phẳng $(P)\colon 2x+2y+z-4=0$ (làm tròn đến hàng phần trăm).\otraloi\dapso{1{,}33. $d=\dfrac{4}{3}\approx1{,}33$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng đi qua ba điểm $A(-2;3;0)$, $B(2;-2;-1)$, $C(3;2;0)$ có phương trình dạng $ax+by+cz+d=0$ với $a$, $b$, $c$, $d$ là các số nguyên tối giản (ước chung lớn nhất bằng $1$) và $a>0$ (nếu $a=0$ thì xét hệ số khác $0$ đầu tiên dương). Tính $a+b+c+d$.\otraloi\dapso{-28. $\vec n=(-1;-5;21)$; $x+5y-21z-13=0$; tổng bằng $-28$.}\end{bai}
+\begin{bai}Trong một căn phòng, chọn hệ trục $Oxyz$ (đơn vị mét) sao cho sàn nhà thuộc mặt phẳng $(Oxy)$ và một bức tường nằm trong mặt phẳng $(P)\colon 3x+4y-24=0$. Một chiếc đèn được treo tại điểm $D(1;2;5)$. Tính khoảng cách từ đèn đến bức tường (đơn vị mét).\otraloi\dapso{2{,}6. $d=\dfrac{|3+8-24|}{5}=2{,}6$.}\end{bai}
+\begin{bai}Trong một căn phòng, chọn hệ trục $Oxyz$ (đơn vị mét) sao cho sàn nhà thuộc mặt phẳng $(Oxy)$ và một bức tường nằm trong mặt phẳng $(P)\colon 3x+4y-24=0$. Một chiếc đèn được treo tại điểm $D(1;2;3)$. Tính khoảng cách từ đèn đến bức tường (đơn vị mét).\otraloi\dapso{2{,}6. $d=\dfrac{|3+8-24|}{5}=2{,}6$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, mặt phẳng $(P)$ đi qua ba điểm $A(3;0;0)$, $B(0;4;0)$, $C(0;0;6)$. Tính thể tích khối tứ diện $OABC$.\otraloi\dapso{12. $V=\dfrac{3\cdot4\cdot6}{6}=12$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon z+7=0$. Một flycam đang ở vị trí $F(-1;3;7)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi bằng bao nhiêu?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+\otraloi
+\dapso{14. $d(F,(P))=\dfrac{|14|}{1}=14$ (m).}\end{bai}
+\begin{bai}Trong một hệ trục $Oxyz$ (đơn vị: mét), một tấm kính phẳng được đặt đi qua ba điểm $A(7;0;0)$, $B(0;6;0)$, $C(0;0;4)$. Một đèn nhỏ đặt tại điểm $E(3;1;3)$. Khoảng cách (mét) từ đèn đến tấm kính bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.260,-0.945) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(4.300,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.200) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!25,opacity=.8] (-0.936,-0.702)--(3.400,0.000)--(0.000,2.500)--cycle; \draw[thick] (-0.936,-0.702) node[left]{$A$}--(3.400,0.000) node[below]{$B$}--(0.000,2.500) node[left]{$C$}--cycle;
+\shade[ball color=gray!20] (0.640,0.030) circle (.1); \node[right] at (0.640,0.030){$E$};
+\end{tikzpicture}}
+\otraloi
+\dapso{1,04. Mặt phẳng $(ABC)\colon \dfrac{x}{7}+\dfrac{y}{6}+\dfrac{z}{4}=1\Leftrightarrow 12x+14y+21z-84=0$. $d=\dfrac{|58|}{\sqrt{3124}}\approx 1{,}04$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon -4x+3y+12z+3=0$. Một flycam đang ở vị trí $F(5;-3;6)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi bằng bao nhiêu (làm tròn kết quả đến hàng phần trăm)?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+\otraloi
+\dapso{3,54. $d(F,(P))=\dfrac{|46|}{13}=\dfrac{46}{13}$ (m).}\end{bai}
+\phieutln
+
+\phanbt{Tự luận}
+\begin{bai}Trong không gian $Oxyz$, cho hình hộp $ABCD.A'B'C'D'$ với $A(1;-1;3)$, $B(0;2;4)$, $D(2;-1;1)$, $A'(0;1;2)$. a) Tính toạ độ các điểm $C$, $B'$, $D'$. b) Viết phương trình mặt phẳng $(CB'D')$.
+\dongke{7}
+\dapso{a) $C(1;2;2)$, $B'(-1;4;3)$, $D'(1;1;0)$. b) $\vec n=\big[\vt{CB'},\vt{CD'}\big]=(-3;-4;2)$; $(CB'D')\colon3x+4y-2z-7=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, viết phương trình mặt phẳng $(P)$ đi qua điểm $M(1;-1;5)$ và vuông góc với hai mặt phẳng $(Q)\colon3x+2y-z=0$, $(R)\colon x+y-z=0$.
+\dongke{5}
+\dapso{$\vec n_P=[\vec n_Q,\vec n_R]=(-1;2;1)$; $(P)\colon x-2y-z+2=0$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$, cho hai mặt phẳng $(P)\colon x+3y-z=0$ và $(Q)\colon x-y-2z+1=0$. a) Chứng minh $(P)\perp(Q)$. b) Tìm điểm $M$ thuộc trục $Ox$ và cách đều hai mặt phẳng $(P)$, $(Q)$.
+\dongke{6}
+\dapso{a) $1-3+2=0$. b) $M(t;0;0)$: $\dfrac{|t|}{\sqrt{11}}=\dfrac{|t+1|}{\sqrt6}\Leftrightarrow5t^2+22t+11=0\Leftrightarrow t=\dfrac{-11\pm\sqrt{66}}5$.}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon -2x+2y+z+3=0$. Một flycam đang ở vị trí $F(-2;5;13)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi bằng bao nhiêu?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\dongke{6}
+\dapso{$d(F,(P))=\dfrac{|30|}{3}=10$ (m).}\end{bai}
+\begin{bai}Trong không gian $Oxyz$ (đơn vị: mét), mặt một sườn đồi được mô hình hoá bởi mặt phẳng $(P)\colon 3x+4z+4=0$. Một flycam đang ở vị trí $F(2;-4;15)$. Khoảng cách (mét) từ flycam đến mặt sườn đồi bằng bao nhiêu?
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[->,gray] (0.000,0.000)--(-1.440,-1.080) node[below left]{$x$};
+\draw[->,gray] (0.000,0.000)--(5.000,0.000) node[right]{$y$};
+\draw[->,gray] (0.000,0.000)--(0.000,3.300) node[above]{$z$};
+\node[below right,gray] at (0.000,0.000){$O$};
+\fill[gray!10] (-0.500,0.000)--(-1.760,-0.945)--(3.240,-0.945)--(4.500,0.000)--cycle;
+\draw[dashed] (0.300,1.525)--(0.300,-0.675); \fill (0.300,-0.675) circle (.04);
+\filldraw[fill=gray!40] (0.300,1.525) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (0.300,1.525){$A$};
+\draw[dashed] (3.240,2.530)--(3.240,-0.270); \fill (3.240,-0.270) circle (.04);
+\filldraw[fill=gray!40] (3.240,2.530) ++(-.18,0) rectangle ++(.36,.1); \node[above] at (3.240,2.530){$B$};
+\draw[thick,dotted] (0.300,1.525)--(3.240,2.530);
+\end{tikzpicture}}
+
+\dongke{6}
+\dapso{$d(F,(P))=\dfrac{|70|}{5}=14$ (m).}\end{bai}
+
+\phanbt{Bài tập tự luận rèn luyện}
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(1;0;2)$, $B(2;1;0)$ và $C(0;3;1)$.
+\begin{enumerate}[label=\alph*)]
+\item Tìm toạ độ các vectơ $\overrightarrow{AB}$, $\overrightarrow{AC}$.
+\item Tính tích có hướng $\left[\overrightarrow{AB},\overrightarrow{AC}\right]$.
+\item Viết phương trình mặt phẳng $(ABC)$ và kiểm tra lại bằng cách thay toạ độ ba điểm.
+\item Tính diện tích tam giác $ABC$.
+\item Tính khoảng cách từ gốc toạ độ $O$ đến mặt phẳng $(ABC)$ (làm tròn đến hàng phần trăm).
+\item Viết phương trình mặt phẳng đi qua $O$ và song song với mặt phẳng $(ABC)$.
+\end{enumerate}
+\dapso{a) $(1;1;-2)$, $(-1;3;-1)$. b) $(5;3;4)$. c) $5x+3y+4z-13=0$. d) $\dfrac12\sqrt{50}=\dfrac{5\sqrt2}2$. e) $\dfrac{13}{\sqrt{50}}\approx1{,}84$. f) $5x+3y+4z=0$.}\end{bai}
+
+\begin{bai}Trong không gian $Oxyz$, cho mặt phẳng $(P)\colon 2x-y+2z-3=0$ và điểm $N(3;-2;4)$.
+\begin{enumerate}[label=\alph*)]
+\item Chỉ ra một vectơ pháp tuyến của $(P)$.
+\item Điểm $M(1;1;1)$ có thuộc $(P)$ không?
+\item Tính khoảng cách từ $N$ đến mặt phẳng $(P)$.
+\item Viết phương trình mặt phẳng $(Q)$ đi qua $N$ và song song với $(P)$.
+\item Tính khoảng cách giữa hai mặt phẳng $(P)$ và $(Q)$; so sánh với kết quả câu c) và giải thích.
+\item Viết phương trình mặt phẳng đi qua $N$, đồng thời vuông góc với cả $(P)$ và mặt phẳng $(Oxy)$.
+\end{enumerate}
+\dapso{a) $(2;-1;2)$. b) Có, vì $2-1+2-3=0$. c) $\dfrac{13}3$. d) $2x-y+2z-16=0$. e) $\dfrac{|-16+3|}3=\dfrac{13}3$, bằng câu c) vì $N\in(Q)$ và $(Q)\parallel(P)$. f) $\vec n=[(2;-1;2),(0;0;1)]=(-1;-2;0)$: $x+2y+1=0$.}\end{bai}
+
+\begin{bai}Một mái hiên bằng tôn được lắp nghiêng phía trước một ngôi nhà. Chọn hệ trục $Oxyz$ (đơn vị: mét) có mặt phẳng $(Oxy)$ là mặt sân, trục $Oz$ hướng thẳng đứng lên trên. Mái hiên là một phần mặt phẳng đi qua ba điểm $A(0;0;3)$, $B(8;0;3)$ và $C(0;4;5)$, trong đó cạnh $AB$ là mép dưới và mép trên của mái nằm sát tường nhà.
+\hinh{\begin{tikzpicture}[scale=0.85,font=\footnotesize,line join=round,line cap=round,>=Stealth]
+\draw[thick] (-.5,0)--(5.6,0); \fill[pattern=north east lines] (-.5,-.15) rectangle (5.6,0);
+\filldraw[fill=gray!10] (1,0) rectangle (5,2.6); \node at (3.5,.6){tường nhà};
+\filldraw[fill=gray!40] (0,1.5)--(4,1.5)--(5,2.2)--(1,2.2)--cycle; \draw (0,1.5)--(0,0) (4,1.5)--(4,0);
+\fill (0,1.5) circle (.04) node[left]{$A$}; \fill (4,1.5) circle (.04) node[below right]{$B$}; \fill (1,2.2) circle (.04) node[above left]{$C$};
+\node at (2.5,1.85){mái hiên};
+\end{tikzpicture}}
+\begin{enumerate}[label=\alph*)]
+\item Tìm toạ độ các vectơ $\overrightarrow{AB}$, $\overrightarrow{AC}$.
+\item Tìm một vectơ pháp tuyến của mặt phẳng chứa mái hiên.
+\item Viết phương trình mặt phẳng chứa mái hiên.
+\item Một bóng đèn treo tại điểm $E(4;2;1)$ dưới mái hiên. Tính khoảng cách từ bóng đèn tới mặt phẳng mái (làm tròn đến hàng phần trăm).
+\item Mép trên của mái nằm ở độ cao bao nhiêu mét so với mặt sân?
+\item Mái hiên có dạng hình chữ nhật với hai cạnh là $AB$ và $AC$. Tính diện tích tôn cần dùng (làm tròn đến hàng phần trăm).
+\end{enumerate}
+\dapso{a) $(8;0;0)$, $(0;4;2)$. b) $[\overrightarrow{AB},\overrightarrow{AC}]=(0;-16;32)$, chọn $(0;1;-2)$. c) $y-2z+6=0$. d) $\dfrac6{\sqrt5}\approx2{,}68$ m. e) $5$ m. f) $8\cdot2\sqrt5=16\sqrt5\approx35{,}78$ m$^2$.}\end{bai}
+
+\begin{bai}Trong không gian $Oxyz$, cho ba điểm $A(2;0;0)$, $B(0;3;0)$, $C(0;0;6)$ lần lượt nằm trên ba trục toạ độ.
+\begin{enumerate}[label=\alph*)]
+\item Viết phương trình mặt phẳng $(ABC)$ dưới dạng đoạn chắn, rồi đưa về dạng tổng quát với hệ số nguyên.
+\item Tính thể tích khối tứ diện $OABC$.
+\item Tính khoảng cách từ $O$ đến mặt phẳng $(ABC)$.
+\item Từ câu b) và c), suy ra diện tích tam giác $ABC$.
+\item Tìm toạ độ hình chiếu vuông góc $H$ của $O$ trên mặt phẳng $(ABC)$.
+\item Tìm toạ độ trọng tâm $G$ của tam giác $ABC$ và kiểm tra xem $H$ có trùng $G$ không.
+\end{enumerate}
+\dapso{a) $\dfrac x2+\dfrac y3+\dfrac z6=1\Leftrightarrow3x+2y+z-6=0$. b) $6$. c) $\dfrac6{\sqrt{14}}$. d) $S=\dfrac{3V}d=3\sqrt{14}$. e) $H=t(3;2;1)$, $14t=6$: $H\left(\dfrac97;\dfrac67;\dfrac37\right)$. f) $G\left(\dfrac23;1;2\right)$, không trùng $H$.}\end{bai}
+
+\begin{bai}Trong không gian $Oxyz$, cho ba mặt phẳng $(P)\colon x+2y-2z+1=0$, $(Q)\colon 2x+4y-4z+5=0$ và $(R)\colon 2x-y+3=0$.
+\begin{enumerate}[label=\alph*)]
+\item Chứng minh $(P)$ và $(Q)$ song song với nhau.
+\item Tính khoảng cách giữa $(P)$ và $(Q)$.
+\item Chứng minh $(P)$ vuông góc với $(R)$.
+\item Viết phương trình mặt phẳng song song và cách đều hai mặt phẳng $(P)$, $(Q)$.
+\item Điểm $M(1;-1;2)$ có nằm giữa hai mặt phẳng $(P)$ và $(Q)$ không?
+\item Viết phương trình các mặt phẳng song song với $(P)$ và cách $(P)$ một khoảng bằng $2$.
+\end{enumerate}
+\dapso{a) $\dfrac12=\dfrac24=\dfrac{-2}{-4}\ne\dfrac15$. b) $(Q)\colon x+2y-2z+\dfrac52=0$; khoảng cách $\dfrac12$. c) $\vec n_P\cdot\vec n_R=2-2+0=0$. d) $x+2y-2z+\dfrac74=0$. e) Thay $M$ vào hai vế trái (cùng dạng $x+2y-2z+d$) được $-4$ và $-2{,}5$ cùng dấu: $M$ không nằm giữa. f) $x+2y-2z+7=0$ và $x+2y-2z-5=0$.}\end{bai}

@@ -1,0 +1,742 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=1.8cm,bottom=1.8cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage{tasks}
+\usepackage{tikz}
+\settasks{label=\textbf{\Alph*.},label-width=1.5em,item-indent=2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small Ngân hàng bài tập Toán 8 -- 8H2-C7-B28-D03}
+\cfoot{\small Trang \thepage}
+\newif\ifloigiai
+\loigiaitrue
+\newenvironment{cauhoi}[2]{%
+  \par\medskip\noindent\rule{\textwidth}{0.4pt}\par\nopagebreak
+  \noindent\textbf{[#1]}\hfill{\scriptsize\ttfamily #2}\par\nopagebreak\smallskip}{\par}
+\newcommand{\loigiai}[1]{\ifloigiai\par\smallskip\noindent\textit{Lời giải.} #1\par\fi}
+\newcommand{\dapan}[1]{\ifloigiai\par\smallskip\noindent\textit{Đáp án:} \textbf{#1}\par\fi}
+\begin{document}
+\begin{center}
+{\Large\textbf{NGÂN HÀNG BÀI TẬP TOÁN 8}}\\[3pt]
+\textbf{Chương 7. Phương trình bậc nhất và hàm số bậc nhất}\\[2pt]
+\textbf{Bài 28. Hàm số bậc nhất và đồ thị của hàm số bậc nhất}\\[2pt]
+\textbf{Dạng D03: Xác định hàm số thoả điều kiện}\\[2pt]
+\textit{Mã dạng: 8H2-C7-B28-D03 \quad 50 bài tự luận + 50 câu trắc nghiệm \quad (TH: 25, VD: 25)}
+\end{center}
+\textbf{Quy ước mã câu:} \textit{khối, học kì, chương, bài, dạng, loại (TL/TN), mức độ, số thứ tự}.\par Ví dụ: \texttt{8H2-C7-B28-D03-TL-NB-001}.\par Để in bản cho học sinh, đặt \verb|\loigiaifalse| ngay sau \verb|\loigiaitrue|.
+\section*{Phần I. Tự luận}
+\begin{cauhoi}{Bài 1}{8H2-C7-B28-D03-TL-TH-001}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(3;-4)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=2a+b$ và $-4=3a+b$. Trừ hai vế: $a=\dfrac{0+4}{2-3}=-4$. Suy ra $b=0+4\cdot(2)=8$. Vậy $y=-4x+8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 2}{8H2-C7-B28-D03-TL-TH-002}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;-5)$ và $B(3;-7)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-5=2a+b$ và $-7=3a+b$. Trừ hai vế: $a=\dfrac{-5+7}{2-3}=-2$. Suy ra $b=-5+2\cdot(2)=-1$. Vậy $y=-2x-1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 3}{8H2-C7-B28-D03-TL-TH-003}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;0)$ và $B(-1;5)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=4a+b$ và $5=-a+b$. Trừ hai vế: $a=\dfrac{0-5}{4+1}=-1$. Suy ra $b=0+1\cdot(4)=4$. Vậy $y=-x+4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 4}{8H2-C7-B28-D03-TL-TH-004}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;13)$ và $B(-4;15)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $13=-3a+b$ và $15=-4a+b$. Trừ hai vế: $a=\dfrac{13-15}{-3+4}=-2$. Suy ra $b=13+2\cdot(-3)=7$. Vậy $y=-2x+7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 5}{8H2-C7-B28-D03-TL-TH-005}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;5)$ và $B(-3;14)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $5=0a+b$ và $14=-3a+b$. Trừ hai vế: $a=\dfrac{5-14}{0+3}=-3$. Suy ra $b=5+3\cdot(0)=5$. Vậy $y=-3x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 6}{8H2-C7-B28-D03-TL-TH-006}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;1)$ và $B(-4;21)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $1=a+b$ và $21=-4a+b$. Trừ hai vế: $a=\dfrac{1-21}{1+4}=-4$. Suy ra $b=1+4\cdot(1)=5$. Vậy $y=-4x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 7}{8H2-C7-B28-D03-TL-TH-007}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;10)$ và $B(3;-6)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $10=-a+b$ và $-6=3a+b$. Trừ hai vế: $a=\dfrac{10+6}{-1-3}=-4$. Suy ra $b=10+4\cdot(-1)=6$. Vậy $y=-4x+6$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 8}{8H2-C7-B28-D03-TL-TH-008}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;-7)$ và $B(4;-19)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-7=0a+b$ và $-19=4a+b$. Trừ hai vế: $a=\dfrac{-7+19}{0-4}=-3$. Suy ra $b=-7+3\cdot(0)=-7$. Vậy $y=-3x-7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 9}{8H2-C7-B28-D03-TL-TH-009}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;6)$ và $B(4;-3)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $6=-5a+b$ và $-3=4a+b$. Trừ hai vế: $a=\dfrac{6+3}{-5-4}=-1$. Suy ra $b=6+1\cdot(-5)=1$. Vậy $y=-x+1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 10}{8H2-C7-B28-D03-TL-TH-010}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-7)$ và $B(-1;8)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-7=4a+b$ và $8=-a+b$. Trừ hai vế: $a=\dfrac{-7-8}{4+1}=-3$. Suy ra $b=-7+3\cdot(4)=5$. Vậy $y=-3x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 11}{8H2-C7-B28-D03-TL-TH-011}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;12)$ và $B(3;-12)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $12=-3a+b$ và $-12=3a+b$. Trừ hai vế: $a=\dfrac{12+12}{-3-3}=-4$. Suy ra $b=12+4\cdot(-3)=0$. Vậy $y=-4x$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 12}{8H2-C7-B28-D03-TL-TH-012}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-15)$ và $B(2;3)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-15=-4a+b$ và $3=2a+b$. Trừ hai vế: $a=\dfrac{-15-3}{-4-2}=3$. Suy ra $b=-15-3\cdot(-4)=-3$. Vậy $y=3x-3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 13}{8H2-C7-B28-D03-TL-TH-013}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-12)$ và $B(-5;-18)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-12=-2a+b$ và $-18=-5a+b$. Trừ hai vế: $a=\dfrac{-12+18}{-2+5}=2$. Suy ra $b=-12-2\cdot(-2)=-8$. Vậy $y=2x-8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 14}{8H2-C7-B28-D03-TL-TH-014}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(-2;4)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=2a+b$ và $4=-2a+b$. Trừ hai vế: $a=\dfrac{0-4}{2+2}=-1$. Suy ra $b=0+1\cdot(2)=2$. Vậy $y=-x+2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 15}{8H2-C7-B28-D03-TL-TH-015}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-22)$ và $B(2;-14)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-22=4a+b$ và $-14=2a+b$. Trừ hai vế: $a=\dfrac{-22+14}{4-2}=-4$. Suy ra $b=-22+4\cdot(4)=-6$. Vậy $y=-4x-6$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 16}{8H2-C7-B28-D03-TL-TH-016}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(5;24)$ và $B(-1;0)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $24=5a+b$ và $0=-a+b$. Trừ hai vế: $a=\dfrac{24-0}{5+1}=4$. Suy ra $b=24-4\cdot(5)=4$. Vậy $y=4x+4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 17}{8H2-C7-B28-D03-TL-TH-017}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;-4)$ và $B(1;0)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-4=-3a+b$ và $0=a+b$. Trừ hai vế: $a=\dfrac{-4-0}{-3-1}=1$. Suy ra $b=-4-1\cdot(-3)=-1$. Vậy $y=x-1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 18}{8H2-C7-B28-D03-TL-TH-018}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;9)$ và $B(1;-11)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $9=-4a+b$ và $-11=a+b$. Trừ hai vế: $a=\dfrac{9+11}{-4-1}=-4$. Suy ra $b=9+4\cdot(-4)=-7$. Vậy $y=-4x-7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 19}{8H2-C7-B28-D03-TL-TH-019}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-8)$ và $B(2;-2)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-8=-a+b$ và $-2=2a+b$. Trừ hai vế: $a=\dfrac{-8+2}{-1-2}=2$. Suy ra $b=-8-2\cdot(-1)=-6$. Vậy $y=2x-6$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 20}{8H2-C7-B28-D03-TL-TH-020}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-12)$ và $B(-4;-24)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-12=-a+b$ và $-24=-4a+b$. Trừ hai vế: $a=\dfrac{-12+24}{-1+4}=4$. Suy ra $b=-12-4\cdot(-1)=-8$. Vậy $y=4x-8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 21}{8H2-C7-B28-D03-TL-TH-021}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;11)$ và $B(-3;-9)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $11=2a+b$ và $-9=-3a+b$. Trừ hai vế: $a=\dfrac{11+9}{2+3}=4$. Suy ra $b=11-4\cdot(2)=3$. Vậy $y=4x+3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 22}{8H2-C7-B28-D03-TL-TH-022}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;11)$ và $B(-3;-17)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $11=4a+b$ và $-17=-3a+b$. Trừ hai vế: $a=\dfrac{11+17}{4+3}=4$. Suy ra $b=11-4\cdot(4)=-5$. Vậy $y=4x-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 23}{8H2-C7-B28-D03-TL-TH-023}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;10)$ và $B(4;1)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $10=-5a+b$ và $1=4a+b$. Trừ hai vế: $a=\dfrac{10-1}{-5-4}=-1$. Suy ra $b=10+1\cdot(-5)=5$. Vậy $y=-x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 24}{8H2-C7-B28-D03-TL-TH-024}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(-1;6)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=2a+b$ và $6=-a+b$. Trừ hai vế: $a=\dfrac{0-6}{2+1}=-2$. Suy ra $b=0+2\cdot(2)=4$. Vậy $y=-2x+4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 25}{8H2-C7-B28-D03-TL-TH-025}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;24)$ và $B(2;0)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $24=-4a+b$ và $0=2a+b$. Trừ hai vế: $a=\dfrac{24-0}{-4-2}=-4$. Suy ra $b=24+4\cdot(-4)=8$. Vậy $y=-4x+8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 26}{8H2-C7-B28-D03-TL-VD-026}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-23)$ và $B(-1;-3)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-23=4a+b$ và $-3=-a+b$. Trừ hai vế: $a=\dfrac{-23+3}{4+1}=-4$. Suy ra $b=-23+4\cdot(4)=-7$. Vậy $y=-4x-7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 27}{8H2-C7-B28-D03-TL-VD-027}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;8)$ và $B(4;17)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $8=a+b$ và $17=4a+b$. Trừ hai vế: $a=\dfrac{8-17}{1-4}=3$. Suy ra $b=8-3\cdot(1)=5$. Vậy $y=3x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 28}{8H2-C7-B28-D03-TL-VD-028}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;0)$ và $B(-2;-1)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=-3a+b$ và $-1=-2a+b$. Trừ hai vế: $a=\dfrac{0+1}{-3+2}=-1$. Suy ra $b=0+1\cdot(-3)=-3$. Vậy $y=-x-3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 29}{8H2-C7-B28-D03-TL-VD-029}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;4)$ và $B(-4;-10)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $4=3a+b$ và $-10=-4a+b$. Trừ hai vế: $a=\dfrac{4+10}{3+4}=2$. Suy ra $b=4-2\cdot(3)=-2$. Vậy $y=2x-2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 30}{8H2-C7-B28-D03-TL-VD-030}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;-1)$ và $B(-4;-4)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-1=-3a+b$ và $-4=-4a+b$. Trừ hai vế: $a=\dfrac{-1+4}{-3+4}=3$. Suy ra $b=-1-3\cdot(-3)=8$. Vậy $y=3x+8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 31}{8H2-C7-B28-D03-TL-VD-031}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;0)$ và $B(4;-6)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $0=a+b$ và $-6=4a+b$. Trừ hai vế: $a=\dfrac{0+6}{1-4}=-2$. Suy ra $b=0+2\cdot(1)=2$. Vậy $y=-2x+2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 32}{8H2-C7-B28-D03-TL-VD-032}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;20)$ và $B(-3;-4)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $20=3a+b$ và $-4=-3a+b$. Trừ hai vế: $a=\dfrac{20+4}{3+3}=4$. Suy ra $b=20-4\cdot(3)=8$. Vậy $y=4x+8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 33}{8H2-C7-B28-D03-TL-VD-033}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;13)$ và $B(1;9)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $13=2a+b$ và $9=a+b$. Trừ hai vế: $a=\dfrac{13-9}{2-1}=4$. Suy ra $b=13-4\cdot(2)=5$. Vậy $y=4x+5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 34}{8H2-C7-B28-D03-TL-VD-034}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(5;2)$ và $B(-4;-7)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $2=5a+b$ và $-7=-4a+b$. Trừ hai vế: $a=\dfrac{2+7}{5+4}=1$. Suy ra $b=2-1\cdot(5)=-3$. Vậy $y=x-3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 35}{8H2-C7-B28-D03-TL-VD-035}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;-4)$ và $B(-2;-12)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-4=0a+b$ và $-12=-2a+b$. Trừ hai vế: $a=\dfrac{-4+12}{0+2}=4$. Suy ra $b=-4-4\cdot(0)=-4$. Vậy $y=4x-4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 36}{8H2-C7-B28-D03-TL-VD-036}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;9)$ và $B(-3;13)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $9=-2a+b$ và $13=-3a+b$. Trừ hai vế: $a=\dfrac{9-13}{-2+3}=-4$. Suy ra $b=9+4\cdot(-2)=1$. Vậy $y=-4x+1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 37}{8H2-C7-B28-D03-TL-VD-037}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;7)$ và $B(-2;11)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $7=0a+b$ và $11=-2a+b$. Trừ hai vế: $a=\dfrac{7-11}{0+2}=-2$. Suy ra $b=7+2\cdot(0)=7$. Vậy $y=-2x+7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 38}{8H2-C7-B28-D03-TL-VD-038}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;-1)$ và $B(-5;11)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-1=a+b$ và $11=-5a+b$. Trừ hai vế: $a=\dfrac{-1-11}{1+5}=-2$. Suy ra $b=-1+2\cdot(1)=1$. Vậy $y=-2x+1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 39}{8H2-C7-B28-D03-TL-VD-039}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;5)$ và $B(-2;-3)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $5=2a+b$ và $-3=-2a+b$. Trừ hai vế: $a=\dfrac{5+3}{2+2}=2$. Suy ra $b=5-2\cdot(2)=1$. Vậy $y=2x+1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 40}{8H2-C7-B28-D03-TL-VD-040}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;-6)$ và $B(-4;-4)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-6=-5a+b$ và $-4=-4a+b$. Trừ hai vế: $a=\dfrac{-6+4}{-5+4}=2$. Suy ra $b=-6-2\cdot(-5)=4$. Vậy $y=2x+4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 41}{8H2-C7-B28-D03-TL-VD-041}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;1)$ và $B(1;-2)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $1=2a+b$ và $-2=a+b$. Trừ hai vế: $a=\dfrac{1+2}{2-1}=3$. Suy ra $b=1-3\cdot(2)=-5$. Vậy $y=3x-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 42}{8H2-C7-B28-D03-TL-VD-042}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-2)$ và $B(5;-9)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-2=-2a+b$ và $-9=5a+b$. Trừ hai vế: $a=\dfrac{-2+9}{-2-5}=-1$. Suy ra $b=-2+1\cdot(-2)=-4$. Vậy $y=-x-4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 43}{8H2-C7-B28-D03-TL-VD-043}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;12)$ và $B(3;5)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $12=-4a+b$ và $5=3a+b$. Trừ hai vế: $a=\dfrac{12-5}{-4-3}=-1$. Suy ra $b=12+1\cdot(-4)=8$. Vậy $y=-x+8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 44}{8H2-C7-B28-D03-TL-VD-044}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;3)$ và $B(3;1)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $3=2a+b$ và $1=3a+b$. Trừ hai vế: $a=\dfrac{3-1}{2-3}=-2$. Suy ra $b=3+2\cdot(2)=7$. Vậy $y=-2x+7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 45}{8H2-C7-B28-D03-TL-VD-045}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;18)$ và $B(-1;2)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $18=3a+b$ và $2=-a+b$. Trừ hai vế: $a=\dfrac{18-2}{3+1}=4$. Suy ra $b=18-4\cdot(3)=6$. Vậy $y=4x+6$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 46}{8H2-C7-B28-D03-TL-VD-046}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-13)$ và $B(-3;-9)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-13=-4a+b$ và $-9=-3a+b$. Trừ hai vế: $a=\dfrac{-13+9}{-4+3}=4$. Suy ra $b=-13-4\cdot(-4)=3$. Vậy $y=4x+3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 47}{8H2-C7-B28-D03-TL-VD-047}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-3)$ và $B(5;21)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-3=-a+b$ và $21=5a+b$. Trừ hai vế: $a=\dfrac{-3-21}{-1-5}=4$. Suy ra $b=-3-4\cdot(-1)=1$. Vậy $y=4x+1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 48}{8H2-C7-B28-D03-TL-VD-048}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-1)$ và $B(-5;-13)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-1=-2a+b$ và $-13=-5a+b$. Trừ hai vế: $a=\dfrac{-1+13}{-2+5}=4$. Suy ra $b=-1-4\cdot(-2)=7$. Vậy $y=4x+7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 49}{8H2-C7-B28-D03-TL-VD-049}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-6)$ và $B(3;1)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $-6=-4a+b$ và $1=3a+b$. Trừ hai vế: $a=\dfrac{-6-1}{-4-3}=1$. Suy ra $b=-6-1\cdot(-4)=-2$. Vậy $y=x-2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 50}{8H2-C7-B28-D03-TL-VD-050}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;5)$ và $B(1;9)$.
+\loigiai{Thay toạ độ $A$, $B$ vào $y=ax+b$ ta có hệ $5=-a+b$ và $9=a+b$. Trừ hai vế: $a=\dfrac{5-9}{-1-1}=2$. Suy ra $b=5-2\cdot(-1)=7$. Vậy $y=2x+7$.}
+\end{cauhoi}
+\clearpage\section*{Phần II. Trắc nghiệm}
+\begin{cauhoi}{Câu 1}{8H2-C7-B28-D03-TN-TH-001}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(3;-4)$.
+\begin{tasks}(2)
+\task $y=4x+8$
+\task $y=-4x+8$
+\task $y=-3x+8$
+\task $y=-4x-8$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 2}{8H2-C7-B28-D03-TN-TH-002}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;-5)$ và $B(3;-7)$.
+\begin{tasks}(2)
+\task $y=2x-1$
+\task $y=-x-1$
+\task $y=-2x+1$
+\task $y=-2x-1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 3}{8H2-C7-B28-D03-TN-TH-003}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;0)$ và $B(-1;5)$.
+\begin{tasks}(2)
+\task $y=-x-4$
+\task $y=0x+4$
+\task $y=-x+4$
+\task $y=x+4$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 4}{8H2-C7-B28-D03-TN-TH-004}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;13)$ và $B(-4;15)$.
+\begin{tasks}(2)
+\task $y=-2x+7$
+\task $y=2x+7$
+\task $y=-x+7$
+\task $y=-2x-7$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 5}{8H2-C7-B28-D03-TN-TH-005}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;5)$ và $B(-3;14)$.
+\begin{tasks}(2)
+\task $y=-2x+5$
+\task $y=-3x+5$
+\task $y=3x+5$
+\task $y=-3x-5$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 6}{8H2-C7-B28-D03-TN-TH-006}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;1)$ và $B(-4;21)$.
+\begin{tasks}(2)
+\task $y=-3x+5$
+\task $y=4x+5$
+\task $y=-4x+5$
+\task $y=-4x-5$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 7}{8H2-C7-B28-D03-TN-TH-007}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;10)$ và $B(3;-6)$.
+\begin{tasks}(2)
+\task $y=4x+6$
+\task $y=-4x-6$
+\task $y=-3x+6$
+\task $y=-4x+6$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 8}{8H2-C7-B28-D03-TN-TH-008}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;-7)$ và $B(4;-19)$.
+\begin{tasks}(2)
+\task $y=-3x+7$
+\task $y=3x-7$
+\task $y=-3x-7$
+\task $y=-2x-7$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 9}{8H2-C7-B28-D03-TN-TH-009}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;6)$ và $B(4;-3)$.
+\begin{tasks}(2)
+\task $y=0x+1$
+\task $y=x+1$
+\task $y=-x-1$
+\task $y=-x+1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 10}{8H2-C7-B28-D03-TN-TH-010}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-7)$ và $B(-1;8)$.
+\begin{tasks}(2)
+\task $y=3x+5$
+\task $y=-2x+5$
+\task $y=-3x+5$
+\task $y=-3x-5$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 11}{8H2-C7-B28-D03-TN-TH-011}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;12)$ và $B(3;-12)$.
+\begin{tasks}(2)
+\task $y=-4x$
+\task $y=4x+0$
+\task $y=-4x+1$
+\task $y=-3x+0$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 12}{8H2-C7-B28-D03-TN-TH-012}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-15)$ và $B(2;3)$.
+\begin{tasks}(2)
+\task $y=4x-3$
+\task $y=-3x-3$
+\task $y=3x+3$
+\task $y=3x-3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 13}{8H2-C7-B28-D03-TN-TH-013}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-12)$ và $B(-5;-18)$.
+\begin{tasks}(2)
+\task $y=2x-8$
+\task $y=3x-8$
+\task $y=2x+8$
+\task $y=-2x-8$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 14}{8H2-C7-B28-D03-TN-TH-014}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(-2;4)$.
+\begin{tasks}(2)
+\task $y=-x-2$
+\task $y=x+2$
+\task $y=-x+2$
+\task $y=0x+2$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 15}{8H2-C7-B28-D03-TN-TH-015}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-22)$ và $B(2;-14)$.
+\begin{tasks}(2)
+\task $y=-4x-6$
+\task $y=-4x+6$
+\task $y=-3x-6$
+\task $y=4x-6$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 16}{8H2-C7-B28-D03-TN-TH-016}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(5;24)$ và $B(-1;0)$.
+\begin{tasks}(2)
+\task $y=4x-4$
+\task $y=-4x+4$
+\task $y=5x+4$
+\task $y=4x+4$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 17}{8H2-C7-B28-D03-TN-TH-017}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;-4)$ và $B(1;0)$.
+\begin{tasks}(2)
+\task $y=-x-1$
+\task $y=x-1$
+\task $y=2x-1$
+\task $y=x+1$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 18}{8H2-C7-B28-D03-TN-TH-018}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;9)$ và $B(1;-11)$.
+\begin{tasks}(2)
+\task $y=-3x-7$
+\task $y=-4x+7$
+\task $y=4x-7$
+\task $y=-4x-7$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 19}{8H2-C7-B28-D03-TN-TH-019}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-8)$ và $B(2;-2)$.
+\begin{tasks}(2)
+\task $y=2x+6$
+\task $y=2x-6$
+\task $y=-2x-6$
+\task $y=3x-6$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 20}{8H2-C7-B28-D03-TN-TH-020}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-12)$ và $B(-4;-24)$.
+\begin{tasks}(2)
+\task $y=4x-8$
+\task $y=5x-8$
+\task $y=4x+8$
+\task $y=-4x-8$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 21}{8H2-C7-B28-D03-TN-TH-021}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;11)$ và $B(-3;-9)$.
+\begin{tasks}(2)
+\task $y=5x+3$
+\task $y=4x-3$
+\task $y=4x+3$
+\task $y=-4x+3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 22}{8H2-C7-B28-D03-TN-TH-022}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;11)$ và $B(-3;-17)$.
+\begin{tasks}(2)
+\task $y=5x-5$
+\task $y=4x-5$
+\task $y=-4x-5$
+\task $y=4x+5$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 23}{8H2-C7-B28-D03-TN-TH-023}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;10)$ và $B(4;1)$.
+\begin{tasks}(2)
+\task $y=-x-5$
+\task $y=0x+5$
+\task $y=-x+5$
+\task $y=x+5$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 24}{8H2-C7-B28-D03-TN-TH-024}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;0)$ và $B(-1;6)$.
+\begin{tasks}(2)
+\task $y=-2x-4$
+\task $y=-x+4$
+\task $y=2x+4$
+\task $y=-2x+4$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 25}{8H2-C7-B28-D03-TN-TH-025}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;24)$ và $B(2;0)$.
+\begin{tasks}(2)
+\task $y=-3x+8$
+\task $y=-4x-8$
+\task $y=-4x+8$
+\task $y=4x+8$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 26}{8H2-C7-B28-D03-TN-VD-026}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(4;-23)$ và $B(-1;-3)$.
+\begin{tasks}(2)
+\task $y=-3x-7$
+\task $y=4x-7$
+\task $y=-4x-7$
+\task $y=-4x+7$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 27}{8H2-C7-B28-D03-TN-VD-027}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;8)$ và $B(4;17)$.
+\begin{tasks}(2)
+\task $y=3x-5$
+\task $y=3x+5$
+\task $y=-3x+5$
+\task $y=4x+5$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 28}{8H2-C7-B28-D03-TN-VD-028}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;0)$ và $B(-2;-1)$.
+\begin{tasks}(2)
+\task $y=-x+3$
+\task $y=-x-3$
+\task $y=x-3$
+\task $y=0x-3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 29}{8H2-C7-B28-D03-TN-VD-029}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;4)$ và $B(-4;-10)$.
+\begin{tasks}(2)
+\task $y=-2x-2$
+\task $y=2x+2$
+\task $y=2x-2$
+\task $y=3x-2$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 30}{8H2-C7-B28-D03-TN-VD-030}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-3;-1)$ và $B(-4;-4)$.
+\begin{tasks}(2)
+\task $y=-3x+8$
+\task $y=4x+8$
+\task $y=3x+8$
+\task $y=3x-8$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 31}{8H2-C7-B28-D03-TN-VD-031}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;0)$ và $B(4;-6)$.
+\begin{tasks}(2)
+\task $y=-2x-2$
+\task $y=-x+2$
+\task $y=-2x+2$
+\task $y=2x+2$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 32}{8H2-C7-B28-D03-TN-VD-032}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;20)$ và $B(-3;-4)$.
+\begin{tasks}(2)
+\task $y=4x+8$
+\task $y=-4x+8$
+\task $y=4x-8$
+\task $y=5x+8$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 33}{8H2-C7-B28-D03-TN-VD-033}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;13)$ và $B(1;9)$.
+\begin{tasks}(2)
+\task $y=5x+5$
+\task $y=-4x+5$
+\task $y=4x-5$
+\task $y=4x+5$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 34}{8H2-C7-B28-D03-TN-VD-034}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(5;2)$ và $B(-4;-7)$.
+\begin{tasks}(2)
+\task $y=2x-3$
+\task $y=-x-3$
+\task $y=x-3$
+\task $y=x+3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 35}{8H2-C7-B28-D03-TN-VD-035}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;-4)$ và $B(-2;-12)$.
+\begin{tasks}(2)
+\task $y=4x-4$
+\task $y=5x-4$
+\task $y=-4x-4$
+\task $y=4x+4$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 36}{8H2-C7-B28-D03-TN-VD-036}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;9)$ và $B(-3;13)$.
+\begin{tasks}(2)
+\task $y=-3x+1$
+\task $y=-4x-1$
+\task $y=4x+1$
+\task $y=-4x+1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 37}{8H2-C7-B28-D03-TN-VD-037}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(0;7)$ và $B(-2;11)$.
+\begin{tasks}(2)
+\task $y=2x+7$
+\task $y=-2x-7$
+\task $y=-2x+7$
+\task $y=-x+7$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 38}{8H2-C7-B28-D03-TN-VD-038}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(1;-1)$ và $B(-5;11)$.
+\begin{tasks}(2)
+\task $y=-x+1$
+\task $y=2x+1$
+\task $y=-2x-1$
+\task $y=-2x+1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 39}{8H2-C7-B28-D03-TN-VD-039}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;5)$ và $B(-2;-3)$.
+\begin{tasks}(2)
+\task $y=2x+1$
+\task $y=3x+1$
+\task $y=2x-1$
+\task $y=-2x+1$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 40}{8H2-C7-B28-D03-TN-VD-040}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-5;-6)$ và $B(-4;-4)$.
+\begin{tasks}(2)
+\task $y=3x+4$
+\task $y=-2x+4$
+\task $y=2x-4$
+\task $y=2x+4$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 41}{8H2-C7-B28-D03-TN-VD-041}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;1)$ và $B(1;-2)$.
+\begin{tasks}(2)
+\task $y=4x-5$
+\task $y=3x-5$
+\task $y=-3x-5$
+\task $y=3x+5$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 42}{8H2-C7-B28-D03-TN-VD-042}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-2)$ và $B(5;-9)$.
+\begin{tasks}(2)
+\task $y=-x-4$
+\task $y=-x+4$
+\task $y=0x-4$
+\task $y=x-4$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 43}{8H2-C7-B28-D03-TN-VD-043}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;12)$ và $B(3;5)$.
+\begin{tasks}(2)
+\task $y=-x-8$
+\task $y=x+8$
+\task $y=-x+8$
+\task $y=0x+8$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 44}{8H2-C7-B28-D03-TN-VD-044}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(2;3)$ và $B(3;1)$.
+\begin{tasks}(2)
+\task $y=-2x-7$
+\task $y=-x+7$
+\task $y=-2x+7$
+\task $y=2x+7$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 45}{8H2-C7-B28-D03-TN-VD-045}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(3;18)$ và $B(-1;2)$.
+\begin{tasks}(2)
+\task $y=-4x+6$
+\task $y=4x-6$
+\task $y=4x+6$
+\task $y=5x+6$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 46}{8H2-C7-B28-D03-TN-VD-046}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-13)$ và $B(-3;-9)$.
+\begin{tasks}(2)
+\task $y=4x+3$
+\task $y=4x-3$
+\task $y=5x+3$
+\task $y=-4x+3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 47}{8H2-C7-B28-D03-TN-VD-047}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;-3)$ và $B(5;21)$.
+\begin{tasks}(2)
+\task $y=-4x+1$
+\task $y=4x-1$
+\task $y=5x+1$
+\task $y=4x+1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 48}{8H2-C7-B28-D03-TN-VD-048}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-2;-1)$ và $B(-5;-13)$.
+\begin{tasks}(2)
+\task $y=4x-7$
+\task $y=4x+7$
+\task $y=5x+7$
+\task $y=-4x+7$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 49}{8H2-C7-B28-D03-TN-VD-049}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-4;-6)$ và $B(3;1)$.
+\begin{tasks}(2)
+\task $y=2x-2$
+\task $y=x-2$
+\task $y=x+2$
+\task $y=-x-2$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 50}{8H2-C7-B28-D03-TN-VD-050}
+Xác định hàm số bậc nhất $y=ax+b$ có đồ thị đi qua hai điểm $A(-1;5)$ và $B(1;9)$.
+\begin{tasks}(2)
+\task $y=3x+7$
+\task $y=2x-7$
+\task $y=-2x+7$
+\task $y=2x+7$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\clearpage\section*{Bảng đáp án trắc nghiệm}
+\begin{center}\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+1. B & 2. D & 3. C & 4. A & 5. B & 6. C & 7. D & 8. C & 9. D & 10. C\\\hline
+11. A & 12. D & 13. A & 14. C & 15. A & 16. D & 17. B & 18. D & 19. B & 20. A\\\hline
+21. C & 22. B & 23. C & 24. D & 25. C & 26. C & 27. B & 28. B & 29. C & 30. C\\\hline
+31. C & 32. A & 33. D & 34. C & 35. A & 36. D & 37. C & 38. D & 39. A & 40. D\\\hline
+41. B & 42. A & 43. C & 44. C & 45. C & 46. A & 47. D & 48. B & 49. B & 50. D\\\hline
+\end{tabular}\end{center}
+\end{document}

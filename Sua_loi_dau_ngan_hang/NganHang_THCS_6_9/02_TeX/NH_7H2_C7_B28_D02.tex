@@ -1,0 +1,742 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=1.8cm,bottom=1.8cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage{tasks}
+\usepackage{tikz}
+\settasks{label=\textbf{\Alph*.},label-width=1.5em,item-indent=2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small Ngân hàng bài tập Toán 7 -- 7H2-C7-B28-D02}
+\cfoot{\small Trang \thepage}
+\newif\ifloigiai
+\loigiaitrue
+\newenvironment{cauhoi}[2]{%
+  \par\medskip\noindent\rule{\textwidth}{0.4pt}\par\nopagebreak
+  \noindent\textbf{[#1]}\hfill{\scriptsize\ttfamily #2}\par\nopagebreak\smallskip}{\par}
+\newcommand{\loigiai}[1]{\ifloigiai\par\smallskip\noindent\textit{Lời giải.} #1\par\fi}
+\newcommand{\dapan}[1]{\ifloigiai\par\smallskip\noindent\textit{Đáp án:} \textbf{#1}\par\fi}
+\begin{document}
+\begin{center}
+{\Large\textbf{NGÂN HÀNG BÀI TẬP TOÁN 7}}\\[3pt]
+\textbf{Chương 7. Biểu thức đại số và đa thức một biến}\\[2pt]
+\textbf{Bài 28. Phép chia đa thức một biến}\\[2pt]
+\textbf{Dạng D02: Phép chia có dư, tìm a để chia hết}\\[2pt]
+\textit{Mã dạng: 7H2-C7-B28-D02 \quad 50 bài tự luận + 50 câu trắc nghiệm \quad (VD: 25, VDC: 25)}
+\end{center}
+\textbf{Quy ước mã câu:} \textit{khối, học kì, chương, bài, dạng, loại (TL/TN), mức độ, số thứ tự}.\par Ví dụ: \texttt{7H2-C7-B28-D02-TL-NB-001}.\par Để in bản cho học sinh, đặt \verb|\loigiaifalse| ngay sau \verb|\loigiaitrue|.
+\section*{Phần I. Tự luận}
+\begin{cauhoi}{Bài 1}{7H2-C7-B28-D02-TL-VD-001}
+Tìm $a$ để đa thức $x^{2}+ax-4$ chia hết cho $x-4$.
+\loigiai{Đa thức chia hết cho $x-4$ khi $x=4$ là nghiệm: $16+4a-4=0$, suy ra $a=-3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 2}{7H2-C7-B28-D02-TL-VD-002}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x+3$.
+\loigiai{Đa thức chia hết cho $x+3$ khi $x=-3$ là nghiệm: $9-3a+3=0$, suy ra $a=4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 3}{7H2-C7-B28-D02-TL-VD-003}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $4$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{6\cdot 4}{2}=12$ ($\text{cm}^2$). Thể tích là $12\cdot 6=72$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 4}{7H2-C7-B28-D02-TL-VD-004}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x-2$.
+\loigiai{Đa thức chia hết cho $x-2$ khi $x=2$ là nghiệm: $4+2a=0$, suy ra $a=-2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 5}{7H2-C7-B28-D02-TL-VD-005}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a+4=0$, suy ra $a=-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 6}{7H2-C7-B28-D02-TL-VD-006}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $8$ cm và $10$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{8\cdot 10}{2}=40$ ($\text{cm}^2$). Thể tích là $40\cdot 4=160$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 7}{7H2-C7-B28-D02-TL-VD-007}
+Tìm $a$ để đa thức $x^{2}+ax+2$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a+2=0$, suy ra $a=-3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 8}{7H2-C7-B28-D02-TL-VD-008}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $10$ cm $\times$ $8$ cm, chiều cao lần lượt $6$ cm và $5$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $10\cdot 8\cdot 6=480$ và $10\cdot 8\cdot 5=400$ ($\text{cm}^3$). Thể tích khối ghép là $480+400=880$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 9}{7H2-C7-B28-D02-TL-VD-009}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $7$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{9\cdot 7}{2}=31,5$ ($\text{cm}^2$). Thể tích là $31,5\cdot 6=189$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 10}{7H2-C7-B28-D02-TL-VD-010}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x+2$.
+\loigiai{Đa thức chia hết cho $x+2$ khi $x=-2$ là nghiệm: $4-2a+6=0$, suy ra $a=5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 11}{7H2-C7-B28-D02-TL-VD-011}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $7$ cm, chiều cao lần lượt $10$ cm và $9$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $6\cdot 7\cdot 10=420$ và $6\cdot 7\cdot 9=378$ ($\text{cm}^3$). Thể tích khối ghép là $420+378=798$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 12}{7H2-C7-B28-D02-TL-VD-012}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a-6=0$, suy ra $a=-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 13}{7H2-C7-B28-D02-TL-VD-013}
+Tìm $a$ để đa thức $x^{2}+ax-8$ chia hết cho $x-2$.
+\loigiai{Đa thức chia hết cho $x-2$ khi $x=2$ là nghiệm: $4+2a-8=0$, suy ra $a=2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 14}{7H2-C7-B28-D02-TL-VD-014}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a+6=0$, suy ra $a=-7$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 15}{7H2-C7-B28-D02-TL-VD-015}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a=0$, suy ra $a=1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 16}{7H2-C7-B28-D02-TL-VD-016}
+Tìm $a$ để đa thức $x^{2}+ax+7$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a+7=0$, suy ra $a=-8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 17}{7H2-C7-B28-D02-TL-VD-017}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $3$ cm, chiều cao lần lượt $9$ cm và $11$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $6\cdot 3\cdot 9=162$ và $6\cdot 3\cdot 11=198$ ($\text{cm}^3$). Thể tích khối ghép là $162+198=360$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 18}{7H2-C7-B28-D02-TL-VD-018}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a+3=0$, suy ra $a=-4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 19}{7H2-C7-B28-D02-TL-VD-019}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-2$.
+\loigiai{Đa thức chia hết cho $x-2$ khi $x=2$ là nghiệm: $4+2a+6=0$, suy ra $a=-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 20}{7H2-C7-B28-D02-TL-VD-020}
+Tìm $a$ để đa thức $x^{2}+ax+7$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a+7=0$, suy ra $a=8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 21}{7H2-C7-B28-D02-TL-VD-021}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $8$ cm, chiều cao lăng trụ $2$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{9\cdot 8}{2}=36$ ($\text{cm}^2$). Thể tích là $36\cdot 2=72$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 22}{7H2-C7-B28-D02-TL-VD-022}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $7$ cm, chiều cao lăng trụ $10$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{3\cdot 7}{2}=10,5$ ($\text{cm}^2$). Thể tích là $10,5\cdot 10=105$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 23}{7H2-C7-B28-D02-TL-VD-023}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $7$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{6\cdot 7}{2}=21$ ($\text{cm}^2$). Thể tích là $21\cdot 6=126$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 24}{7H2-C7-B28-D02-TL-VD-024}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $2$ cm $\times$ $4$ cm, chiều cao lần lượt $9$ cm và $7$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $2\cdot 4\cdot 9=72$ và $2\cdot 4\cdot 7=56$ ($\text{cm}^3$). Thể tích khối ghép là $72+56=128$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 25}{7H2-C7-B28-D02-TL-VD-025}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $10$ cm, chiều cao lăng trụ $8$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{3\cdot 10}{2}=15$ ($\text{cm}^2$). Thể tích là $15\cdot 8=120$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 26}{7H2-C7-B28-D02-TL-VDC-026}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $7$ cm và $5$ cm, chiều cao lăng trụ $10$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{7\cdot 5}{2}=17,5$ ($\text{cm}^2$). Thể tích là $17,5\cdot 10=175$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 27}{7H2-C7-B28-D02-TL-VDC-027}
+Tìm $a$ để đa thức $x^{2}+ax+2$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a+2=0$, suy ra $a=3$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 28}{7H2-C7-B28-D02-TL-VDC-028}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $10$ cm và $5$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{10\cdot 5}{2}=25$ ($\text{cm}^2$). Thể tích là $25\cdot 4=100$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 29}{7H2-C7-B28-D02-TL-VDC-029}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $7$ cm $\times$ $4$ cm, chiều cao lần lượt $6$ cm và $2$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $7\cdot 4\cdot 6=168$ và $7\cdot 4\cdot 2=56$ ($\text{cm}^3$). Thể tích khối ghép là $168+56=224$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 30}{7H2-C7-B28-D02-TL-VDC-030}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $2$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{6\cdot 2}{2}=6$ ($\text{cm}^2$). Thể tích là $6\cdot 4=24$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 31}{7H2-C7-B28-D02-TL-VDC-031}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $9$ cm $\times$ $8$ cm, chiều cao lần lượt $8$ cm và $10$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $9\cdot 8\cdot 8=576$ và $9\cdot 8\cdot 10=720$ ($\text{cm}^3$). Thể tích khối ghép là $576+720=1296$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 32}{7H2-C7-B28-D02-TL-VDC-032}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $7$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{3\cdot 7}{2}=10,5$ ($\text{cm}^2$). Thể tích là $10,5\cdot 12=126$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 33}{7H2-C7-B28-D02-TL-VDC-033}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $4$ cm, chiều cao lăng trụ $5$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{6\cdot 4}{2}=12$ ($\text{cm}^2$). Thể tích là $12\cdot 5=60$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 34}{7H2-C7-B28-D02-TL-VDC-034}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x-2$.
+\loigiai{Đa thức chia hết cho $x-2$ khi $x=2$ là nghiệm: $4+2a+4=0$, suy ra $a=-4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 35}{7H2-C7-B28-D02-TL-VDC-035}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x-2$.
+\loigiai{Đa thức chia hết cho $x-2$ khi $x=2$ là nghiệm: $4+2a-6=0$, suy ra $a=1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 36}{7H2-C7-B28-D02-TL-VDC-036}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $4$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{3\cdot 4}{2}=6$ ($\text{cm}^2$). Thể tích là $6\cdot 4=24$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 37}{7H2-C7-B28-D02-TL-VDC-037}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $3$ cm $\times$ $5$ cm, chiều cao lần lượt $10$ cm và $5$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $3\cdot 5\cdot 10=150$ và $3\cdot 5\cdot 5=75$ ($\text{cm}^3$). Thể tích khối ghép là $150+75=225$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 38}{7H2-C7-B28-D02-TL-VDC-038}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $5$ cm, chiều cao lần lượt $7$ cm và $11$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $6\cdot 5\cdot 7=210$ và $6\cdot 5\cdot 11=330$ ($\text{cm}^3$). Thể tích khối ghép là $210+330=540$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 39}{7H2-C7-B28-D02-TL-VDC-039}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $10$ cm, chiều cao lăng trụ $7$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{9\cdot 10}{2}=45$ ($\text{cm}^2$). Thể tích là $45\cdot 7=315$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 40}{7H2-C7-B28-D02-TL-VDC-040}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $5$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{3\cdot 5}{2}=7,5$ ($\text{cm}^2$). Thể tích là $7,5\cdot 12=90$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 41}{7H2-C7-B28-D02-TL-VDC-041}
+Tìm $a$ để đa thức $x^{2}+ax-3$ chia hết cho $x+3$.
+\loigiai{Đa thức chia hết cho $x+3$ khi $x=-3$ là nghiệm: $9-3a-3=0$, suy ra $a=2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 42}{7H2-C7-B28-D02-TL-VDC-042}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a+4=0$, suy ra $a=5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 43}{7H2-C7-B28-D02-TL-VDC-043}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $7$ cm, chiều cao lần lượt $3$ cm và $11$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $6\cdot 7\cdot 3=126$ và $6\cdot 7\cdot 11=462$ ($\text{cm}^3$). Thể tích khối ghép là $126+462=588$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 44}{7H2-C7-B28-D02-TL-VDC-044}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x+1$.
+\loigiai{Đa thức chia hết cho $x+1$ khi $x=-1$ là nghiệm: $1-a+3=0$, suy ra $a=4$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 45}{7H2-C7-B28-D02-TL-VDC-045}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $7$ cm và $5$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{7\cdot 5}{2}=17,5$ ($\text{cm}^2$). Thể tích là $17,5\cdot 12=210$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 46}{7H2-C7-B28-D02-TL-VDC-046}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x+2$.
+\loigiai{Đa thức chia hết cho $x+2$ khi $x=-2$ là nghiệm: $4-2a=0$, suy ra $a=2$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 47}{7H2-C7-B28-D02-TL-VDC-047}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $4$ cm $\times$ $5$ cm, chiều cao lần lượt $7$ cm và $12$ cm. Tính thể tích khối ghép.
+\loigiai{Thể tích hai khối là $4\cdot 5\cdot 7=140$ và $4\cdot 5\cdot 12=240$ ($\text{cm}^3$). Thể tích khối ghép là $140+240=380$ ($\text{cm}^3$).}
+\end{cauhoi}
+\begin{cauhoi}{Bài 48}{7H2-C7-B28-D02-TL-VDC-048}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-3$.
+\loigiai{Đa thức chia hết cho $x-3$ khi $x=3$ là nghiệm: $9+3a+6=0$, suy ra $a=-5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 49}{7H2-C7-B28-D02-TL-VDC-049}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x-1$.
+\loigiai{Đa thức chia hết cho $x-1$ khi $x=1$ là nghiệm: $1+a-6=0$, suy ra $a=5$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 50}{7H2-C7-B28-D02-TL-VDC-050}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $3$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\loigiai{Diện tích đáy là $\dfrac{6\cdot 3}{2}=9$ ($\text{cm}^2$). Thể tích là $9\cdot 12=108$ ($\text{cm}^3$).}
+\end{cauhoi}
+\clearpage\section*{Phần II. Trắc nghiệm}
+\begin{cauhoi}{Câu 1}{7H2-C7-B28-D02-TN-VD-001}
+Tìm $a$ để đa thức $x^{2}+ax-4$ chia hết cho $x-4$.
+\begin{tasks}(2)
+\task $-3$
+\task $-4$
+\task $-2$
+\task $3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 2}{7H2-C7-B28-D02-TN-VD-002}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x+3$.
+\begin{tasks}(2)
+\task $5$
+\task $4$
+\task $3$
+\task $-4$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 3}{7H2-C7-B28-D02-TN-VD-003}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $4$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $60\text{ cm}^3$
+\task $144\text{ cm}^3$
+\task $72\text{ cm}^3$
+\task $82\text{ cm}^3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 4}{7H2-C7-B28-D02-TN-VD-004}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x-2$.
+\begin{tasks}(2)
+\task $-1$
+\task $-3$
+\task $-2$
+\task $2$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 5}{7H2-C7-B28-D02-TN-VD-005}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $-4$
+\task $5$
+\task $-6$
+\task $-5$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 6}{7H2-C7-B28-D02-TN-VD-006}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $8$ cm và $10$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $72\text{ cm}^3$
+\task $160\text{ cm}^3$
+\task $320\text{ cm}^3$
+\task $170\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 7}{7H2-C7-B28-D02-TN-VD-007}
+Tìm $a$ để đa thức $x^{2}+ax+2$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $3$
+\task $-2$
+\task $-4$
+\task $-3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 8}{7H2-C7-B28-D02-TN-VD-008}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $10$ cm $\times$ $8$ cm, chiều cao lần lượt $6$ cm và $5$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $880\text{ cm}^3$
+\task $400\text{ cm}^3$
+\task $881\text{ cm}^3$
+\task $480\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 9}{7H2-C7-B28-D02-TN-VD-009}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $7$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $96\text{ cm}^3$
+\task $378\text{ cm}^3$
+\task $199\text{ cm}^3$
+\task $189\text{ cm}^3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 10}{7H2-C7-B28-D02-TN-VD-010}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x+2$.
+\begin{tasks}(2)
+\task $-5$
+\task $4$
+\task $5$
+\task $6$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 11}{7H2-C7-B28-D02-TN-VD-011}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $7$ cm, chiều cao lần lượt $10$ cm và $9$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $798\text{ cm}^3$
+\task $799\text{ cm}^3$
+\task $420\text{ cm}^3$
+\task $378\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 12}{7H2-C7-B28-D02-TN-VD-012}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $5$
+\task $-6$
+\task $-5$
+\task $-4$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 13}{7H2-C7-B28-D02-TN-VD-013}
+Tìm $a$ để đa thức $x^{2}+ax-8$ chia hết cho $x-2$.
+\begin{tasks}(2)
+\task $3$
+\task $-2$
+\task $2$
+\task $1$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 14}{7H2-C7-B28-D02-TN-VD-014}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $7$
+\task $-7$
+\task $-8$
+\task $-6$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 15}{7H2-C7-B28-D02-TN-VD-015}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $2$
+\task $0$
+\task $1$
+\task $-1$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 16}{7H2-C7-B28-D02-TN-VD-016}
+Tìm $a$ để đa thức $x^{2}+ax+7$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $8$
+\task $-7$
+\task $-9$
+\task $-8$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 17}{7H2-C7-B28-D02-TN-VD-017}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $3$ cm, chiều cao lần lượt $9$ cm và $11$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $361\text{ cm}^3$
+\task $360\text{ cm}^3$
+\task $162\text{ cm}^3$
+\task $198\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 18}{7H2-C7-B28-D02-TN-VD-018}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $4$
+\task $-4$
+\task $-5$
+\task $-3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 19}{7H2-C7-B28-D02-TN-VD-019}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-2$.
+\begin{tasks}(2)
+\task $-5$
+\task $5$
+\task $-6$
+\task $-4$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 20}{7H2-C7-B28-D02-TN-VD-020}
+Tìm $a$ để đa thức $x^{2}+ax+7$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $8$
+\task $-8$
+\task $9$
+\task $7$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 21}{7H2-C7-B28-D02-TN-VD-021}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $8$ cm, chiều cao lăng trụ $2$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $72\text{ cm}^3$
+\task $144\text{ cm}^3$
+\task $82\text{ cm}^3$
+\task $34\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 22}{7H2-C7-B28-D02-TN-VD-022}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $7$ cm, chiều cao lăng trụ $10$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $115\text{ cm}^3$
+\task $105\text{ cm}^3$
+\task $210\text{ cm}^3$
+\task $100\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 23}{7H2-C7-B28-D02-TN-VD-023}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $7$ cm, chiều cao lăng trụ $6$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $78\text{ cm}^3$
+\task $126\text{ cm}^3$
+\task $252\text{ cm}^3$
+\task $136\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 24}{7H2-C7-B28-D02-TN-VD-024}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $2$ cm $\times$ $4$ cm, chiều cao lần lượt $9$ cm và $7$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $129\text{ cm}^3$
+\task $128\text{ cm}^3$
+\task $56\text{ cm}^3$
+\task $72\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 25}{7H2-C7-B28-D02-TN-VD-025}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $10$ cm, chiều cao lăng trụ $8$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $130\text{ cm}^3$
+\task $240\text{ cm}^3$
+\task $104\text{ cm}^3$
+\task $120\text{ cm}^3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 26}{7H2-C7-B28-D02-TN-VDC-026}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $7$ cm và $5$ cm, chiều cao lăng trụ $10$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $185\text{ cm}^3$
+\task $350\text{ cm}^3$
+\task $175\text{ cm}^3$
+\task $120\text{ cm}^3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 27}{7H2-C7-B28-D02-TN-VDC-027}
+Tìm $a$ để đa thức $x^{2}+ax+2$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $4$
+\task $-3$
+\task $2$
+\task $3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 28}{7H2-C7-B28-D02-TN-VDC-028}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $10$ cm và $5$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $100\text{ cm}^3$
+\task $200\text{ cm}^3$
+\task $60\text{ cm}^3$
+\task $110\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 29}{7H2-C7-B28-D02-TN-VDC-029}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $7$ cm $\times$ $4$ cm, chiều cao lần lượt $6$ cm và $2$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $225\text{ cm}^3$
+\task $168\text{ cm}^3$
+\task $56\text{ cm}^3$
+\task $224\text{ cm}^3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 30}{7H2-C7-B28-D02-TN-VDC-030}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $2$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $34\text{ cm}^3$
+\task $32\text{ cm}^3$
+\task $48\text{ cm}^3$
+\task $24\text{ cm}^3$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 31}{7H2-C7-B28-D02-TN-VDC-031}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $9$ cm $\times$ $8$ cm, chiều cao lần lượt $8$ cm và $10$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $1296\text{ cm}^3$
+\task $1297\text{ cm}^3$
+\task $576\text{ cm}^3$
+\task $720\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 32}{7H2-C7-B28-D02-TN-VDC-032}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $7$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $126\text{ cm}^3$
+\task $252\text{ cm}^3$
+\task $120\text{ cm}^3$
+\task $136\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 33}{7H2-C7-B28-D02-TN-VDC-033}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $4$ cm, chiều cao lăng trụ $5$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $60\text{ cm}^3$
+\task $120\text{ cm}^3$
+\task $50\text{ cm}^3$
+\task $70\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 34}{7H2-C7-B28-D02-TN-VDC-034}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x-2$.
+\begin{tasks}(2)
+\task $-4$
+\task $4$
+\task $-5$
+\task $-3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 35}{7H2-C7-B28-D02-TN-VDC-035}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x-2$.
+\begin{tasks}(2)
+\task $2$
+\task $1$
+\task $0$
+\task $-1$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 36}{7H2-C7-B28-D02-TN-VDC-036}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $4$ cm, chiều cao lăng trụ $4$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $24\text{ cm}^3$
+\task $48\text{ cm}^3$
+\task $28\text{ cm}^3$
+\task $34\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 37}{7H2-C7-B28-D02-TN-VDC-037}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $3$ cm $\times$ $5$ cm, chiều cao lần lượt $10$ cm và $5$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $75\text{ cm}^3$
+\task $150\text{ cm}^3$
+\task $225\text{ cm}^3$
+\task $226\text{ cm}^3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 38}{7H2-C7-B28-D02-TN-VDC-038}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $5$ cm, chiều cao lần lượt $7$ cm và $11$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $540\text{ cm}^3$
+\task $541\text{ cm}^3$
+\task $330\text{ cm}^3$
+\task $210\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 39}{7H2-C7-B28-D02-TN-VDC-039}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $9$ cm và $10$ cm, chiều cao lăng trụ $7$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $315\text{ cm}^3$
+\task $325\text{ cm}^3$
+\task $630\text{ cm}^3$
+\task $133\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 40}{7H2-C7-B28-D02-TN-VDC-040}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $3$ cm và $5$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $90\text{ cm}^3$
+\task $180\text{ cm}^3$
+\task $96\text{ cm}^3$
+\task $100\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 41}{7H2-C7-B28-D02-TN-VDC-041}
+Tìm $a$ để đa thức $x^{2}+ax-3$ chia hết cho $x+3$.
+\begin{tasks}(2)
+\task $3$
+\task $2$
+\task $-2$
+\task $1$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 42}{7H2-C7-B28-D02-TN-VDC-042}
+Tìm $a$ để đa thức $x^{2}+ax+4$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $-5$
+\task $5$
+\task $6$
+\task $4$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 43}{7H2-C7-B28-D02-TN-VDC-043}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $6$ cm $\times$ $7$ cm, chiều cao lần lượt $3$ cm và $11$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $588\text{ cm}^3$
+\task $589\text{ cm}^3$
+\task $462\text{ cm}^3$
+\task $126\text{ cm}^3$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 44}{7H2-C7-B28-D02-TN-VDC-044}
+Tìm $a$ để đa thức $x^{2}+ax+3$ chia hết cho $x+1$.
+\begin{tasks}(2)
+\task $3$
+\task $5$
+\task $4$
+\task $-4$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 45}{7H2-C7-B28-D02-TN-VDC-045}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $7$ cm và $5$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $420\text{ cm}^3$
+\task $210\text{ cm}^3$
+\task $144\text{ cm}^3$
+\task $220\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 46}{7H2-C7-B28-D02-TN-VDC-046}
+Tìm $a$ để đa thức $x^{2}+ax$ chia hết cho $x+2$.
+\begin{tasks}(2)
+\task $3$
+\task $1$
+\task $-2$
+\task $2$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 47}{7H2-C7-B28-D02-TN-VDC-047}
+Một khối hình ghép gồm hai hình hộp chữ nhật xếp chồng lên nhau, cùng đáy $4$ cm $\times$ $5$ cm, chiều cao lần lượt $7$ cm và $12$ cm. Tính thể tích khối ghép.
+\begin{tasks}(2)
+\task $140\text{ cm}^3$
+\task $380\text{ cm}^3$
+\task $240\text{ cm}^3$
+\task $381\text{ cm}^3$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 48}{7H2-C7-B28-D02-TN-VDC-048}
+Tìm $a$ để đa thức $x^{2}+ax+6$ chia hết cho $x-3$.
+\begin{tasks}(2)
+\task $-5$
+\task $-4$
+\task $-6$
+\task $5$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 49}{7H2-C7-B28-D02-TN-VDC-049}
+Tìm $a$ để đa thức $x^{2}+ax-6$ chia hết cho $x-1$.
+\begin{tasks}(2)
+\task $6$
+\task $-5$
+\task $4$
+\task $5$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 50}{7H2-C7-B28-D02-TN-VDC-050}
+Một lăng trụ đứng có đáy là tam giác vuông với hai cạnh góc vuông $6$ cm và $3$ cm, chiều cao lăng trụ $12$ cm. Tính thể tích.
+\begin{tasks}(2)
+\task $216\text{ cm}^3$
+\task $1080\text{ cm}^3$
+\task $108\text{ cm}^3$
+\task $118\text{ cm}^3$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\clearpage\section*{Bảng đáp án trắc nghiệm}
+\begin{center}\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+1. A & 2. B & 3. C & 4. C & 5. D & 6. B & 7. D & 8. A & 9. D & 10. C\\\hline
+11. A & 12. C & 13. C & 14. B & 15. C & 16. D & 17. B & 18. B & 19. A & 20. A\\\hline
+21. A & 22. B & 23. B & 24. B & 25. D & 26. C & 27. D & 28. A & 29. D & 30. D\\\hline
+31. A & 32. A & 33. A & 34. A & 35. B & 36. A & 37. C & 38. A & 39. A & 40. A\\\hline
+41. B & 42. B & 43. A & 44. C & 45. B & 46. D & 47. B & 48. A & 49. D & 50. C\\\hline
+\end{tabular}\end{center}
+\end{document}

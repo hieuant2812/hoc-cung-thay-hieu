@@ -1,0 +1,742 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[top=1.8cm,bottom=1.8cm,left=1.8cm,right=1.8cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage{tasks}
+\usepackage{tikz}
+\settasks{label=\textbf{\Alph*.},label-width=1.5em,item-indent=2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small Ngân hàng bài tập Toán 8 -- 8H1-C2-B8-D02}
+\cfoot{\small Trang \thepage}
+\newif\ifloigiai
+\loigiaitrue
+\newenvironment{cauhoi}[2]{%
+  \par\medskip\noindent\rule{\textwidth}{0.4pt}\par\nopagebreak
+  \noindent\textbf{[#1]}\hfill{\scriptsize\ttfamily #2}\par\nopagebreak\smallskip}{\par}
+\newcommand{\loigiai}[1]{\ifloigiai\par\smallskip\noindent\textit{Lời giải.} #1\par\fi}
+\newcommand{\dapan}[1]{\ifloigiai\par\smallskip\noindent\textit{Đáp án:} \textbf{#1}\par\fi}
+\begin{document}
+\begin{center}
+{\Large\textbf{NGÂN HÀNG BÀI TẬP TOÁN 8}}\\[3pt]
+\textbf{Chương 2. Hằng đẳng thức đáng nhớ và ứng dụng}\\[2pt]
+\textbf{Bài 8. Tổng và hiệu hai lập phương}\\[2pt]
+\textbf{Dạng D02: Rút gọn biểu thức}\\[2pt]
+\textit{Mã dạng: 8H1-C2-B8-D02 \quad 50 bài tự luận + 50 câu trắc nghiệm \quad (TH: 25, VD: 25)}
+\end{center}
+\textbf{Quy ước mã câu:} \textit{khối, học kì, chương, bài, dạng, loại (TL/TN), mức độ, số thứ tự}.\par Ví dụ: \texttt{8H1-C2-B8-D02-TL-NB-001}.\par Để in bản cho học sinh, đặt \verb|\loigiaifalse| ngay sau \verb|\loigiaitrue|.
+\section*{Phần I. Tự luận}
+\begin{cauhoi}{Bài 1}{8H1-C2-B8-D02-TL-TH-001}
+Rút gọn biểu thức $(x+52)(x^{2}-52x+2704)-x^{3}$.
+\loigiai{Ta có $(x+52)(x^{2}-52x+2704)=x^{3}+140608$ nên biểu thức bằng $x^{3}+140608-x^{3}=140608$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 2}{8H1-C2-B8-D02-TL-TH-002}
+Rút gọn biểu thức $(x+51)(x^{2}-51x+2601)-x^{3}$.
+\loigiai{Ta có $(x+51)(x^{2}-51x+2601)=x^{3}+132651$ nên biểu thức bằng $x^{3}+132651-x^{3}=132651$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 3}{8H1-C2-B8-D02-TL-TH-003}
+Rút gọn biểu thức $(x+59)(x^{2}-59x+3481)-x^{3}$.
+\loigiai{Ta có $(x+59)(x^{2}-59x+3481)=x^{3}+205379$ nên biểu thức bằng $x^{3}+205379-x^{3}=205379$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 4}{8H1-C2-B8-D02-TL-TH-004}
+Rút gọn biểu thức $(x+5)(x^{2}-5x+25)-x^{3}$.
+\loigiai{Ta có $(x+5)(x^{2}-5x+25)=x^{3}+125$ nên biểu thức bằng $x^{3}+125-x^{3}=125$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 5}{8H1-C2-B8-D02-TL-TH-005}
+Rút gọn biểu thức $(x+41)(x^{2}-41x+1681)-x^{3}$.
+\loigiai{Ta có $(x+41)(x^{2}-41x+1681)=x^{3}+68921$ nên biểu thức bằng $x^{3}+68921-x^{3}=68921$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 6}{8H1-C2-B8-D02-TL-TH-006}
+Rút gọn biểu thức $(x+40)(x^{2}-40x+1600)-x^{3}$.
+\loigiai{Ta có $(x+40)(x^{2}-40x+1600)=x^{3}+64000$ nên biểu thức bằng $x^{3}+64000-x^{3}=64000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 7}{8H1-C2-B8-D02-TL-TH-007}
+Rút gọn biểu thức $(x+15)(x^{2}-15x+225)-x^{3}$.
+\loigiai{Ta có $(x+15)(x^{2}-15x+225)=x^{3}+3375$ nên biểu thức bằng $x^{3}+3375-x^{3}=3375$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 8}{8H1-C2-B8-D02-TL-TH-008}
+Rút gọn biểu thức $(x+1)(x^{2}-x+1)-x^{3}$.
+\loigiai{Ta có $(x+1)(x^{2}-x+1)=x^{3}+1$ nên biểu thức bằng $x^{3}+1-x^{3}=1$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 9}{8H1-C2-B8-D02-TL-TH-009}
+Rút gọn biểu thức $(x+9)(x^{2}-9x+81)-x^{3}$.
+\loigiai{Ta có $(x+9)(x^{2}-9x+81)=x^{3}+729$ nên biểu thức bằng $x^{3}+729-x^{3}=729$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 10}{8H1-C2-B8-D02-TL-TH-010}
+Rút gọn biểu thức $(x+12)(x^{2}-12x+144)-x^{3}$.
+\loigiai{Ta có $(x+12)(x^{2}-12x+144)=x^{3}+1728$ nên biểu thức bằng $x^{3}+1728-x^{3}=1728$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 11}{8H1-C2-B8-D02-TL-TH-011}
+Rút gọn biểu thức $(x+6)(x^{2}-6x+36)-x^{3}$.
+\loigiai{Ta có $(x+6)(x^{2}-6x+36)=x^{3}+216$ nên biểu thức bằng $x^{3}+216-x^{3}=216$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 12}{8H1-C2-B8-D02-TL-TH-012}
+Rút gọn biểu thức $(x+49)(x^{2}-49x+2401)-x^{3}$.
+\loigiai{Ta có $(x+49)(x^{2}-49x+2401)=x^{3}+117649$ nên biểu thức bằng $x^{3}+117649-x^{3}=117649$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 13}{8H1-C2-B8-D02-TL-TH-013}
+Rút gọn biểu thức $(x+44)(x^{2}-44x+1936)-x^{3}$.
+\loigiai{Ta có $(x+44)(x^{2}-44x+1936)=x^{3}+85184$ nên biểu thức bằng $x^{3}+85184-x^{3}=85184$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 14}{8H1-C2-B8-D02-TL-TH-014}
+Rút gọn biểu thức $(x+47)(x^{2}-47x+2209)-x^{3}$.
+\loigiai{Ta có $(x+47)(x^{2}-47x+2209)=x^{3}+103823$ nên biểu thức bằng $x^{3}+103823-x^{3}=103823$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 15}{8H1-C2-B8-D02-TL-TH-015}
+Rút gọn biểu thức $(x+19)(x^{2}-19x+361)-x^{3}$.
+\loigiai{Ta có $(x+19)(x^{2}-19x+361)=x^{3}+6859$ nên biểu thức bằng $x^{3}+6859-x^{3}=6859$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 16}{8H1-C2-B8-D02-TL-TH-016}
+Rút gọn biểu thức $(x+38)(x^{2}-38x+1444)-x^{3}$.
+\loigiai{Ta có $(x+38)(x^{2}-38x+1444)=x^{3}+54872$ nên biểu thức bằng $x^{3}+54872-x^{3}=54872$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 17}{8H1-C2-B8-D02-TL-TH-017}
+Rút gọn biểu thức $(x+31)(x^{2}-31x+961)-x^{3}$.
+\loigiai{Ta có $(x+31)(x^{2}-31x+961)=x^{3}+29791$ nên biểu thức bằng $x^{3}+29791-x^{3}=29791$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 18}{8H1-C2-B8-D02-TL-TH-018}
+Rút gọn biểu thức $(x+11)(x^{2}-11x+121)-x^{3}$.
+\loigiai{Ta có $(x+11)(x^{2}-11x+121)=x^{3}+1331$ nên biểu thức bằng $x^{3}+1331-x^{3}=1331$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 19}{8H1-C2-B8-D02-TL-TH-019}
+Rút gọn biểu thức $(x+60)(x^{2}-60x+3600)-x^{3}$.
+\loigiai{Ta có $(x+60)(x^{2}-60x+3600)=x^{3}+216000$ nên biểu thức bằng $x^{3}+216000-x^{3}=216000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 20}{8H1-C2-B8-D02-TL-TH-020}
+Rút gọn biểu thức $(x+25)(x^{2}-25x+625)-x^{3}$.
+\loigiai{Ta có $(x+25)(x^{2}-25x+625)=x^{3}+15625$ nên biểu thức bằng $x^{3}+15625-x^{3}=15625$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 21}{8H1-C2-B8-D02-TL-TH-021}
+Rút gọn biểu thức $(x+26)(x^{2}-26x+676)-x^{3}$.
+\loigiai{Ta có $(x+26)(x^{2}-26x+676)=x^{3}+17576$ nên biểu thức bằng $x^{3}+17576-x^{3}=17576$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 22}{8H1-C2-B8-D02-TL-TH-022}
+Rút gọn biểu thức $(x+58)(x^{2}-58x+3364)-x^{3}$.
+\loigiai{Ta có $(x+58)(x^{2}-58x+3364)=x^{3}+195112$ nên biểu thức bằng $x^{3}+195112-x^{3}=195112$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 23}{8H1-C2-B8-D02-TL-TH-023}
+Rút gọn biểu thức $(x+48)(x^{2}-48x+2304)-x^{3}$.
+\loigiai{Ta có $(x+48)(x^{2}-48x+2304)=x^{3}+110592$ nên biểu thức bằng $x^{3}+110592-x^{3}=110592$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 24}{8H1-C2-B8-D02-TL-TH-024}
+Rút gọn biểu thức $(x+17)(x^{2}-17x+289)-x^{3}$.
+\loigiai{Ta có $(x+17)(x^{2}-17x+289)=x^{3}+4913$ nên biểu thức bằng $x^{3}+4913-x^{3}=4913$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 25}{8H1-C2-B8-D02-TL-TH-025}
+Rút gọn biểu thức $(x+37)(x^{2}-37x+1369)-x^{3}$.
+\loigiai{Ta có $(x+37)(x^{2}-37x+1369)=x^{3}+50653$ nên biểu thức bằng $x^{3}+50653-x^{3}=50653$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 26}{8H1-C2-B8-D02-TL-VD-026}
+Rút gọn biểu thức $(x+45)(x^{2}-45x+2025)-x^{3}$.
+\loigiai{Ta có $(x+45)(x^{2}-45x+2025)=x^{3}+91125$ nên biểu thức bằng $x^{3}+91125-x^{3}=91125$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 27}{8H1-C2-B8-D02-TL-VD-027}
+Rút gọn biểu thức $(x+10)(x^{2}-10x+100)-x^{3}$.
+\loigiai{Ta có $(x+10)(x^{2}-10x+100)=x^{3}+1000$ nên biểu thức bằng $x^{3}+1000-x^{3}=1000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 28}{8H1-C2-B8-D02-TL-VD-028}
+Rút gọn biểu thức $(x+16)(x^{2}-16x+256)-x^{3}$.
+\loigiai{Ta có $(x+16)(x^{2}-16x+256)=x^{3}+4096$ nên biểu thức bằng $x^{3}+4096-x^{3}=4096$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 29}{8H1-C2-B8-D02-TL-VD-029}
+Rút gọn biểu thức $(x+27)(x^{2}-27x+729)-x^{3}$.
+\loigiai{Ta có $(x+27)(x^{2}-27x+729)=x^{3}+19683$ nên biểu thức bằng $x^{3}+19683-x^{3}=19683$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 30}{8H1-C2-B8-D02-TL-VD-030}
+Rút gọn biểu thức $(x+53)(x^{2}-53x+2809)-x^{3}$.
+\loigiai{Ta có $(x+53)(x^{2}-53x+2809)=x^{3}+148877$ nên biểu thức bằng $x^{3}+148877-x^{3}=148877$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 31}{8H1-C2-B8-D02-TL-VD-031}
+Rút gọn biểu thức $(x+50)(x^{2}-50x+2500)-x^{3}$.
+\loigiai{Ta có $(x+50)(x^{2}-50x+2500)=x^{3}+125000$ nên biểu thức bằng $x^{3}+125000-x^{3}=125000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 32}{8H1-C2-B8-D02-TL-VD-032}
+Rút gọn biểu thức $(x+7)(x^{2}-7x+49)-x^{3}$.
+\loigiai{Ta có $(x+7)(x^{2}-7x+49)=x^{3}+343$ nên biểu thức bằng $x^{3}+343-x^{3}=343$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 33}{8H1-C2-B8-D02-TL-VD-033}
+Rút gọn biểu thức $(x+8)(x^{2}-8x+64)-x^{3}$.
+\loigiai{Ta có $(x+8)(x^{2}-8x+64)=x^{3}+512$ nên biểu thức bằng $x^{3}+512-x^{3}=512$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 34}{8H1-C2-B8-D02-TL-VD-034}
+Rút gọn biểu thức $(x+3)(x^{2}-3x+9)-x^{3}$.
+\loigiai{Ta có $(x+3)(x^{2}-3x+9)=x^{3}+27$ nên biểu thức bằng $x^{3}+27-x^{3}=27$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 35}{8H1-C2-B8-D02-TL-VD-035}
+Rút gọn biểu thức $(x+20)(x^{2}-20x+400)-x^{3}$.
+\loigiai{Ta có $(x+20)(x^{2}-20x+400)=x^{3}+8000$ nên biểu thức bằng $x^{3}+8000-x^{3}=8000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 36}{8H1-C2-B8-D02-TL-VD-036}
+Rút gọn biểu thức $(x+33)(x^{2}-33x+1089)-x^{3}$.
+\loigiai{Ta có $(x+33)(x^{2}-33x+1089)=x^{3}+35937$ nên biểu thức bằng $x^{3}+35937-x^{3}=35937$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 37}{8H1-C2-B8-D02-TL-VD-037}
+Rút gọn biểu thức $(x+34)(x^{2}-34x+1156)-x^{3}$.
+\loigiai{Ta có $(x+34)(x^{2}-34x+1156)=x^{3}+39304$ nên biểu thức bằng $x^{3}+39304-x^{3}=39304$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 38}{8H1-C2-B8-D02-TL-VD-038}
+Rút gọn biểu thức $(x+22)(x^{2}-22x+484)-x^{3}$.
+\loigiai{Ta có $(x+22)(x^{2}-22x+484)=x^{3}+10648$ nên biểu thức bằng $x^{3}+10648-x^{3}=10648$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 39}{8H1-C2-B8-D02-TL-VD-039}
+Rút gọn biểu thức $(x+39)(x^{2}-39x+1521)-x^{3}$.
+\loigiai{Ta có $(x+39)(x^{2}-39x+1521)=x^{3}+59319$ nên biểu thức bằng $x^{3}+59319-x^{3}=59319$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 40}{8H1-C2-B8-D02-TL-VD-040}
+Rút gọn biểu thức $(x+46)(x^{2}-46x+2116)-x^{3}$.
+\loigiai{Ta có $(x+46)(x^{2}-46x+2116)=x^{3}+97336$ nên biểu thức bằng $x^{3}+97336-x^{3}=97336$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 41}{8H1-C2-B8-D02-TL-VD-041}
+Rút gọn biểu thức $(x+43)(x^{2}-43x+1849)-x^{3}$.
+\loigiai{Ta có $(x+43)(x^{2}-43x+1849)=x^{3}+79507$ nên biểu thức bằng $x^{3}+79507-x^{3}=79507$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 42}{8H1-C2-B8-D02-TL-VD-042}
+Rút gọn biểu thức $(x+24)(x^{2}-24x+576)-x^{3}$.
+\loigiai{Ta có $(x+24)(x^{2}-24x+576)=x^{3}+13824$ nên biểu thức bằng $x^{3}+13824-x^{3}=13824$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 43}{8H1-C2-B8-D02-TL-VD-043}
+Rút gọn biểu thức $(x+2)(x^{2}-2x+4)-x^{3}$.
+\loigiai{Ta có $(x+2)(x^{2}-2x+4)=x^{3}+8$ nên biểu thức bằng $x^{3}+8-x^{3}=8$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 44}{8H1-C2-B8-D02-TL-VD-044}
+Rút gọn biểu thức $(x+28)(x^{2}-28x+784)-x^{3}$.
+\loigiai{Ta có $(x+28)(x^{2}-28x+784)=x^{3}+21952$ nên biểu thức bằng $x^{3}+21952-x^{3}=21952$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 45}{8H1-C2-B8-D02-TL-VD-045}
+Rút gọn biểu thức $(x+32)(x^{2}-32x+1024)-x^{3}$.
+\loigiai{Ta có $(x+32)(x^{2}-32x+1024)=x^{3}+32768$ nên biểu thức bằng $x^{3}+32768-x^{3}=32768$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 46}{8H1-C2-B8-D02-TL-VD-046}
+Rút gọn biểu thức $(x+42)(x^{2}-42x+1764)-x^{3}$.
+\loigiai{Ta có $(x+42)(x^{2}-42x+1764)=x^{3}+74088$ nên biểu thức bằng $x^{3}+74088-x^{3}=74088$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 47}{8H1-C2-B8-D02-TL-VD-047}
+Rút gọn biểu thức $(x+23)(x^{2}-23x+529)-x^{3}$.
+\loigiai{Ta có $(x+23)(x^{2}-23x+529)=x^{3}+12167$ nên biểu thức bằng $x^{3}+12167-x^{3}=12167$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 48}{8H1-C2-B8-D02-TL-VD-048}
+Rút gọn biểu thức $(x+30)(x^{2}-30x+900)-x^{3}$.
+\loigiai{Ta có $(x+30)(x^{2}-30x+900)=x^{3}+27000$ nên biểu thức bằng $x^{3}+27000-x^{3}=27000$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 49}{8H1-C2-B8-D02-TL-VD-049}
+Rút gọn biểu thức $(x+35)(x^{2}-35x+1225)-x^{3}$.
+\loigiai{Ta có $(x+35)(x^{2}-35x+1225)=x^{3}+42875$ nên biểu thức bằng $x^{3}+42875-x^{3}=42875$.}
+\end{cauhoi}
+\begin{cauhoi}{Bài 50}{8H1-C2-B8-D02-TL-VD-050}
+Rút gọn biểu thức $(x+13)(x^{2}-13x+169)-x^{3}$.
+\loigiai{Ta có $(x+13)(x^{2}-13x+169)=x^{3}+2197$ nên biểu thức bằng $x^{3}+2197-x^{3}=2197$.}
+\end{cauhoi}
+\clearpage\section*{Phần II. Trắc nghiệm}
+\begin{cauhoi}{Câu 1}{8H1-C2-B8-D02-TN-TH-001}
+Rút gọn biểu thức $(x+52)(x^{2}-52x+2704)-x^{3}$.
+\begin{tasks}(2)
+\task $281216$
+\task $140609$
+\task $140608$
+\task $2704$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 2}{8H1-C2-B8-D02-TN-TH-002}
+Rút gọn biểu thức $(x+51)(x^{2}-51x+2601)-x^{3}$.
+\begin{tasks}(2)
+\task $132651$
+\task $2601$
+\task $132652$
+\task $265302$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 3}{8H1-C2-B8-D02-TN-TH-003}
+Rút gọn biểu thức $(x+59)(x^{2}-59x+3481)-x^{3}$.
+\begin{tasks}(2)
+\task $205380$
+\task $205379$
+\task $410758$
+\task $3481$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 4}{8H1-C2-B8-D02-TN-TH-004}
+Rút gọn biểu thức $(x+5)(x^{2}-5x+25)-x^{3}$.
+\begin{tasks}(2)
+\task $25$
+\task $125$
+\task $126$
+\task $250$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 5}{8H1-C2-B8-D02-TN-TH-005}
+Rút gọn biểu thức $(x+41)(x^{2}-41x+1681)-x^{3}$.
+\begin{tasks}(2)
+\task $68921$
+\task $1681$
+\task $137842$
+\task $68922$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 6}{8H1-C2-B8-D02-TN-TH-006}
+Rút gọn biểu thức $(x+40)(x^{2}-40x+1600)-x^{3}$.
+\begin{tasks}(2)
+\task $128000$
+\task $64001$
+\task $64000$
+\task $1600$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 7}{8H1-C2-B8-D02-TN-TH-007}
+Rút gọn biểu thức $(x+15)(x^{2}-15x+225)-x^{3}$.
+\begin{tasks}(2)
+\task $6750$
+\task $3376$
+\task $3375$
+\task $225$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 8}{8H1-C2-B8-D02-TN-TH-008}
+Rút gọn biểu thức $(x+1)(x^{2}-x+1)-x^{3}$.
+\begin{tasks}(2)
+\task $0$
+\task $3$
+\task $2$
+\task $1$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 9}{8H1-C2-B8-D02-TN-TH-009}
+Rút gọn biểu thức $(x+9)(x^{2}-9x+81)-x^{3}$.
+\begin{tasks}(2)
+\task $1458$
+\task $729$
+\task $730$
+\task $81$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 10}{8H1-C2-B8-D02-TN-TH-010}
+Rút gọn biểu thức $(x+12)(x^{2}-12x+144)-x^{3}$.
+\begin{tasks}(2)
+\task $1729$
+\task $1728$
+\task $144$
+\task $3456$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 11}{8H1-C2-B8-D02-TN-TH-011}
+Rút gọn biểu thức $(x+6)(x^{2}-6x+36)-x^{3}$.
+\begin{tasks}(2)
+\task $432$
+\task $36$
+\task $216$
+\task $217$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 12}{8H1-C2-B8-D02-TN-TH-012}
+Rút gọn biểu thức $(x+49)(x^{2}-49x+2401)-x^{3}$.
+\begin{tasks}(2)
+\task $117650$
+\task $235298$
+\task $2401$
+\task $117649$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 13}{8H1-C2-B8-D02-TN-TH-013}
+Rút gọn biểu thức $(x+44)(x^{2}-44x+1936)-x^{3}$.
+\begin{tasks}(2)
+\task $1936$
+\task $170368$
+\task $85184$
+\task $85185$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 14}{8H1-C2-B8-D02-TN-TH-014}
+Rút gọn biểu thức $(x+47)(x^{2}-47x+2209)-x^{3}$.
+\begin{tasks}(2)
+\task $2209$
+\task $103824$
+\task $207646$
+\task $103823$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 15}{8H1-C2-B8-D02-TN-TH-015}
+Rút gọn biểu thức $(x+19)(x^{2}-19x+361)-x^{3}$.
+\begin{tasks}(2)
+\task $6860$
+\task $6859$
+\task $361$
+\task $13718$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 16}{8H1-C2-B8-D02-TN-TH-016}
+Rút gọn biểu thức $(x+38)(x^{2}-38x+1444)-x^{3}$.
+\begin{tasks}(2)
+\task $109744$
+\task $1444$
+\task $54873$
+\task $54872$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 17}{8H1-C2-B8-D02-TN-TH-017}
+Rút gọn biểu thức $(x+31)(x^{2}-31x+961)-x^{3}$.
+\begin{tasks}(2)
+\task $29792$
+\task $29791$
+\task $961$
+\task $59582$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 18}{8H1-C2-B8-D02-TN-TH-018}
+Rút gọn biểu thức $(x+11)(x^{2}-11x+121)-x^{3}$.
+\begin{tasks}(2)
+\task $1332$
+\task $1331$
+\task $121$
+\task $2662$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 19}{8H1-C2-B8-D02-TN-TH-019}
+Rút gọn biểu thức $(x+60)(x^{2}-60x+3600)-x^{3}$.
+\begin{tasks}(2)
+\task $3600$
+\task $216001$
+\task $216000$
+\task $432000$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 20}{8H1-C2-B8-D02-TN-TH-020}
+Rút gọn biểu thức $(x+25)(x^{2}-25x+625)-x^{3}$.
+\begin{tasks}(2)
+\task $15626$
+\task $15625$
+\task $31250$
+\task $625$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 21}{8H1-C2-B8-D02-TN-TH-021}
+Rút gọn biểu thức $(x+26)(x^{2}-26x+676)-x^{3}$.
+\begin{tasks}(2)
+\task $17577$
+\task $17576$
+\task $676$
+\task $35152$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 22}{8H1-C2-B8-D02-TN-TH-022}
+Rút gọn biểu thức $(x+58)(x^{2}-58x+3364)-x^{3}$.
+\begin{tasks}(2)
+\task $3364$
+\task $390224$
+\task $195113$
+\task $195112$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 23}{8H1-C2-B8-D02-TN-TH-023}
+Rút gọn biểu thức $(x+48)(x^{2}-48x+2304)-x^{3}$.
+\begin{tasks}(2)
+\task $221184$
+\task $110592$
+\task $110593$
+\task $2304$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 24}{8H1-C2-B8-D02-TN-TH-024}
+Rút gọn biểu thức $(x+17)(x^{2}-17x+289)-x^{3}$.
+\begin{tasks}(2)
+\task $4914$
+\task $289$
+\task $4913$
+\task $9826$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 25}{8H1-C2-B8-D02-TN-TH-025}
+Rút gọn biểu thức $(x+37)(x^{2}-37x+1369)-x^{3}$.
+\begin{tasks}(2)
+\task $101306$
+\task $50654$
+\task $1369$
+\task $50653$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 26}{8H1-C2-B8-D02-TN-VD-026}
+Rút gọn biểu thức $(x+45)(x^{2}-45x+2025)-x^{3}$.
+\begin{tasks}(2)
+\task $91126$
+\task $182250$
+\task $91125$
+\task $2025$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 27}{8H1-C2-B8-D02-TN-VD-027}
+Rút gọn biểu thức $(x+10)(x^{2}-10x+100)-x^{3}$.
+\begin{tasks}(2)
+\task $1000$
+\task $2000$
+\task $100$
+\task $1001$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 28}{8H1-C2-B8-D02-TN-VD-028}
+Rút gọn biểu thức $(x+16)(x^{2}-16x+256)-x^{3}$.
+\begin{tasks}(2)
+\task $4097$
+\task $8192$
+\task $4096$
+\task $256$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 29}{8H1-C2-B8-D02-TN-VD-029}
+Rút gọn biểu thức $(x+27)(x^{2}-27x+729)-x^{3}$.
+\begin{tasks}(2)
+\task $19683$
+\task $19684$
+\task $729$
+\task $39366$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 30}{8H1-C2-B8-D02-TN-VD-030}
+Rút gọn biểu thức $(x+53)(x^{2}-53x+2809)-x^{3}$.
+\begin{tasks}(2)
+\task $2809$
+\task $297754$
+\task $148877$
+\task $148878$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 31}{8H1-C2-B8-D02-TN-VD-031}
+Rút gọn biểu thức $(x+50)(x^{2}-50x+2500)-x^{3}$.
+\begin{tasks}(2)
+\task $250000$
+\task $125001$
+\task $2500$
+\task $125000$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 32}{8H1-C2-B8-D02-TN-VD-032}
+Rút gọn biểu thức $(x+7)(x^{2}-7x+49)-x^{3}$.
+\begin{tasks}(2)
+\task $343$
+\task $686$
+\task $49$
+\task $344$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 33}{8H1-C2-B8-D02-TN-VD-033}
+Rút gọn biểu thức $(x+8)(x^{2}-8x+64)-x^{3}$.
+\begin{tasks}(2)
+\task $513$
+\task $1024$
+\task $512$
+\task $64$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 34}{8H1-C2-B8-D02-TN-VD-034}
+Rút gọn biểu thức $(x+3)(x^{2}-3x+9)-x^{3}$.
+\begin{tasks}(2)
+\task $27$
+\task $54$
+\task $9$
+\task $28$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 35}{8H1-C2-B8-D02-TN-VD-035}
+Rút gọn biểu thức $(x+20)(x^{2}-20x+400)-x^{3}$.
+\begin{tasks}(2)
+\task $8001$
+\task $400$
+\task $8000$
+\task $16000$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 36}{8H1-C2-B8-D02-TN-VD-036}
+Rút gọn biểu thức $(x+33)(x^{2}-33x+1089)-x^{3}$.
+\begin{tasks}(2)
+\task $1089$
+\task $71874$
+\task $35937$
+\task $35938$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 37}{8H1-C2-B8-D02-TN-VD-037}
+Rút gọn biểu thức $(x+34)(x^{2}-34x+1156)-x^{3}$.
+\begin{tasks}(2)
+\task $39305$
+\task $78608$
+\task $39304$
+\task $1156$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 38}{8H1-C2-B8-D02-TN-VD-038}
+Rút gọn biểu thức $(x+22)(x^{2}-22x+484)-x^{3}$.
+\begin{tasks}(2)
+\task $21296$
+\task $10648$
+\task $484$
+\task $10649$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 39}{8H1-C2-B8-D02-TN-VD-039}
+Rút gọn biểu thức $(x+39)(x^{2}-39x+1521)-x^{3}$.
+\begin{tasks}(2)
+\task $59320$
+\task $118638$
+\task $1521$
+\task $59319$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 40}{8H1-C2-B8-D02-TN-VD-040}
+Rút gọn biểu thức $(x+46)(x^{2}-46x+2116)-x^{3}$.
+\begin{tasks}(2)
+\task $97337$
+\task $194672$
+\task $97336$
+\task $2116$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 41}{8H1-C2-B8-D02-TN-VD-041}
+Rút gọn biểu thức $(x+43)(x^{2}-43x+1849)-x^{3}$.
+\begin{tasks}(2)
+\task $79508$
+\task $1849$
+\task $79507$
+\task $159014$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 42}{8H1-C2-B8-D02-TN-VD-042}
+Rút gọn biểu thức $(x+24)(x^{2}-24x+576)-x^{3}$.
+\begin{tasks}(2)
+\task $13825$
+\task $27648$
+\task $13824$
+\task $576$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 43}{8H1-C2-B8-D02-TN-VD-043}
+Rút gọn biểu thức $(x+2)(x^{2}-2x+4)-x^{3}$.
+\begin{tasks}(2)
+\task $8$
+\task $9$
+\task $4$
+\task $16$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 44}{8H1-C2-B8-D02-TN-VD-044}
+Rút gọn biểu thức $(x+28)(x^{2}-28x+784)-x^{3}$.
+\begin{tasks}(2)
+\task $21953$
+\task $21952$
+\task $43904$
+\task $784$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 45}{8H1-C2-B8-D02-TN-VD-045}
+Rút gọn biểu thức $(x+32)(x^{2}-32x+1024)-x^{3}$.
+\begin{tasks}(2)
+\task $32769$
+\task $65536$
+\task $32768$
+\task $1024$
+\end{tasks}
+\dapan{C}
+\end{cauhoi}
+\begin{cauhoi}{Câu 46}{8H1-C2-B8-D02-TN-VD-046}
+Rút gọn biểu thức $(x+42)(x^{2}-42x+1764)-x^{3}$.
+\begin{tasks}(2)
+\task $74088$
+\task $1764$
+\task $148176$
+\task $74089$
+\end{tasks}
+\dapan{A}
+\end{cauhoi}
+\begin{cauhoi}{Câu 47}{8H1-C2-B8-D02-TN-VD-047}
+Rút gọn biểu thức $(x+23)(x^{2}-23x+529)-x^{3}$.
+\begin{tasks}(2)
+\task $12168$
+\task $12167$
+\task $24334$
+\task $529$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 48}{8H1-C2-B8-D02-TN-VD-048}
+Rút gọn biểu thức $(x+30)(x^{2}-30x+900)-x^{3}$.
+\begin{tasks}(2)
+\task $27001$
+\task $27000$
+\task $900$
+\task $54000$
+\end{tasks}
+\dapan{B}
+\end{cauhoi}
+\begin{cauhoi}{Câu 49}{8H1-C2-B8-D02-TN-VD-049}
+Rút gọn biểu thức $(x+35)(x^{2}-35x+1225)-x^{3}$.
+\begin{tasks}(2)
+\task $42876$
+\task $1225$
+\task $85750$
+\task $42875$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\begin{cauhoi}{Câu 50}{8H1-C2-B8-D02-TN-VD-050}
+Rút gọn biểu thức $(x+13)(x^{2}-13x+169)-x^{3}$.
+\begin{tasks}(2)
+\task $2198$
+\task $169$
+\task $4394$
+\task $2197$
+\end{tasks}
+\dapan{D}
+\end{cauhoi}
+\clearpage\section*{Bảng đáp án trắc nghiệm}
+\begin{center}\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+1. C & 2. A & 3. B & 4. B & 5. A & 6. C & 7. C & 8. D & 9. B & 10. B\\\hline
+11. C & 12. D & 13. C & 14. D & 15. B & 16. D & 17. B & 18. B & 19. C & 20. B\\\hline
+21. B & 22. D & 23. B & 24. C & 25. D & 26. C & 27. A & 28. C & 29. A & 30. C\\\hline
+31. D & 32. A & 33. C & 34. A & 35. C & 36. C & 37. C & 38. B & 39. D & 40. C\\\hline
+41. C & 42. C & 43. A & 44. B & 45. C & 46. A & 47. B & 48. B & 49. D & 50. D\\\hline
+\end{tabular}\end{center}
+\end{document}
