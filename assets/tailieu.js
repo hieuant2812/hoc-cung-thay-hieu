@@ -85,6 +85,11 @@
 .tv .giua{text-align:center}
 .tv .dien{color:#c0392b;font-weight:600}
 .tv .trong{display:inline-block;border-bottom:1.6px dotted #6b7489;height:1.15em;vertical-align:baseline;margin:0 2px}
+.tv .ts10-lg{margin-top:8px;padding:8px 12px;background:#f6f8fc;border-radius:10px;border-left:3px solid #2fb35a}
+.ts10-so{display:grid!important;grid-template-columns:repeat(5,1fr);gap:4px}
+.ts10-so a{text-align:center;padding:4px 0!important}
+.ts10-ghep{display:block;margin:4px 0 2px;padding:8px 10px;border-radius:12px;background:#fff1ec;color:#c2410c;font-weight:800;text-decoration:none}
+.ts10-ghep.on{outline:2px solid #ff6f4a}
 .tv .vdc{border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden;break-inside:avoid}
 .tv .vdc .vt{background:var(--nt);padding:5px 14px;font-weight:800;color:var(--nm);font-size:14px}
 .tv .vdc .vb{padding:8px 14px}
@@ -175,9 +180,10 @@
     if (!document.getElementById("tlCss")) { const st = document.createElement("style"); st.id = "tlCss"; st.textContent = CSS; document.head.appendChild(st); }
     const S = { lop: LS.get("tl-lop", "12"), k: LS.get("tl-k", ""), iDe: 0, ban: "hs", nguon: "web", moCh: null };
     const mh = /^#([6-9]|1[0-2])\/([bot]\d+)$/.exec(location.hash); if (mh) { S.lop = mh[1]; S.k = mh[2]; }
+    const mt = /^#ts10(?:\/(d\d+|g-[A-Za-z0-9\-\/]+|ghep))?$/.exec(location.hash); if (mt) { S.lop = "ts10"; S.k = mt[1] || ""; }
     const DATA = { web: {}, gv: {}, may: {} };   // web: bản HS đã đăng; gv: bản GV giải mã; may: đề cương đang soạn
     let INDEX = null, laGV = sessionStorage.getItem("tl-gv") === "1";
-    root.innerHTML = `<div class="tl"><aside class="tl-nav"><div class="small muted" style="margin:0 0 3px 2px">THCS</div><div class="tl-lop">${["6", "7", "8", "9"].map(l => `<button data-l="${l}">${l}</button>`).join("")}</div><div class="small muted" style="margin:4px 0 3px 2px">THPT</div><div class="tl-lop">${["10", "11", "12"].map(l => `<button data-l="${l}">Lớp ${l}</button>`).join("")}</div><div class="small muted tl-nam"></div><div class="tl-ds"></div>
+    root.innerHTML = `<div class="tl"><aside class="tl-nav"><div class="small muted" style="margin:0 0 3px 2px">THCS</div><div class="tl-lop">${["6", "7", "8", "9"].map(l => `<button data-l="${l}">${l}</button>`).join("")}</div><div class="tl-lop"><button data-l="ts10" style="grid-column:1/-1">🎯 Ôn thi vào 10</button></div><div class="small muted" style="margin:4px 0 3px 2px">THPT</div><div class="tl-lop">${["10", "11", "12"].map(l => `<button data-l="${l}">Lớp ${l}</button>`).join("")}</div><div class="small muted tl-nam"></div><div class="tl-ds"></div>
       <div class="tl-gv"><button class="btn sm ghost" data-a="gv">🔑 Giáo viên</button></div></aside>
       <div><div class="tl-bar"><div class="ban hidden"><button data-b="hs">Bản học sinh</button><button data-b="gv">Bản giáo viên</button></div><select class="nguon hidden" title="Nguồn dữ liệu"><option value="web">Đề cương đã đăng trên web</option><option value="may">Đề cương đang soạn trên máy này</option></select><button class="btn sm ghost" data-a="in">🖨 In</button><button class="btn sm green" data-a="pdf">⬇ Tải PDF</button></div><div id="tlIn"></div></div></div>`;
     const $ = s => root.querySelector(s);
@@ -216,6 +222,7 @@
       $(".ban").classList.toggle("hidden", !laGV); $(".nguon").classList.toggle("hidden", !laGV);
       root.querySelectorAll(".ban button").forEach(b => b.classList.toggle("on", b.dataset.b === S.ban));
       const out = $("#tlIn");
+      if (S.lop === "ts10") { $(".nguon").classList.add("hidden"); return hienTS10(out); }
       if (+S.lop <= 9) { $(".nguon").classList.add("hidden"); return hienTHCS(out); }
       if (S.k === "soan") return soan(out);
       let D; try { D = await layDuLieu(); } catch (e) { out.innerHTML = `<div class="card">Không tải được đề cương (${esc(e.message)}).</div>`; return; }
@@ -266,6 +273,51 @@
         const pt = await DongBo.unseal(buf, pass);
         DATA.gv[S.lop] = JSON.parse(new TextDecoder().decode(pt)); S.ban = "gv"; S.nguon = "web"; $(".nguon").value = "web"; hien();
       } catch (e) { alert(e.message || "Không mở được."); }
+    }
+
+    /* ---------------- Ôn thi vào 10: 50 đề theo khung 7 bài của Sở GD TP.HCM ---------------- */
+    const TSS = { D: null, ghep: null, muc: "all" };
+    async function hienTS10(out) {
+      if (!G.TS10) { out.innerHTML = `<div class="card">Thiếu assets/ts10.js.</div>`; return; }
+      try { if (!TSS.D) TSS.D = await TS10.nap(); } catch (e) { out.innerHTML = `<div class="card">Chưa có bộ đề ôn thi vào 10 trên web (data/ts10/hs.json).</div>`; return; }
+      const D = TSS.D, gv = S.ban === "gv" && laGV;
+      $(".tl-nam").textContent = "50 đề · khung 7 bài của Sở";
+      if (!S.k) S.k = "d1";
+      LS.set("tl-k", S.k);
+      // ----- cột trái
+      const nhom = {}; D.de.forEach(d => d.bai.forEach(b => { const g = TS10.nhomBai(b.dang); (nhom[g] = nhom[g] || {}); nhom[g][b.dang] = (nhom[g][b.dang] || 0) + 1; }));
+      const mucDs = ["lq", "sat", "nc"].map((m, i) => `<div class="tl-ch${S.moCh === "m" + m || (S.moCh == null && S.k[0] === "d" && (D.de.find(d => "d" + d.so === S.k) || {}).muc === m) ? " mo" : ""}" style="--nm:${MAU[i][0]};--nt:${MAU[i][1]}"><button data-c="m${m}"><b>${i + 1}</b><span>Đề ${TS10.MUC[m].toLowerCase()} (${D.de.filter(d => d.muc === m).length} đề)</span></button><div class="ds ts10-so">${D.de.filter(d => d.muc === m).map(d => `<a href="#" data-k="d${d.so}" class="${S.k === "d" + d.so ? "on" : ""}">Đề ${d.so}</a>`).join("")}</div></div>`).join("");
+      const dangDs = Object.keys(nhom).sort().map((g, i) => `<div class="tl-ch${S.moCh === "g" + g || (S.moCh == null && S.k.startsWith("g-" + g)) ? " mo" : ""}" style="--nm:${MAU[(i + 3) % MAU.length][0]};--nt:${MAU[(i + 3) % MAU.length][1]}"><button data-c="g${g}"><b>${g.slice(1)}</b><span>${esc((D.dang.bai[g] || g).replace(/^Bài \d+ – /, ""))}</span></button><div class="ds">${Object.keys(nhom[g]).sort().map(dk => `<a href="#" data-k="g-${dk}" class="${S.k === "g-" + dk ? "on" : ""}">${esc(dk)} · ${ve(esc(TS10.tenDang(D.dang, dk)))} <i class="small muted">(${nhom[g][dk]})</i></a>`).join("")}</div></div>`).join("");
+      $(".tl-ds").innerHTML = `<a href="#" class="ts10-ghep${S.k === "ghep" ? " on" : ""}" data-k="ghep">🎲 Ghép đề mới (bốc ngẫu nhiên theo dạng)</a><div class="small muted" style="margin:8px 2px 3px">THEO ĐỀ</div>${mucDs}<div class="small muted" style="margin:10px 2px 3px">LUYỆN THEO DẠNG</div>${dangDs}`;
+      root.querySelectorAll(".tl-ch>button").forEach(b => b.onclick = () => { S.moCh = S.moCh === b.dataset.c ? "-" : b.dataset.c; hienTS10(out); });
+      root.querySelectorAll(".tl-ds a").forEach(a => a.onclick = ev => { ev.preventDefault(); S.k = a.dataset.k; history.replaceState(null, "", "#ts10/" + S.k); hienTS10(out); if (innerWidth < 880) out.scrollIntoView({ behavior: "smooth" }); });
+      const g = $(".tl-gv");
+      g.innerHTML = laGV ? `<b class="small">🧑‍🏫 Chế độ giáo viên</b><div class="small" style="margin:4px 0">${D.coGV ? "✅ Đã có lời giải TS10 trên máy này" : "Chưa có lời giải trên máy này"}</div><label class="btn sm ghost">📥 Nạp file lời giải TS10<input type="file" accept=".json" hidden data-a="napts"></label>${D.coGV ? `<button class="btn sm ghost" data-a="xoats">Xoá lời giải khỏi máy</button>` : ""}<a class="btn sm green" href="rade-thcs.html">📝 Ra đề Toán THCS</a><button class="btn sm ghost" data-a="thoat">Thoát chế độ GV</button>` : `<button class="btn sm ghost" data-a="gv">🔑 Giáo viên</button>`;
+      g.querySelectorAll("button").forEach(b => b.onclick = async () => { if (b.dataset.a === "gv") moGV(); else if (b.dataset.a === "xoats") { if (confirm("Xoá bản lời giải TS10 khỏi trình duyệt này?")) { await TS10.xoa(); TSS.D = null; hienTS10(out); } } else { laGV = false; sessionStorage.removeItem("tl-gv"); S.ban = "hs"; hien(); } });
+      const fi = g.querySelector('[data-a="napts"]'); if (fi) fi.onchange = async e => { try { const n = await TS10.napFile(e.target.files[0]); TSS.D = null; S.ban = "gv"; alert("Đã nạp lời giải cho " + n + " đề."); hien(); } catch (x) { alert(x.message); } };
+      // ----- nội dung
+      const mau = MAU[(+String(S.k).replace(/\D/g, "") || 0) % MAU.length];
+      const ytBai = (b, i, nhan) => `<div class="hop ts10-bai"><div class="ht">${nhan || `Bài ${i + 1}`} (${esc(b.diem)} điểm) <span style="font-weight:600;opacity:.75">· ${esc(b.dang)} – ${ve(TS10.tenDang(D.dang, b.dang))}</span></div><div class="hb">${ve(b.de)}${gv && b.lg ? `<div class="ts10-lg"><b>Lời giải và hướng dẫn chấm.</b><br>${ve(b.lg)}</div>` : ""}</div></div>`;
+      const thieuLG = gv && !D.coGV ? `<div class="note blue small" style="margin:10px 0">Bản giáo viên cần file <b>TS10_GV_LoiGiai.json</b> (không đăng lên GitHub). Bấm <b>📥 Nạp file lời giải TS10</b> ở cột trái.</div>` : "";
+      let tieu = "", phu = "", than = "", bais = null, tenTex = "";
+      if (S.k[0] === "d") {
+        const d = D.de.find(x => "d" + x.so === S.k) || D.de[0]; bais = d.bai;
+        tieu = `Đề ôn tập tuyển sinh 10 – Đề số ${String(d.so).padStart(2, "0")}`; phu = `Mức: ${TS10.MUC[d.muc]} · 120 phút · 7 bài theo khung đề của Sở GD&ĐT TP.HCM`;
+        than = d.bai.map((b, i) => ytBai(b, i)).join(""); tenTex = `TS10_De${String(d.so).padStart(2, "0")}`;
+      } else if (S.k.startsWith("g-")) {
+        const dk = S.k.slice(2); const ds = []; D.de.forEach(d => d.bai.forEach(b => { if (b.dang === dk) ds.push(Object.assign({ so: d.so }, b)); }));
+        tieu = `Luyện dạng ${dk}`; phu = `${TS10.tenDang(D.dang, dk)} · ${ds.length} bài lấy từ 50 đề`;
+        than = ds.map((b, i) => ytBai(b, i, `Bài ${i + 1} (Đề ${b.so}, bài ${b.k})`)).join("");
+      } else {
+        if (!TSS.ghep) TSS.ghep = TS10.ghep(D, TSS.muc);
+        bais = TSS.ghep; tieu = "Đề ôn tập tuyển sinh 10 – đề ghép"; phu = "Mỗi bài bốc ngẫu nhiên từ kho cùng vị trí trong khung 7 bài"; tenTex = "TS10_DeGhep";
+        than = `<div class="row noprint" style="gap:8px;flex-wrap:wrap;margin:6px 0 10px"><select class="ts10-muc">${[["all", "Mọi mức"], ["lq", "Làm quen"], ["sat", "Sát đề Sở"], ["nc", "Nâng cao"]].map(([v, t]) => `<option value="${v}"${TSS.muc === v ? " selected" : ""}>${t}</option>`).join("")}</select><button class="btn sm coral ts10-lai">🎲 Ghép đề khác</button></div>` + bais.map((b, i) => ytBai(b, i, `Bài ${i + 1}`)).join("") + `<p class="small muted">Nguồn: ${bais.map((b, i) => `Bài ${i + 1} ← Đề ${b.so}`).join(" · ")}</p>`;
+      }
+      const nutTex = gv && bais ? `<div class="row noprint" style="gap:8px;flex-wrap:wrap;margin:12px 0 0"><button class="btn sm ghost" data-tex="0">⬇ TeX bản học sinh</button>${D.coGV ? `<button class="btn sm ghost" data-tex="1">⬇ TeX có lời giải + HDC</button>` : ""}</div>` : "";
+      out.innerHTML = `<article class="tv" style="${bien(mau)}"><div class="hd"><small>Ôn thi vào lớp 10 · Toán · TP.HCM</small><h2>${esc(tieu)}</h2><p>${ve(esc(phu))}${gv ? " · bản giáo viên" : ""}</p></div><div class="bd">${thieuLG}${than}${nutTex}</div></article>`;
+      const lai = out.querySelector(".ts10-lai"); if (lai) lai.onclick = () => { TSS.muc = out.querySelector(".ts10-muc").value; TSS.ghep = TS10.ghep(D, TSS.muc); hienTS10(out); };
+      const sm = out.querySelector(".ts10-muc"); if (sm) sm.onchange = () => { TSS.muc = sm.value; TSS.ghep = TS10.ghep(D, TSS.muc); hienTS10(out); };
+      out.querySelectorAll("[data-tex]").forEach(b => b.onclick = () => { const lg = b.dataset.tex === "1"; const t = TS10.tex(tieu.toUpperCase(), bais.map(x => lg ? x : Object.assign({}, x, { texLg: "" })), lg); const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([t], { type: "text/x-tex" })); a.download = tenTex + (lg ? "_GV" : "_HS") + ".tex"; a.click(); });
     }
 
     /* ---------------- THCS: bài tập theo dạng (ngân hàng Toán 6–9) ---------------- */

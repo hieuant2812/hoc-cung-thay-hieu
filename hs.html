@@ -5,7 +5,7 @@
 <title>Vào dự thi · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
-<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/katex.min.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/phongmang.js"></script>
 <style>
 :root{--nen:#0e1626;--the:#152338;--vien:#22324e;--vang:#ffd66b;--ngoc:#7fd1c1;--cam:#ff9e7d;--luc:#9bd66b;--tim:#c3a6ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -44,7 +44,7 @@ h1{font-size:20px;margin:0 0 4px}
 .diem div{background:var(--the);border-radius:12px;padding:10px 16px;text-align:center;min-width:88px}
 .diem b{display:block;font-size:24px;color:var(--vang)}
 .diem span{font-size:12px;color:#8fb3e8}
-.nut{padding:14px;border-radius:14px;border:0;background:var(--vang);color:#15233a;font:700 17px inherit;width:100%}
+.nut{padding:14px;border-radius:14px;border:0;background:var(--vang);color:#15233a;font-weight:700;font-size:17px;font-family:inherit;width:100%}
 .loai{text-align:center;padding:24px 10px}
 .loai .ic{font-size:54px}
 footer{padding:10px 16px;text-align:center;font-size:12px;color:#5f7aa8}
@@ -58,15 +58,19 @@ footer{padding:10px 16px;text-align:center;font-size:12px;color:#5f7aa8}
 <script>
 (function(){
   const $=id=>document.getElementById(id), man=$("man");
-  const q=new URLSearchParams(location.search); const MA=q.get("ma")||"";
+  const q=new URLSearchParams(location.search); const PMA=(q.get("p")||"").replace(/\D/g,""); const MA=PMA||q.get("ma")||"";
+  const PM=PMA&&window.PhongMang?PhongMang.hs(PMA):null;
   const K="hs-"+MA; let toi=null, lastCau=-1, chonRoi=null;
-  const T=s=>{ // hiện công thức toán
-    const d=document.createElement("div"); d.textContent=String(s==null?"":s);
-    let h=d.innerHTML;
-    h=h.replace(/\$([^$]+)\$/g,(m,x)=>{ try{return katex.renderToString(x,{throwOnError:false})}catch(e){return m} });
-    return h;
+  const esc=x=>String(x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const MAC={"\\R":"\\mathbb{R}","\\N":"\\mathbb{N}","\\Z":"\\mathbb{Z}","\\Q":"\\mathbb{Q}"};
+  const T=s=>{ // hiện công thức toán (dựng công thức trước rồi mới thoát kí tự, để dấu < > trong công thức không hỏng)
+    s=String(s==null?"":s).replace(/\\begin\{center\}[^]*?\\end\{center\}/g,m=>/tikzpicture/.test(m)?"":m).replace(/\\begin\{tikzpicture\}[^]*?\\end\{tikzpicture\}/g,"");
+    return s.split(/(\$[^$]+\$)/).map(p=>{
+      if(p.length>2&&p[0]==="$"&&p[p.length-1]==="$"){ try{return katex.renderToString(p.slice(1,-1),{throwOnError:false,strict:"ignore",macros:MAC})}catch(e){return esc(p)} }
+      return esc(p).replace(/\\\\/g,"<br>").replace(/\\(?:textbf|textit|emph)\{([^{}]*)\}/g,"$1").replace(/\\(?:begin|end)\{(?:center|itemize|enumerate)\}/g,"").replace(/\\item\b/g,"<br>• ").replace(/~/g," ");
+    }).join("");
   };
-  const api=async(du,o)=>{ const r=await fetch(du,o?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)}:{cache:"no-store"});
+  const api=PM?((du,o)=>PM.api(du,o)):async(du,o)=>{ const r=await fetch(du,o?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)}:{cache:"no-store"});
     const j=await r.json().catch(()=>({loi:"Mất kết nối với máy chủ lớp."})); if(!r.ok) throw new Error(j.loi||"Lỗi"); return j; };
   try{ toi=JSON.parse(localStorage.getItem(K)||"null"); }catch(e){}
 
@@ -127,7 +131,7 @@ footer{padding:10px 16px;text-align:center;font-size:12px;color:#5f7aa8}
   function veCau(c,t){
     const n=c.n||4, CHU="ABCD";
     man.innerHTML=`<div class="muted">Câu ${c.so}</div>
-      ${c.de?`<div class="de">${T(c.de)}</div>`:`<p class="muted">Nhìn lên màn chiếu để đọc đề, rồi chọn đáp án:</p>`}
+      ${c.de?`<div class="de">${(f=>f?`<div style="text-align:center;background:#fff;border-radius:10px;margin-bottom:6px;padding:4px">${f}</div>`:"")(window.HinhTuDong?HinhTuDong.svg(c.de):"")}${T(c.de)}</div>`:`<p class="muted">Nhìn lên màn chiếu để đọc đề, rồi chọn đáp án:</p>`}
       <div class="pa" id="pa">${Array.from({length:n},(_,k)=>`<button data-k="${k}"><i>${CHU[k]}</i><span>${c.pa&&c.pa[k]?T(c.pa[k]):"Phương án "+CHU[k]}</span></button>`).join("")}</div>
       <div id="kq"></div>`;
     $("pa").querySelectorAll("button").forEach(b=>b.onclick=async()=>{
@@ -151,7 +155,14 @@ footer{padding:10px 16px;text-align:center;font-size:12px;color:#5f7aa8}
       }
     }
   }
-  if(!MA){ man.innerHTML=bao("do","Thiếu mã phòng thi. Em quét mã QR trên màn chiếu của lớp nhé."); }
+  if(!MA){
+    $("tieu").textContent="Vào phòng thi";
+    man.innerHTML=`<div class="cho"><h1>Nhập mã phòng</h1><p class="muted">Mã 6 chữ số hiện trên màn chiếu của lớp (hoặc quét mã QR).</p>
+      <input class="tim" id="maP" inputmode="numeric" maxlength="6" placeholder="VD: 012345" style="font-size:28px;text-align:center;letter-spacing:6px">
+      <button class="nut" id="vaoP" style="margin-top:12px">Vào phòng</button><div id="baoP"></div></div>`;
+    const di=()=>{ const v=($("maP").value||"").replace(/\D/g,""); if(v.length!==6){ $("baoP").innerHTML=bao("do","Mã phòng gồm đúng 6 chữ số."); return; } location.href=location.pathname+"?p="+v; };
+    $("vaoP").onclick=di; $("maP").onkeydown=e=>{ if(e.key==="Enter") di(); }; $("maP").focus();
+  }
   else if(toi&&toi.id){ vong(); } else chonTen();
 })();
 </script>

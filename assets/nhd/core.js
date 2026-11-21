@@ -648,7 +648,8 @@
   /* hiển thị một câu: item = {q, order} ; mode "exam" | "key" (có đáp án) ; opts.sol: kèm lời giải; opts.n: số câu */
   function renderQuestion(item, n, mode, opts = {}) {
     const { q, order } = item;
-    const side = opts.side === false ? null : sideFig(q);
+    let side = opts.side === false ? null : sideFig(q);
+    if (!side && opts.hinh && G.HinhTuDong && !/tikzpicture|includegraphics/.test(q.de || "")) { const f = HinhTuDong.svg(q.de); if (f) side = { figHtml: f, rest: q.de, tuDong: true }; }
     let h = `<div class="q" data-k="${esc(q.k || q.id)}">`;
     if (opts.swap != null && opts.swap !== false) h += `<button class="swap noprint" data-swap="${opts.swap}" title="Thay bằng câu khác cùng dạng, cùng mức độ">⟳ Đổi câu</button>`;
     if (opts.meta) h += `<div class="meta"><span class="lv"><i class="${q.muc}">${q.muc}</i></span><span>${esc(q.id)}</span></div>`;

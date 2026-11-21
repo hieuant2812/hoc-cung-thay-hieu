@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
 <script src="assets/katex/katex.min.js"></script><script src="assets/lib/qrcode.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script><script src="assets/butve.js"></script><script src="assets/hinhtudong.js"></script>
 <style>
 .tl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
 .tl-tabs button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;font:700 15px var(--font);cursor:pointer;color:#334}
@@ -30,7 +30,8 @@
 #show .ex .opt.right{background:#dff5e6;border-color:#19a64a}
 #show .ex .ds-row{padding:4px 0 4px 18px}
 #show .ex .sol{font-size:.8em;margin-top:18px;border-left:5px solid #ffbf2e;padding:8px 14px;background:#fff8e1;border-radius:8px}
-#show .ex svg{max-width:100%;height:auto}
+#show .ex .tikz-wrap svg,#show .ex svg.hv,#show .ex img{max-width:100%;height:auto}
+#show .ex .katex svg{max-width:none;height:inherit}
 #show .timer{font:800 30px var(--font-h);min-width:96px;text-align:center;background:#fff;color:#1d2742;border-radius:12px;padding:2px 10px}
 #show .timer.warn{background:#ffd6dc;color:#b0163d;animation:pulse 1s infinite}
 @keyframes pulse{50%{transform:scale(1.08)}}
@@ -87,7 +88,7 @@
           <label class="f">Thời gian mỗi câu<select id="tcTime"><option value="0">Không đếm giờ</option><option value="30">30 giây</option><option value="45">45 giây</option><option value="60">1 phút</option><option value="90">1 phút 30 giây</option><option value="120">2 phút</option><option value="180">3 phút</option><option value="300">5 phút</option></select></label>
           <label class="chk"><input type="checkbox" id="tcSol" checked> Có nút xem lời giải</label>
           <button class="btn coral" id="tcGo" style="font-size:18px;padding:14px">▶ Bắt đầu trình chiếu</button>
-          <div class="small muted">Phím tắt: <b>→ / Space</b> câu sau · <b>←</b> câu trước · <b>Đ</b> hoặc <b>A</b> hiện đáp án · <b>L</b> lời giải · <b>T</b> bắt đầu/dừng giờ · <b>+ / −</b> cỡ chữ · <b>F</b> toàn màn hình · <b>Esc</b> thoát.</div>
+          <div class="small muted">Phím tắt: <b>→ / Space</b> câu sau · <b>←</b> câu trước · <b>Đ</b> hoặc <b>A</b> hiện đáp án · <b>L</b> lời giải · <b>T</b> bắt đầu/dừng giờ · <b>+ / −</b> cỡ chữ · <b>F</b> toàn màn hình · <b>Esc</b> thoát.<br>✏️ <b>Ghi bảng</b> (góc dưới trái màn hình chiếu): <b>B</b> bút · <b>H</b> dạ quang · <b>R</b> thước · <b>K</b> laser · <b>E</b> tẩy · <b>W</b> bảng trắng nháp · <b>Ctrl/⌘+Z</b> hoàn tác. Nét vẽ giữ riêng cho từng câu, đi theo khi cuộn và đổi cỡ chữ; nút 📷 lưu ảnh câu kèm nét vẽ.</div>
           <div id="tcMsg"></div>
         </div>
       </div>
@@ -196,8 +197,12 @@
     if (!list.length) { $("tcMsg").innerHTML = `<div class="note red">Không có câu nào phù hợp — thầy chọn lại dạng, mức độ hoặc đăng ngân hàng ở trang Ra đề.</div>`; return; }
     const R = NHD.rng(NHD.hash("tc|" + Date.now()));
     S.list = list.map(q => ({ q, order: q.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], R) : [0, 1, 2, 3] }));
-    S.i = 0; S.t = +$("tcTime").value; SH.classList.add("on"); document.body.style.overflow = "hidden"; render(true);
+    S.i = 0; S.t = +$("tcTime").value; SH.classList.add("on"); document.body.style.overflow = "hidden";
+    if (!BV && window.ButVe) BV = ButVe.gan({ root: SH, goc: () => $("sBody"), tile: () => S.z / 30, khoa: () => { const it = S.list[S.i]; return "tc|" + S.i + "|" + (it ? it.q.id : ""); }, cuon: () => SH.querySelector(".body"), chup: () => SH.querySelector(".body"), tren: () => SH.querySelector(".tb").getBoundingClientRect().bottom });
+    if (BV) BV.xoaHet();
+    render(true);
   }
+  let BV = null;
   $("tcGo").onclick = () => { const st = pick1.state(); startShow(pick1.pick(st.n)); };
   function fmt(s) { s = Math.max(0, Math.round(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
   function render(resetTimer) {
@@ -206,13 +211,14 @@
     const q = it.q; const ten = (pick1.bank().dang || {})[q.dkey] || "";
     $("sDang").innerHTML = `${esc(q.dkey.replace(/^C\d+-B\d+-/, ""))} ${ten ? NHD.texToHtml(ten) : ""} · <b>${({ NB: "Nhận biết", TH: "Thông hiểu", VD: "Vận dụng", VDC: "Vận dụng cao" })[q.muc] || q.muc}</b>`;
     SH.style.setProperty("--z", S.z);
-    $("sBody").innerHTML = NHD.renderQuestion(it, S.i + 1, S.show ? "key" : "", { sol: S.show && S.sol });
+    $("sBody").innerHTML = NHD.renderQuestion(it, S.i + 1, S.show ? "key" : "", { sol: S.show && S.sol, hinh: true });
     $("sSol").style.display = $("tcSol").checked ? "" : "none";
     $("sAns").textContent = S.show ? "Ẩn đáp án" : "Đáp án";
     // mô phỏng liên quan
     const st = pick1.state(); const sims = (window.SIMS || []).filter(r => r.mon === st.mon && +r.lop === +st.lop && r.chuong === "Chương " + ROM[q.chuong]);
     $("sSims").innerHTML = sims.length ? `🔬 <b>Mô phỏng liên quan:</b> ` + sims.map(r => `<a href="${r.file}" target="_blank" rel="noopener">${esc(r.ten)}</a>`).join("") : "";
     if (resetTimer) { clearInterval(timer); S.run = false; S.left = S.t; drawTimer(); if (S.t) toggleTimer(true); }
+    if (BV) BV.ve();
   }
   function drawTimer() { const el = $("sTimer"); el.textContent = S.t ? fmt(S.left) : "--:--"; el.classList.toggle("warn", S.t && S.left <= 10 && S.left > 0); }
   function toggleTimer(on) {
@@ -229,7 +235,7 @@
   $("sZm").onclick = () => { S.z = Math.max(16, S.z - 3); LS.set("tl-z", S.z); render(); };
   $("sFull").onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else SH.requestFullscreen && SH.requestFullscreen(); };
   $("sSwap").onclick = () => { const q = S.list[S.i].q; const c = pick1.bank().questions.filter(x => x.dkey === q.dkey && x.muc === q.muc && x.loai === q.loai && !S.list.some(y => y.q.id === x.id)); if (!c.length) return toast("Không còn câu khác cùng dạng, cùng mức"); const n = c[Math.floor(Math.random() * c.length)]; S.list[S.i] = { q: n, order: n.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], NHD.rng(Date.now())) : [0, 1, 2, 3] }; S.show = false; S.sol = false; render(true); };
-  function exitShow() { SH.classList.remove("on"); document.body.style.overflow = ""; clearInterval(timer); if (document.fullscreenElement) document.exitFullscreen(); }
+  function exitShow() { if (BV) BV.tat(); SH.classList.remove("on"); document.body.style.overflow = ""; clearInterval(timer); if (document.fullscreenElement) document.exitFullscreen(); }
   $("sExit").onclick = exitShow;
   document.addEventListener("keydown", e => {
     if (!SH.classList.contains("on") || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;

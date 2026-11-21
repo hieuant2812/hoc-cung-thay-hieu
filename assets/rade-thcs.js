@@ -21,13 +21,13 @@
     tn15: { ten: "Kiểm tra 15 phút — trắc nghiệm", tn: { NB: 5, TH: 4, VD: 1 }, tl: { NB: 0, TH: 0, VD: 0, VDC: 0 }, diemTN: 1, phut: 15, ki: "KIỂM TRA 15 PHÚT" },
     tl15: { ten: "Kiểm tra 15 phút — tự luận", tn: { NB: 0, TH: 0, VD: 0 }, tl: { NB: 1, TH: 1, VD: 1, VDC: 0 }, diemTN: 0, phut: 15, ki: "KIỂM TRA 15 PHÚT" },
     ontap: { ten: "Đề ôn tập chương", tn: { NB: 6, TH: 4, VD: 2 }, tl: { NB: 2, TH: 3, VD: 2, VDC: 1 }, diemTN: 0.25, phut: 90, ki: "ĐỀ ÔN TẬP" },
-    ts10: { ten: "Đề tham khảo tuyển sinh 10 TP.HCM (khối 9, tự luận)", tn: { NB: 0, TH: 0, VD: 0 }, tl: { NB: 4, TH: 5, VD: 4, VDC: 2 }, diemTN: 0, phut: 120, ki: "ĐỀ THAM KHẢO TUYỂN SINH VÀO LỚP 10" },
+    ts10: { ten: "Đề tuyển sinh 10 TP.HCM — khung 7 bài của Sở (bốc từ bộ 50 đề ôn)", tn: { NB: 0, TH: 0, VD: 0 }, tl: { NB: 4, TH: 5, VD: 4, VDC: 2 }, diemTN: 0, phut: 120, ki: "ĐỀ THAM KHẢO TUYỂN SINH VÀO LỚP 10" },
     phieu: { ten: "Phiếu bài tập (không tính điểm)", tn: { NB: 4, TH: 4, VD: 2 }, tl: { NB: 3, TH: 3, VD: 2, VDC: 0 }, diemTN: 0, phut: 0, ki: "PHIẾU BÀI TẬP", khongDiem: true }
   };
 
   let BANK = {}, ML = {}, KQ = null;
-  const S = Object.assign({ khoi: "8", mau: "gk", truong: "TRƯỜNG THCS …", phong: "UBND …", nam: "2026 – 2027", soDe: 2, tronTN: true, tronPA: true, chon: {}, mt: {} }, LS.get("rdthcs", {}));
-  const luuS = () => LS.set("rdthcs", { khoi: S.khoi, mau: S.mau, truong: S.truong, phong: S.phong, nam: S.nam, soDe: S.soDe, tronTN: S.tronTN, tronPA: S.tronPA, chon: S.chon });
+  const S = Object.assign({ khoi: "8", mau: "gk", truong: "TRƯỜNG THCS …", phong: "UBND …", nam: "2026 – 2027", soDe: 2, tronTN: true, tronPA: true, hinh: "auto", chon: {}, mt: {} }, LS.get("rdthcs", {}));
+  const luuS = () => LS.set("rdthcs", { khoi: S.khoi, mau: S.mau, truong: S.truong, phong: S.phong, nam: S.nam, soDe: S.soDe, tronTN: S.tronTN, tronPA: S.tronPA, hinh: S.hinh, chon: S.chon });
 
   /* ---------------- ngân hàng ---------------- */
   async function capNhatKho() {
@@ -88,6 +88,22 @@
     luuS(); veKhoi();
   }
 
+  /* ---------------- bài hình học chứng minh ---------------- */
+  const soY = q => { let n = 0; for (const c of "abcde") if (new RegExp("(^|\\s|<br>)" + c + "\\)\\s").test(q.de)) n++; return Math.max(1, n); };
+  const laDangHinh = d => +d.khoi >= 7 && /chứng minh|tam giác bằng nhau|đồng dạng|nội tiếp|tiếp tuyến|tia phân giác|song song, vuông góc|thẳng hàng/i.test(d.tenDang) && !/biến|chia hết|bất đẳng thức đơn giản/i.test(d.tenDang) && d.cau.some(q => q.loai === "TL");
+  function dangHinh() {
+    const bais = Object.keys(S.chon[S.khoi] || {});
+    return Object.values(BANK).filter(d => bais.includes(d.bai) && laDangHinh(d)).sort((a, b) => a.ma.localeCompare(b.ma, "vi", { numeric: true }));
+  }
+  function veHinh() {
+    const ds = dangHinh(), el = $("hinh"); if (!el) return;
+    const coAbc = d => d.cau.some(q => q.loai === "TL" && soY(q) >= 3);
+    el.innerHTML = `<option value="auto">Tự động: có 1 bài hình chứng minh${ds.some(coAbc) ? " (ưu tiên bài có ý a, b, c)" : ""}</option><option value="khong">Không bắt buộc (bốc ngẫu nhiên theo ma trận)</option>` +
+      (ds.length ? `<optgroup label="Chọn đúng dạng bài hình">${ds.map(d => `<option value="${d.ma}">Bài ${d.bai} · ${esc(d.tenDang)}${coAbc(d) ? " — có ý a, b, c" : ""}</option>`).join("")}</optgroup>` : "");
+    el.value = [...el.options].some(o => o.value === S.hinh) ? S.hinh : "auto";
+    $("hinhTT").textContent = +S.khoi < 7 ? "Toán 6 không có dạng chứng minh hình học trong ngân hàng." : ds.length ? `Phạm vi đã chọn có ${ds.length} dạng hình học chứng minh${ds.some(coAbc) ? `, trong đó ${ds.filter(coAbc).length} dạng có đủ ý a), b), c)` : " (các dạng này mỗi bài một ý)"}.` : "Phạm vi đã chọn chưa có dạng chứng minh hình học.";
+  }
+
   /* ---------------- ma trận ---------------- */
   function cauCua(bai, loai, muc) { const out = []; Object.values(BANK).filter(d => d.bai === String(bai)).forEach(d => d.cau.forEach(q => { if (q.loai === loai && q.muc === muc) out.push([d, q]); })); return out; }
   function coSan(bai) { const r = {}; Object.values(BANK).filter(d => d.bai === String(bai)).forEach(d => d.cau.forEach(q => { const k = q.loai + q.muc; r[k] = (r[k] || 0) + 1; })); return r; }
@@ -103,7 +119,7 @@
     };
     const tong = x => Object.values(x.TN).reduce((s, v) => s + v, 0) + Object.values(x.TL).reduce((s, v) => s + v, 0);
     MUC_TN.forEach(m => rai("TN", m, M.tn[m] || 0)); MUC_TL.forEach(m => rai("TL", m, M.tl[m] || 0));
-    S.mt = mt; veMT();
+    S.mt = mt; veMT(); veHinh();
   }
   function veMT() {
     const bais = Object.keys(S.mt).sort((a, b) => a - b); const C = cayKhoi();
@@ -135,7 +151,32 @@
     }
     return null;
   }
+  /* ---------------- đề tuyển sinh 10: khung 7 bài, bốc từ bộ 50 đề ôn (assets/ts10.js) ---------------- */
+  const MUC_TS = { 1: "TH", 2: "TH", 3: "NB", 4: "VD", 5: "VD", 6: "VDC", 7: "VDC" };
+  const soDiem = x => +String(x).replace(",", ".");
+  const muc10 = b => ({ d: { ma: b.dang, tenDang: TS10.tenDang(KQ10.dang, b.dang), bai: b.k, cau: [] }, q: { ma: b.ma, loai: "TL", de: b.de, lg: b.lg || "", tex: { de: b.tex, lg: b.texLg || "" } }, muc: MUC_TS[b.k], bai: b.k, diem: soDiem(b.diem), ts10: b });
+  let KQ10 = null;
+  async function taoDeTS10() {
+    try { KQ10 = await TS10.nap(); } catch (e) { return alert("Chưa tải được bộ đề ôn tuyển sinh 10 (data/ts10/hs.json)."); }
+    const bais = TS10.ghep(KQ10, S.tsMuc || "all");
+    const TL = bais.map(muc10);
+    KQ = { M: MAU.ts10, TN: [], TL, nhom: TL.map(x => ({ y: [x], rieng: true })), thieu: KQ10.coGV ? [] : [], hinhMsg: KQ10.coGV ? "" : "Máy này chưa nạp lời giải TS10 nên tab Đáp án – HDC còn trống. Nạp file TS10_GV_LoiGiai.json ở trang Tài liệu › Ôn thi vào 10 (chế độ giáo viên).", tg: new Date(), ts10: true };
+    taoMa(); veKQ();
+  }
+  function doiTS10(i) {
+    const cu = KQ.TL[i]; const dung = new Set(KQ.TL.map(x => x.q.ma));
+    let ds = []; KQ10.de.forEach(d => { if (S.tsMuc && S.tsMuc !== "all" && d.muc !== S.tsMuc) return; d.bai.forEach(b => { if (b.k === cu.bai && !dung.has(b.ma)) ds.push(b); }); });
+    if (!ds.length) return alert("Không còn bài khác cùng vị trí.");
+    const moi = muc10(ds[Math.floor(Math.random() * ds.length)]);
+    KQ.TL[i] = moi; KQ.nhom = KQ.TL.map(x => ({ y: [x], rieng: true })); taoMa(); veKQ();
+  }
+  function maTranTS10() {
+    let s = `<h3 style="text-align:center">MA TRẬN – ĐẶC TẢ ĐỀ TUYỂN SINH 10 (KHUNG 7 BÀI)</h3><table class="mtd"><tr><th>Bài</th><th>Nội dung</th><th>Dạng bài</th><th>Mức độ</th><th>Điểm</th><th>Nguồn (mã bài)</th></tr>`;
+    KQ.TL.forEach((x, i) => { s += `<tr><td>${i + 1}</td><td>${esc((KQ10.dang.bai["B" + x.bai] || "").replace(/^Bài \d+ – /, ""))}</td><td>${esc(x.d.ma)} – ${esc(x.d.tenDang.replace(/\$/g, ""))}</td><td>${TEN_MUC[x.muc] || x.muc}</td><td>${fmt(x.diem)}</td><td class="small">${esc(x.q.ma)}</td></tr>`; });
+    return s + `<tr class="tong"><td colspan="4">Tổng</td><td>${fmt(KQ.TL.reduce((a, x) => a + x.diem, 0))}</td><td></td></tr></table>`;
+  }
   function taoDe() {
+    if (S.mau === "ts10" && G.TS10) return taoDeTS10();
     const M = MAU[S.mau]; const bais = Object.keys(S.mt).sort((a, b) => a - b);
     if (!bais.length) return alert("Chưa chọn phạm vi kiến thức.");
     const daDung = new Set(), TN = [], TL = [], thieu = [];
@@ -143,17 +184,42 @@
       MUC_TN.forEach(m => { for (let i = 0; i < S.mt[b].TN[m]; i++) { const x = boc(b, "TN", m, daDung); x ? TN.push(Object.assign(x, { bai: b })) : thieu.push(`TN ${m} bài ${b}`); } });
       MUC_TL.forEach(m => { for (let i = 0; i < S.mt[b].TL[m]; i++) { const x = boc(b, "TL", m, daDung); x ? TL.push(Object.assign(x, { bai: b })) : thieu.push(`TL ${m} bài ${b}`); } });
     });
+    const hinhMsg = chenBaiHinh(TL, daDung, M);
     const capMuc = { NB: 0, TH: 1, VD: 2, VDC: 3 };
     TN.sort((a, b) => capMuc[a.muc] - capMuc[b.muc] || a.bai - b.bai);
     // điểm tự luận
     const tongTN = M.khongDiem ? 0 : TN.length * M.diemTN, conLai = M.khongDiem ? 0 : Math.max(0, 10 - tongTN);
-    const W = { NB: 0.5, TH: 0.75, VD: 1, VDC: 1 }; const sw = TL.reduce((s, x) => s + W[x.muc] * (laNhieuY(x.q) ? 2 : 1), 0) || 1;
-    TL.forEach(x => x.diem = Math.max(0.25, Math.round(conLai * W[x.muc] * (laNhieuY(x.q) ? 2 : 1) / sw * 4) / 4));
+    const W = { NB: 0.5, TH: 0.75, VD: 1, VDC: 1 }; const hs = x => x.hinh ? Math.max(2.5, soY(x.q) * 0.9) : soY(x.q);
+    const sw = TL.reduce((s, x) => s + W[x.muc] * hs(x), 0) || 1;
+    TL.forEach(x => x.diem = Math.max(0.25, Math.round(conLai * W[x.muc] * hs(x) / sw * 4) / 4));
     if (TL.length && !M.khongDiem) { const lech = Math.round((conLai - TL.reduce((s, x) => s + x.diem, 0)) * 4) / 4; const k = TL.reduce((bi, x, i) => x.diem > TL[bi].diem ? i : bi, 0); TL[k].diem = Math.max(0.25, TL[k].diem + lech); }
-    KQ = { M, TN, TL, nhom: nhomTL(TL), thieu, tg: new Date() };
+    KQ = { M, TN, TL, nhom: nhomTL(TL), thieu, hinhMsg, tg: new Date() };
     taoMa(); veKQ();
   }
   const laNhieuY = q => /(^|\s|<br>)b\)\s/.test(q.de);
+  function chenBaiHinh(TL, daDung, M) {
+    if (S.hinh === "khong" || M.khongDiem && S.mau !== "phieu" || !TL.length && S.hinh === "auto") return "";
+    if (["tn15", "tl15"].includes(S.mau) && S.hinh === "auto") return "";
+    const ds = dangHinh(); if (!ds.length) return S.hinh === "auto" ? "" : "Dạng bài hình đã chọn không còn trong phạm vi.";
+    // đã có câu hình chứng minh trong đề thì dùng luôn câu đó làm bài hình
+    const co = TL.find(x => laDangHinh(x.d)); 
+    let dang = S.hinh !== "auto" ? ds.find(d => d.ma === S.hinh) : null;
+    if (!dang) { const abc = ds.filter(d => d.cau.some(q => q.loai === "TL" && soY(q) >= 3)); dang = co && S.hinh === "auto" && soY(co.q) >= 2 ? null : (abc.length ? abc : ds)[Math.floor(Math.random() * (abc.length ? abc : ds).length)]; }
+    if (!dang) { co.hinh = true; return ""; }
+    const ung = dang.cau.filter(q => q.loai === "TL" && !daDung.has(q.ma) && !daDung.has(dang.ma + "#" + soThuTu(q)));
+    if (!ung.length) return "Dạng bài hình đã chọn hết câu chưa dùng.";
+    const maxY = Math.max(...ung.map(soY)); const tot = ung.filter(q => soY(q) === maxY);
+    const q = tot[Math.floor(Math.random() * tot.length)];
+    daDung.add(q.ma); daDung.add(dang.ma + "#" + soThuTu(q)); daDung.add("dang:" + dang.ma);
+    // bỏ bớt ý tự luận để giữ độ dài đề: ưu tiên bỏ câu cùng bài SGK, rồi câu mức VD/TH
+    const bo = Math.min(TL.length, Math.max(1, soY(q) - 1));
+    for (let i = 0; i < bo; i++) {
+      let k = TL.findIndex(x => x.bai === dang.bai && !x.hinh); if (k < 0) k = TL.findIndex(x => x.muc === "VD" && !x.hinh); if (k < 0) k = TL.findIndex(x => x.muc === "TH" && !x.hinh); if (k < 0) k = TL.findIndex(x => !x.hinh);
+      if (k >= 0) TL.splice(k, 1);
+    }
+    TL.push({ d: dang, q, muc: q.muc, lech: false, bai: dang.bai, hinh: true });
+    return "";
+  }
   function nhomTL(TL) {
     // gom theo chương thành "Bài": câu có sẵn ý a), b) đứng riêng một bài; mỗi bài tối đa 4 ý
     const C = cayKhoi(); const chuongCua = b => { for (const c in C) if (C[c].bai[b]) return c; return "0"; };
@@ -162,15 +228,16 @@
     const out = []; let cur = null;
     ds.forEach(x => {
       const ch = chuongCua(x.bai);
-      if (laNhieuY(x.q)) { out.push({ ch, y: [x], rieng: true }); cur = null; return; }
+      if (laNhieuY(x.q) || x.hinh) { out.push({ ch, y: [x], rieng: true, hinh: !!x.hinh }); cur = null; return; }
       if (!cur || cur.ch !== ch || cur.y.length >= 4) { cur = { ch, y: [] }; out.push(cur); }
       cur.y.push(x);
     });
     // đưa VDC xuống cuối đề
-    return out.sort((a, b) => (a.y.some(x => x.muc === "VDC") - b.y.some(x => x.muc === "VDC")));
+    const hang = g => g.hinh ? 2 : g.y.some(x => x.muc === "VDC") ? 1 : 0;
+    return out.sort((a, b) => hang(a) - hang(b));
   }
   function taoMa() {
-    const n = Math.max(1, Math.min(24, +S.soDe || 1)); const goc = Math.floor(100 + Math.random() * 800);
+    const n = KQ.ts10 ? 1 : Math.max(1, Math.min(24, +S.soDe || 1)); const goc = Math.floor(100 + Math.random() * 800);
     KQ.ma = [];
     for (let i = 0; i < n; i++) {
       const thu = S.tronTN && i > 0 ? tron(KQ.TN.map((_, k) => k)) : KQ.TN.map((_, k) => k);
@@ -183,7 +250,7 @@
   function dauDe(maDe) {
     const M = KQ.M;
     return `<table class="dau"><tr><td style="width:42%;text-align:center">${esc(S.phong)}<br><b>${esc(S.truong)}</b></td>
-      <td style="text-align:center"><b>${esc(M.ki)}</b><br><b>NĂM HỌC ${esc(S.nam)}</b><br>Môn: <b>TOÁN – KHỐI ${esc(S.khoi)}</b>${M.phut ? `<br><i>Thời gian làm bài: ${M.phut} phút (không kể thời gian phát đề)</i>` : ""}</td></tr></table>
+      <td style="text-align:center"><b>${esc(M.ki)}</b><br><b>NĂM HỌC ${esc(S.nam)}</b><br>Môn: <b>TOÁN – KHỐI ${esc(KQ.ts10 ? "9" : S.khoi)}</b>${M.phut ? `<br><i>Thời gian làm bài: ${M.phut} phút (không kể thời gian phát đề)</i>` : ""}</td></tr></table>
       ${maDe ? `<div class="made">Mã đề: <b>${maDe}</b></div>` : ""}<div class="hoten">Họ và tên: ………………………………………… Lớp: ………… Số báo danh: …………</div>`;
   }
   function deHTML(V, goc) {
@@ -203,9 +270,9 @@
     }
     return s + `<p class="het">— HẾT —</p>`;
   }
-  const doiNut = x => `<button class="doi" title="Đổi câu khác cùng bài, cùng mức">🔄 đổi</button><span class="nguon">${esc(x.d.tenDang)} · ${x.muc}${x.lech ? " (thay mức)" : ""}</span>`;
+  const doiNut = x => `<button class="doi" title="${x.ts10 ? "Đổi bài khác cùng vị trí trong khung 7 bài" : "Đổi câu khác cùng bài, cùng mức"}">🔄 đổi</button><span class="nguon">${esc(x.d.tenDang)} · ${x.muc}${x.lech ? " (thay mức)" : ""}</span>`;
   function dapAnHTML() {
-    const M = KQ.M; let s = `<h3 style="text-align:center">ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM — ${esc(M.ki)} — TOÁN ${esc(S.khoi)}</h3>`;
+    const M = KQ.M; let s = `<h3 style="text-align:center">ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM — ${esc(M.ki)} — TOÁN ${esc(KQ.ts10 ? "9" : S.khoi)}</h3>`;
     if (KQ.TN.length) {
       s += `<h4 class="ph">PHẦN I. TRẮC NGHIỆM${M.khongDiem ? "" : ` (mỗi câu đúng ${fmt(M.diemTN)} điểm)`}</h4>`;
       KQ.ma.forEach(V => { s += `<table class="bda"><tr><td><b>Mã ${V.ma}</b></td>${V.cau.map((_, i) => `<td>${i + 1}</td>`).join("")}</tr><tr><td>Đáp án</td>${V.cau.map(c => `<td><b>${"ABCD"[c.da]}</b></td>`).join("")}</tr></table>`; });
@@ -218,6 +285,7 @@
     return s;
   }
   function maTranHTML() {
+    if (KQ.ts10) return maTranTS10();
     const M = KQ.M, C = cayKhoi(); const bais = [...new Set([...KQ.TN, ...KQ.TL].map(x => x.bai))].sort((a, b) => a - b);
     const tenBai = b => { for (const c in C) if (C[c].bai[b]) return [c, C[c].ten, C[c].bai[b].ten]; return ["", "", ""]; };
     const dem = (b, l, m) => (l === "TN" ? KQ.TN : KQ.TL).filter(x => x.bai === b && x.muc === m);
@@ -241,13 +309,17 @@
     $("kqTabs").innerHTML = [["goc", "📝 Đề gốc (đổi câu)"], ...KQ.ma.map((V, i) => ["m" + i, "Mã " + V.ma]), ["da", "🔑 Đáp án – HDC"], ["mt", "📊 Ma trận – Đặc tả"]].map(([k, t]) => `<button data-t="${k}" class="${tab === k ? "on" : ""}">${t}</button>`).join("");
     $("kqTabs").querySelectorAll("button").forEach(b => b.onclick = () => { tab = b.dataset.t; veKQ(); });
     const V0 = { ma: "", cau: KQ.TN.map(x => ({ x, p: [0, 1, 2, 3], da: x.q.da })) };
-    $("kqThieu").innerHTML = KQ.thieu.length ? `<div class="note red">Ngân hàng không đủ câu cho: ${esc(KQ.thieu.join(", "))}.</div>` : "";
+    $("kqThieu").innerHTML = (KQ.thieu.length ? `<div class="note red">Ngân hàng không đủ câu cho: ${esc(KQ.thieu.join(", "))}.</div>` : "") + (KQ.hinhMsg ? `<div class="note red">${esc(KQ.hinhMsg)}</div>` : "");
     const h = tab === "goc" ? deHTML(V0, true) : tab === "da" ? dapAnHTML() : tab === "mt" ? maTranHTML() : deHTML(KQ.ma[+tab.slice(1)]);
     $("kqXem").innerHTML = `<div class="giay">${h}</div>`;
     $("kqXem").querySelectorAll(".doi").forEach(bt => bt.onclick = () => {
-      const el = bt.closest("[data-loai]"); const loai = el.dataset.loai, i = +el.dataset.i; const arr = loai === "TN" ? KQ.TN : KQ.TL; const cu = arr[i];
+      const el = bt.closest("[data-loai]"); const loai = el.dataset.loai, i = +el.dataset.i;
+      if (KQ.ts10) return doiTS10(i); const arr = loai === "TN" ? KQ.TN : KQ.TL; const cu = arr[i];
       const daDung = new Set([...KQ.TN, ...KQ.TL].filter(x => x !== cu).flatMap(x => [x.q.ma, x.d.ma + "#" + soThuTu(x.q), "dang:" + x.d.ma, "dang:" + x.d.ma + ":" + x.q.loai])); daDung.add(cu.q.ma);
-      const moi = boc(cu.bai, loai, cu.muc, daDung); if (!moi) return alert("Không còn câu khác cùng bài, cùng mức.");
+      let moi;
+      if (cu.hinh) { const ung = cu.d.cau.filter(q => q.loai === "TL" && !daDung.has(q.ma) && soY(q) === soY(cu.q)); const q = ung[Math.floor(Math.random() * ung.length)]; moi = q ? { d: cu.d, q, muc: q.muc, hinh: true } : null; }
+      else moi = boc(cu.bai, loai, cu.muc, daDung);
+      if (!moi) return alert("Không còn câu khác cùng bài, cùng mức.");
       Object.assign(moi, { bai: cu.bai, diem: cu.diem }); arr[i] = moi;
       if (loai === "TL") KQ.nhom.forEach(g => g.y = g.y.map(x => x === cu ? moi : x));
       taoMa(); veKQ();
@@ -259,7 +331,8 @@
   async function xuatWord(btn) {
     if (!KQ) return; const cu = btn.textContent; btn.textContent = "⏳ Đang tạo Word…"; btn.disabled = true;
     try {
-      const z = new JSZip(); const goc = `De_Toan${S.khoi}_${tenTep(KQ.M.ki)}`;
+      await napThuVien("assets/lib/html2canvas.min.js");   // chỉ cần khi có hình TikZ trong đề
+      const z = new JSZip(); const goc = KQ.ts10 ? "De_TS10_TPHCM" : `De_Toan${S.khoi}_${tenTep(KQ.M.ki)}`;
       const lam = async (html, ten, opt) => { const host = document.createElement("div"); host.className = "giay xuat"; host.style.cssText = "position:fixed;left:-10000px;top:0;width:760px"; host.innerHTML = html; document.body.appendChild(host); try { z.file(ten, await Docx.fromHtml(host, Object.assign({ size: 12, font: "Times New Roman", margins: { top: 1.5, bottom: 1.5, left: 2, right: 1.5 } }, opt || {}))); } finally { host.remove(); } };
       for (const V of KQ.ma) await lam(deHTML(V).replace(/<button[^>]*>.*?<\/button>|<span class="nguon">.*?<\/span>/g, ""), `${goc}_Ma${V.ma}.docx`);
       await lam(dapAnHTML(), `${goc}_DapAn_HDC.docx`);
@@ -269,6 +342,7 @@
   }
   function xuatTeX() {
     if (!KQ) return; const M = KQ.M;
+    if (KQ.ts10) { const t = TS10.tex("ĐỀ ÔN TẬP TUYỂN SINH VÀO LỚP 10 – NĂM HỌC " + S.nam, KQ.TL.map(x => x.ts10), true); const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([t], { type: "text/x-tex" })); a.download = "De_TS10_TPHCM_khung7bai.tex"; a.click(); return; }
     const pre = `\\documentclass[12pt,a4paper]{article}\n\\usepackage[top=1.5cm,bottom=1.5cm,left=2cm,right=1.5cm]{geometry}\n\\usepackage{fontspec}\\setmainfont{TeX Gyre Termes}\n\\usepackage{amsmath,amssymb,tikz,tasks,enumitem}\n\\settasks{label=\\textbf{\\Alph*.},label-width=1.5em,item-indent=2em}\n\\setlength{\\parindent}{0pt}\\setlength{\\parskip}{3pt}\n\\pagestyle{empty}\n\\begin{document}\n`;
     const dau = ma => `\\begin{minipage}[t]{0.42\\textwidth}\\centering ${S.phong}\\\\\\textbf{${S.truong}}\\end{minipage}\\hfill\\begin{minipage}[t]{0.55\\textwidth}\\centering\\textbf{${M.ki}}\\\\\\textbf{NĂM HỌC ${S.nam}}\\\\Môn: \\textbf{TOÁN -- KHỐI ${S.khoi}}${M.phut ? `\\\\\\textit{Thời gian làm bài: ${M.phut} phút}` : ""}\\end{minipage}\\par\\medskip\n${ma ? `\\hfill\\fbox{Mã đề: ${ma}}\\par\n` : ""}Họ và tên: \\dotfill\\ Lớp: \\dots\\dots\\dots\\par\\medskip\n`;
     const de = V => {
@@ -292,7 +366,10 @@
     $("mau").value = S.mau; $("truong").value = S.truong; $("phong").value = S.phong; $("nam").value = S.nam; $("soDe").value = S.soDe; $("tronTN").checked = S.tronTN; $("tronPA").checked = S.tronPA;
     ["truong", "phong", "nam", "soDe"].forEach(k => $(k).onchange = () => { S[k] = $(k).value; luuS(); });
     ["tronTN", "tronPA"].forEach(k => $(k).onchange = () => { S[k] = $(k).checked; luuS(); });
-    $("mau").onchange = () => { S.mau = $("mau").value; luuS(); phanBo(); };
+    $("mau").insertAdjacentHTML("afterend", `<label class="f" id="tsMucL" style="margin-top:6px">Mức đề (bộ 50 đề ôn tuyển sinh 10)<select id="tsMuc"><option value="all">Trộn mọi mức</option><option value="lq">Làm quen (đề 1–10)</option><option value="sat">Sát đề Sở (đề 11–40)</option><option value="nc">Nâng cao (đề 41–50)</option></select></label>`);
+    const hienTS = () => { $("tsMucL").style.display = S.mau === "ts10" ? "" : "none"; }; $("tsMuc").value = S.tsMuc || "all"; $("tsMuc").onchange = () => { S.tsMuc = $("tsMuc").value; luuS(); }; hienTS();
+    $("mau").onchange = () => { S.mau = $("mau").value; luuS(); hienTS(); if (S.mau !== "ts10") phanBo(); };
+    $("hinh").onchange = () => { S.hinh = $("hinh").value; luuS(); };
     document.querySelectorAll("#khoi button").forEach(b => b.onclick = async () => { S.khoi = b.dataset.k; luuS(); BANK = await ThcsBank.tatCa(S.khoi); veKhoi(); });
     $("nhNap").onchange = e => { napNH([...e.target.files]); e.target.value = ""; };
     $("nhGoi").onclick = taoGoi; $("nhWeb").onclick = taiWeb;

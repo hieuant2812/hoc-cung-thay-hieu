@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="assets/lophoc.js"></script><script src="assets/sotay.js?v=3"></script>
 <script src="assets/katex/katex.min.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
 <style>
 .lt-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
 .lt-tabs button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;font:700 15px var(--font);cursor:pointer;color:#334}
@@ -157,7 +157,7 @@
       if (i >= items.length) return done();
       const it = items[i], q = it.q;
       box.innerHTML = `<div class="row" style="justify-content:space-between"><b>Câu ${i + 1}/${items.length}</b><span class="small muted">${esc(SET.dang && SET.dang[q.dkey] ? "" : q.dkey)} ${SET.dang && SET.dang[q.dkey] ? NHD.texToHtml(SET.dang[q.dkey]) : ""} · ${LVN[q.muc] || q.muc}</span><button class="btn ghost sm" id="pQuit">✕ Thoát</button></div>
-        <div class="pbar"><i style="width:${i / items.length * 100}%"></i></div><div class="card ex" id="pQ">${NHD.renderQuestion(it, i + 1, "", {})}</div><div id="pAct"></div><div id="pFb"></div>`;
+        <div class="pbar"><i style="width:${i / items.length * 100}%"></i></div><div class="card ex" id="pQ">${NHD.renderQuestion(it, i + 1, "", { hinh: true })}</div><div id="pAct"></div><div id="pFb"></div>`;
       $("pQuit").onclick = () => { if (confirm("Thoát lượt luyện tập này?")) back(); };
       const fb = (good, txt) => { res.push({ dkey: q.dkey, good }); if (good) ok++; saveProg(q.dkey, good);
         $("pFb").innerHTML = `<div class="fb ${good ? "ok" : "no"}">${good ? "✓ Chính xác!" : "✗ Chưa đúng."} ${txt || ""}</div>${q.loigiai ? `<div class="card ex" style="margin-top:8px"><div class="sol"><span class="lb">Lời giải.</span> ${NHD.texToHtml(q.loigiai)}</div></div>` : ""}<div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn coral" id="pNext">${i + 1 < items.length ? "Câu tiếp →" : "Xem kết quả"}</button></div>`;

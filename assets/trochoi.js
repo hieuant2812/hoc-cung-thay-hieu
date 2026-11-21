@@ -4,6 +4,7 @@
 (function (G) {
   "use strict";
   const esc = G.esc || (s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])));
+  const hinhTD = de => (G.HinhTuDong && !/tikzpicture|includegraphics/.test(de || "")) ? HinhTuDong.svg(de) : "";
   const T = s => (G.NHD && NHD.texToHtml) ? NHD.texToHtml(String(s == null ? "" : s)) : esc(s);
   const CHU = "ABCD";
   const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -70,11 +71,11 @@
       than(ctx).innerHTML = `<div class="pc">
         <div class="pc-qr"><div data-qr></div>
           <div class="pc-ma">Mã phòng <b>${Lop.ma}</b></div>
-          <div class="pc-url">${esc(Lop.url())}</div></div>
+          <div class="pc-url">${Lop.trucTuyen && Lop.urlNgan ? esc(Lop.urlNgan()) : esc(Lop.url())}</div><div class="pc-mang" data-mang></div></div>
         <div class="pc-ds">
           <h3>Đã vào: <b data-so>0</b>/<span data-tong>${ctx.cfg.ds ? ctx.cfg.ds.length : 0}</span></h3>
           <div class="pc-ten" data-ten></div>
-          <p class="tc-nhan">Các em dùng điện thoại quét mã QR bên cạnh (cùng wifi với máy này), chọn đúng tên mình rồi chờ.</p>
+          <p class="tc-nhan">${Lop.trucTuyen ? "Các em dùng điện thoại (4G hay wifi nào cũng được) quét mã QR bên cạnh, hoặc mở trang ở dòng dưới mã QR rồi nhập mã phòng; chọn đúng tên mình rồi chờ." : "Các em dùng điện thoại quét mã QR bên cạnh (cùng wifi với máy này), chọn đúng tên mình rồi chờ."}</p>
         </div></div>`;
       duoi(ctx).innerHTML = `<div class="tc-cham"><button class="btn coral" data-batdau>Bắt đầu thi <kbd>Enter</kbd></button>
         <span class="tc-nhan">Có thể bắt đầu khi đủ số em cần thiết.</span></div>`;
@@ -86,6 +87,7 @@
             const t = await Lop.gv();
             const so = ctx.host.querySelector("[data-so]"); if (so) so.textContent = t.sohs;
             const dt = ctx.host.querySelector("[data-ten]");
+            const mg = ctx.host.querySelector("[data-mang]"); if (mg) mg.innerHTML = t.mang === "mat" ? "⚠️ Máy này vừa mất Internet — đang nối lại…" : "";
             if (dt) dt.innerHTML = (t.hs || []).map(h => `<span class="v">${esc(h.ten)}${h.to ? ` <i>${esc(h.to)}</i>` : ""}</span>`).join("");
           } catch (e) {}
           await sleep(1200);
@@ -109,7 +111,7 @@
       const ys = q.loai === "DS" ? (q.y || []) : [];
       than(ctx).innerHTML = `<div class="tc-cau">
         ${o.nhan ? `<div class="tc-nhan">${o.nhan}</div>` : ""}
-        <div class="tc-de">${T(q.de)}</div>
+        <div class="tc-de">${hinhTD(q.de)}${T(q.de)}</div>
         ${q.loai === "TN" ? `<div class="tc-pa">${pa.map((p, k) => `<button class="pa" data-k="${k}"><i>${CHU[k]}</i><span>${T(p)}</span></button>`).join("")}</div>`
           : q.loai === "DS" ? `<div class="tc-ds">${ys.map((y, k) => `<div class="ds" data-k="${k}"><b>${"abcd"[k]})</b> <span>${T(y.t)}</span><em></em></div>`).join("")}</div>`
             : `<div class="tc-tln">Đáp án: <b data-tln>? ? ?</b></div>`}
@@ -155,6 +157,7 @@
       }
       function hienDap(k, hetGio) {
         if (xong || !dhEl || !dhEl.isConnected) return; xong = true; clearInterval(hen);
+        if (ctx.cfg.live && window.Lop && Lop.ma && q.loai === "TN") Lop.khoa().catch(() => {}); // báo đáp án về điện thoại học sinh
         chon = (k == null ? -1 : k);
         if (q.loai === "TN") {
           ctx.host.querySelectorAll(".pa").forEach((b, idx) => {

@@ -36,7 +36,9 @@
 .tc-than{flex:1;overflow:auto;padding:22px 30px;display:flex;flex-direction:column;justify-content:center}
 .tc-duoi{padding:12px 20px;background:#152338;border-top:1px solid #22324e}
 .tc-nhan{color:#8fb3e8;font-size:17px}
-.tc-de{font-size:clamp(20px,2.4vw,32px);line-height:1.45;margin:10px 0 18px}
+.tc-de{font-size:clamp(20px,2.4vw,32px);line-height:1.45;margin:10px 0 18px;display:flow-root}
+.tc-de>.hinh-td{float:right;margin:0 0 8px 18px;background:#fff;border-radius:12px;padding:6px}
+.tc-de>.hinh-td svg{max-height:42vh}
 .tc-pa{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .pa{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#1b2b45;border:2px solid #2b4068;color:#eef3ff;
   border-radius:14px;padding:14px 16px;font:inherit;font-size:clamp(16px,1.7vw,22px);cursor:pointer;transition:.12s}
@@ -127,6 +129,8 @@ kbd{background:#2b4068;border-radius:5px;padding:1px 6px;font:600 12px var(--fon
 .pc{display:grid;grid-template-columns:minmax(230px,32%) 1fr;gap:26px;align-items:start}
 .pc-qr{background:#fff;border-radius:16px;padding:14px;text-align:center}
 .pc-ma{color:#15233a;font:800 22px var(--font-h);margin-top:8px}
+.pc-ma b{font-size:40px;letter-spacing:5px;display:block;line-height:1.1}
+.pc-mang{color:#c0392b;font-weight:700;font-size:13px}
 .pc-url{color:#5a6680;font-size:12px;word-break:break-all}
 .pc-ds h3{margin:0 0 10px;font:700 22px var(--font-h);color:#ffd66b}
 .pc-ten{display:flex;flex-wrap:wrap;gap:7px;max-height:46vh;overflow:auto}
@@ -188,8 +192,8 @@ kbd{background:#2b4068;border-radius:5px;padding:1px 6px;font:600 12px var(--fon
 <footer id="foot"></footer>
 <div id="san"></div>
 <script src="data/chuongtrinh.js"></script>
-<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script>
-<script src="assets/lib/jszip.min.js"></script><script src="assets/lib/qrcode.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/nhd/store.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/lib/qrcode.js"></script><script src="assets/phongmang.js"></script><script src="assets/butve.js"></script>
 <script src="assets/chon-cau.js"></script><script src="assets/lop.js"></script><script src="assets/trochoi.js"></script>
 <script>
 (function(){
@@ -244,15 +248,28 @@ kbd{background:#2b4068;border-radius:5px;padding:1px 6px;font:600 12px var(--fon
     c.cau=cau.slice().sort(()=>Math.random()-.5);
     const san=$("san"); san.classList.add("on");
     try{ await san.requestFullscreen?.(); }catch(x){}
-    TroChoi.batDau(b.dataset.g,c,san,()=>{ san.classList.remove("on"); san.innerHTML=""; try{document.exitFullscreen?.();}catch(x){} });
+    let bv=null;
+    TroChoi.batDau(b.dataset.g,c,san,()=>{ if(bv){bv.huy();bv=null;} san.classList.remove("on"); san.innerHTML=""; try{document.exitFullscreen?.();}catch(x){} });
+    if(window.ButVe) bv=ButVe.gan({ root:san, giuLai:true, phim:false, viTri:"tren",
+      goc:()=>san.querySelector("[data-than]"), cuon:()=>san.querySelector("[data-than]"), chup:()=>san.querySelector("[data-than]"),
+      khoa:()=>{ const d=san.querySelector(".tc-de"); return d?d.textContent.slice(0,80):"tc"; },
+      tren:()=>{ const t=san.querySelector(".tc-top"); return t?t.getBoundingClientRect().bottom:0; },
+      duoi:()=>{ const t=san.querySelector(".tc-duoi"); return t?Math.max(0,innerHeight-t.getBoundingClientRect().top):0; } });
   };
   (async()=>{
-    const co=await Lop.kiemTra();
-    $("lopTT").className="note "+(co?"green":"blue")+" small";
-    $("lopTT").innerHTML=co
-      ? `✅ Đã nối với <b>máy chủ lớp học</b> — học sinh quét QR vào dự thi được. Địa chỉ cho học sinh: <b>http://${Lop.dc.ip[0]}:${Lop.dc.cong}</b>`
-      : `Muốn học sinh dự thi bằng điện thoại: mở Terminal trên máy này, gõ <b>python3 maychu.py</b> (trong thư mục trang web), rồi mở lại trang này theo địa chỉ máy chủ in ra. Không chạy máy chủ thì các trò vẫn chơi bình thường theo tổ.`;
-    $("live").disabled=!co; if(!co)$("live").checked=false;
+    const coLan=await Lop.kiemTra();
+    const ve=()=>{
+      const tt=window.PhongMang&&Lop.trucTuyen;
+      $("lopTT").className="note "+(tt||coLan?"green":"blue")+" small";
+      $("lopTT").innerHTML=(tt
+        ? `🌐 <b>Thi qua Internet</b> (giống Kahoot): học sinh dùng 4G hay wifi nào cũng được, <b>không cần chung mạng</b> với máy này. Bấm vào trò chơi, màn hình sẽ hiện <b>mã QR</b> và <b>mã phòng 6 số</b>; học sinh quét QR hoặc vào <b>${PhongMang.lop.urlNgan()}</b> rồi nhập mã. Máy này cần có Internet.`
+        : `✅ Đang dùng <b>máy chủ trong lớp</b> (học sinh phải chung wifi): <b>http://${Lop.dc.ip[0]}:${Lop.dc.cong}</b>`)
+        +(coLan?`<div style="margin-top:6px"><label class="chk" style="display:inline-flex"><input type="radio" name="cachNoi" value="net" ${tt?"checked":""}> Qua Internet</label> &nbsp; <label class="chk" style="display:inline-flex"><input type="radio" name="cachNoi" value="lan" ${tt?"":"checked"}> Máy chủ trong lớp (chung wifi)</label></div>`:"");
+      document.querySelectorAll('input[name=cachNoi]').forEach(r=>r.onchange=()=>{ if(r.value==="net") PhongMang.ganVao(Lop); else PhongMang.boGan(Lop); ve(); });
+    };
+    if(window.PhongMang) PhongMang.ganVao(Lop);
+    ve();
+    $("live").disabled=!(window.PhongMang||coLan);
   })();
   ChonCau.mount($("chonCau"),{key:"trochoi",multiDang:true,soCau:false,onReady:a=>api=a,onChange:a=>{
     api=a; const n=a.pool().length;

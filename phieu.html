@@ -5,7 +5,7 @@
 <title>Phiếu trả lời & chấm bằng điện thoại · Học cùng Thầy Hiếu</title>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script>
-<script src="assets/omr/layout.js"></script><script src="assets/lib/qrcode.js"></script><script src="assets/lib/jspdf.umd.min.js"></script>
+<script src="assets/omr/layout.js"></script><script src="assets/lib/qrcode.js"></script>
 <style>
 .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px;margin:14px 0}
 .pc{background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px;cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:6px}
@@ -119,6 +119,7 @@
   $("btnPdf").onclick = async () => {
     save(); const b = $("btnPdf"); b.disabled = true; $("pdfMsg").textContent = "Đang tạo PDF…";
     try {
+      await napThuVien("assets/lib/jspdf.umd.min.js");
       const S2 = sheets(); const ori = S2.land ? "landscape" : "portrait"; const [pw, ph] = S2.land ? [297, 210] : [210, 297];
       const doc = new window.jspdf.jsPDF({ orientation: ori, unit: "mm", format: "a4", compress: true });
       for (let i = 0; i < S2.pages.length; i++) {

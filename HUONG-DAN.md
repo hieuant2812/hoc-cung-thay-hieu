@@ -192,6 +192,20 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
   - Chọn môn, lớp, dạng, mức độ và số câu từ ngân hàng trên máy.
   - Câu hiện chữ to, có đồng hồ đếm ngược cho mỗi câu và nút hiện đáp án, lời giải. Nút ⟳ thay câu khác cùng dạng, cùng mức.
   - Phím tắt: → câu sau, ← câu trước, A đáp án, L lời giải, T đồng hồ, +/− cỡ chữ, F toàn màn hình.
+  - Đã sửa lỗi **mất dấu vectơ, dấu căn** khi chiếu (do quy tắc hiển thị hình TikZ đè lên công thức).
+  - **✏️ Ghi bảng — viết trực tiếp lên câu đang chiếu** (nút ở góc dưới trái), khỏi phải chụp màn hình rồi dán sang app ghi chú:
+    - Dùng chuột, ngón tay hoặc Apple Pencil. Khi đã dùng bút, ngón tay sẽ dùng để cuộn trang.
+    - Có bút 6 màu, 3 độ dày, bút dạ quang, thước kẻ đoạn thẳng (tự hít góc 15°), tia laser tự mờ, tẩy từng nét, hoàn tác, xoá trang, ẩn/hiện nét.
+    - **Bảng trắng** (có lưới ô vuông) để nháp, và nút 📷 lưu ảnh câu hỏi kèm nét viết.
+    - Nét vẽ gắn với từng câu: chuyển câu rồi quay lại vẫn còn; đổi cỡ chữ hay cuộn thì nét đi theo nội dung.
+    - Phím tắt: B bút, H dạ quang, R thước, K laser, E tẩy, W bảng trắng, X xoá trang, Ctrl/⌘+Z hoàn tác, Esc tắt bút.
+  - **Hình minh hoạ tự động** cho câu hình học chưa có hình (khoảng 1.500 câu trong ngân hàng 10–12):
+    - Web đọc đề rồi tự vẽ: hình chóp, tứ diện, lăng trụ, lập phương, hình hộp, tam giác, hình bình hành, hình vuông, hình chữ nhật, hình thoi, hình thang, lục giác đều.
+    - Có trung điểm, trọng tâm, tâm, điểm chia theo tỉ số, chân đường cao, hình chiếu, giao điểm, đường tròn ngoại tiếp/nội tiếp, góc cho trong đề.
+    - Cạnh khuất vẽ nét đứt theo đúng mặt bị che.
+    - Chỉ đọc phần đề, không đọc phương án nên không lộ đáp án.
+    - Câu cho toạ độ (Oxy, Oxyz) không vẽ. Câu đã có hình TikZ giữ nguyên hình gốc.
+    - Hình hiện ở Trình chiếu, Tự học, Trò chơi và trên điện thoại học sinh.
   - Dưới câu hỏi có đường dẫn sang các mô phỏng cùng chương.
 - **Phiếu học tập (QR)**: chọn câu và bấm “Tạo phiếu”, rồi in.
   - Mã QR trên phiếu mở trang đáp số (`dapan.html`) ngay trên điện thoại học sinh.
@@ -250,9 +264,25 @@ Mẫu file TeX được nhận dạng: Toán 10 `\bai{n}{..}` + `\phan{A|B|C}`, 
 2. **Thông tin đề**: khối, loại đề (giữa kì / cuối kì TN 3đ + TL 7đ; tự luận 100%; 15 phút TN hoặc TL; ôn tập chương; đề tham khảo tuyển sinh 10 TP.HCM; phiếu bài tập), tên trường, năm học, số mã đề, trộn câu / trộn phương án.
 3. **Phạm vi**: tick chương, bài (nút nhanh Học kì I / II / Cả năm).
 4. **Ma trận**: web tự phân bổ số câu TN (NB/TH/VD) và số ý TL (NB/TH/VD/VDC) cho từng bài theo loại đề; thầy sửa trực tiếp từng ô.
-5. **🎲 Tạo đề**: bốc câu đúng bài, đúng mức (thiếu thì lấy mức gần nhất và ghi chú), không lấy hai câu cùng bộ số liệu, ưu tiên mỗi dạng một câu; tự luận gom theo chương thành Bài 1, 2, 3… có ý a), b), c), câu có sẵn nhiều ý đứng riêng, ý vận dụng cao để cuối; điểm tự luận tự chia theo mức độ, tổng 10 điểm.
-6. Tab **Đề gốc**: rê chuột vào câu → **🔄 đổi** để thay câu khác cùng bài, cùng mức. Các tab mã đề, **Đáp án – HDC** (bảng đáp án từng mã + lời giải, điểm từng ý), **Ma trận – Đặc tả**.
-7. Xuất: **Word** (gói zip: từng mã đề, đáp án – HDC, ma trận – đặc tả; công thức là Equation của Word), **TeX** (biên dịch XeLaTeX), **In / PDF**.
+5. **Bài hình học** (ô trong Thông tin đề): *Tự động* — đề luôn có một bài hình chứng minh, ưu tiên dạng có ý a), b), c), đặt cuối đề, khoảng 2–2,5 điểm; *Không bắt buộc* — bốc ngẫu nhiên theo ma trận; hoặc chọn đúng một dạng hình trong phạm vi. Dòng chú thích cho biết phạm vi có bao nhiêu dạng hình, bao nhiêu dạng đủ ý a), b), c).
+6. **🎲 Tạo đề**: bốc câu đúng bài, đúng mức (thiếu thì lấy mức gần nhất và ghi chú), không lấy hai câu cùng bộ số liệu, ưu tiên mỗi dạng một câu; tự luận gom theo chương thành Bài 1, 2, 3… có ý a), b), c), câu có sẵn nhiều ý đứng riêng, ý vận dụng cao để cuối; điểm tự luận tự chia theo mức độ, tổng 10 điểm.
+7. Tab **Đề gốc**: rê chuột vào câu → **🔄 đổi** để thay câu khác cùng bài, cùng mức. Các tab mã đề, **Đáp án – HDC** (bảng đáp án từng mã + lời giải, điểm từng ý), **Ma trận – Đặc tả**.
+8. Xuất: **Word** (gói zip: từng mã đề, đáp án – HDC, ma trận – đặc tả; công thức là Equation của Word), **TeX** (biên dịch XeLaTeX), **In / PDF**.
+
+## 4e1c. Ôn thi vào 10 (bộ 50 đề theo khung 7 bài của Sở)
+
+- **Tài liệu › 🎯 Ôn thi vào 10**:
+  - **Theo đề**: 50 đề chia ba mức (làm quen, sát đề Sở, nâng cao).
+  - **Luyện theo dạng**: chọn một mã dạng (ví dụ `B6-D2` chuyển động trên đường khép kín) → hiện mọi bài cùng dạng trong 50 đề.
+  - **🎲 Ghép đề mới**: mỗi bài bốc ngẫu nhiên từ kho cùng vị trí, lọc được theo mức.
+- Học sinh chỉ thấy đề (file công khai `data/ts10/hs.json` không có lời giải).
+- **Bản giáo viên** (lời giải, hướng dẫn chấm đến 0,25 điểm):
+  - File `TS10_GV_LoiGiai.json` — **thầy giữ trên máy, không đăng lên GitHub**.
+  - Vào chế độ giáo viên ở trang Tài liệu → **📥 Nạp file lời giải TS10** (nạp một lần cho mỗi trình duyệt).
+  - Tải được TeX bản học sinh hoặc TeX có lời giải (khung lệnh `\loigiaitrue/false` như bộ gốc).
+- **Ra đề THCS** › Loại đề **“Đề tuyển sinh 10 TP.HCM — khung 7 bài”**:
+  - Chọn mức → **Tạo đề**. Nút 🔄 đổi bài khác cùng vị trí.
+  - Có tab đáp án – HDC, ma trận – đặc tả; xuất Word, TeX, in.
 
 ## 4e2. Lớp học: kết nối học sinh với giáo viên (`lophoc.html`)
 
@@ -283,7 +313,23 @@ Học sinh nhập **họ tên, lớp** một lần trên máy của em. Mỗi l�
 
 Ba trò **Rung chuông vàng**, **Đua xe tiếp sức**, **Ai là triệu phú** cho phép cả lớp dự thi bằng điện thoại: các em quét mã QR hiện trên màn chiếu, chọn đúng tên mình trong danh sách lớp rồi bấm đáp án. Máy chấm tự động, thầy cô không phải đếm tay.
 
-### Chuẩn bị (làm một lần)
+### Cách 1 (mặc định, từ bản 2026.11.21): thi qua Internet, giống Kahoot — không cần chung wifi
+
+- Không cần cài gì, không cần chạy `maychu.py`. Mở trang **Trò chơi** trên web như bình thường (máy chiếu cần có Internet).
+- Bấm vào trò chơi → màn hình hiện **mã QR** và **mã phòng 6 chữ số**.
+- Học sinh dùng **4G hay wifi nào cũng được**: quét QR, hoặc mở `hieuant2812.github.io/hoc-cung-thay-hieu/hs.html` rồi gõ mã phòng.
+- Máy thầy giữ toàn bộ phòng thi (danh sách, điểm). Máy thầy và điện thoại nhắn qua một **máy chủ trung gian công cộng** (giao thức MQTT, kết nối bảo mật `wss://`).
+  - Chỉ gửi đi tên học sinh trong danh sách lớp, đề và phương án đang hỏi, đáp án các em chọn.
+  - Thầy bấm thoát trò chơi là phòng tự xoá.
+- Mạng chập chờn: máy thầy và điện thoại **tự nối lại** rồi tiếp tục, không mất điểm. Màn hình phòng chờ báo nếu máy thầy mất Internet.
+- Nếu wifi trường chặn: phát 4G từ điện thoại cho máy chiếu. Thầy cũng có thể đổi danh sách máy chủ trung gian ở dòng `troChoi.mayChu` trong `config.js`.
+- Khi đáp án được công bố, điện thoại mỗi em hiện ngay đúng/sai và điểm.
+
+### Cách 2: máy chủ trong lớp (chung wifi) — dùng khi không có Internet
+
+Khi trang trò chơi được mở qua `maychu.py`, ô cài đặt hiện thêm lựa chọn **Qua Internet / Máy chủ trong lớp** để thầy chọn.
+
+### Chuẩn bị cho cách 2 (làm một lần)
 
 1. Tải cả thư mục web về máy (máy Mac của thầy cô).
 2. Mở **Terminal**, chuyển vào thư mục đó rồi chạy:
@@ -306,7 +352,7 @@ python3 maychu.py
    - Hoặc bấm **📄 Nạp từ Excel / CSV** rồi chọn file `.xlsx` xuất từ sổ điểm (web tự tìm cột *Họ và tên* và cột *Tổ*).
    - Tích **“Học sinh dự thi bằng điện thoại”**. Dòng chữ xanh phía trên cho biết đã nối được với máy chủ hay chưa.
    - Bỏ tích “Gửi cả đề lên điện thoại” nếu muốn các em nhìn đề trên màn chiếu, điện thoại chỉ còn 4 nút A, B, C, D.
-2. Chọn câu hỏi như bình thường rồi bấm vào trò chơi → màn hình hiện **mã QR cỡ lớn và mã phòng 4 chữ số**.
+2. Chọn câu hỏi như bình thường rồi bấm vào trò chơi → màn hình hiện **mã QR cỡ lớn và mã phòng** (6 chữ số khi thi qua Internet, 4 chữ số khi dùng máy chủ trong lớp).
 3. Các em quét QR, chọn tên mình. Màn chiếu đếm số em đã vào.
 4. Bấm **Bắt đầu thi** (hoặc Enter).
 5. Mỗi câu: màn chiếu hiện đề, điện thoại hiện các phương án. Khi đủ số em trả lời, máy tự công bố đáp án kèm biểu đồ số em chọn mỗi phương án.
@@ -319,7 +365,8 @@ python3 maychu.py
 
 - Tên trong danh sách không cần gõ dấu chính xác tuyệt đối, máy so khớp không phân biệt hoa thường và dấu.
 - Một tên chỉ vào được một máy; em nào lỡ thoát thì mở lại link cũ là tiếp tục được.
-- Danh sách lớp và kết quả chỉ nằm trong bộ nhớ máy thầy cô, tắt máy chủ là xoá hết, không gửi đi đâu.
+- Danh sách lớp và kết quả chỉ nằm trong bộ nhớ máy thầy cô; thoát trò chơi (hoặc tắt máy chủ trong lớp) là xoá hết.
+- Màn hình trò chơi cũng có nút **✏️ Ghi bảng** (góc trên trái) để viết lên câu đang chiếu; trong trò chơi các phím chữ A–D vẫn dùng để chọn đáp án.
 
 ## 5. Định dạng câu hỏi trong ngân hàng
 
@@ -339,3 +386,11 @@ python3 maychu.py
 - `config.js`: tên web, khẩu hiệu, dòng chân trang, thông tin điền sẵn cho đầu đề.
 - `data/chuongtrinh.js`: tên chương, bài theo SGK Kết nối tri thức. Muốn thêm lớp hoặc môn mới thì thêm một khối theo mẫu có sẵn.
 - `data/sims.js` và thư mục `sims/`: danh sách và các trang mô phỏng.
+
+## Gói 18 — ngoại tuyến, trang chủ HS/GV (21/11/2026)
+- **Số phiên bản chỉ còn một chỗ**: `config.js` → `phienBan`. Mỗi lần đăng bản mới, thầy đổi số này (VD `2026.11.21b` → `2026.11.22`); máy học sinh tự làm mới bộ đệm. Không cần sửa `sw.js`.
+- `sw.js`: trang và mã (HTML/JS/CSS/JSON) lấy bản mới trên mạng trước, chờ tối đa 3 giây rồi mới dùng bản đã lưu → không còn lẫn bản cũ – mới. Chỉ lưu phản hồi thành công. Lõi tải sẵn cho học sinh khoảng 1,4 MB (có font công thức KaTeX).
+- **📥 Tải sẵn ngoại tuyến** (Trang chủ → Dành cho giáo viên, hoặc menu Giáo viên ▾): chọn nhóm Mô phỏng / Đề cương 10, 11, 12 / THCS 6–9 / Ôn thi vào 10 / Công cụ giáo viên. Bấm ở nhà khi có wifi; web có bản mới thì bấm 🔄 Cập nhật. Máy đã có ngân hàng đề tự tải ngầm nhóm Công cụ giáo viên.
+- Danh sách file nhóm Công cụ giáo viên nằm ở `data/ngoaituyen.json`. Trang mới chưa có trong danh sách vẫn được lưu khi mở lần đầu.
+- Trang chủ chia khối Học sinh / Giáo viên; khối Giáo viên tự thu gọn trên máy học sinh. Menu: 5 mục cho học sinh + "🧑‍🏫 Giáo viên ▾".
+- jsPDF (phieu.html) và html2canvas (rade-thcs.html) chỉ nạp khi bấm xuất: `napThuVien(src)` trong `site.js`.

@@ -4,14 +4,34 @@
   const S = window.SITE || {};
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   window.esc = esc;
+  /* menu: 5 mục cho học sinh + mục "Giáo viên ▾" gom công cụ của thầy */
+  const MENU_HS = [["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["hs", "📱 Vào thi"]];
+  const MENU_GV = [["tren-lop", "📽 Trên lớp"], ["trochoi", "🎲 Trò chơi"], ["rade", "📄 Ra đề THPT"], ["rade-thcs", "📝 Ra đề THCS"], ["phieu", "🧾 Phiếu & chấm"],
+    ["phantich", "📈 Phân tích"], ["khbd", "🗂 Soạn bài"], ["beamer", "🖥 Beamer"], ["lophoc", "👥 Lớp học"], ["index#ngoaituyen", "📥 Tải sẵn ngoại tuyến"]];
   function header() {
     const h = document.getElementById("top"); if (!h) return;
     const cur = document.body.dataset.page || "";
     const ten = S.tenWeb || "Học cùng Thầy Hiếu"; const m = ten.match(/^(.*?)(Thầy.*)$/);
+    const a = ([k, t]) => `<a href="${k.replace(/(#|$)/, ".html$1")}"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`;
+    const gvCur = MENU_GV.find(([k]) => k === cur);
     h.className = "top";
     h.innerHTML = `<div class="wrap in"><a class="logo" href="index.html"><span class="mk">H</span><span><b>${m ? esc(m[1]) + "<span>" + esc(m[2]) + "</span>" : esc(ten)}</b><small>${esc(S.truong || "")}</small></span></a>
-      <nav class="nav">${[["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tren-lop", "Trên lớp"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["rade", "Ra đề"], ["rade-thcs", "Ra đề THCS"], ["phieu", "Phiếu & chấm"], ["phantich", "Phân tích"], ["khbd", "Soạn bài"], ["beamer", "Trình chiếu"], ["trochoi", "Trò chơi"], ["lophoc", "Lớp học"]].map(([k, t]) => `<a href="${k}.html"${k === cur ? ' aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div>`;
+      <nav class="nav" aria-label="Học sinh">${MENU_HS.map(a).join("")}</nav>
+      <details class="menu-gv"><summary${gvCur ? ' aria-current="page"' : ""}>🧑‍🏫 ${gvCur ? esc(gvCur[1].replace(/^\S+\s/, "")) : "Giáo viên"} <span aria-hidden="true">▾</span></summary>
+        <nav aria-label="Giáo viên">${MENU_GV.map(a).join("")}</nav></details></div>`;
+    const d = h.querySelector(".menu-gv");
+    document.addEventListener("click", e => { if (d.open && !d.contains(e.target)) d.open = false; });
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && d.open) { d.open = false; d.querySelector("summary").focus(); } });
   }
+  /* nạp thư viện nặng khi cần (jsPDF, html2canvas, jsQR…): napThuVien("assets/lib/jspdf.umd.min.js").then(...) */
+  const daNap = {};
+  window.napThuVien = function (...ds) {
+    return Promise.all(ds.map(src => daNap[src] || (daNap[src] = new Promise((ok, loi) => {
+      const sc = document.createElement("script"); sc.src = src; sc.onload = ok;
+      sc.onerror = () => { delete daNap[src]; loi(new Error("Không tải được " + src + " — kiểm tra mạng")); };
+      document.head.appendChild(sc);
+    }))));
+  };
   function footer() {
     const f = document.getElementById("foot"); if (!f) return;
     f.className = "foot";
