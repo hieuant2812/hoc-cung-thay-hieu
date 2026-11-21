@@ -86,7 +86,7 @@
         case "diem": {
           const p = P[e[1]];
           if (o.cham !== false) out.push(`\\fill[${mauT(o.mau || "trang")}] ${C(p)} circle (1.6pt);`);
-          if (o.nhan !== "") out.push(`\\node[${o.vt || "above right"},inner sep=1.5pt] at ${C(p)} {$${o.nhan || e[1]}$};`);
+          if (o.nhan !== "") out.push(`\\node[${o.vt || "above right"},inner sep=1.5pt] at ${C(p)} {${((n) => /[À-ỹĐđ]/.test(n) ? n : "$" + n + "$")(o.nhan || e[1])}};`);   // nhãn có chữ Việt (CĐ, CT…) in chữ thường
           break;
         }
         case "doan": out.push(`\\draw[${mauT(o.mau || "trang")}${net(o)}] ${C(toaDo(e[1]))} -- ${C(toaDo(e[2]))};`); break;

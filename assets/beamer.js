@@ -59,13 +59,19 @@
     const parts = s.split(/(\$[^$]*\$)/);
     return parts.map(p => {
       if (p.length > 1 && p[0] === "$" && p[p.length - 1] === "$") {
-        let m = p.slice(1, -1).trim().replace(/\\\\(?=[a-zA-Z])/g, "\\").replace(/(^|[^\\])%/g, "$1\\%").replace(/(^|[^\\])#/g, "$1\\#");
+        let m = p.slice(1, -1).replace(/[\u2000-\u200b\u00a0]/g, " ").trim().replace(/\\\\(?=[a-zA-Z])/g, "\\").replace(/(^|[^\\])%/g, "$1\\%").replace(/(^|[^\\])#/g, "$1\\#");
         if (!m) return "";
         m = m.replace(/[⇒⇔⟹⟺→≤≥≠∈∉⊂∩∪∅∞παβΔδ°×≈±∀∃⊥∥φθλσμΩω−⋅·ℝℕℤℚ∖⊆∠△εγ∘]/g, c => (UNI[c] ? UNI[c] + " " : c));
+        if (!mathOK(m)) { const m2 = bocChu(m); if (m2 !== m && mathOK(m2)) m = m2; }   // chữ Việt trong công thức → \text{…}
         return mathOK(m) ? "$" + m + "$" : thuong(m.replace(/\\[a-zA-Z]+/g, x => x.slice(1) + " ").replace(/[{}^_]/g, ""));
       }
       return thuong(p.replace(/\$/g, ""));
     }).join("");
+  }
+  /* bọc chữ tiếng Việt lẫn trong công thức vào \text{…}: "\right)và\left(" → "\right)\text{ và }\left(", "y_{CĐ}" → "y_{\text{CĐ}}" */
+  function bocChu(m) {
+    if (/\\text\{/.test(m)) return m;
+    return m.replace(/(?<!\\[a-zA-Z]*)[A-Za-zÀ-ỹĐđ]*[À-ỹĐđ][A-Za-zÀ-ỹĐđ]*/g, w => /^[a-zà-ỹđ]{2,}$/.test(w) ? "\\text{ " + w + " }" : "\\text{" + w + "}");
   }
   function thuong(p) {
     let out = "";
@@ -75,7 +81,7 @@
       else if (c === "\\") out += "\\textbackslash{}";
       else if (c === "~") out += "\\textasciitilde{}";
       else if (c === "^") out += "\\textasciicircum{}";
-      else if (c === "\n") out += " ";
+      else if (c === "\n" || /[\u2000-\u200b\u00a0]/.test(c)) out += " ";
       else if (/[\u{1F300}-\u{1FAFF}☀-➿]/u.test(c)) out += "";
       else out += c;
     }
