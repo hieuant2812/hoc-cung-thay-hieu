@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trò chơi ôn tập · Học cùng Thầy Hiếu</title>
+<meta name="description" content="10 trò chơi ôn tập trên lớp cho cả lớp cùng tham gia, lấy câu hỏi từ ngân hàng đề.">
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<script src="config.js"></script><script src="assets/site.js"></script><script src="assets/katex/katex.min.js"></script>
+<style>
+/* ---- màn chọn trò chơi */
+.gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:14px;margin-top:14px}
+.gcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.15s;text-align:left}
+.gcard:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(20,30,60,.12);border-color:#bcd0f5}
+.gcard .ic{font-size:36px;line-height:1}
+.gcard b{display:block;font:700 17px var(--font-h);margin:8px 0 4px}
+.gcard p{margin:0;font-size:13.5px;color:#5a6680;line-height:1.45}
+.gcard .can{display:inline-block;margin-top:9px;font-size:12px;background:#eef3ff;color:#2a4f9b;padding:3px 9px;border-radius:999px}
+.cai label.f{display:block;margin:8px 0 2px;font-weight:600;font-size:13px;color:#445}
+.cai input,.cai select,.cai textarea{width:100%;padding:7px 9px;border:1px solid #cfd8e8;border-radius:9px;font:inherit;font-size:14px}
+.cai .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.doilist{display:grid;gap:6px;margin-top:6px}
+.doirow{display:flex;gap:8px;align-items:center}
+.doirow input[type=color]{width:42px;padding:2px;height:34px}
+/* ---- sân chơi */
+#san{position:fixed;inset:0;z-index:70;background:#0e1626;color:#eef3ff;display:none}
+#san.on{display:block}
+.tc-wrap{height:100%;display:flex;flex-direction:column;font-family:var(--font-b)}
+.tc-top{display:flex;align-items:center;gap:14px;padding:10px 18px;background:#152338;border-bottom:1px solid #22324e}
+.tc-ten{font:700 20px var(--font-h);color:#ffd66b}
+.tc-diem{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.tc-diem .doi{display:flex;gap:8px;align-items:center;background:#1d3050;border-left:5px solid var(--c);border-radius:9px;padding:5px 12px;font-size:15px}
+.tc-diem .doi.luot{box-shadow:0 0 0 2px #ffd66b}
+.tc-diem .doi span{font:800 19px var(--font-h);color:#ffd66b}
+.tc-x{background:#2a3c5c;border:0;color:#fff;width:34px;height:34px;border-radius:9px;font-size:16px;cursor:pointer}
+.tc-than{flex:1;overflow:auto;padding:22px 30px;display:flex;flex-direction:column;justify-content:center}
+.tc-duoi{padding:12px 20px;background:#152338;border-top:1px solid #22324e}
+.tc-nhan{color:#8fb3e8;font-size:17px}
+.tc-de{font-size:clamp(20px,2.4vw,32px);line-height:1.45;margin:10px 0 18px;display:flow-root}
+.tc-de>.hinh-td{float:right;margin:0 0 8px 18px;background:#fff;border-radius:12px;padding:6px}
+.tc-de>.hinh-td svg{max-height:42vh}
+.tc-pa{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pa{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#1b2b45;border:2px solid #2b4068;color:#eef3ff;
+  border-radius:14px;padding:14px 16px;font:inherit;font-size:clamp(16px,1.7vw,22px);cursor:pointer;transition:.12s}
+.pa:hover{border-color:#5e86d6;background:#22365a}
+.pa i{flex:none;width:34px;height:34px;border-radius:50%;background:#2b4068;display:grid;place-items:center;font-style:normal;font-weight:800}
+.pa.dung{background:#15503a;border-color:#2fbf78}.pa.dung i{background:#2fbf78;color:#06301f}
+.pa.sai{background:#54202b;border-color:#e2566f}.pa.sai i{background:#e2566f}
+.pa.mo{opacity:.18;pointer-events:none}
+.tc-ds .ds{background:#1b2b45;border:2px solid #2b4068;border-radius:12px;padding:10px 14px;margin:7px 0;font-size:19px;display:flex;gap:10px}
+.tc-ds .ds em{margin-left:auto;font-style:normal;font-weight:700}
+.tc-ds .ds.dung{border-color:#2fbf78}.tc-ds .ds.dung em{color:#5fe0a0}
+.tc-ds .ds.sai{border-color:#e2566f}.tc-ds .ds.sai em{color:#ff93a6}
+.tc-tln{font-size:26px;margin-top:10px}.tc-tln b{color:#ffd66b;font-size:34px}
+.tc-lg{margin-top:16px;background:#16243c;border-left:5px solid #ffd66b;border-radius:10px;padding:12px 16px;font-size:17px;line-height:1.5}
+.tc-dh{display:flex;gap:16px;align-items:center}
+.dh{font:800 32px var(--font-h);color:#7fd1c1;min-width:62px;text-align:center}
+.dh.gap{color:#ff8a80;animation:nhay .5s infinite}
+@keyframes nhay{50%{opacity:.35}}
+.tc-nut{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.tc-cham{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:16px}
+.tc-cham .so{font:800 28px var(--font-h);color:#ffd66b;min-width:52px;text-align:center}
+kbd{background:#2b4068;border-radius:5px;padding:1px 6px;font:600 12px var(--font-b);color:#cfe0ff}
+.tc-conlai{text-align:center;font-size:20px;color:#8fb3e8;margin-bottom:6px}
+.tc-conlai b{color:#ffd66b;font-size:34px}
+.tc-ket{text-align:center}
+.tc-ket h2{font:800 34px var(--font-h);color:#ffd66b;margin:0 0 18px}
+.bxh{max-width:620px;margin:0 auto;display:grid;gap:9px}
+.hang{display:flex;gap:14px;align-items:center;background:#1b2b45;border-left:7px solid var(--c);border-radius:12px;padding:12px 18px;font-size:21px}
+.hang.nhat{background:#2a3a22;border-color:#ffd66b}
+.hang .th{font:800 22px var(--font-h);color:#8fb3e8;width:30px}
+.hang .dd{margin-left:auto;font:800 26px var(--font-h);color:#ffd66b}
+/* triệu phú */
+.thang{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:12px}
+.thang span{font-size:13px;background:#1b2b45;padding:3px 9px;border-radius:999px;color:#8fb3e8}
+.thang .qua{background:#1d3b2c;color:#7fd1c1}.thang .nay{background:#ffd66b;color:#15233a;font-weight:800}
+.thang .moc{box-shadow:0 0 0 1px #ffd66b inset}
+/* mảnh ghép */
+.mg{position:relative;max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(var(--n),1fr);gap:6px;aspect-ratio:16/9}
+.mg .nen{position:absolute;inset:0;display:grid;place-items:center;font:800 clamp(28px,5vw,64px) var(--font-h);
+  background:linear-gradient(135deg,#1f6feb,#8b5cf6,#ec4899);color:#fff;border-radius:14px;z-index:0;text-align:center;padding:10px}
+.mg .o{position:relative;z-index:1;background:#223659;border:2px solid #31507f;border-radius:10px;display:grid;place-items:center;
+  font:800 28px var(--font-h);color:#8fb3e8;cursor:pointer;transition:.3s}
+.mg .o:hover{background:#2c4876}
+.mg .o.mo{opacity:0;pointer-events:none;transform:scale(.6)}
+/* đua xe */
+.dua{display:grid;gap:12px;max-width:1000px;margin:0 auto;width:100%}
+.lane{display:flex;align-items:center;gap:10px}
+.lane .ten{width:120px;font-weight:700;color:var(--c)}
+.track{position:relative;flex:1;display:flex;gap:3px;background:#16243c;padding:6px;border-radius:10px}
+.track i{flex:1;height:26px;background:#203457;border-radius:5px}
+.track i.qua{background:var(--c);opacity:.55}
+.track .xe{position:absolute;top:-6px;font-size:30px;transition:left .4s}
+.lane .co{font-size:24px}
+/* vòng quay */
+.vq{position:relative;width:min(58vh,440px);margin:0 auto;aspect-ratio:1}
+.vq .dia{width:100%;height:100%;border-radius:50%;position:relative;border:8px solid #ffd66b;box-shadow:0 0 0 6px #16243c}
+.vq .dia span{position:absolute;left:50%;top:50%;transform-origin:0 0;width:50%;height:0;display:block}
+.vq .dia span i{position:absolute;left:52%;top:-9px;font-style:normal;font-size:13px;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);white-space:nowrap}
+.vq .kim{position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-size:34px;color:#ffd66b;z-index:2}
+/* bingo */
+.bingo{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:8px;max-width:620px;margin:0 auto;width:100%}
+.bingo .o{background:#1b2b45;border:2px solid #2b4068;border-radius:10px;padding:16px 8px;text-align:center;font:700 20px var(--font-h)}
+.bingo .o.danh{background:#15503a;border-color:#2fbf78;color:#9fe8c4}
+/* ong tìm mật */
+.ong{display:flex;gap:18px;justify-content:center;align-items:flex-end;flex-wrap:wrap}
+.cot{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cot .to{font-size:34px}
+.cot .o{width:66px;height:38px;background:#1b2b45;border:2px solid var(--c);border-radius:8px;display:grid;place-items:center;font-size:22px}
+.cot .o.qua{background:var(--c);opacity:.45}
+.cot .ten{margin-top:6px;font-weight:700;color:var(--c)}
+/* lật thẻ */
+.lt{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:9px;max-width:1000px;margin:0 auto;width:100%}
+.the{position:relative;min-height:92px;border-radius:12px;background:#223659;border:2px solid #31507f;display:grid;place-items:center;
+  padding:9px;cursor:pointer;font-size:14px;line-height:1.35;text-align:center}
+.the .sau{display:none}.the .truoc{font-size:28px}
+.the.lat,.the.ghep{background:#1b3a52;border-color:#7fd1c1}
+.the.lat .sau,.the.ghep .sau{display:block}.the.lat .truoc,.the.ghep .truoc{display:none}
+.the.ghep{background:#15503a;border-color:#2fbf78}
+/* kho báu */
+.kb{max-width:1000px;margin:0 auto;width:100%}
+.duong{display:flex;gap:8px}
+.chang{flex:1;background:#16243c;border:2px solid #2b4068;border-radius:12px;padding:12px 4px;text-align:center}
+.chang .bd{display:block;font-size:30px}
+.chang.kho{background:#2a3a22;border-color:#ffd66b}
+.doiline{position:relative;height:40px;margin-top:8px}
+.doiline .dd{position:absolute;top:0;background:var(--c);color:#fff;padding:4px 10px;border-radius:999px;font-weight:700;font-size:13px;transition:left .4s}
+/* phòng chờ + thi bằng điện thoại */
+.pc{display:grid;grid-template-columns:minmax(230px,32%) 1fr;gap:26px;align-items:start}
+.pc-qr{background:#fff;border-radius:16px;padding:14px;text-align:center}
+.pc-ma{color:#15233a;font:800 22px var(--font-h);margin-top:8px}
+.pc-ma b{font-size:40px;letter-spacing:5px;display:block;line-height:1.1}
+.pc-mang{color:#c0392b;font-weight:700;font-size:13px}
+.pc-url{color:#5a6680;font-size:12px;word-break:break-all}
+.pc-ds h3{margin:0 0 10px;font:700 22px var(--font-h);color:#ffd66b}
+.pc-ten{display:flex;flex-wrap:wrap;gap:7px;max-height:46vh;overflow:auto}
+.pc-ten .v{background:#1d3050;border-radius:999px;padding:6px 13px;font-size:15px}
+.pc-ten .v i{font-style:normal;color:#7fd1c1;font-size:12px}
+.pc-ten .v.rot{background:#54202b;color:#ffc9d2}
+.live{display:flex;gap:14px;align-items:center;margin-top:16px;background:#16243c;border-radius:12px;padding:10px 14px}
+.live-qr{width:92px;background:#fff;border-radius:8px;padding:5px;flex:none}
+.live b{color:#ffd66b;font-size:22px}
+.live-dem{display:flex;gap:12px;align-items:flex-end;margin-top:6px}
+.live-dem .cot{display:flex;flex-direction:column;align-items:center;font-size:12px;color:#8fb3e8}
+.live-dem .cot i{display:block;width:24px;background:#5e86d6;border-radius:4px 4px 0 0;margin-bottom:3px}
+.live-dem .cot.d i{background:#2fbf78}
+.live-dem .cot b{font-size:14px}
+@media(max-width:760px){.tc-pa{grid-template-columns:1fr}.tc-than{padding:14px}.pc{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-page="trochoi">
+<header id="top"></header>
+<main class="wrap">
+  <h1 style="font:800 26px var(--font-h);margin:6px 0 2px">Trò chơi ôn tập trên lớp</h1>
+  <p class="muted" style="margin:0 0 6px">Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu hỏi lấy thẳng từ ngân hàng đề trên máy. Không cần mạng, không cần học sinh có điện thoại.</p>
+
+  <details class="card cai" id="caiBox" open>
+    <summary><b>⚙️ Chuẩn bị trước khi chơi</b> <span class="muted small">— chọn nguồn câu hỏi, chia tổ, đặt thời gian</span></summary>
+    <div class="grid2" style="margin-top:12px;align-items:start">
+      <div>
+        <label class="f">Nguồn câu hỏi (lấy từ ngân hàng trên máy này)</label>
+        <div id="chonCau"></div>
+      </div>
+      <div>
+        <div class="two">
+          <div><label class="f">Thời gian mỗi câu (giây)</label><input type="number" id="giay" value="30" min="0" max="300"></div>
+          <div><label class="f">Số câu (Rung chuông vàng)</label><input type="number" id="soCau" value="15" min="5" max="60"></div>
+        </div>
+        <div class="two">
+          <div><label class="f">Sĩ số lớp</label><input type="number" id="siSo" value="40" min="5" max="60"></div>
+          <div><label class="f">Số tổ</label><select id="soDoi"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
+        </div>
+        <label class="f">Tên các tổ</label><div class="doilist" id="doiList"></div>
+        <label class="f">Từ khoá của trò Lật mảnh ghép</label><input id="tuKhoa" value="HÀM SỐ BẬC HAI">
+        <label class="f">Danh sách lớp (mỗi dòng một em, có thể thêm tổ sau dấu phẩy)</label>
+        <textarea id="dsHS" rows="4" placeholder="Nguyễn Văn An, Tổ 1&#10;Trần Thị Bình, Tổ 2"></textarea>
+        <div class="row" style="gap:8px;margin-top:6px;flex-wrap:wrap">
+          <label class="btn ghost sm">📄 Nạp từ Excel / CSV<input type="file" id="fDs" accept=".xlsx,.xlsm,.csv,.txt" hidden></label>
+          <span class="small muted" id="dsTT"></span>
+        </div>
+        <label class="chk" style="margin-top:8px"><input type="checkbox" id="am" checked> Bật âm báo</label>
+        <div class="note blue small" id="lopTT" style="margin-top:10px">Đang kiểm tra máy chủ lớp học…</div>
+        <label class="chk"><input type="checkbox" id="live"> <span><b>Học sinh dự thi bằng điện thoại</b> — quét QR, chọn tên rồi bấm đáp án (áp dụng cho Rung chuông vàng, Đua xe tiếp sức, Ai là triệu phú)</span></label>
+        <label class="chk"><input type="checkbox" id="guiDe" checked> Gửi cả đề lên điện thoại học sinh (bỏ chọn nếu muốn các em nhìn màn chiếu)</label>
+      </div>
+    </div>
+  </details>
+
+  <div class="gcards" id="dsTro"></div>
+  <div id="msg" style="margin-top:12px"></div>
+</main>
+<footer id="foot"></footer>
+<div id="san"></div>
+<script src="data/chuongtrinh.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/nhd/store.js"></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/lib/qrcode.js"></script><script src="assets/phongmang.js"></script><script src="assets/butve.js"></script>
+<script src="assets/chon-cau.js"></script><script src="assets/lop.js"></script><script src="assets/trochoi.js"></script>
+<script>
+(function(){
+  const $=id=>document.getElementById(id); let api=null;
+  const MAU=["#3b7bff","#13b981","#f59e0b","#ef4444","#8b5cf6","#06b6d4"];
+  const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+  const luu=LS.get("tc-cai",{});
+  ["giay","soCau","siSo","soDoi","tuKhoa","dsHS"].forEach(k=>{ if(luu[k]!=null)$(k).value=luu[k]; });
+  if(luu.am===false)$("am").checked=false;
+  function veDoi(){
+    const n=+$("soDoi").value, ten=luu.doiTen||[];
+    $("doiList").innerHTML=Array.from({length:n},(_,k)=>`<div class="doirow">
+      <input type="color" value="${(luu.doiMau||[])[k]||MAU[k%MAU.length]}" data-m="${k}">
+      <input value="${ten[k]||("Tổ "+(k+1))}" data-t="${k}"></div>`).join("");
+  }
+  async function doFile(f){
+    try{
+      const ds=await Lop.docFile(f);
+      if(!ds.length){ $("dsTT").innerHTML='<b style="color:#b0163d">Không đọc được tên nào trong file.</b>'; return; }
+      $("dsHS").value=ds.map(x=>x.to?`${x.ten}, ${x.to}`:x.ten).join("\n");
+      $("dsTT").innerHTML=`Đã nạp <b>${ds.length}</b> học sinh từ <b>${f.name}</b>.`;
+    }catch(e){ $("dsTT").innerHTML='<b style="color:#b0163d">Lỗi đọc file: '+e.message+'</b>'; }
+  }
+  $("fDs").onchange=e=>{ const f=e.target.files[0]; e.target.value=""; if(f) doFile(f); };
+  function dsLop(){ return Lop.docVanBan($("dsHS").value); }
+  function cai(){
+    const doi=[...$("doiList").querySelectorAll("[data-t]")].map((e,k)=>({ten:e.value||("Tổ "+(k+1)),mau:$("doiList").querySelector(`[data-m="${k}"]`).value}));
+    const o={giay:+$("giay").value,soCau:+$("soCau").value,siSo:+$("siSo").value,soDoi:$("soDoi").value,
+      tuKhoa:$("tuKhoa").value,dsHS:$("dsHS").value,am:$("am").checked,
+      doiTen:doi.map(d=>d.ten),doiMau:doi.map(d=>d.mau)};
+    LS.set("tc-cai",o);
+    return {doi,giay:+$("giay").value,soCau:+$("soCau").value,siSo:+$("siSo").value,tuKhoa:$("tuKhoa").value,
+      am:$("am").checked,hs:dsLop().map(x=>x.ten),ds:dsLop(),
+      live:$("live").checked,guiDe:$("guiDe").checked};
+  }
+  $("soDoi").onchange=veDoi; veDoi();
+  $("dsTro").innerHTML=TroChoi.GAMES.map(g=>`<button class="gcard" data-g="${g.ma}">
+    <span class="ic">${g.icon}</span><b>${g.ten}</b><p>${g.mo}</p><span class="can">${g.can}</span></button>`).join("");
+  $("dsTro").onclick=async e=>{
+    const b=e.target.closest(".gcard"); if(!b)return;
+    const c=cai();
+    let cau=[]; try{ cau=api?api.pool():[]; }catch(x){}
+    if(!cau.length){ $("msg").innerHTML=`<div class="note red small">Chưa có câu hỏi: máy này chưa có ngân hàng, hoặc phần đã chọn không còn câu nào. Thầy cô vào <b>Ra đề</b> để nạp ngân hàng (hoặc lấy gói ngân hàng về máy), rồi chọn lại chương/dạng ở trên.</div>`; return; }
+    const LIVE=["rungchuong","duaxe","trieuphu"];
+    if(c.live&&!LIVE.includes(b.dataset.g)){ $("msg").innerHTML=`<div class="note blue small">Trò này chưa có phần thi bằng điện thoại — em sẽ chạy theo cách chơi tính điểm theo tổ. Ba trò có thi bằng điện thoại: Rung chuông vàng, Đua xe tiếp sức, Ai là triệu phú.</div>`; c.live=false; }
+    if(c.live){
+      if(!c.ds.length){ $("msg").innerHTML=`<div class="note red small">Chưa có danh sách lớp. Thầy cô dán danh sách hoặc nạp từ file Excel ở phần Chuẩn bị.</div>`; return; }
+      try{ await Lop.moPhong(c.ds,b.dataset.g); }
+      catch(x){ $("msg").innerHTML=`<div class="note red small">Không mở được phòng thi: ${x.message}</div>`; return; }
+    }
+    $("msg").innerHTML="";
+    c.cau=cau.slice().sort(()=>Math.random()-.5);
+    const san=$("san"); san.classList.add("on");
+    try{ await san.requestFullscreen?.(); }catch(x){}
+    let bv=null;
+    TroChoi.batDau(b.dataset.g,c,san,()=>{ if(bv){bv.huy();bv=null;} san.classList.remove("on"); san.innerHTML=""; try{document.exitFullscreen?.();}catch(x){} });
+    if(window.ButVe) bv=ButVe.gan({ root:san, giuLai:true, phim:false, viTri:"tren",
+      goc:()=>san.querySelector("[data-than]"), cuon:()=>san.querySelector("[data-than]"), chup:()=>san.querySelector("[data-than]"),
+      khoa:()=>{ const d=san.querySelector(".tc-de"); return d?d.textContent.slice(0,80):"tc"; },
+      tren:()=>{ const t=san.querySelector(".tc-top"); return t?t.getBoundingClientRect().bottom:0; },
+      duoi:()=>{ const t=san.querySelector(".tc-duoi"); return t?Math.max(0,innerHeight-t.getBoundingClientRect().top):0; } });
+  };
+  (async()=>{
+    const coLan=await Lop.kiemTra();
+    const ve=()=>{
+      const tt=window.PhongMang&&Lop.trucTuyen;
+      $("lopTT").className="note "+(tt||coLan?"green":"blue")+" small";
+      $("lopTT").innerHTML=(tt
+        ? `🌐 <b>Thi qua Internet</b> (giống Kahoot): học sinh dùng 4G hay wifi nào cũng được, <b>không cần chung mạng</b> với máy này. Bấm vào trò chơi, màn hình sẽ hiện <b>mã QR</b> và <b>mã phòng 6 số</b>; học sinh quét QR hoặc vào <b>${PhongMang.lop.urlNgan()}</b> rồi nhập mã. Máy này cần có Internet.`
+        : `✅ Đang dùng <b>máy chủ trong lớp</b> (học sinh phải chung wifi): <b>http://${Lop.dc.ip[0]}:${Lop.dc.cong}</b>`)
+        +(coLan?`<div style="margin-top:6px"><label class="chk" style="display:inline-flex"><input type="radio" name="cachNoi" value="net" ${tt?"checked":""}> Qua Internet</label> &nbsp; <label class="chk" style="display:inline-flex"><input type="radio" name="cachNoi" value="lan" ${tt?"":"checked"}> Máy chủ trong lớp (chung wifi)</label></div>`:"");
+      document.querySelectorAll('input[name=cachNoi]').forEach(r=>r.onchange=()=>{ if(r.value==="net") PhongMang.ganVao(Lop); else PhongMang.boGan(Lop); ve(); });
+    };
+    if(window.PhongMang) PhongMang.ganVao(Lop);
+    ve();
+    $("live").disabled=!(window.PhongMang||coLan);
+  })();
+  ChonCau.mount($("chonCau"),{key:"trochoi",multiDang:true,soCau:false,onReady:a=>api=a,onChange:a=>{
+    api=a; const n=a.pool().length;
+    $("msg").innerHTML=n?`<div class="note green small">Đã sẵn sàng <b>${n.toLocaleString("vi-VN")}</b> câu cho trò chơi.</div>`:"";
+  }});
+  setTimeout(()=>{ if(api&&!api.pool().length)$("msg").innerHTML=`<div class="note blue small">Hãy chọn chương/dạng ở ô bên trái để lấy câu hỏi.</div>`; },1200);
+})();
+</script>
+</body>
+</html>

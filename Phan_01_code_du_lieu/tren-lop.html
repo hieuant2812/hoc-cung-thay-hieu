@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trên lớp · Học cùng Thầy Hiếu</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sims.js"></script>
+<script src="assets/katex/katex.min.js"></script><script src="assets/lib/qrcode.js"></script>
+<script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script><script src="assets/butve.js"></script><script src="assets/hinhtudong.js"></script>
+<style>
+.tl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
+.tl-tabs button{border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 16px;font:700 15px var(--font);cursor:pointer;color:#334}
+.tl-tabs button[aria-selected=true]{border-color:var(--coral);background:#fff3ee;color:#c43d1c}
+.tl-pane{display:none}.tl-pane.on{display:block}
+/* trình chiếu */
+#show{position:fixed;inset:0;z-index:100;background:#fffdf7;display:none;flex-direction:column}
+#show.on{display:flex}
+#show .tb{display:flex;align-items:center;gap:10px;padding:10px 18px;background:#1d2742;color:#fff;flex-wrap:wrap}
+#show .tb .nm{font:800 20px var(--font-h)}
+#show .tb .dg{opacity:.85;font-size:15px;flex:1;min-width:200px}
+#show .tb button{background:#2c3a60;color:#fff;border:0;border-radius:10px;padding:8px 12px;font:700 15px var(--font);cursor:pointer}
+#show .tb button:hover{background:#3c4c78}
+#show .tb button.hl{background:#ff7a59}
+#show .body{flex:1;overflow:auto;padding:26px 6vw 30px}
+#show .ex{font-size:calc(var(--z,30) * 1px);line-height:1.55;max-width:1400px;margin:0 auto}
+#show .ex .q{margin:0}
+#show .ex .qh{color:#c43d1c}
+#show .ex .opts{gap:10px 30px;margin-top:14px}
+#show .ex .opt{padding:6px 12px;border-radius:12px;border:2px solid transparent}
+#show .ex .opt.right{background:#dff5e6;border-color:#19a64a}
+#show .ex .ds-row{padding:4px 0 4px 18px}
+#show .ex .sol{font-size:.8em;margin-top:18px;border-left:5px solid #ffbf2e;padding:8px 14px;background:#fff8e1;border-radius:8px}
+#show .ex .tikz-wrap svg,#show .ex svg.hv,#show .ex img{max-width:100%;height:auto}
+#show .ex .katex svg{max-width:none;height:inherit}
+#show .timer{font:800 30px var(--font-h);min-width:96px;text-align:center;background:#fff;color:#1d2742;border-radius:12px;padding:2px 10px}
+#show .timer.warn{background:#ffd6dc;color:#b0163d;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+#show .sims{padding:0 6vw 16px;max-width:1400px;margin:0 auto;font-size:15px}
+#show .sims a{display:inline-block;margin:4px 8px 0 0;padding:6px 12px;background:#eef4ff;border-radius:10px;text-decoration:none;color:#1b4fb3;font-weight:600}
+/* gọi tên */
+.pick-big{font:800 clamp(40px,8vw,110px)/1.1 var(--font-h);text-align:center;padding:40px 10px;min-height:180px;color:#1d2742;background:linear-gradient(120deg,#fff3ee,#eef4ff);border-radius:24px;margin:10px 0;word-break:break-word}
+.pick-big.spin{color:#9aa}
+.chips2{display:flex;flex-wrap:wrap;gap:6px}
+.chips2 span{background:#eef1f7;border-radius:8px;padding:3px 8px;font-size:13.5px}
+.chips2 span.done{background:#dff5e6;text-decoration:line-through;color:#4a7}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
+.groups .g{background:#fff;border-radius:16px;border:2px solid var(--line);padding:12px}
+.groups .g h3{margin:0 0 6px;font:800 20px var(--font-h)}
+.groups .g ol{margin:0;padding-left:20px;font-size:16px;line-height:1.6}
+/* đồng hồ */
+.clock{font:800 clamp(80px,20vw,260px)/1 var(--font-h);text-align:center;color:#1d2742;padding:30px 0;font-variant-numeric:tabular-nums}
+.clock.end{color:#e0234e;animation:pulse 1s infinite}
+.clockbar{height:16px;background:#eef1f7;border-radius:10px;overflow:hidden}.clockbar i{display:block;height:100%;background:linear-gradient(90deg,#19a64a,#ffbf2e,#e0234e);transition:width .3s linear}
+/* bảng vẽ */
+.board-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.board-tools .sw{width:28px;height:28px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px #ccd;cursor:pointer}
+.board-tools .sw.on{box-shadow:0 0 0 3px #1d2742}
+#boardWrap{position:relative;background:#fff;border:2px solid var(--line);border-radius:16px;overflow:hidden;touch-action:none}
+#boardWrap canvas{position:absolute;inset:0;width:100%;height:100%}
+#boardWrap:fullscreen{border-radius:0}
+/* phiếu học tập */
+.pht-pv{background:#e9ecf3;border-radius:16px;padding:14px;max-height:75vh;overflow:auto}
+.pht-pv .page{background:#fff;width:210mm;max-width:100%;margin:0 auto 12px;padding:12mm 14mm;box-shadow:0 3px 12px rgba(0,0,0,.15)}
+</style>
+</head>
+<body data-page="tren-lop">
+<header id="top"></header>
+<main class="wrap">
+  <section class="hero sm" style="background:linear-gradient(120deg,#10b3a3,#3b7bff 60%,#8a5cf6)">
+    <h1>Trên lớp</h1>
+    <p>Trình chiếu câu hỏi chữ to có đồng hồ, tạo phiếu học tập có mã QR, gọi tên ngẫu nhiên, chia nhóm, đồng hồ làm bài và bảng vẽ trên nền lưới toạ độ.</p>
+  </section>
+  <div class="tl-tabs" id="tlTabs">
+    <button data-t="tc">📽 Trình chiếu câu hỏi</button>
+    <button data-t="pht">📄 Phiếu học tập (QR)</button>
+    <button data-t="goi">🎯 Gọi tên</button>
+    <button data-t="nhom">👥 Chia nhóm</button>
+    <button data-t="dh">⏱ Đồng hồ</button>
+    <button data-t="bv">✏️ Bảng vẽ</button>
+  </div>
+
+  <!-- ===================== TRÌNH CHIẾU ===================== -->
+  <section class="tl-pane" id="tc">
+    <div class="grid2" style="align-items:start;gap:16px">
+      <div class="card"><h3 style="margin-top:0">1. Chọn câu hỏi từ ngân hàng</h3><div id="tcPick"></div></div>
+      <div class="card"><h3 style="margin-top:0">2. Trình chiếu</h3>
+        <div style="display:grid;gap:10px">
+          <label class="f">Thời gian mỗi câu<select id="tcTime"><option value="0">Không đếm giờ</option><option value="30">30 giây</option><option value="45">45 giây</option><option value="60">1 phút</option><option value="90">1 phút 30 giây</option><option value="120">2 phút</option><option value="180">3 phút</option><option value="300">5 phút</option></select></label>
+          <label class="chk"><input type="checkbox" id="tcSol" checked> Có nút xem lời giải</label>
+          <button class="btn coral" id="tcGo" style="font-size:18px;padding:14px">▶ Bắt đầu trình chiếu</button>
+          <div class="small muted">Phím tắt: <b>→ / Space</b> câu sau · <b>←</b> câu trước · <b>Đ</b> hoặc <b>A</b> hiện đáp án · <b>L</b> lời giải · <b>T</b> bắt đầu/dừng giờ · <b>+ / −</b> cỡ chữ · <b>F</b> toàn màn hình · <b>Esc</b> thoát.<br>✏️ <b>Ghi bảng</b> (góc dưới trái màn hình chiếu): <b>B</b> bút · <b>H</b> dạ quang · <b>R</b> thước · <b>K</b> laser · <b>E</b> tẩy · <b>W</b> bảng trắng nháp · <b>Ctrl/⌘+Z</b> hoàn tác. Nét vẽ giữ riêng cho từng câu, đi theo khi cuộn và đổi cỡ chữ; nút 📷 lưu ảnh câu kèm nét vẽ.</div>
+          <div id="tcMsg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PHIẾU HỌC TẬP ===================== -->
+  <section class="tl-pane" id="pht">
+    <div class="grid2" style="align-items:start;gap:16px">
+      <div class="card"><h3 style="margin-top:0">1. Chọn câu hỏi</h3><div id="phtPick"></div></div>
+      <div class="card"><h3 style="margin-top:0">2. Thông tin phiếu</h3>
+        <div style="display:grid;gap:10px">
+          <label class="f">Tiêu đề<input type="text" id="phtTen" placeholder="PHIẾU HỌC TẬP – BÀI TẬP VỀ NHÀ"></label>
+          <label class="f">Dòng phụ (lớp, ngày nộp…)<input type="text" id="phtPhu" placeholder="Lớp 11A1 · Nộp ngày …"></label>
+          <label class="chk"><input type="checkbox" id="phtQR" checked> In mã QR xem đáp số (học sinh quét bằng điện thoại)</label>
+          <label class="chk"><input type="checkbox" id="phtLG" checked> In thêm bản đáp án + lời giải cho giáo viên</label>
+          <div class="row"><button class="btn blue" id="phtGo">⟳ Tạo phiếu</button><button class="btn coral" id="phtPrint" disabled>🖨 In / lưu PDF</button></div>
+          <div class="small muted">Mã QR mở trang đáp số ngay trên điện thoại (không cần mạng nội bộ). Mỗi lần bấm “Tạo phiếu” sẽ lấy bộ câu khác.</div>
+        </div>
+      </div>
+    </div>
+    <div class="pht-pv" id="phtPv" style="margin-top:14px"><div class="muted" style="text-align:center;padding:30px">Bản xem trước hiện ở đây.</div></div>
+  </section>
+
+  <!-- ===================== GỌI TÊN ===================== -->
+  <section class="tl-pane" id="goi">
+    <div class="grid2" style="align-items:start;gap:16px">
+      <div class="card">
+        <h3 style="margin-top:0">Danh sách lớp</h3>
+        <div class="row" style="gap:8px;align-items:end;flex-wrap:wrap"><label class="f">Lớp<select id="dsSel"></select></label><button class="btn ghost sm" id="dsNew">+ Lớp mới</button><button class="btn ghost sm" id="dsDel">Xoá lớp</button></div>
+        <p class="small muted">Mỗi dòng một học sinh (chép cột họ tên từ Excel). Danh sách lưu trên máy này, dùng chung cho Gọi tên và Chia nhóm.</p>
+        <textarea id="dsText" style="width:100%;min-height:260px;font:15px var(--font)"></textarea>
+        <div class="row"><button class="btn blue sm" id="dsSave">Lưu danh sách</button><span class="small muted" id="dsInfo"></span></div>
+      </div>
+      <div class="card">
+        <div class="pick-big" id="pickOut">Bấm “Gọi tên”</div>
+        <div class="row" style="justify-content:center;gap:10px"><button class="btn coral" id="pickGo" style="font-size:20px;padding:14px 28px">🎯 Gọi tên</button><label class="chk"><input type="checkbox" id="pickNo" checked> Không gọi lại người đã gọi</label><button class="btn ghost sm" id="pickReset">Làm lại</button></div>
+        <h3>Đã gọi</h3><div class="chips2" id="pickHist"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHIA NHÓM ===================== -->
+  <section class="tl-pane" id="nhom">
+    <div class="card">
+      <div class="row" style="gap:10px;align-items:end;flex-wrap:wrap"><label class="f">Lớp<select id="gSel"></select></label>
+        <label class="f">Chia theo<select id="gMode"><option value="n">Số nhóm</option><option value="k">Số người mỗi nhóm</option></select></label>
+        <label class="f" style="width:90px">Số<input type="number" id="gNum" min="1" value="6"></label>
+        <label class="chk"><input type="checkbox" id="gLead" checked> Chọn nhóm trưởng</label>
+        <button class="btn coral" id="gGo">🎲 Chia nhóm</button><button class="btn ghost" onclick="print()">🖨 In</button></div>
+      <div class="groups" id="gOut"></div>
+    </div>
+  </section>
+
+  <!-- ===================== ĐỒNG HỒ ===================== -->
+  <section class="tl-pane" id="dh">
+    <div class="card" id="clockCard">
+      <div class="row" style="gap:8px;flex-wrap:wrap;justify-content:center">
+        <button class="btn ghost" data-m="1">1 phút</button><button class="btn ghost" data-m="3">3 phút</button><button class="btn ghost" data-m="5">5 phút</button><button class="btn ghost" data-m="10">10 phút</button><button class="btn ghost" data-m="15">15 phút</button><button class="btn ghost" data-m="45">45 phút</button>
+        <label class="f" style="width:110px">Phút<input type="number" id="cMin" min="0" value="5"></label><label class="f" style="width:90px">Giây<input type="number" id="cSec" min="0" max="59" value="0"></label>
+        <button class="btn ghost" id="cSW">⏱ Bấm giờ (đếm lên)</button>
+      </div>
+      <div class="clock" id="clock">05:00</div>
+      <div class="clockbar"><i id="cBar" style="width:100%"></i></div>
+      <div class="row" style="gap:10px;justify-content:center;margin-top:14px"><button class="btn coral" id="cGo" style="font-size:20px;padding:12px 30px">▶ Bắt đầu</button><button class="btn ghost" id="cReset">↺ Đặt lại</button><button class="btn ghost" id="cFull">⛶ Toàn màn hình</button><label class="chk"><input type="checkbox" id="cBeep" checked> Chuông khi hết giờ</label></div>
+    </div>
+  </section>
+
+  <!-- ===================== BẢNG VẼ ===================== -->
+  <section class="tl-pane" id="bv">
+    <div class="board-tools" id="bTools">
+      <label class="f" style="width:170px">Nền<select id="bBg"><option value="trang">Trắng</option><option value="o">Lưới ô vuông</option><option value="oxy" selected>Hệ trục Oxy</option><option value="kebang">Kẻ dòng (vở)</option></select></label>
+      <label class="f" style="width:240px">Đồ thị y = f(x)<input type="text" id="bFx" placeholder="VD: x^3-3*x+1 ; sin(x)"></label>
+      <label class="f" style="width:110px">Đơn vị (px)<input type="number" id="bU" min="10" max="120" value="40"></label>
+      <span id="bCols"></span>
+      <label class="f" style="width:110px">Nét<select id="bW"><option value="2">Mảnh</option><option value="4" selected>Vừa</option><option value="8">Đậm</option></select></label>
+      <button class="btn ghost sm" id="bErase">🧽 Tẩy</button><button class="btn ghost sm" id="bLine">📏 Đoạn thẳng</button><button class="btn ghost sm" id="bUndo">↶ Hoàn tác</button><button class="btn ghost sm" id="bClear">🗑 Xoá nét vẽ</button><button class="btn ghost sm" id="bSave">⬇ Lưu ảnh</button><button class="btn ghost sm" id="bFull">⛶ Toàn màn hình</button>
+    </div>
+    <div id="boardWrap" style="height:70vh"><canvas id="bgCv"></canvas><canvas id="drCv"></canvas></div>
+  </section>
+</main>
+<footer id="foot"></footer>
+
+<div id="show"><div class="tb"><span class="nm" id="sNum">Câu 1/10</span><span class="dg" id="sDang"></span>
+  <span class="timer" id="sTimer" title="Bấm để bắt đầu/dừng">--:--</span>
+  <button id="sPrev">◀</button><button id="sNext">▶</button><button class="hl" id="sAns">Đáp án</button><button id="sSol">Lời giải</button><button id="sSwap" title="Thay bằng câu khác cùng dạng, cùng mức">⟳</button><button id="sZm">A−</button><button id="sZp">A+</button><button id="sFull">⛶</button><button id="sExit">✕</button></div>
+  <div class="body"><div class="ex" id="sBody"></div></div><div class="sims" id="sSims"></div></div>
+
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  const ROM = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+  /* ---------------------------------------------------------------- tab */
+  let tab = LS.get("tl-tab", "tc");
+  function setTab(t) { tab = t; LS.set("tl-tab", t); document.querySelectorAll("#tlTabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.t === t)); document.querySelectorAll(".tl-pane").forEach(p => p.classList.toggle("on", p.id === t)); if (t === "bv") setTimeout(resizeBoard, 30); }
+  document.querySelectorAll("#tlTabs button").forEach(b => b.onclick = () => setTab(b.dataset.t));
+
+  /* ================================================================ TRÌNH CHIẾU */
+  const pick1 = ChonCau.mount($("tcPick"), { key: "tc", n: 10 });
+  let S = { list: [], i: 0, show: false, sol: false, t: 0, left: 0, run: false, z: LS.get("tl-z", 30) };
+  const SH = $("show"); let timer = null;
+  function startShow(list) {
+    if (!list.length) { $("tcMsg").innerHTML = `<div class="note red">Không có câu nào phù hợp — thầy chọn lại dạng, mức độ hoặc đăng ngân hàng ở trang Ra đề.</div>`; return; }
+    const R = NHD.rng(NHD.hash("tc|" + Date.now()));
+    S.list = list.map(q => ({ q, order: q.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], R) : [0, 1, 2, 3] }));
+    S.i = 0; S.t = +$("tcTime").value; SH.classList.add("on"); document.body.style.overflow = "hidden";
+    if (!BV && window.ButVe) BV = ButVe.gan({ root: SH, goc: () => $("sBody"), tile: () => S.z / 30, khoa: () => { const it = S.list[S.i]; return "tc|" + S.i + "|" + (it ? it.q.id : ""); }, cuon: () => SH.querySelector(".body"), chup: () => SH.querySelector(".body"), tren: () => SH.querySelector(".tb").getBoundingClientRect().bottom });
+    if (BV) BV.xoaHet();
+    render(true);
+  }
+  let BV = null;
+  $("tcGo").onclick = () => { const st = pick1.state(); startShow(pick1.pick(st.n)); };
+  function fmt(s) { s = Math.max(0, Math.round(s)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+  function render(resetTimer) {
+    const it = S.list[S.i]; if (!it) return;
+    $("sNum").textContent = `Câu ${S.i + 1}/${S.list.length}`;
+    const q = it.q; const ten = (pick1.bank().dang || {})[q.dkey] || "";
+    $("sDang").innerHTML = `${esc(q.dkey.replace(/^C\d+-B\d+-/, ""))} ${ten ? NHD.texToHtml(ten) : ""} · <b>${({ NB: "Nhận biết", TH: "Thông hiểu", VD: "Vận dụng", VDC: "Vận dụng cao" })[q.muc] || q.muc}</b>`;
+    SH.style.setProperty("--z", S.z);
+    $("sBody").innerHTML = NHD.renderQuestion(it, S.i + 1, S.show ? "key" : "", { sol: S.show && S.sol, hinh: true });
+    $("sSol").style.display = $("tcSol").checked ? "" : "none";
+    $("sAns").textContent = S.show ? "Ẩn đáp án" : "Đáp án";
+    // mô phỏng liên quan
+    const st = pick1.state(); const sims = (window.SIMS || []).filter(r => r.mon === st.mon && +r.lop === +st.lop && r.chuong === "Chương " + ROM[q.chuong]);
+    $("sSims").innerHTML = sims.length ? `🔬 <b>Mô phỏng liên quan:</b> ` + sims.map(r => `<a href="${r.file}" target="_blank" rel="noopener">${esc(r.ten)}</a>`).join("") : "";
+    if (resetTimer) { clearInterval(timer); S.run = false; S.left = S.t; drawTimer(); if (S.t) toggleTimer(true); }
+    if (BV) BV.ve();
+  }
+  function drawTimer() { const el = $("sTimer"); el.textContent = S.t ? fmt(S.left) : "--:--"; el.classList.toggle("warn", S.t && S.left <= 10 && S.left > 0); }
+  function toggleTimer(on) {
+    if (!S.t) return; S.run = on == null ? !S.run : on; clearInterval(timer);
+    if (S.run) { const t0 = Date.now(), l0 = S.left; timer = setInterval(() => { S.left = l0 - (Date.now() - t0) / 1000; if (S.left <= 0) { S.left = 0; S.run = false; clearInterval(timer); bell(); } drawTimer(); }, 200); }
+  }
+  function bell() { try { const a = new (window.AudioContext || window.webkitAudioContext)(); [0, .35, .7].forEach(d => { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; g.gain.value = .2; o.connect(g); g.connect(a.destination); o.start(a.currentTime + d); o.stop(a.currentTime + d + .25); }); } catch (e) {} }
+  const go = d => { const n = S.i + d; if (n < 0 || n >= S.list.length) return; S.i = n; S.show = false; S.sol = false; render(true); };
+  $("sNext").onclick = () => go(1); $("sPrev").onclick = () => go(-1);
+  $("sAns").onclick = () => { S.show = !S.show; if (!S.show) S.sol = false; render(); };
+  $("sSol").onclick = () => { S.sol = !S.sol; S.show = S.show || S.sol; render(); };
+  $("sTimer").onclick = () => toggleTimer();
+  $("sZp").onclick = () => { S.z = Math.min(64, S.z + 3); LS.set("tl-z", S.z); render(); };
+  $("sZm").onclick = () => { S.z = Math.max(16, S.z - 3); LS.set("tl-z", S.z); render(); };
+  $("sFull").onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else SH.requestFullscreen && SH.requestFullscreen(); };
+  $("sSwap").onclick = () => { const q = S.list[S.i].q; const c = pick1.bank().questions.filter(x => x.dkey === q.dkey && x.muc === q.muc && x.loai === q.loai && !S.list.some(y => y.q.id === x.id)); if (!c.length) return toast("Không còn câu khác cùng dạng, cùng mức"); const n = c[Math.floor(Math.random() * c.length)]; S.list[S.i] = { q: n, order: n.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], NHD.rng(Date.now())) : [0, 1, 2, 3] }; S.show = false; S.sol = false; render(true); };
+  function exitShow() { if (BV) BV.tat(); SH.classList.remove("on"); document.body.style.overflow = ""; clearInterval(timer); if (document.fullscreenElement) document.exitFullscreen(); }
+  $("sExit").onclick = exitShow;
+  document.addEventListener("keydown", e => {
+    if (!SH.classList.contains("on") || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+    const k = e.key.toLowerCase();
+    if (k === "arrowright" || k === " " || k === "pagedown") { e.preventDefault(); go(1); } else if (k === "arrowleft" || k === "pageup") go(-1);
+    else if (k === "a" || k === "đ" || k === "d") $("sAns").click(); else if (k === "l") $("sSol").click(); else if (k === "t") toggleTimer();
+    else if (k === "+" || k === "=") $("sZp").click(); else if (k === "-") $("sZm").click(); else if (k === "f") $("sFull").click(); else if (k === "escape" && !document.fullscreenElement) exitShow();
+  });
+  /* mở từ trang Mô phỏng: tren-lop.html#tc={mon,lop,chuong(La Mã),ten,n} */
+  async function fromSim(o) {
+    setTab("tc");
+    const c = ROM.indexOf(String(o.chuong || "").replace(/^Chương\s*/, ""));
+    await pick1.setPreset({ mon: o.mon, lop: +o.lop, dang: [], muc: ["NB", "TH", "VD"], loai: ["TN", "DS", "TLN"], n: +o.n || 5 });
+    const ds = pick1.dangs().filter(d => d.chuong === c);
+    if (!ds.length) { $("tcMsg").innerHTML = `<div class="note red">Máy này chưa có ngân hàng ${esc(o.mon)} lớp ${esc(o.lop)} chương ${esc(o.chuong)}. Thầy đăng ngân hàng ở trang Ra đề rồi bấm lại.</div>`; return; }
+    const norm = s => String(s || "").toLowerCase().normalize("NFC").replace(/\$[^$]*\$/g, " ").replace(/[^a-zà-ỹđ0-9 ]/g, " ");
+    const stop = new Set(["của", "và", "các", "một", "có", "là", "trong", "theo", "với", "cho", "hàm", "số", "bài", "toán", "dạng"]);
+    const kw = new Set(norm(o.ten + " " + (o.mota || "")).split(/\s+/).filter(w => w.length > 2 && !stop.has(w)));
+    const score = d => norm(d.ten).split(/\s+/).filter(w => kw.has(w)).length;
+    const best = ds.map(d => [d, score(d)]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0].dkey);
+    await pick1.setPreset({ dang: best.length ? best : ds.map(d => d.dkey) });
+    $("tcMsg").innerHTML = `<div class="note blue">Từ mô phỏng “${esc(o.ten)}”: đã chọn ${best.length ? "các dạng liên quan" : "các dạng của " + esc(o.chuong)}.</div>`;
+    startShow(pick1.pick(+o.n || 5));
+  }
+
+  /* ================================================================ PHIẾU HỌC TẬP */
+  const pick2 = ChonCau.mount($("phtPick"), { key: "pht", n: 10 });
+  const P0 = LS.get("tl-pht", {}); $("phtTen").value = P0.ten || "PHIẾU HỌC TẬP"; $("phtPhu").value = P0.phu || "";
+  let phtPages = "";
+  function ansOf(it) { const q = it.q; if (q.loai === "TN") return "ABCD"[it.order.indexOf(0)]; if (q.loai === "DS") return it.order.map(j => q.y[j].d ? "Đ" : "S").join(""); return String(q.da).replace(/\$|\\,/g, "").replace(/\{,\}/g, ",").trim(); }
+  $("phtGo").onclick = () => {
+    const st = pick2.state(); const L = pick2.pick(st.n); if (!L.length) return toast("Không có câu phù hợp");
+    LS.set("tl-pht", { ten: $("phtTen").value, phu: $("phtPhu").value });
+    const R = NHD.rng(NHD.hash("pht|" + Date.now()));
+    const items = L.map(q => ({ q, order: q.loai === "TN" ? NHD.shuffle([0, 1, 2, 3], R) : [0, 1, 2, 3] }));
+    const ten = $("phtTen").value || "PHIẾU HỌC TẬP", phu = $("phtPhu").value;
+    const code = Math.random().toString(36).slice(2, 7).toUpperCase();
+    const payload = { t: ten + (phu ? " · " + phu : ""), c: code, a: items.map(ansOf) };
+    const url = location.href.replace(/[^/]*$/, "") + "dapan.html#" + encodeURIComponent(JSON.stringify(payload));
+    let qr = ""; if ($("phtQR").checked) { try { const Q = qrcode(0, "L"); Q.addData(url); Q.make(); qr = Q.createSvgTag({ cellSize: 2, margin: 1 }); } catch (e) { qr = ""; } }
+    const S = window.SITE || {};
+    const head = `<div style="display:flex;gap:12px;align-items:flex-start;border-bottom:1.5px solid #000;padding-bottom:6px;margin-bottom:8px"><div style="flex:1;font:12pt 'Times New Roman'"><div><b>${esc((S.de && S.de.truong) || S.truong || "")}</b></div><div style="font:bold 15pt 'Times New Roman';margin:4px 0">${esc(ten)}</div>${phu ? `<div>${esc(phu)}</div>` : ""}<div style="margin-top:6px">Họ và tên: ………………………………………… Lớp: ………… Mã phiếu: <b>${code}</b></div></div>${qr ? `<div style="text-align:center;font:9pt Arial">${qr}<div>Quét xem đáp số</div></div>` : ""}</div>`;
+    const part = (L, t) => { const xs = items.filter(x => x.q.loai === L); return xs.length ? `<div class="ph"><b>${t}</b></div>` + xs.map(x => NHD.renderQuestion(x, items.indexOf(x) + 1, "", {})).join("") : ""; };
+    const body = part("TN", "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn.") + part("DS", "PHẦN II. Câu trắc nghiệm đúng sai.") + part("TLN", "PHẦN III. Câu trắc nghiệm trả lời ngắn.");
+    let gv = "";
+    if ($("phtLG").checked) gv = `<div class="page ex"><div style="font:bold 14pt 'Times New Roman';margin-bottom:6px">ĐÁP ÁN + LỜI GIẢI — ${esc(ten)} (mã phiếu ${code})</div><table class="dap"><tr>${items.map((x, i) => `<th>${i + 1}</th>`).join("")}</tr><tr>${items.map(x => `<td>${esc(ansOf(x))}</td>`).join("")}</tr></table>` + items.map((x, i) => NHD.renderQuestion(x, i + 1, "key", { sol: true })).join("") + `</div>`;
+    phtPages = `<div class="page ex">${head}${body}</div>${gv}`;
+    $("phtPv").innerHTML = phtPages; $("phtPrint").disabled = false;
+  };
+  $("phtPrint").onclick = () => {
+    const w = window.open("", "_blank"); if (!w) return alert("Hãy cho phép cửa sổ bật lên.");
+    const base = location.href.replace(/[^/]*$/, "");
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc($("phtTen").value)}</title><base href="${base}"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css"><style>@page{size:A4;margin:12mm 14mm}body{background:#fff;margin:0}.page{page-break-after:always;font:12pt 'Times New Roman'}.page:last-child{page-break-after:auto}.ex .q{break-inside:avoid}</style></head><body>${phtPages}<script>setTimeout(()=>print(),700)<\/script></body></html>`);
+    w.document.close();
+  };
+
+  /* ================================================================ GỌI TÊN + CHIA NHÓM */
+  const DS = () => LS.get("tl-ds", { "Lớp của tôi": [] });
+  let curDs = LS.get("tl-ds-cur", Object.keys(DS())[0]);
+  function drawDs() {
+    const D = DS(); if (!D[curDs]) curDs = Object.keys(D)[0];
+    const opts = Object.keys(D).map(k => `<option${k === curDs ? " selected" : ""}>${esc(k)}</option>`).join("");
+    $("dsSel").innerHTML = opts; $("gSel").innerHTML = opts;
+    $("dsText").value = (D[curDs] || []).join("\n"); $("dsInfo").textContent = (D[curDs] || []).length + " học sinh";
+    drawHist();
+  }
+  const setDs = k => { curDs = k; LS.set("tl-ds-cur", k); drawDs(); };
+  $("dsSel").onchange = e => setDs(e.target.value); $("gSel").onchange = e => setDs(e.target.value);
+  $("dsNew").onclick = () => { const n = prompt("Tên lớp (VD 11A1):"); if (!n) return; const D = DS(); D[n] = D[n] || []; LS.set("tl-ds", D); setDs(n); };
+  $("dsDel").onclick = () => { if (!confirm("Xoá danh sách " + curDs + "?")) return; const D = DS(); delete D[curDs]; if (!Object.keys(D).length) D["Lớp của tôi"] = []; LS.set("tl-ds", D); setDs(Object.keys(D)[0]); };
+  $("dsSave").onclick = () => { const D = DS(); D[curDs] = $("dsText").value.split(/\n/).map(s => s.split("\t").filter(Boolean).pop() || "").map(s => s.trim()).filter(Boolean); LS.set("tl-ds", D); drawDs(); toast("Đã lưu " + D[curDs].length + " học sinh"); };
+  const called = () => LS.get("tl-goi-" + curDs, []);
+  function drawHist() { const c = called(); $("pickHist").innerHTML = c.map(n => `<span class="done">${esc(n)}</span>`).join("") || `<span class="muted small">Chưa gọi ai</span>`; }
+  $("pickGo").onclick = () => {
+    const all = DS()[curDs] || []; if (!all.length) return toast("Danh sách lớp đang trống");
+    let pool = $("pickNo").checked ? all.filter(n => !called().includes(n)) : all; if (!pool.length) { toast("Đã gọi hết lớp — bắt đầu vòng mới"); LS.set("tl-goi-" + curDs, []); pool = all; }
+    const out = $("pickOut"); out.classList.add("spin"); let k = 0; const N = 22;
+    const step = () => { out.textContent = pool[Math.floor(Math.random() * pool.length)]; k++; if (k < N) setTimeout(step, 40 + k * k * .9); else { const w = pool[Math.floor(Math.random() * pool.length)]; out.textContent = w; out.classList.remove("spin"); LS.set("tl-goi-" + curDs, called().concat([w])); drawHist(); try { const a = new AudioContext(), o = a.createOscillator(); o.frequency.value = 1046; o.connect(a.destination); o.start(); o.stop(a.currentTime + .15); } catch (e) {} } };
+    step();
+  };
+  $("pickReset").onclick = () => { LS.set("tl-goi-" + curDs, []); drawHist(); $("pickOut").textContent = "Bấm “Gọi tên”"; };
+  $("gGo").onclick = () => {
+    const all = NHD.shuffle((DS()[curDs] || []).slice(), NHD.rng(Date.now())); if (!all.length) return toast("Danh sách lớp đang trống (nhập ở mục Gọi tên)");
+    const v = Math.max(1, +$("gNum").value || 1); const n = $("gMode").value === "n" ? Math.min(v, all.length) : Math.max(1, Math.ceil(all.length / v));
+    const G = Array.from({ length: n }, () => []); all.forEach((x, i) => G[i % n].push(x));
+    const col = ["#ff7a59", "#3b7bff", "#10b3a3", "#8a5cf6", "#ffbf2e", "#ff4f87", "#19a64a", "#2fb6e8"];
+    $("gOut").innerHTML = G.map((g, i) => `<div class="g" style="border-color:${col[i % col.length]}"><h3 style="color:${col[i % col.length]}">Nhóm ${i + 1}</h3><ol>${g.map((x, j) => `<li>${esc(x)}${j === 0 && $("gLead").checked ? " <b>(nhóm trưởng)</b>" : ""}</li>`).join("")}</ol></div>`).join("");
+  };
+
+  /* ================================================================ ĐỒNG HỒ */
+  let C = { total: 300, left: 300, run: false, up: false, t: null };
+  function drawC() { const s = C.up ? C.left : Math.max(0, C.left); const el = $("clock"); el.textContent = (s >= 3600 ? Math.floor(s / 3600) + ":" : "") + String(Math.floor(s % 3600 / 60)).padStart(2, "0") + ":" + String(Math.floor(s % 60)).padStart(2, "0"); el.classList.toggle("end", !C.up && C.left <= 0); $("cBar").style.width = C.up ? "100%" : (C.total ? Math.max(0, C.left / C.total * 100) : 0) + "%"; $("cGo").textContent = C.run ? "⏸ Tạm dừng" : "▶ Bắt đầu"; }
+  function setC(sec, up) { clearInterval(C.t); C = { total: sec, left: up ? 0 : sec, run: false, up: !!up, t: null }; drawC(); }
+  document.querySelectorAll("#clockCard [data-m]").forEach(b => b.onclick = () => { $("cMin").value = b.dataset.m; $("cSec").value = 0; setC(+b.dataset.m * 60); });
+  ["cMin", "cSec"].forEach(id => $(id).onchange = () => setC((+$("cMin").value || 0) * 60 + (+$("cSec").value || 0)));
+  $("cSW").onclick = () => setC(0, true);
+  $("cGo").onclick = () => {
+    C.run = !C.run; clearInterval(C.t);
+    if (C.run) { const t0 = Date.now(), l0 = C.left; C.t = setInterval(() => { C.left = C.up ? l0 + (Date.now() - t0) / 1000 : l0 - (Date.now() - t0) / 1000; if (!C.up && C.left <= 0) { C.left = 0; C.run = false; clearInterval(C.t); if ($("cBeep").checked) bell(); } drawC(); }, 200); }
+    drawC();
+  };
+  $("cReset").onclick = () => setC(C.up ? 0 : C.total, C.up);
+  $("cFull").onclick = () => { const el = $("clockCard"); if (document.fullscreenElement) document.exitFullscreen(); else el.requestFullscreen && el.requestFullscreen(); };
+  setC(300);
+
+  /* ================================================================ BẢNG VẼ */
+  const bg = $("bgCv"), dr = $("drCv"), wrap = $("boardWrap");
+  const COLS = ["#1d2742", "#e0234e", "#1b5fb3", "#14873e", "#f08c00", "#8a5cf6"];
+  let B = { col: COLS[0], w: 4, erase: false, line: false, strokes: [], cur: null };
+  $("bCols").innerHTML = COLS.map((c, i) => `<span class="sw${i ? "" : " on"}" data-c="${c}" style="background:${c}"></span>`).join("");
+  $("bCols").querySelectorAll(".sw").forEach(s => s.onclick = () => { B.col = s.dataset.c; B.erase = false; $("bCols").querySelectorAll(".sw").forEach(x => x.classList.toggle("on", x === s)); $("bErase").classList.remove("coral"); });
+  $("bW").onchange = e => B.w = +e.target.value;
+  $("bErase").onclick = () => { B.erase = !B.erase; B.line = false; $("bErase").classList.toggle("coral", B.erase); $("bLine").classList.remove("coral"); };
+  $("bLine").onclick = () => { B.line = !B.line; B.erase = false; $("bLine").classList.toggle("coral", B.line); $("bErase").classList.remove("coral"); };
+  $("bUndo").onclick = () => { B.strokes.pop(); redraw(); };
+  $("bClear").onclick = () => { if (B.strokes.length && !confirm("Xoá hết nét vẽ?")) return; B.strokes = []; redraw(); };
+  const bcfg = LS.get("tl-bv", {}); if (bcfg.bg) $("bBg").value = bcfg.bg; if (bcfg.fx) $("bFx").value = bcfg.fx; if (bcfg.u) $("bU").value = bcfg.u;
+  ["bBg", "bFx", "bU"].forEach(id => $(id).onchange = () => { LS.set("tl-bv", { bg: $("bBg").value, fx: $("bFx").value, u: $("bU").value }); drawBg(); });
+  function compile(src) {
+    let s = String(src).trim().toLowerCase().replace(/\s+/g, "").replace(/\^/g, "**").replace(/(\d)(x|\()/g, "$1*$2").replace(/\)(x|\(|\d)/g, ")*$1").replace(/x(\(|\d)/g, "x*$1").replace(/\bln\(/g, "log(").replace(/\bpi\b/g, "PI");
+    if (!/^[0-9x+\-*/().,a-zA-Z]*$/.test(s)) throw 0;
+    const ok = new Set(["x", "sin", "cos", "tan", "sqrt", "abs", "exp", "log", "log10", "log2", "PI", "E", "asin", "acos", "atan", "floor", "ceil", "pow", "min", "max", "e"]);
+    (s.match(/[a-zA-Z]\w*/g) || []).forEach(id => { if (!ok.has(id)) throw 0; });
+    s = s.replace(/\be\b/g, "E");
+    return new Function("x", "with(Math){return " + s + "}");
+  }
+  function drawBg() {
+    const W = bg.width, H = bg.height, c = bg.getContext("2d"), dpr = window.devicePixelRatio || 1, u = (+$("bU").value || 40) * dpr; c.clearRect(0, 0, W, H); c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+    const mode = $("bBg").value, ox = Math.round(W / 2 / u) * u, oy = Math.round(H / 2 / u) * u;
+    if (mode === "kebang") { c.strokeStyle = "#cfe0f5"; c.lineWidth = dpr; for (let y = u; y < H; y += u * .8) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); } c.strokeStyle = "#f3b6c2"; c.beginPath(); c.moveTo(u * 2, 0); c.lineTo(u * 2, H); c.stroke(); }
+    if (mode === "o" || mode === "oxy") { c.strokeStyle = "#e3e8f2"; c.lineWidth = dpr; for (let x = ox % u; x < W; x += u) { c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); } for (let y = oy % u; y < H; y += u) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); } }
+    if (mode === "oxy") {
+      c.strokeStyle = "#1d2742"; c.fillStyle = "#1d2742"; c.lineWidth = 1.6 * dpr;
+      c.beginPath(); c.moveTo(0, oy); c.lineTo(W - 4 * dpr, oy); c.moveTo(ox, H); c.lineTo(ox, 4 * dpr); c.stroke();
+      c.beginPath(); c.moveTo(W, oy); c.lineTo(W - 12 * dpr, oy - 5 * dpr); c.lineTo(W - 12 * dpr, oy + 5 * dpr); c.fill(); c.beginPath(); c.moveTo(ox, 0); c.lineTo(ox - 5 * dpr, 12 * dpr); c.lineTo(ox + 5 * dpr, 12 * dpr); c.fill();
+      c.font = `italic ${16 * dpr}px 'Times New Roman'`; c.fillText("x", W - 16 * dpr, oy + 20 * dpr); c.fillText("y", ox + 8 * dpr, 16 * dpr); c.fillText("O", ox - 16 * dpr, oy + 18 * dpr);
+      c.font = `${12 * dpr}px Arial`; c.fillStyle = "#556";
+      const step = u < 24 * dpr ? 2 : 1;
+      for (let k = -Math.ceil(ox / u); k * u + ox < W; k++) if (k && k % step === 0) { const x = ox + k * u; c.beginPath(); c.moveTo(x, oy - 4 * dpr); c.lineTo(x, oy + 4 * dpr); c.stroke(); c.fillText(k, x - 4 * dpr, oy + 18 * dpr); }
+      for (let k = -Math.ceil(oy / u); k * u + oy < H; k++) if (k && k % step === 0) { const y = oy + k * u; c.beginPath(); c.moveTo(ox - 4 * dpr, y); c.lineTo(ox + 4 * dpr, y); c.stroke(); c.fillText(-k, ox - 18 * dpr, y + 4 * dpr); }
+      const fx = $("bFx").value.split(";").map(s => s.trim()).filter(Boolean); const cl = ["#e0234e", "#1b5fb3", "#14873e", "#f08c00"];
+      fx.forEach((src, j) => { let f; try { f = compile(src); } catch (e) { toast("Không hiểu biểu thức: " + src); return; } c.strokeStyle = cl[j % 4]; c.lineWidth = 2.5 * dpr; c.beginPath(); let pen = false, py = null;
+        for (let px = 0; px <= W; px += 1) { const x = (px - ox) / u; let y; try { y = f(x); } catch (e) { y = NaN; } const sy = oy - y * u; if (!isFinite(y) || Math.abs(sy) > 4 * H || (py != null && Math.abs(sy - py) > H)) { pen = false; py = null; continue; } if (!pen) { c.moveTo(px, sy); pen = true; } else c.lineTo(px, sy); py = sy; }
+        c.stroke(); c.font = `italic bold ${15 * dpr}px 'Times New Roman'`; c.fillStyle = cl[j % 4]; c.fillText("y = " + src, 10 * dpr, (22 + 20 * j) * dpr); });
+    }
+  }
+  function resizeBoard() { const r = wrap.getBoundingClientRect(), dpr = window.devicePixelRatio || 1; if (!r.width) return; [bg, dr].forEach(cv => { cv.width = r.width * dpr; cv.height = r.height * dpr; }); drawBg(); redraw(); }
+  function redraw() { const c = dr.getContext("2d"); c.clearRect(0, 0, dr.width, dr.height); B.strokes.forEach(s => stroke(c, s)); }
+  function stroke(c, s) { c.save(); c.globalCompositeOperation = s.erase ? "destination-out" : "source-over"; c.strokeStyle = s.col; c.lineWidth = s.w * (s.erase ? 5 : 1) * (window.devicePixelRatio || 1); c.lineCap = c.lineJoin = "round"; c.beginPath(); s.p.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); if (s.p.length === 1) c.lineTo(s.p[0][0] + .1, s.p[0][1]); c.stroke(); c.restore(); }
+  const pt = e => { const r = dr.getBoundingClientRect(), dpr = window.devicePixelRatio || 1; return [(e.clientX - r.left) * dpr, (e.clientY - r.top) * dpr]; };
+  dr.addEventListener("pointerdown", e => { dr.setPointerCapture(e.pointerId); B.cur = { col: B.col, w: B.w, erase: B.erase, line: B.line, p: [pt(e)] }; B.strokes.push(B.cur); redraw(); });
+  dr.addEventListener("pointermove", e => { if (!B.cur) return; if (B.cur.line) B.cur.p[1] = pt(e); else B.cur.p.push(pt(e)); redraw(); });
+  ["pointerup", "pointercancel"].forEach(ev => dr.addEventListener(ev, () => B.cur = null));
+  window.addEventListener("resize", () => tab === "bv" && resizeBoard());
+  document.addEventListener("fullscreenchange", () => setTimeout(resizeBoard, 80));
+  $("bFull").onclick = () => { if (document.fullscreenElement) document.exitFullscreen(); else wrap.requestFullscreen && wrap.requestFullscreen(); };
+  $("bSave").onclick = () => { const c = document.createElement("canvas"); c.width = bg.width; c.height = bg.height; const x = c.getContext("2d"); x.drawImage(bg, 0, 0); x.drawImage(dr, 0, 0); const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "BangVe.png"; a.click(); };
+
+  /* ---------------------------------------------------------------- khởi động */
+  drawDs(); setTab(tab);
+  const m = location.hash.match(/^#tc=(.+)$/);
+  if (m) { try { const o = JSON.parse(decodeURIComponent(m[1])); history.replaceState(null, "", location.pathname); setTimeout(() => fromSim(o), 300); } catch (e) {} }
+})();
+</script>
+</body>
+</html>
