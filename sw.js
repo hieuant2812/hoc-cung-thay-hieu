@@ -57,7 +57,7 @@ self.addEventListener("message", e => { if (e.data === "skipWaiting") self.skipW
 
 const khongLuu = u => /\.hcth(\.\d+)?$/.test(u.pathname) || /nganhang\.json$/.test(u.pathname) || /decuong\/gv-/.test(u.pathname) || /thcs\/nganhang/.test(u.pathname);
 const laMa = (req, u) => req.mode === "navigate" || /\.(html?|js|css|json|webmanifest)$/i.test(u.pathname) || /\/$/.test(u.pathname);
-const batBien = u => /\/data\/decuong\/hinh\/[0-9a-f]{8}\./.test(u.pathname);   // tên theo mã băm: không bao giờ đổi
+const batBien = u => /\/data\/decuong\/hinh\/[0-9a-f]{8}\./.test(u.pathname) || /\/data\/hinhnh\/[\w-]+\.[0-9a-f]{8}\.json$/.test(u.pathname);   // tên theo mã băm: không bao giờ đổi
 
 /* tìm bản đã lưu: đúng địa chỉ trước, rồi bỏ qua ?v=…; bộ chính trước, bộ tải sẵn sau */
 async function timBan(req) {

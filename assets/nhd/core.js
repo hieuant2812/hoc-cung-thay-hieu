@@ -312,7 +312,13 @@
     return s.length;
   }
 
+  /* Hình đã biên dịch sẵn (XeLaTeX → SVG, data/hinhnh): bọc mỗi hình bằng mã băm; trình nạp bên dưới
+     thay bằng ảnh SVG đúng như bản in nếu có, không có thì giữ hình vẽ nhanh trên web. */
+  function tikzKey(body) { return (hash(String(body).replace(/\s+/g, " ").trim()) >>> 0).toString(16).padStart(8, "0"); }
   function tikz(body) {
+    return '<span class="hnh" data-h="' + tikzKey(body) + '">' + tikzWeb(body) + "</span>";
+  }
+  function tikzWeb(body) {
     try {
       if (/\\tkzTabInit/.test(body)) return tkzTab(body);
       return tikzDraw(body);
@@ -671,5 +677,39 @@
     return q.da;
   }
 
-  Object.assign(NHD, { MACROS, sideFig, esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, MUC, plainLen, findEnd });
+
+  /* ---------------------------------------------------------------- trình nạp hình SVG biên dịch sẵn */
+  if (typeof document !== "undefined" && typeof MutationObserver !== "undefined" && typeof fetch !== "undefined") {
+    const cs = document.currentScript && document.currentScript.src;
+    const GOC = NHD.HINH_GOC || (cs ? cs.replace(/assets\/nhd\/core\.js.*$/, "") : "") ;
+    let chiMuc = null; const goi = {};
+    const layJson = u => fetch(u).then(r => { if (!r.ok) throw 0; return r.json(); });
+    const napChiMuc = () => chiMuc || (chiMuc = layJson(GOC + "data/hinhnh/chi-muc.json").catch(() => ({})));
+    const napGoi = g => goi[g] || (goi[g] = layJson(GOC + "data/hinhnh/" + g + ".json").catch(() => ({})));
+    const anh = {};
+    function gan(el, svg) {
+      const k = el.dataset.h;
+      if (!anh[k]) anh[k] = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      const m = /width="([\d.]+)"\s+height="([\d.]+)"/.exec(svg) || [0, 200, 120];
+      const w = Math.round(+m[1] * 1.3), h = Math.round(+m[2] * 1.3);
+      el.innerHTML = '<img class="hnh-img" alt="Hình" src="' + anh[k] + '" width="' + w + '" height="' + h + '">';
+      el.classList.add("hnh-ok");
+    }
+    let hen = 0;
+    function quet() {
+      hen = 0;
+      const ds = [...document.querySelectorAll(".hnh:not([data-x])")]; if (!ds.length) return;
+      ds.forEach(el => el.dataset.x = 1);
+      napChiMuc().then(cm => {
+        const theoGoi = {};
+        ds.forEach(el => { const g = cm[el.dataset.h]; if (g) (theoGoi[g] = theoGoi[g] || []).push(el); });
+        Object.keys(theoGoi).forEach(g => napGoi(g).then(b => theoGoi[g].forEach(el => { const svg = b[el.dataset.h]; if (svg) gan(el, svg); })));
+      });
+    }
+    const hoan = () => { if (!hen) hen = (window.requestAnimationFrame || setTimeout)(quet); };
+    const batDau = () => { new MutationObserver(hoan).observe(document.documentElement, { childList: true, subtree: true }); hoan(); };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", batDau); else batDau();
+    NHD.quetHinh = quet;
+  }
+  Object.assign(NHD, { MACROS, sideFig, esc, stripComments, readGroup, splitTop, parseKeys, parseBank, texToHtml, tikz, compileExpr, xcolor, rng, hash, shuffle, optCols, renderQuestion, keyOf, tikzKey, MUC, plainLen, findEnd });
 })(window);

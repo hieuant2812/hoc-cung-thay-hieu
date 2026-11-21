@@ -404,3 +404,11 @@ python3 maychu.py
 - **Trên lớp → 🎫 Phiếu cuối giờ**: 3 câu trắc nghiệm, học sinh trả lời bằng điện thoại (hs.html, mã phòng); xem tỉ lệ đúng từng câu; kết quả tự lưu sang trang Phân tích (lớp lấy từ danh sách ở tab Gọi tên).
 - **Tự học → 📕 Sổ lỗi sai**: câu làm sai được hỏi lại sau 1 → 3 → 7 ngày; đúng cả 3 lần thì rời sổ. Lưu trên máy học sinh.
 - **Chuyên đề 10, 11**: thêm 27 mục kiến thức có ví dụ, lời giải từng bước; 15 hình minh hoạ (`G.HINH.CD10`, `G.HINH.CD11` trong `data/hinhve-bai.js`). Tên bài Chuyên đề 11 Bài 4–5, Chuyên đề 12 Bài 1–2 theo đúng SGK KNTT.
+
+## Gói 21 — Hình ngân hàng đề biên dịch sẵn thành SVG (2026.11.23)
+- 4.104 hình TikZ của ngân hàng Toán 12 (bản 144 dạng và bản cũ) và Toán 11 (bản cũ) đã biên dịch bằng XeLaTeX → SVG, giống hệt bản in (kể cả \clip, plot, tkz-tab).
+- Lưu ở `data/hinhnh/` thành 62 gói `.json` (mỗi gói ≤ 100 hình của một dạng) và `chi-muc.json` (mã hình → gói).
+- `assets/nhd/core.js` gắn mã băm cho mỗi hình; trang tự tải gói cần thiết và thay hình vẽ nhanh bằng ảnh SVG. Không có mạng/chưa có gói thì vẫn hiện hình vẽ nhanh như trước.
+- Áp dụng cho mọi trang dùng ngân hàng: Ra đề, Tự học, Trên lớp, Trò chơi, Phân tích…
+- Toán 10 (bản TRON_BO_v2) không có hình TikZ nên không cần biên dịch.
+- Khi có ngân hàng mới (ví dụ Toán 11 bản mới): gửi zip để biên dịch thêm; tên gói theo nội dung nên máy học sinh tự lấy bản mới.
