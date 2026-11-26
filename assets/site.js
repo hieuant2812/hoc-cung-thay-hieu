@@ -6,7 +6,7 @@
   window.esc = esc;
   /* menu: 5 mục cho học sinh + mục "Giáo viên ▾" gom công cụ của thầy */
   const MENU_HS = [["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["hs", "📱 Vào thi"]];
-  const MENU_GV = [["tren-lop", "📽 Trên lớp"], ["trochoi", "🎲 Trò chơi"], ["rade", "📄 Ra đề THPT"], ["rade-thcs", "📝 Ra đề THCS"], ["phieu", "🧾 Phiếu & chấm"],
+  const MENU_GV = [["tren-lop", "📽 Trên lớp"], ["trochoi", "🎲 Trò chơi"], ["bangve", "📐 Bảng vẽ"], ["rade", "📄 Ra đề THPT"], ["rade-thcs", "📝 Ra đề THCS"], ["phieu", "🧾 Phiếu & chấm"],
     ["phantich", "📈 Phân tích"], ["khbd", "🗂 Soạn bài"], ["beamer", "🖥 Beamer"], ["lophoc", "👥 Lớp học"], ["index#ngoaituyen", "📥 Tải sẵn ngoại tuyến"]];
   function header() {
     const h = document.getElementById("top"); if (!h) return;
