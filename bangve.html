@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bảng vẽ · Học cùng Thầy Hiếu</title>
+<meta name="description" content="Bảng vẽ có thước thẳng, thước đo độ và compa: dạy đo góc (Toán 6) và dựng hình (Toán 9), học sinh làm trên điện thoại.">
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css">
+<script src="config.js"></script><script src="assets/butve.js"></script><script src="assets/lib/qrcode.js"></script>
+<style>
+html,body{height:100%;margin:0;overflow:hidden;background:#fff;overscroll-behavior:none}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,select{-webkit-user-select:text;user-select:text}
+#thanh{position:fixed;left:0;right:0;top:0;z-index:9995;background:#1d2742;color:#fff;padding:8px 12px calc(8px);font:600 14px var(--font,system-ui)}
+#thanh .hang{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#thanh a.ve{color:#cfd8ff;text-decoration:none;font-size:13px}
+#thanh h1{font:800 17px var(--font-h,system-ui);margin:0 6px 0 0}
+#thanh select,#thanh input{font:600 14px var(--font,system-ui);padding:6px 8px;border-radius:9px;border:0;color:#1d2742;background:#fff;max-width:100%}
+#thanh input[type=number]{width:84px}
+#thanh button{font:700 14px var(--font,system-ui);padding:7px 12px;border-radius:9px;border:0;cursor:pointer;background:#ff7a59;color:#fff}
+#thanh button.phu{background:#2c3a60}
+#de{margin-top:6px;font-size:15px;line-height:1.4}
+#de b{color:#ffd66b}
+#kq{margin-top:4px;font-size:14px;min-height:0}
+#kq .dung{color:#7ee2a8}#kq .sai{color:#ffb3c1}
+#ban{position:fixed;left:0;right:0;bottom:0;background-color:#fff;background-image:linear-gradient(#e4eaf5 1px,transparent 1px),linear-gradient(90deg,#e4eaf5 1px,transparent 1px);background-size:37.8px 37.8px}
+#hop{position:fixed;inset:0;z-index:9998;background:rgba(10,16,32,.55);display:none;align-items:center;justify-content:center}
+#hop.on{display:flex}
+#hop .the{background:#fff;color:#1d2742;border-radius:16px;padding:18px;max-width:min(92vw,420px);text-align:center}
+#hop .qr svg{width:min(70vw,300px);height:auto}
+#hop .url{font-size:12px;word-break:break-all;color:#5d6677}
+@media (max-width:640px){#thanh{padding:6px 8px}#thanh h1{font-size:14px;margin:0}#thanh .an-dt{display:none}
+  #thanh .hang:first-child{flex-wrap:nowrap;gap:6px}#thanh .hang:first-child select{flex:1;min-width:0;padding:5px 6px;font-size:13px}#thanh .hang:first-child button{padding:6px 8px;font-size:13px;white-space:nowrap}
+  #de{font-size:13.5px;margin-top:4px}#kq{font-size:13px}#thanh button{padding:6px 10px}}
+</style>
+</head>
+<body data-page="bangve">
+<div id="thanh">
+  <div class="hang">
+    <a class="ve an-dt" href="index.html">← Trang chủ</a>
+    <h1>📐<span class="an-dt"> Bảng vẽ</span></h1>
+    <select id="selBai" aria-label="Chọn bài">
+      <option value="tu-do">Vẽ tự do</option>
+      <optgroup label="Toán 6 – Số đo góc">
+        <option value="do-goc">Đo góc bằng thước đo độ</option>
+        <option value="ve-goc">Vẽ góc cho trước số đo</option>
+      </optgroup>
+      <optgroup label="Toán 9 – Dựng hình bằng compa">
+        <option value="trung-truc">Dựng đường trung trực của đoạn thẳng</option>
+        <option value="phan-giac">Dựng tia phân giác của góc</option>
+        <option value="ngoai-tiep">Đường tròn ngoại tiếp tam giác</option>
+        <option value="noi-tiep">Đường tròn nội tiếp tam giác</option>
+        <option value="luc-giac">Lục giác đều nội tiếp đường tròn</option>
+      </optgroup>
+    </select>
+    <button id="btnMoi" class="phu" title="Đề khác cùng dạng">⟳<span class="an-dt"> Đề khác</span></button>
+    <button id="btnGiao" class="phu an-hs" title="Mã QR để học sinh mở bài này trên điện thoại">📱<span class="an-dt"> Giao cho lớp</span></button>
+  </div>
+  <div id="de"></div>
+  <div class="hang" id="traLoi" style="margin-top:6px"></div>
+  <div id="kq" aria-live="polite"></div>
+</div>
+<div id="ban"></div>
+<div id="hop" role="dialog" aria-modal="true"><div class="the">
+  <div style="font:800 18px var(--font-h,system-ui);margin-bottom:6px">Học sinh quét mã để làm bài</div>
+  <div id="hopTen" style="font-size:14px;margin-bottom:8px"></div>
+  <div class="qr" id="hopQR"></div>
+  <div class="url" id="hopUrl"></div>
+  <button class="btn ghost sm" id="hopDong" style="display:inline-flex;margin-top:10px">Đóng</button>
+</div></div>
+<script>
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const PI = Math.PI, DEG = PI / 180, CM = 37.8;
+  const q = new URLSearchParams(location.search);
+  const laHS = q.get("hs") === "1";
+  if (laHS) document.querySelectorAll(".an-hs").forEach(e => e.style.display = "none");
+  const TEN = {};
+  [...$("selBai").options].forEach(o => TEN[o.value] = o.textContent);
+  let bai = TEN[q.get("bai")] ? q.get("bai") : "tu-do";
+  $("selBai").value = bai;
+
+  /* ---------- bảng và bút */
+  const thanh = $("thanh"), ban = $("ban");
+  function coBan() { ban.style.top = thanh.offsetHeight + "px"; }
+  coBan();
+  let deSo = 0;
+  const BV = ButVe.gan({ root: document.body, goc: () => ban, tile: () => 1, khoa: () => "bangve|" + bai + "|" + deSo, tren: () => thanh.offsetHeight });
+  BV.bat();
+  window.addEventListener("resize", () => { coBan(); BV.ve(); });
+
+  /* ---------- tiện ích hình học (toạ độ nội dung = px trên bảng) */
+  const rnd = (a, b) => a + Math.random() * (b - a), rndI = (a, b) => Math.floor(rnd(a, b + 1));
+  const kc = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+  const theoGoc = (O, a, L) => [O[0] + L * Math.cos(a), O[1] + L * Math.sin(a)];
+  const chuan = a => { a %= 2 * PI; return a < 0 ? a + 2 * PI : a; };
+  const lechGoc = (a, b) => { const d = chuan(a - b); return Math.min(d, 2 * PI - d); };
+  const huong = (A, B) => Math.atan2(B[1] - A[1], B[0] - A[0]);
+  function khung() { // phần bảng nhìn thấy, trừ thanh bút ở đáy
+    const tb = document.querySelector(".bv-tb"), w = ban.clientWidth, h = ban.clientHeight - (tb ? tb.offsetHeight + 12 : 0);
+    return { w, h, c: [w / 2, h / 2], m: Math.min(w, h) };
+  }
+  const diem = (P, ten, an, dx, dy) => ({ loai: "diem", P, ten, an: !!an, dx, dy });
+  const doan = (A, B) => ({ loai: "th", A, B, kieu: "doan" });
+  const tia = (A, B) => ({ loai: "th", A, B, kieu: "tia" });
+  function nhanTia(O, a, L, ten) { const P = theoGoc(O, a, L * 1.04), c = Math.cos(a), s = Math.sin(a); return diem(P, ten, true, c >= 0 ? 4 : -16, s >= 0 ? 16 : -6); }
+  const cua = () => BV.hinh().filter(g => !g.coDinh);
+  const duongCua = () => cua().filter(g => g.loai === "th");
+  const cungCua = () => cua().filter(g => g.loai === "cung");
+  const khoangDenDuong = (P, g) => { const d = [g.B[0] - g.A[0], g.B[1] - g.A[1]], L = Math.hypot(d[0], d[1]) || 1; return Math.abs(d[0] * (P[1] - g.A[1]) - d[1] * (P[0] - g.A[0])) / L; };
+  // tia/đoạn xuất phát từ O (đầu nào gần O) → hướng của nó
+  function huongTu(O, g, sai) {
+    if (kc(g.A, O) <= sai) return huong(g.A, g.B);
+    if (g.kieu === "doan" && kc(g.B, O) <= sai) return huong(g.B, g.A);
+    if (g.kieu === "duong" && khoangDenDuong(O, g) <= sai) return null; // đường thẳng qua O: xét cả hai hướng ở chỗ gọi
+    return undefined;
+  }
+  function coDuongTheoHuong(O, a, saiGoc) {
+    return duongCua().some(g => {
+      const h = huongTu(O, g, 4);
+      if (h === undefined) return false;
+      if (h === null) return lechGoc(huong(g.A, g.B), a) < saiGoc || lechGoc(huong(g.A, g.B) + PI, a) < saiGoc;
+      return lechGoc(h, a) < saiGoc;
+    });
+  }
+
+  /* ---------- các bài */
+  const DE = {}, S = { soCau: 0, dung: 0, batDau: Date.now() };
+  const traLoi = $("traLoi"), kq = $("kq");
+  const nutKT = (nhan) => `<button id="btnKT">${nhan || "Kiểm tra"}</button>`;
+  function bao(ok, s) { kq.innerHTML = `<span class="${ok ? "dung" : "sai"}">${ok ? "✓ " : "✗ "}${s}</span>`; if (ok) ghiKetQua(); }
+
+  DE["tu-do"] = {
+    tao() { $("de").innerHTML = "Bật thước thẳng, thước đo độ hoặc compa ở thanh bút phía dưới. Compa luôn để lại tâm đường tròn; chạm <b>• A</b> rồi chạm vào điểm để đặt tên."; traLoi.innerHTML = ""; BV.datDeBai([]); }
+  };
+  DE["do-goc"] = {
+    tao() {
+      const K = khung(), O = [K.c[0] + rnd(-.08, .08) * K.w, K.c[1] + K.m * .12], L = K.m * .36;
+      const m = rndI(1, 34) * 5 + rndI(-2, 2), a0 = rnd(0, 2 * PI), chieu = Math.random() < .5 ? 1 : -1, a1 = a0 - chieu * m * DEG;
+      this.m = Math.max(3, Math.min(177, m));
+      BV.datDeBai([tia(O, theoGoc(O, a0, L)), tia(O, theoGoc(O, a1, L)), diem(O, "O", false, -18, 18), nhanTia(O, a0, L, "x"), nhanTia(O, a1, L, "y")]);
+      $("de").innerHTML = `Câu ${S.soCau + 1}/10 · Dùng <b>thước đo độ</b> đo góc <b>xOy</b>: đặt tâm thước trùng đỉnh O, vạch 0 nằm trên một cạnh, kéo kim đỏ tới cạnh kia rồi đọc số.`;
+      traLoi.innerHTML = `<label>Số đo: <input type="number" id="ipSo" min="0" max="180" inputmode="numeric"> °</label>${nutKT()}`;
+      BV.moDungCu("dodo"); BV.dat("anSo", true);
+      $("btnKT").onclick = () => this.cham();
+      $("ipSo").onkeydown = e => { if (e.key === "Enter") this.cham(); };
+    },
+    cham() {
+      const v = +$("ipSo").value; if (!$("ipSo").value) return;
+      S.soCau++; const ok = Math.abs(v - this.m) <= 1; if (ok) S.dung++;
+      if (ok) bao(true, `Đúng, góc xOy = ${this.m}°. Đúng ${S.dung}/${S.soCau} câu.`);
+      else if (Math.abs(v - (180 - this.m)) <= 1) bao(false, `Em đọc nhầm vòng số: góc xOy = ${this.m}°. Đọc trên vòng số bắt đầu từ 0 ở cạnh đặt vạch 0.`);
+      else bao(false, `Chưa đúng: góc xOy = ${this.m}°. Kiểm tra tâm thước có trùng O không.`);
+      if (S.soCau >= 10) { kq.innerHTML += ` <b>Hết lượt: ${S.dung}/10 câu đúng.</b>`; traLoi.innerHTML = `<button id="btnLai">Làm lượt mới</button>`; $("btnLai").onclick = () => { S.soCau = 0; S.dung = 0; moi(); }; ghiKetQua(true); return; }
+      traLoi.innerHTML = `<button id="btnTiep">Câu tiếp →</button>`; $("btnTiep").onclick = () => moi(true);
+    }
+  };
+  DE["ve-goc"] = {
+    tao() {
+      const K = khung(), O = [K.c[0] - K.m * .05, K.c[1] + K.m * .15], L = K.m * .36, a0 = rnd(-PI, PI) * .25 + (Math.random() < .5 ? 0 : PI);
+      this.m = rndI(2, 34) * 5 + (Math.random() < .4 ? rndI(1, 4) : 0); this.O = O; this.a0 = a0;
+      BV.datDeBai([tia(O, theoGoc(O, a0, L)), diem(O, "O", false, -18, 18), nhanTia(O, a0, L, "x")]);
+      $("de").innerHTML = `Vẽ tia <b>Oy</b> sao cho <b>xOy = ${this.m}°</b>: đặt thước đo độ, chạm vào vạch ${this.m} để chấm điểm, rồi dùng <b>thước thẳng</b> kẻ tia từ O qua điểm đó.`;
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("dodo");
+    },
+    cham() {
+      const a = this.m * DEG, ok = [this.a0 + a, this.a0 - a].some(b => coDuongTheoHuong(this.O, b, 1.2 * DEG));
+      if (ok) bao(true, `Đúng, góc xOy = ${this.m}°.`);
+      else bao(false, duongCua().length ? "Chưa đúng số đo, hoặc tia chưa xuất phát từ O. Thử lại (bấm ↶ để xoá nét vừa kẻ)." : "Chưa thấy tia nào kẻ bằng thước thẳng từ O.");
+    }
+  };
+  function canhDungCompa(soCung) { return cungCua().length >= soCung ? "" : ` Nhưng em chưa dùng compa (cần ít nhất ${soCung} cung) — hãy dựng lại bằng compa.`; }
+  DE["trung-truc"] = {
+    tao() {
+      const K = khung(), a = rnd(-.5, .5), L = K.m * .32, A = theoGoc(K.c, a + PI, L / 2), B = theoGoc(K.c, a, L / 2);
+      this.A = A; this.B = B;
+      BV.datDeBai([doan(A, B), diem(A, "A", false, -16, 20), diem(B, "B", false, 6, 20)]);
+      $("de").innerHTML = "Dựng <b>đường trung trực</b> của đoạn AB bằng compa và thước thẳng (bật <b>Đường</b> ở thước để kẻ đường thẳng).";
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("compa");
+    },
+    cham() {
+      const M = [(this.A[0] + this.B[0]) / 2, (this.A[1] + this.B[1]) / 2], a = huong(this.A, this.B) + PI / 2;
+      const ok = duongCua().some(g => khoangDenDuong(M, g) < 4 && (lechGoc(huong(g.A, g.B), a) < 1.5 * DEG || lechGoc(huong(g.A, g.B), a + PI) < 1.5 * DEG));
+      const thieu = canhDungCompa(2);
+      if (ok && !thieu) bao(true, "Đúng, đường vừa dựng là trung trực của AB.");
+      else if (ok) bao(false, "Đường thẳng đúng vị trí." + thieu);
+      else bao(false, "Chưa đúng. Gợi ý: cắm kim vào A, mở khẩu độ hơn nửa AB, quay một cung; giữ khẩu độ, cắm kim vào B quay cung nữa; kẻ đường qua hai giao điểm.");
+    }
+  };
+  DE["phan-giac"] = {
+    tao() {
+      const K = khung(), O = [K.c[0] - K.m * .15, K.c[1] + K.m * .18], L = K.m * .42, m = rndI(8, 30) * 5, a0 = -rnd(0, .4), a1 = a0 - m * DEG;
+      this.O = O; this.p = a0 - m * DEG / 2; this.m = m;
+      BV.datDeBai([tia(O, theoGoc(O, a0, L)), tia(O, theoGoc(O, a1, L)), diem(O, "O", false, -18, 18), nhanTia(O, a0, L, "x"), nhanTia(O, a1, L, "y")]);
+      $("de").innerHTML = "Dựng <b>tia phân giác</b> của góc xOy bằng compa và thước thẳng (chọn <b>Tia</b> ở thước).";
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("compa");
+    },
+    cham() {
+      const ok = coDuongTheoHuong(this.O, this.p, 1.5 * DEG), thieu = canhDungCompa(3);
+      if (ok && !thieu) bao(true, `Đúng, tia vừa dựng chia góc ${this.m}° thành hai góc ${this.m / 2}°.`);
+      else if (ok) bao(false, "Tia đúng vị trí." + thieu);
+      else bao(false, "Chưa đúng. Gợi ý: cung tâm O cắt Ox, Oy tại A, B; hai cung cùng bán kính tâm A và B cắt nhau tại C; kẻ tia OC.");
+    }
+  };
+  function tamGiac(K) {
+    for (let i = 0; i < 50; i++) {
+      const r = K.m * .3, c = [K.c[0], K.c[1] + K.m * .03], g = [rnd(-PI, -PI / 2 - .3), rnd(-.9, -.2), rnd(PI / 4, 3 * PI / 4)].sort((a, b) => a - b);
+      const P = g.map(a => theoGoc(c, a, r * rnd(.8, 1.1)));
+      const goc = P.map((X, i) => { const Y = P[(i + 1) % 3], Z = P[(i + 2) % 3]; return lechGoc(huong(X, Y), huong(X, Z)); });
+      if (goc.every(x => x > 35 * DEG && x < 100 * DEG)) return P;
+    }
+    return [[K.c[0], K.c[1] - K.m * .28], [K.c[0] - K.m * .3, K.c[1] + K.m * .2], [K.c[0] + K.m * .28, K.c[1] + K.m * .22]];
+  }
+  function deTamGiac(P) {
+    const nhan = ["A", "B", "C"], G = [(P[0][0] + P[1][0] + P[2][0]) / 3, (P[0][1] + P[1][1] + P[2][1]) / 3];
+    return [doan(P[0], P[1]), doan(P[1], P[2]), doan(P[2], P[0]), ...P.map((X, i) => { const d = [X[0] - G[0], X[1] - G[1]], L = Math.hypot(...d) || 1; return diem(X, nhan[i], false, d[0] / L * 16 - 6, d[1] / L * 16 + 6); })];
+  }
+  function coDuongTron(O, r, sai) { return cungCua().some(g => Math.abs(g.sw) > 300 * DEG && kc(g.O, O) < sai && Math.abs(g.r - r) < sai); }
+  DE["ngoai-tiep"] = {
+    tao() {
+      const P = tamGiac(khung()); this.P = P;
+      const [A, B, C] = P, d = 2 * (A[0] * (B[1] - C[1]) + B[0] * (C[1] - A[1]) + C[0] * (A[1] - B[1]));
+      const s = X => X[0] * X[0] + X[1] * X[1];
+      this.O = [(s(A) * (B[1] - C[1]) + s(B) * (C[1] - A[1]) + s(C) * (A[1] - B[1])) / d, (s(A) * (C[0] - B[0]) + s(B) * (A[0] - C[0]) + s(C) * (B[0] - A[0])) / d];
+      this.r = kc(this.O, A);
+      BV.datDeBai(deTamGiac(P));
+      $("de").innerHTML = "Dựng <b>đường tròn ngoại tiếp</b> tam giác ABC: dựng hai đường trung trực, lấy giao điểm làm tâm, rồi quay compa qua một đỉnh.";
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("compa");
+    },
+    cham() {
+      if (coDuongTron(this.O, this.r, 4)) bao(true, "Đúng, đường tròn đi qua cả ba đỉnh A, B, C.");
+      else bao(false, cungCua().some(g => kc(g.O, this.O) < 4) ? "Tâm đúng rồi, nhưng cần vẽ cả đường tròn qua một đỉnh (kéo đầu chì tới đỉnh rồi quay đủ một vòng hoặc bấm ◯ Cả vòng)." : "Chưa đúng. Tâm đường tròn ngoại tiếp là giao điểm của các đường trung trực.");
+    }
+  };
+  DE["noi-tiep"] = {
+    tao() {
+      const P = tamGiac(khung()); this.P = P;
+      const [A, B, C] = P, a = kc(B, C), b = kc(C, A), c = kc(A, B), p = a + b + c;
+      this.O = [(a * A[0] + b * B[0] + c * C[0]) / p, (a * A[1] + b * B[1] + c * C[1]) / p];
+      const s = p / 2; this.r = Math.sqrt(s * (s - a) * (s - b) * (s - c)) / s;
+      BV.datDeBai(deTamGiac(P));
+      $("de").innerHTML = "Dựng <b>đường tròn nội tiếp</b> tam giác ABC: dựng hai tia phân giác, lấy giao điểm I làm tâm, bán kính là khoảng cách từ I đến một cạnh.";
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("compa");
+    },
+    cham() {
+      if (coDuongTron(this.O, this.r, 4)) bao(true, "Đúng, đường tròn tiếp xúc với cả ba cạnh.");
+      else bao(false, cungCua().some(g => kc(g.O, this.O) < 4) ? "Tâm đúng rồi, bán kính chưa đúng: hạ đường vuông góc từ tâm xuống một cạnh để lấy bán kính." : "Chưa đúng. Tâm đường tròn nội tiếp là giao điểm của các đường phân giác.");
+    }
+  };
+  DE["luc-giac"] = {
+    tao() {
+      const K = khung(), O = [K.c[0], K.c[1] + K.m * .04], R = Math.round(Math.min(K.m * .3, 4.5 * CM)), a = rnd(-PI, PI);
+      this.O = O; this.R = R; this.V = [0, 1, 2, 3, 4, 5].map(k => theoGoc(O, a + k * PI / 3, R));
+      BV.datDeBai([{ loai: "cung", O, r: R, t0: 0, sw: 2 * PI }, diem(O, "O", false, -18, 18), diem(this.V[0], "A", false, 8, -6)]);
+      $("de").innerHTML = "Dựng <b>lục giác đều ABCDEF</b> nội tiếp đường tròn (O): giữ khẩu độ bằng bán kính, cắm kim lần lượt vào A, B, … để đặt các đỉnh, rồi nối các đỉnh bằng thước.";
+      traLoi.innerHTML = nutKT(); $("btnKT").onclick = () => this.cham(); BV.moDungCu("compa");
+    },
+    cham() {
+      const V = this.V, ds = duongCua().filter(g => g.kieu === "doan");
+      const noi = (X, Y) => ds.some(g => (kc(g.A, X) < 5 && kc(g.B, Y) < 5) || (kc(g.A, Y) < 5 && kc(g.B, X) < 5));
+      let canh = 0; for (let k = 0; k < 6; k++) if (noi(V[k], V[(k + 1) % 6])) canh++;
+      if (canh === 6) bao(true, "Đúng, đã có đủ 6 cạnh của lục giác đều.");
+      else bao(false, `Mới có ${canh}/6 cạnh nối đúng hai đỉnh liên tiếp. Các đỉnh cách nhau đúng một bán kính trên đường tròn.`);
+    }
+  };
+
+  /* ---------- kết quả cho học sinh (chụp màn hình gửi thầy) */
+  function maKiemTra(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return (h >>> 0).toString(36).slice(-5).toUpperCase(); }
+  function ghiKetQua(hetLuot) {
+    if (!laHS) return;
+    const t = new Date(), gio = t.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) + " " + t.toLocaleDateString("vi-VN");
+    let ten = ""; try { ten = localStorage.getItem("bv-ten") || ""; } catch (e) {}
+    const diemTxt = bai === "do-goc" ? `${S.dung}/${S.soCau}` : "Đạt";
+    if (bai === "do-goc" && !hetLuot) return;
+    kq.innerHTML += `<div style="margin-top:6px;background:#fff;color:#1d2742;border-radius:10px;padding:8px 10px">
+      <label>Họ tên: <input id="ipTen" value="${ten.replace(/"/g, "&quot;")}" style="width:160px"></label>
+      <div id="phieuKQ" style="margin-top:4px"></div></div>`;
+    const capNhat = () => { const tn = $("ipTen").value.trim(); try { localStorage.setItem("bv-ten", tn); } catch (e) {}
+      $("phieuKQ").innerHTML = `<b>${TEN[bai]}</b> · Kết quả: <b>${diemTxt}</b> · ${gio} · Mã: <b>${maKiemTra([tn, bai, diemTxt, gio].join("|"))}</b><br><span style="font-size:12px">Chụp màn hình này gửi thầy.</span>`; };
+    $("ipTen").oninput = capNhat; capNhat();
+  }
+
+  /* ---------- điều khiển */
+  function moi(giuDiem) {
+    deSo++; kq.innerHTML = ""; if (!giuDiem) { S.soCau = 0; S.dung = 0; }
+    ["thuoc", "dodo", "compa"].forEach(l => BV.dongDungCu(l));
+    BV.chonCu("but"); BV.dat("anSo", false); DE[bai].tao(); coBan(); BV.ve();
+  }
+  $("selBai").onchange = () => { bai = $("selBai").value; const u = new URL(location.href); u.searchParams.set("bai", bai); history.replaceState(null, "", u); moi(); };
+  $("btnMoi").onclick = () => moi(bai === "do-goc");
+  $("btnGiao").onclick = () => {
+    const u = new URL(location.href); u.search = ""; u.hash = ""; u.searchParams.set("bai", bai); u.searchParams.set("hs", "1");
+    const url = u.href;
+    try { const qr = qrcode(0, "M"); qr.addData(url); qr.make(); $("hopQR").innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true }); } catch (e) { $("hopQR").textContent = ""; }
+    $("hopTen").textContent = TEN[bai]; $("hopUrl").textContent = url; $("hop").classList.add("on");
+  };
+  $("hopDong").onclick = () => $("hop").classList.remove("on");
+  $("hop").onclick = e => { if (e.target === $("hop")) $("hop").classList.remove("on"); };
+  window.addEventListener("load", () => moi());
+  if (document.readyState === "complete") moi();
+})();
+</script>
+</body>
+</html>

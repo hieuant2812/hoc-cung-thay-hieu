@@ -195,7 +195,8 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
   - Đã sửa lỗi **mất dấu vectơ, dấu căn** khi chiếu (do quy tắc hiển thị hình TikZ đè lên công thức).
   - **✏️ Ghi bảng — viết trực tiếp lên câu đang chiếu** (nút ở góc dưới trái), khỏi phải chụp màn hình rồi dán sang app ghi chú:
     - Dùng chuột, ngón tay hoặc Apple Pencil. Khi đã dùng bút, ngón tay sẽ dùng để cuộn trang.
-    - Có bút 6 màu, 3 độ dày, bút dạ quang, thước kẻ đoạn thẳng (tự hít góc 15°), tia laser tự mờ, tẩy từng nét, hoàn tác, xoá trang, ẩn/hiện nét.
+    - Có bút 6 màu, 3 độ dày, bút dạ quang, tia laser tự mờ, tẩy từng nét, hoàn tác, xoá trang, ẩn/hiện nét.
+    - **Dụng cụ:** thước thẳng có vạch cm, thước đo độ và compa đặt thẳng lên câu đang chiếu (xem mục 4d1).
     - **Bảng trắng** (có lưới ô vuông) để nháp, và nút 📷 lưu ảnh câu hỏi kèm nét viết.
     - Nét vẽ gắn với từng câu: chuyển câu rồi quay lại vẫn còn; đổi cỡ chữ hay cuộn thì nét đi theo nội dung.
     - Phím tắt: B bút, H dạ quang, R thước, K laser, E tẩy, W bảng trắng, X xoá trang, Ctrl/⌘+Z hoàn tác, Esc tắt bút.
@@ -216,6 +217,29 @@ Mười trò chơi chiếu lên màn hình cho cả lớp cùng tham gia, câu h
 - **Liên kết với mô phỏng**:
   - Mỗi thẻ mô phỏng (Toán, Lí, Hoá lớp 10–12) có nút “🎯 Chiếu 5 câu luyện tập”, lấy câu từ các dạng liên quan.
   - Cây ngân hàng ở trang Ra đề hiện các mô phỏng của từng chương.
+
+## 4d1. Thước thẳng, thước đo độ, compa và trang Bảng vẽ (`bangve.html`)
+
+Thước và compa là **dụng cụ của bút ghi bảng**, giống phần cây viết trong app Ghi chú: bật **✏️ Ghi bảng** là thanh bút có thêm 4 nút thước thẳng, thước đo độ, compa và **•A** đặt điểm. Dụng cụ dùng được ở mọi trang có bút (Trên lớp, Trò chơi, Bảng vẽ).
+
+- **Cầm nắm chung:** kéo thân dụng cụ để dời, kéo núm ↻ để xoay (trên máy cảm ứng: hai ngón tay để xoay thước), bấm × để cất. Đầu dụng cụ tự **hít** vào điểm, đầu đoạn thẳng và giao điểm có sẵn (tắt bằng nút **Hít**).
+- **Thước thẳng:** đặt bút sát mép có vạch rồi kéo dọc mép là ra nét thẳng. Chọn **Đoạn / Tia / Đường**. Nút **Vạch** ẩn vạch chia để thành thước thẳng không chia khi dạy dựng hình.
+- **Thước đo độ:** tâm thước hít vào đỉnh góc; xoay núm cho vạch 0 trùng một cạnh; kéo **kim đỏ** tới cạnh kia, kính lúp phóng to vạch chia, ô số hiện cả vòng trong (đỏ) và vòng ngoài (xanh). Chạm vào vạch chia để chấm một điểm tại đó; **⟶ Kẻ theo kim** kẻ tia từ tâm theo kim. Nút **Số đo** ẩn số để hỏi học sinh.
+- **Compa:** kéo chân kim để cắm (hít vào điểm), kéo đầu chì để mở khẩu độ (bán kính hiện bằng cm, kéo đầu chì tới một điểm là lấy khẩu độ theo đoạn có sẵn), kéo **núm ↻ trên đỉnh** quanh kim để vẽ cung; quay đủ vòng hoặc bấm **◯ Cả vòng** là ra đường tròn. Nhấc compa sang chỗ khác vẫn giữ khẩu độ; **🔒 Khẩu độ** để khoá hẳn. **Compa luôn để lại tâm**: một điểm có tên O, O₁, O₂… (trừ khi kim cắm đúng vào điểm đã có).
+- **Điểm và tên:** nút **•A**, chạm chỗ trống hoặc giao điểm để đặt điểm (tự đặt tên A, B, C…); chạm vào điểm đã có để đổi tên. Nút **Tên** ẩn/hiện tên điểm.
+- Phím tắt khi bút đang bật: **R** thước thẳng, **G** thước đo độ, **C** compa, **P** đặt điểm.
+
+**Trang Bảng vẽ** (menu Giáo viên → 📐 Bảng vẽ) là bảng trắng có lưới ô 1 cm, bút bật sẵn, có các bài tự chấm:
+
+| Bài | Học sinh làm | Máy chấm |
+|---|---|---|
+| Đo góc (Toán 6) | 10 góc ngẫu nhiên, đặt thước đo độ rồi nhập số đo | Đúng nếu lệch ≤ 1°; báo riêng lỗi đọc nhầm vòng số |
+| Vẽ góc cho trước số đo (Toán 6) | Vẽ tia Oy để góc xOy bằng số đo cho trước | Tia từ O, lệch ≤ 1,2° |
+| Trung trực, phân giác (ôn lớp 7, dùng ở Toán 9) | Dựng bằng compa và thước | Đúng vị trí và có dùng compa |
+| Đường tròn ngoại tiếp, nội tiếp tam giác (Toán 9) | Dựng tâm rồi vẽ đường tròn | Tâm và bán kính đúng (sai số 4 px) |
+| Lục giác đều nội tiếp (Toán 9) | Đặt đỉnh bằng compa, nối bằng thước | Đủ 6 cạnh |
+
+Bấm **📱 Giao cho lớp** để hiện mã QR; học sinh quét là mở đúng bài trên điện thoại. Làm xong, màn hình học sinh hiện họ tên, kết quả, giờ làm và một **mã kiểm tra** để chụp màn hình gửi thầy (chưa tự gửi điểm về máy thầy).
 
 ## 4e. Tự học (`luyentap.html`)
 - **Học sinh**:

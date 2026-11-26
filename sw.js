@@ -14,11 +14,11 @@ const NT = "hcth-nt";
 /* Lõi nhẹ cho học sinh — tải sẵn ngay lần đầu vào web. Công cụ giáo viên tải sau (nút 📥 hoặc khi mở trang). */
 const SHELL = [
   "./", "./index.html", "./mophong.html", "./luyentap.html", "./tailieu.html", "./hs.html",
-  "./config.js", "./manifest.webmanifest",
+  "./bangve.html", "./config.js", "./manifest.webmanifest",
   "./assets/style.css", "./assets/fonts.css", "./assets/site.js", "./assets/ngoaituyen.js",
   "./data/sims.js", "./data/chuongtrinh.js", "./data/sotay.js", "./data/sotaybai-10.js", "./data/sotaybai-11.js", "./data/sotaybai-12.js", "./data/hinhve-sotay.js",
   "./assets/sotay.js", "./assets/lophoc.js", "./assets/chon-cau.js", "./assets/hinhtudong.js", "./assets/phongmang.js",
-  "./assets/nhd/core.js", "./assets/nhd/store.js", "./assets/saoluu.js", "./assets/dongbo.js", "./assets/lib/jszip.min.js",
+  "./assets/butve.js", "./assets/lib/qrcode.js", "./assets/nhd/core.js", "./assets/nhd/store.js", "./assets/saoluu.js", "./assets/dongbo.js", "./assets/lib/jszip.min.js",
   "./assets/tailieu.js", "./assets/decuong-tex.js", "./assets/thcs-bank.js", "./assets/ts10.js",
   "./data/decuong/index.json", "./data/decuong/hinh/ds.json",
   "./assets/katex/katex.min.css", "./assets/katex/katex.min.js",
