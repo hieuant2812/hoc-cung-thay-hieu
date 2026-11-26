@@ -6,6 +6,15 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="assets/lophoc.js"></script><script src="assets/sotay.js?v=3"></script>
 <script src="assets/katex/katex.min.js"></script>
+<style>
+.web-hs{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;margin:14px 0 6px;padding:14px 16px;border:1.5px solid #bfe3f2;border-radius:14px;background:#f2fbff}
+.web-hs-chu{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1 1 320px}
+.web-hs-chu span{color:#46506a;font-size:.93em}
+.web-hs-chu code{font-size:.85em;color:#1f6fb2;word-break:break-all}
+.web-hs-nut{display:flex;flex-wrap:wrap;gap:8px}
+.web-hs-qr{flex-basis:100%;display:flex;flex-direction:column;align-items:center;gap:6px}
+.web-hs-qr svg{width:220px;height:220px;background:#fff;border-radius:8px}
+</style>
 <script src="assets/nhd/core.js"></script><script src="assets/hinhtudong.js"></script><script src="assets/nhd/store.js"></script><script src="assets/chon-cau.js"></script>
 <style>
 .lt-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 14px}
@@ -48,6 +57,14 @@
     <h1>Tự học</h1>
     <p>Luyện tập theo chương, dạng, mức độ ngay trên điện thoại — chấm ngay, có lời giải. Sổ tay kiến thức theo từng bài: tóm tắt lí thuyết, dạng bài có giải mẫu, sơ đồ tư duy.</p>
   </section>
+  <div class="web-hs" id="webHS" hidden>
+    <div class="web-hs-chu"><b>🎒 Web học sinh</b><span>Trang chính thức để gửi cho học sinh: các em đăng nhập, làm bài thầy giao và xem kết quả của mình.</span>
+      <code id="webHSurl"></code></div>
+    <div class="web-hs-nut"><a class="btn" id="webHSmo" target="_blank" rel="noopener">Mở web học sinh ↗</a>
+      <button class="btn ghost" id="webHSchep" type="button">📋 Sao chép liên kết</button>
+      <button class="btn ghost" id="webHSqr" type="button" aria-expanded="false">📱 Mã QR</button></div>
+    <div class="web-hs-qr" id="webHSqrBox" hidden></div>
+  </div>
   <div class="lt-tabs" id="ltTabs">
     <button data-t="lt">✍️ Luyện tập</button>
     <button data-t="st">📘 Sổ tay kiến thức</button>
@@ -102,6 +119,27 @@
   </section>
 </main>
 <footer id="foot"></footer>
+<script>
+/* Nút sang web học sinh (SITE.webHS trong config.js) */
+(function () {
+  const url = (window.SITE || {}).webHS; if (!url) return;
+  const $ = id => document.getElementById(id);
+  $("webHS").hidden = false; $("webHSurl").textContent = url; $("webHSmo").href = url;
+  $("webHSchep").onclick = () => {
+    const xong = () => { $("webHSchep").textContent = "✓ Đã sao chép"; setTimeout(() => $("webHSchep").textContent = "📋 Sao chép liên kết", 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(xong, () => prompt("Sao chép liên kết:", url)); else prompt("Sao chép liên kết:", url);
+  };
+  $("webHSqr").onclick = () => {
+    const box = $("webHSqrBox"), mo = box.hidden; box.hidden = !mo; $("webHSqr").setAttribute("aria-expanded", mo);
+    if (!mo || box.firstChild) return;
+    box.textContent = "Đang tạo mã…";
+    napThuVien("assets/lib/qrcode.js").then(() => {
+      const qr = qrcode(0, "M"); qr.addData(url); qr.make();
+      box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true }) + "<small>Học sinh quét mã để mở web học sinh</small>";
+    }).catch(e => { box.textContent = e.message; });
+  };
+})();
+</script>
 <script>
 (function () {
   "use strict";

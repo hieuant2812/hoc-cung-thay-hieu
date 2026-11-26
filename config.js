@@ -7,10 +7,13 @@ window.SITE = {
   truong: "Trường THPT An Nhơn Tây",
   chanTrang: "Phát triển bởi Thầy Hiếu - GV Toán Trường THPT An Nhơn Tây - TP.HCM",
   namBatDau: 2026,
-  phienBan: "2026.11.26",   // đổi số này mỗi lần đăng bản mới → máy học sinh tự cập nhật bộ đệm
+  phienBan: "2026.11.26b",   // đổi số này mỗi lần đăng bản mới → máy học sinh tự cập nhật bộ đệm
 
   /* Địa chỉ web công khai — dùng để tạo mã QR cho học sinh vào trò chơi qua Internet */
   diaChiWeb: "https://hieuant2812.github.io/hoc-cung-thay-hieu/",
+
+  /* Web riêng cho học sinh (kho hoc-cung-Thay-Hieu-HS): trang Tự học có nút mở và mã QR gửi cho lớp. Để trống thì ẩn. */
+  webHS: "https://hieuant2812.github.io/hoc-cung-Thay-Hieu-HS/",
 
   /* Kết nối học sinh – giáo viên: dán URL ứng dụng web Apps Script (đuôi /exec) vào đây.
      Để trống thì web vẫn chạy, kết quả học sinh chỉ lưu trên máy của em đó. Xem trang lophoc.html. */
