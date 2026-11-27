@@ -127,6 +127,15 @@
       </div>
 
       <div class="card" style="margin-top:18px">
+        <div class="row" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><h3 style="margin:0">Các lượt tự học</h3>
+          <div class="row" style="gap:8px"><label class="f" style="margin:0">Học sinh<select id="luotHS"><option value="">Tất cả</option></select></label>
+          <button class="btn sm ghost" id="btnLuotCSV" style="align-self:end">⬇ Tải (Excel)</button></div></div>
+        <p class="small muted" style="margin:6px 0 10px">Mỗi lần em bấm luyện rồi nộp là một lượt, theo lớp và khoảng ngày ở trên. <b>Vào làm</b> là lúc em nhận câu, <b>Nộp bài</b> là lúc em bấm nộp. Lượt em mở ra mà chưa nộp thì không hiện.</p>
+        <div id="luotTom" class="small" style="margin-bottom:8px"></div>
+        <div class="tbl-wrap"><table class="tbl" id="tLuot"><thead><tr><th>Họ và tên</th><th>Kiểu luyện</th><th>Dạng</th><th>Vào làm</th><th>Nộp bài</th><th class="num">Thời gian làm</th><th class="num">Đúng</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
         <div class="row" style="justify-content:space-between"><h3 style="margin:0">Bài tự học thầy giao</h3><button class="btn sm green" id="btnMoGiao">＋ Giao bài mới</button></div>
         <p class="small muted" style="margin:6px 0 10px">Em nào làm đúng đủ số câu trong các dạng thầy chọn trước hạn là xong. Học sinh thấy nhắc ở trang chính; quá hạn mà chưa xong, tên em hiện ở cột “Chưa xong”.</p>
         <form id="fGiao" class="grid-form hidden" style="margin-bottom:12px">
@@ -443,6 +452,7 @@
   $("#btnTH").onclick = () => xemTH();
   async function xemTH() {
     if (!$("#thLop").value) return;
+    xemLuot();
     try { thDuLieu = await goi("gv.tuHoc", { maLop: $("#thLop").value, tu: $("#thTu").value, den: $("#thDen").value }); } catch (e) { return bao(esc(e.message), "red"); }
     const hs = thDuLieu.hs.sort((a, b) => b.chuoiDaiNhat - a.chuoiDaiNhat || b.soNgayDat - a.soNgayDat || b.dung - a.dung || a.hoTen.localeCompare(b.hoTen, "vi"));
     let hang = 0, truoc = null;
@@ -455,6 +465,36 @@
       <td class="num">${h.dung} / ${h.lam}</td><td class="num">${h.chuoiHienTai ? "🔥" + h.chuoiHienTai : 0}</td><td class="num">${h.soLoi}</td><td class="small">${dmy(h.ngayCuoi) || "chưa học"}</td></tr>`).join("")
       || `<tr><td colspan="8" class="muted">Lớp chưa có học sinh đã duyệt.</td></tr>`;
   }
+  /* ---- từng lượt tự học: giờ vào làm, giờ nộp ---- */
+  let luotDL = null;
+  const KIEU_LUYEN = { dang: "Theo dạng", loi: "Ôn sổ lỗi", goiy: "Theo gợi ý", giao: "Bài thầy giao" };
+  const gioNgay = s => { if (!s) return ""; const d = new Date(s); if (isNaN(d)) return ""; return d.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric" }); };
+  const thoiLuong = (a, b) => { const s = Math.round((new Date(b) - new Date(a)) / 1000); if (!a || !(s >= 0)) return ""; const p = Math.floor(s / 60), g = Math.floor(p / 60); return g ? `${g} giờ ${p % 60} phút` : p ? `${p} phút ${s % 60} giây` : `${s} giây`; };
+  const kieuLuot = l => (KIEU_LUYEN[l.cheDo] || "Luyện") + (l.giao ? `: ${l.giao}` : "");
+  async function xemLuot() {
+    luotDL = null; $("#luotTom").textContent = "Đang tải…"; $("#tLuot tbody").innerHTML = "";
+    try { luotDL = await goi("gv.tuHoc.luot", { maLop: $("#thLop").value, tu: $("#thTu").value, den: $("#thDen").value }); }
+    catch (e) { $("#luotTom").innerHTML = /Không có chức năng/.test(e.message) ? `<span style="color:#c0392b">Máy chủ chưa cập nhật. Thầy dán Code.gs mới và triển khai <b>Phiên bản mới</b> thì bảng này mới có.</span>` : esc(e.message); return; }
+    const cu = $("#luotHS").value, ten = {}; luotDL.luot.forEach(l => ten[l.hsId] = l.hoTen);
+    $("#luotHS").innerHTML = `<option value="">Tất cả</option>` + Object.keys(ten).sort((a, b) => ten[a].localeCompare(ten[b], "vi")).map(id => `<option value="${esc(id)}">${esc(ten[id])}</option>`).join("");
+    if (ten[cu]) $("#luotHS").value = cu;
+    veLuot();
+  }
+  function luotLoc() { const id = $("#luotHS").value; return luotDL ? luotDL.luot.filter(l => !id || l.hsId === id) : []; }
+  function veLuot() {
+    const ds = luotLoc();
+    $("#luotTom").innerHTML = luotDL.tong ? `${ds.length} lượt` + (luotDL.tong > luotDL.luot.length ? ` (hiện ${luotDL.luot.length} lượt mới nhất trong ${luotDL.tong})` : "") : "";
+    $("#tLuot tbody").innerHTML = ds.map(l => `<tr><td>${esc(l.hoTen)}</td><td class="small">${esc(kieuLuot(l))}</td><td class="small">${esc(l.dang.join(", "))}</td>
+      <td class="small">${gioNgay(l.batDau) || "—"}</td><td class="small">${gioNgay(l.nopLuc)}</td><td class="num">${thoiLuong(l.batDau, l.nopLuc) || "—"}</td><td class="num"><b>${l.dung}</b> / ${l.soCau}</td></tr>`).join("")
+      || `<tr><td colspan="7" class="muted">Chưa có lượt tự học nào trong khoảng ngày này.</td></tr>`;
+  }
+  $("#luotHS").onchange = () => luotDL && veLuot();
+  $("#btnLuotCSV").onclick = () => {
+    if (!luotDL) return;
+    const tenLop = ($("#thLop").selectedOptions[0] || {}).textContent || "";
+    taiCSV(`LuotTuHoc_${tenLop}_${luotDL.tu}_${luotDL.den}`, [["Họ và tên", "Kiểu luyện", "Dạng", "Vào làm", "Nộp bài", "Thời gian làm", "Số câu đúng", "Số câu"]]
+      .concat(luotLoc().map(l => [l.hoTen, kieuLuot(l), l.dang.join(", "), gioNgay(l.batDau), gioNgay(l.nopLuc), thoiLuong(l.batDau, l.nopLuc), l.dung, l.soCau])));
+  };
   $("#btnTHCSV").onclick = () => {
     if (!thDuLieu) return;
     const tenLop = ($("#thLop").selectedOptions[0] || {}).textContent || "";
