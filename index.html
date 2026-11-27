@@ -34,7 +34,7 @@
     <span class="go">Mở kho mô phỏng →</span>
   </a>
     <div class="home-ds">
-    <a class="card lk" href="luyentap.html" style="background:linear-gradient(120deg,#e8faf6,#eaf6ff)"><span class="ic">✍️</span><span class="nd"><b>Tự học</b><span class="muted small">Luyện tập theo chương, dạng, mức độ — chấm ngay, có lời giải. Sổ tay kiến thức Toán 10, 11, 12.</span></span><span class="btn green sm">Mở →</span></a>
+    <a class="card lk" id="lkWebHS" href="https://hieuant2812.github.io/hoc-cung-Thay-Hieu-HS/" target="_blank" rel="noopener" style="background:linear-gradient(120deg,#e8faf6,#eaf6ff)"><span class="ic">🎒</span><span class="nd"><b>Web học sinh</b><span class="muted small">Tự học có sổ lỗi sai, Sổ tay kiến thức giải đủ bước, làm bài kiểm tra thầy giao</span></span></a>
     <a class="card lk" href="tailieu.html" style="background:linear-gradient(120deg,#eef4ff,#e9fbff)"><span class="ic">📚</span><span class="nd"><b>Tài liệu & đề cương</b><span class="muted small">Đề cương Toán 10 – 12, bài tập Toán 6 – 9 theo dạng, 🎯 ôn thi vào lớp 10.</span></span><span class="btn blue sm">Mở →</span></a>
     <a class="card lk" href="hs.html" style="background:linear-gradient(120deg,#fff0e6,#f0e9ff)"><span class="ic">📱</span><span class="nd"><b>Vào phòng thi</b><span class="muted small">Thầy chiếu trò chơi lên bảng → em nhập mã phòng 6 số để trả lời bằng điện thoại.</span></span><span class="btn coral sm">Mở →</span></a>
     </div>
@@ -67,7 +67,7 @@
     <a class="card lk" href="phantich.html" style="background:linear-gradient(120deg,#fff0ea,#ffe9f1)"><span class="ic">📈</span><span class="nd"><b>Phân tích kết quả</b><span class="muted small">Tỉ lệ đúng từng câu, dạng còn yếu, phổ điểm — sinh đề ôn đúng chỗ yếu.</span></span><span class="btn coral sm">Mở →</span></a>
     <a class="card lk" href="khbd.html" style="background:linear-gradient(120deg,#fff4e6,#ffeef5)"><span class="ic">🗂</span><span class="nd"><b>Soạn kế hoạch bài dạy</b><span class="muted small">KHBD theo CV 5512 kèm năng lực số; tải Word công thức Equation.</span></span><span class="btn coral sm">Mở →</span></a>
     <a class="card lk" href="beamer.html" style="background:linear-gradient(120deg,#e9f6ef,#eef3ff)"><span class="ic">🖥</span><span class="nd"><b>Trình chiếu Beamer</b><span class="muted small">Slide nền bảng xanh, lời giải hiện từng bước; tải .tex biên dịch XeLaTeX.</span></span><span class="btn green sm">Mở →</span></a>
-    <a class="card lk" href="lophoc.html" style="background:linear-gradient(120deg,#eafaf1,#e8f4ff)"><span class="ic">👥</span><span class="nd"><b>Lớp học</b><span class="muted small">Giao bài cho lớp, xem kết quả học sinh gửi về Google Trang tính.</span></span><span class="btn green sm">Mở →</span></a>
+    <a class="card lk" href="quanly.html" style="background:linear-gradient(120deg,#eafaf1,#e8f4ff)"><span class="ic">👥</span><span class="nd"><b>Quản lí lớp</b><span class="muted small">Duyệt học sinh, nạp ngân hàng, giao bài, mở bài kiểm tra, theo dõi và thống kê</span></span></a>
       </div>
     </div>
     <div class="grid2 home-cong">
@@ -121,5 +121,6 @@ NHD.Store.count().then(n => {
   if (!NgoaiTuyen.daTai("gv")) NgoaiTuyen.tai("gv", { im: true }).catch(() => {});
 }).catch(() => {});
 </script>
+<script>(function () { const u = (window.SITE || {}).webHS, a = document.getElementById("lkWebHS"); if (u && a) a.href = u; })();</script>
 </body>
 </html>

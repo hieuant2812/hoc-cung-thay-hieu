@@ -1,0 +1,86 @@
+/* hs.css — bổ sung cho web học sinh và trang quản lí (dựa trên style.css của web GV) */
+.wrap.narrow{width:min(760px,100% - 32px)}
+.wrap.mid{width:min(1080px,100% - 32px)}
+input[type=password],input[type=email]{font:inherit;color:inherit;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type=password]:focus,input[type=email]:focus{border-color:var(--c);box-shadow:0 0 0 3px var(--c2)}
+.form{display:grid;gap:14px;margin-top:12px}
+.form input{font-size:16px;padding:11px 12px}            /* 16px để iPhone không tự phóng to */
+.form h3{margin:0}
+.btn.full{width:100%;padding:13px 16px;font-size:16px}
+.loi{color:#d11a45;font-size:14px;min-height:0}
+.loi:empty{display:none}
+.row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+.row.left{justify-content:flex-start}
+dialog.card{border:1px solid var(--line);max-width:420px;width:calc(100% - 32px);padding:22px}
+dialog::backdrop{background:rgba(20,28,48,.45)}
+.big .ill.ico{display:grid;place-items:center;font-size:64px;height:120px}
+.big[aria-disabled=true]{opacity:.8}
+.hero.sm{margin-top:4px}
+@media (max-width:560px){.hero.sm{padding:20px}.hero.sm h1{font-size:28px}.big{padding:20px}.big h2{font-size:24px}}
+
+/* bảng quản lí */
+.tbl-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fff}
+table.tbl{border-collapse:collapse;width:100%;font-size:14px}
+table.tbl th,table.tbl td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:middle}
+table.tbl th{background:#fbf6ee;font-weight:700;white-space:nowrap;position:sticky;top:0}
+table.tbl td.num,table.tbl th.num{text-align:right}
+table.tbl tr.sel{background:#eef4ff}
+.ma{font:700 18px/1 ui-monospace,Menlo,monospace;letter-spacing:2px;background:var(--bg2);padding:4px 8px;border-radius:8px}
+.tt{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.tt.cho{background:#fff0d2;color:#946200}.tt.ok{background:#e0f6e7;color:#1b7a3c}.tt.khoa{background:#ffe3ec;color:#c21e57}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.toolbar .sp{flex:1}
+.loglist{max-height:220px;overflow:auto;font:12.5px/1.5 ui-monospace,Menlo,monospace;background:#fbf6ee;border-radius:10px;padding:8px 10px;margin-top:10px}
+.grid-form{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.grid-form input[type=datetime-local]{font:inherit;border:1.5px solid var(--line);border-radius:10px;padding:7px 10px}
+label.f.chk{align-self:end;color:var(--ink);font-weight:600}
+.chips label.chip{cursor:pointer;display:inline-flex;gap:6px;align-items:center;padding:5px 12px}
+table.mx td.dang{text-align:left;white-space:normal;min-width:220px;max-width:340px}
+table.mx td.dang small{color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+table.mx input{width:44px;padding:3px 4px;text-align:center;font-size:13.5px;border-radius:7px}
+table.mx input.over{border-color:#d11a45;background:#fff0f4}
+table.mx .co{display:block;font-size:10.5px;color:var(--muted);line-height:1.1}
+table.mx td.na{color:#c9c2b5}
+table.mx tfoot td{font-weight:700}
+.tt.mo{background:#e0f6e7;color:#1b7a3c}.tt.nhap{background:#eef2f8;color:#55607a}.tt.dong{background:#ffe3ec;color:#c21e57}.tt.lam{background:#e3edff;color:#1f4fc7}.tt.nop{background:#e0f6e7;color:#1b7a3c}.tt.chua{background:#eef2f8;color:#55607a}
+.ds-bai{display:grid;gap:8px;margin-top:10px}
+.bai-dong{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;background:#fffdf9}
+.bai-dong .btn{flex:none}
+
+/* câu nói hay mỗi ngày (cuối trang) */
+.foot .loi-hay{margin:0 auto 12px;max-width:680px;text-align:center}
+.foot .loi-hay blockquote{margin:0;font-style:italic;font-size:15px;line-height:1.55;color:var(--ink)}
+.foot .loi-hay figcaption{margin-top:4px;font-size:13px;font-weight:600;color:var(--muted)}
+
+/* thống kê bài kiểm tra */
+.tk-luoi{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:700px){.tk-luoi{grid-template-columns:1fr}}
+#cTK h4{margin:16px 0 6px}
+.tl{font-weight:700;padding:1px 8px;border-radius:999px}
+.tl.yeu{background:#ffe3ec;color:#c21e57}.tl.kha{background:#fff0d2;color:#946200}.tl.tot{background:#e0f6e7;color:#1b7a3c}
+.tt.hen{background:#efe7ff;color:#6a3fd6}
+.tbl tr.canh td{background:#fff5f7}
+
+/* trang chính: nhắc bài giao, lịch sử điểm */
+.nhac-giao{display:grid;gap:8px;margin-top:14px}
+.nhac-giao a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:14px;background:#fff8e6;border:1px solid #f3d58a;color:var(--ink);text-decoration:none}
+.nhac-giao a.qua{background:#fff0f4;border-color:#f6a8bf}
+.nhac-giao a small{display:block;color:var(--muted);font-size:12.5px}
+.nhac-giao .tien{font:800 16px var(--font-h);white-space:nowrap}
+.bieu-do{width:100%;height:auto;display:block;margin-top:8px}
+.bieu-do .luoi{stroke:#e9eef8}.bieu-do .em{fill:none;stroke:var(--blue);stroke-width:2.5}.bieu-do .lop{fill:none;stroke:#b4bdd0;stroke-width:2;stroke-dasharray:5 4}
+.bieu-do circle.em{fill:var(--blue);stroke:#fff;stroke-width:2}.bieu-do circle.tt{fill:var(--violet)}
+.bieu-do text{font:600 11px var(--font);fill:var(--muted)}
+.ls-bang{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.ls-bang td{padding:6px 4px;border-top:1px solid var(--line)}
+.ls-bang td.num{text-align:right;white-space:nowrap}
+.thong-bao-lop{display:grid;gap:8px;margin-top:14px}
+.tbl-lop{padding:12px 14px;border-radius:14px;background:#eef4ff;border:1px solid #c9d8fb}
+.tbl-lop p{margin:4px 0 0;white-space:pre-line}
+.ls-bang tr.la-em td{background:#eef4ff;font-weight:700}
+/* học thêm: sổ tay, mô phỏng, tài liệu, vào thi trên lớp */
+.hoc-them{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:18px 0 6px}
+.hoc-them a{display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;text-decoration:none;color:var(--ink)}
+.hoc-them a:hover{border-color:var(--teal)}
+.hoc-them i{grid-row:span 2;font-style:normal;font-size:26px}
+.hoc-them b{font-size:15px}.hoc-them small{color:var(--muted);font-size:12.5px;line-height:1.3}

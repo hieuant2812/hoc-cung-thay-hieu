@@ -1,0 +1,709 @@
+<!doctype html>
+<!-- Trang quản lí của giáo viên (chuyển từ web học sinh gv.html, 27/11/2026). Máy chủ: SITE.mayChu trong config.js. -->
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quản lí · Học cùng Thầy Hiếu</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/hs-style.css"><link rel="stylesheet" href="assets/hs.css">
+<script src="config.js"></script><script src="assets/api.js"></script><script src="assets/loihay.js" defer></script>
+<script src="assets/lib/jszip.min.js"></script><script src="assets/nhd/core.js"></script><script src="assets/nhd/store.js"></script><script src="assets/nhd/gen.js"></script>
+</head>
+<body>
+<header class="top"><div class="wrap mid in">
+  <a class="logo" href="quanly.html"><span class="mk">H</span><span><b>Học cùng <span>Thầy Hiếu</span></b><small>Trang quản lí của giáo viên</small></span></a>
+  <nav class="nav hidden" id="nav"><a href="index.html">Web giáo viên</a><a href="https://hieuant2812.github.io/hoc-cung-Thay-Hieu-HS/" target="_blank" rel="noopener">Web học sinh ↗</a><a href="#" id="btnThoat">Đăng xuất</a></nav>
+</div></header>
+
+<main><div class="wrap mid">
+  <div id="thongBao"></div>
+
+  <section id="vDN" class="hidden">
+    <form id="fDN" class="card form" style="max-width:420px;margin:20px auto">
+      <h3>Giáo viên đăng nhập</h3>
+      <label class="f">Khoá giáo viên (KHOA_GV trong Apps Script)<input name="khoa" type="password" autocomplete="current-password" required></label>
+      <div class="loi" role="alert"></div>
+      <button class="btn blue full" type="submit">Vào trang quản lí</button>
+    </form>
+  </section>
+
+  <section id="vQL" class="hidden">
+    <div class="tabs lg" role="tablist">
+      <button data-tab="lop" role="tab" aria-selected="true">👥 Lớp học</button>
+      <button data-tab="kt" role="tab" aria-selected="false">📝 Bài kiểm tra</button>
+      <button data-tab="nh" role="tab" aria-selected="false">📚 Ngân hàng đề</button>
+      <button data-tab="th" role="tab" aria-selected="false">🔥 Tự học</button>
+    </div>
+
+    <!-- ===== bài kiểm tra ===== -->
+    <div class="pane" data-pane="kt">
+      <div class="card">
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0">Các bài kiểm tra</h3><div class="row"><button class="btn sm ghost" id="btnTaiBai">⟳ Tải lại</button><button class="btn sm green" id="btnMoTao">＋ Tạo bài mới</button></div></div>
+        <div class="tbl-wrap" style="margin-top:12px"><table class="tbl" id="tBai"><thead><tr><th>Bài</th><th>Lớp</th><th class="num">Câu</th><th class="num">Phút</th><th>Trạng thái</th><th class="num">Vào / nộp</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card hidden" id="cGS" style="margin-top:18px">
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0" id="gsTieuDe">Theo dõi</h3>
+          <div class="row"><span class="small muted" id="gsLuc"></span><button class="btn sm ghost" id="btnGS">⟳</button><button class="btn sm ghost" id="btnTK">📊 Thống kê câu</button><button class="btn sm ghost" id="btnCSV">⬇ Bảng điểm và nhận xét (Excel)</button></div></div>
+        <div id="gsTom" class="small" style="margin:8px 0"></div>
+        <div class="tbl-wrap"><table class="tbl" id="tGS"><thead><tr><th>#</th><th>Họ và tên</th><th>Trạng thái</th><th class="num">Đã làm</th><th>Vào lúc</th><th>Nộp lúc</th><th class="num">Vi phạm</th><th class="num">Điểm</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card hidden" id="cTK" style="margin-top:18px">
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0" id="tkTieuDe">Thống kê</h3><button class="btn sm ghost" id="btnDongTK">Đóng</button></div>
+        <p class="small muted" style="margin:6px 0 10px">Tỉ lệ = điểm lớp đạt được / điểm tối đa của các câu đó. Dưới 50% tô đỏ: phần lớp còn yếu, nên dạy lại.</p>
+        <div class="tk-luoi">
+          <div><h4>Theo phần</h4><table class="tbl" id="tkLoai"></table></div>
+          <div><h4>Theo mức độ</h4><table class="tbl" id="tkMuc"></table></div>
+        </div>
+        <h4>Theo dạng (chuẩn kiến thức)</h4>
+        <div class="tbl-wrap"><table class="tbl" id="tkDang"></table></div>
+        <h4>Từng câu (yếu nhất ở trên)</h4>
+        <div class="tbl-wrap"><table class="tbl" id="tkCau"></table></div>
+      </div>
+
+      <div class="card hidden" id="cTao" style="margin-top:18px">
+        <h3>Tạo bài kiểm tra từ ma trận</h3>
+        <p class="small muted" style="margin-top:0">Mỗi học sinh nhận một đề riêng: cùng dạng, cùng mức độ ở mỗi ô của ma trận, câu hỏi khác nhau, thứ tự câu và phương án được trộn.</p>
+        <form id="fBai" class="grid-form">
+          <label class="f" style="grid-column:span 2">Tên bài<input name="ten" type="text" required placeholder="VD: Kiểm tra 15 phút chương 1"></label>
+          <label class="f">Lớp<select name="maLop" required></select></label>
+          <label class="f">Môn<select name="mon"><option>Toán</option><option>Vật lí</option><option>Hoá học</option><option>KHTN</option></select></label>
+          <label class="f">Khối (ngân hàng)<select name="lop"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option selected>12</option></select></label>
+          <label class="f">Thời gian (phút)<input name="thoiGian" type="number" min="5" max="180" value="45" required></label>
+          <label class="f">Mở bài lúc (để trống: theo ô bên phải)<input name="moLuc" type="datetime-local"></label>
+          <label class="f">Đóng bài lúc (không bắt buộc)<input name="dongLuc" type="datetime-local"></label>
+          <label class="f chk"><span><input name="moNgay" type="checkbox" checked> Mở cho học sinh ngay</span></label>
+          <label class="f chk"><span><input name="tronCau" type="checkbox" checked> Đảo thứ tự câu</span></label>
+          <label class="f chk"><span><input name="tronPA" type="checkbox" checked> Đảo phương án A–D</span></label>
+          <label class="f chk" title="Rời màn hình làm bài lần 1: cảnh báo. Lần 2: khoá, chờ thầy mở trong bảng Theo dõi. Lần 3: tự nộp."><span><input name="thiNghiem" type="checkbox" checked> Thi nghiêm (rời màn hình: cảnh báo → khoá → tự nộp)</span></label>
+        </form>
+
+        <h4 style="margin:18px 0 6px">Ma trận</h4>
+        <div class="row left">
+          <button class="btn sm ghost" id="btnNapCT">Tải cấu trúc ngân hàng</button>
+          <span class="small muted" id="ctTom"></span>
+        </div>
+        <div id="ctChuong" class="chips" style="margin-top:10px"></div>
+        <div class="row left hidden" id="ctGoiY">
+          <label class="f">Số câu TN<input id="nTN" type="number" min="0" max="40" value="12" style="width:80px"></label>
+          <label class="f">Đúng/Sai<input id="nDS" type="number" min="0" max="10" value="4" style="width:80px"></label>
+          <label class="f">Trả lời ngắn<input id="nTLN" type="number" min="0" max="10" value="6" style="width:80px"></label>
+          <label class="f">% NB<input id="pNB" type="number" min="0" max="100" value="40" style="width:70px"></label>
+          <label class="f">% TH<input id="pTH" type="number" min="0" max="100" value="30" style="width:70px"></label>
+          <label class="f">% VD<input id="pVD" type="number" min="0" max="100" value="20" style="width:70px"></label>
+          <label class="f">% VDC<input id="pVDC" type="number" min="0" max="100" value="10" style="width:70px"></label>
+          <button class="btn sm violet" id="btnGoiY" style="align-self:end">✨ Gợi ý ma trận</button>
+          <button class="btn sm ghost" id="btnXoaMT" style="align-self:end">Xoá ma trận</button>
+        </div>
+        <div class="mx-wrap hidden" id="mxWrap" style="margin-top:12px"><table class="mx" id="tMX"></table></div>
+        <div id="mxTom" class="small" style="margin-top:8px"></div>
+        <div class="loi" id="taoLoi" style="margin-top:8px"></div>
+        <div class="row" style="margin-top:12px"><button class="btn ghost" id="btnHuyTao">Đóng</button><button class="btn green" id="btnTaoBai">Tạo bài kiểm tra</button></div>
+      </div>
+    </div>
+
+    <!-- ===== tự học ===== -->
+    <div class="pane" data-pane="th">
+      <div class="card">
+        <h3 style="margin-top:0">Chuyên cần tự học</h3>
+        <p class="small muted" style="margin-top:0">Mỗi ngày em làm đúng ít nhất 5 câu (khác nhau) là đạt. Chuỗi là số ngày đạt liên tiếp. Em có chuỗi dài nhất trong khoảng thời gian thầy chọn được xếp đầu để thầy cộng điểm thưởng.</p>
+        <div class="row left" style="flex-wrap:wrap;gap:10px">
+          <label class="f">Lớp<select id="thLop"></select></label>
+          <label class="f">Từ ngày<input type="date" id="thTu"></label>
+          <label class="f">Đến ngày<input type="date" id="thDen"></label>
+          <div class="row" style="align-self:end;gap:6px">
+            <button class="btn sm ghost" data-khoang="tuan">Tuần này</button>
+            <button class="btn sm ghost" data-khoang="thang">Tháng này</button>
+            <button class="btn sm ghost" data-khoang="hk1">Học kì I</button>
+            <button class="btn sm ghost" data-khoang="hk2">Học kì II</button>
+          </div>
+          <button class="btn sm blue" id="btnTH" style="align-self:end">Xem</button>
+          <button class="btn sm ghost" id="btnTHCSV" style="align-self:end">⬇ Tải (Excel)</button>
+        </div>
+        <div id="thTom" class="small" style="margin:10px 0"></div>
+        <div class="tbl-wrap"><table class="tbl" id="tTH"><thead><tr><th>Hạng</th><th>Họ và tên</th><th class="num">Chuỗi dài nhất</th><th class="num">Số ngày đạt</th><th class="num">Câu đúng / đã làm</th><th class="num">Chuỗi hiện tại</th><th class="num">Sổ lỗi</th><th>Học gần nhất</th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0">Bài tự học thầy giao</h3><button class="btn sm green" id="btnMoGiao">＋ Giao bài mới</button></div>
+        <p class="small muted" style="margin:6px 0 10px">Em nào làm đúng đủ số câu trong các dạng thầy chọn trước hạn là xong. Học sinh thấy nhắc ở trang chính; quá hạn mà chưa xong, tên em hiện ở cột “Chưa xong”.</p>
+        <form id="fGiao" class="grid-form hidden" style="margin-bottom:12px">
+          <label class="f" style="grid-column:span 2">Tên bài<input name="ten" type="text" required placeholder="VD: Ôn cực trị trước kiểm tra"></label>
+          <label class="f">Lớp<select name="maLop" required></select></label>
+          <label class="f">Môn<select name="mon"><option>Toán</option><option>Vật lí</option><option>Hoá học</option><option>KHTN</option></select></label>
+          <label class="f">Khối (ngân hàng)<select name="lop"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option selected>12</option></select></label>
+          <label class="f">Mức<select name="muc"><option value="">Mọi mức</option><option value="NB">Nhận biết</option><option value="TH">Thông hiểu</option><option value="VD">Vận dụng</option><option value="VDC">Vận dụng cao</option></select></label>
+          <label class="f">Số câu đúng cần đạt<input name="soCauDung" type="number" min="1" max="100" value="10" required></label>
+          <label class="f">Hạn nộp<input name="hanNop" type="datetime-local" required></label>
+          <div style="grid-column:1/-1"><button class="btn sm ghost" type="button" id="btnGiaoDang">Tải các dạng</button> <span class="small muted" id="giaoTom"></span><div id="giaoDang" class="chips" style="margin-top:8px"></div></div>
+          <div class="loi" id="giaoLoi" style="grid-column:1/-1"></div>
+          <div class="row" style="grid-column:1/-1"><button class="btn ghost" type="button" id="btnHuyGiao">Đóng</button><button class="btn green" type="submit">Giao bài</button></div>
+        </form>
+        <div class="tbl-wrap"><table class="tbl" id="tGiao"><thead><tr><th>Bài</th><th>Lớp</th><th>Hạn nộp</th><th class="num">Xong / đang / chưa</th><th>Chưa xong</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ===== lớp học ===== -->
+    <div class="pane on" data-pane="lop">
+      <div class="card">
+        <form id="fLop" class="row left">
+          <label class="f" style="flex:1;min-width:180px">Tạo lớp mới<input name="tenLop" type="text" placeholder="VD: 12A1" required></label>
+          <button class="btn green" type="submit" style="align-self:end">＋ Tạo lớp</button>
+        </form>
+        <p class="small muted" style="margin:8px 0 0">Mỗi lớp có một <b>mã lớp</b> 6 kí tự. Thầy đưa mã cho học sinh để các em tự tạo tài khoản, rồi duyệt ở bảng bên dưới.</p>
+        <div class="tbl-wrap" style="margin-top:12px"><table class="tbl" id="tLop"><thead><tr><th>Lớp</th><th>Mã lớp</th><th class="num">Học sinh</th><th class="num">Chờ duyệt</th><th title="Bảng xếp hạng tự học tuần cho học sinh xem">Xếp hạng</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card hidden" id="cHS" style="margin-top:18px">
+        <h3 id="hsTieuDe">Học sinh</h3>
+        <div class="toolbar">
+          <button class="btn sm green" id="btnDuyetHet">✓ Duyệt tất cả đang chờ</button>
+          <button class="btn sm ghost" id="btnDuyet">Duyệt / mở khoá mục đã chọn</button>
+          <button class="btn sm ghost" id="btnKhoa">Khoá mục đã chọn</button>
+          <button class="btn sm ghost" id="btnXoa">Xoá mục đã chọn</button>
+          <select id="selChuyen" aria-label="Lớp chuyển đến" style="max-width:170px"></select><button class="btn sm ghost" id="btnChuyen">Chuyển mục đã chọn sang lớp này</button>
+          <span class="sp"></span>
+          <button class="btn sm ghost" id="btnDongLop"></button>
+          <button class="btn sm ghost" id="btnXoaLop" title="Chỉ xoá được lớp không còn học sinh và bài kiểm tra">🗑 Xoá lớp</button>
+        </div>
+        <div id="mkTam"></div>
+        <div class="tbl-wrap"><table class="tbl" id="tHS"><thead><tr><th><input type="checkbox" id="chonHet" aria-label="Chọn tất cả"></th><th>Họ và tên</th><th>Tên đăng nhập</th><th>Trạng thái</th><th>Đăng nhập gần nhất</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3 style="margin-top:0">📢 Thông báo lớp</h3>
+        <form id="fTB" class="grid-form">
+          <label class="f" style="grid-column:1/-1">Nội dung (hiện ở đầu trang chính của học sinh)<textarea name="noiDung" rows="2" maxlength="600" required placeholder="VD: Thứ Sáu kiểm tra 15 phút chương 1, các em ôn dạng 1 và 2."></textarea></label>
+          <label class="f">Gửi cho<select name="maLop"></select></label>
+          <label class="f">Hiện trong<select name="soNgay"><option value="1">1 ngày</option><option value="3">3 ngày</option><option value="7" selected>7 ngày</option><option value="30">30 ngày</option><option value="0">Đến khi thầy xoá</option></select></label>
+          <button class="btn blue" type="submit" style="align-self:end">Đăng thông báo</button>
+        </form>
+        <div class="tbl-wrap" style="margin-top:12px"><table class="tbl" id="tTB"><thead><tr><th>Nội dung</th><th>Lớp</th><th>Đăng lúc</th><th>Hết hạn</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3 style="margin-top:0">💾 Sao lưu dữ liệu</h3>
+        <p class="small" id="slTom">Đang kiểm tra…</p>
+        <p class="small muted">Bản sao Trang tính nằm trong thư mục <b>Sao lưu web học sinh</b> trên Google Drive của thầy, giữ 8 bản gần nhất. Để bật sao lưu tự động 22 giờ tối Chủ nhật hằng tuần: trong Apps Script chọn hàm <b>batSaoLuuHangTuan</b> rồi bấm ▷ Chạy một lần (Google hỏi thêm quyền Drive, thầy cho phép).</p>
+        <button class="btn sm ghost" id="btnSaoLuu">Sao lưu ngay</button>
+      </div>
+    </div>
+
+    <!-- ===== ngân hàng đề ===== -->
+    <div class="pane" data-pane="nh">
+      <div class="card">
+        <h3>Nạp ngân hàng đề (LaTeX)</h3>
+        <p class="small muted" style="margin-top:0">Cùng định dạng với trang Ra đề: <code>\cauTN</code>, <code>\cauDS</code>, <code>\cauTLN</code>, mã câu dạng <code>T10-C1-B1-D01-NB-001</code>. Câu trùng mã sẽ được ghi đè bằng bản mới. Ngân hàng nằm trong Trang tính của thầy, học sinh không xem được.</p>
+        <div class="row left" style="margin-bottom:12px">
+          <label class="f">Môn<select id="selMon"><option>Toán</option><option>Vật lí</option><option>Hoá học</option><option>KHTN</option></select></label>
+          <label class="f">Lớp (khi file không ghi rõ)<select id="selLop"><option value="">Tự nhận</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></label>
+        </div>
+        <div class="drop" id="drop">
+          <div class="ico">📥</div><b>Kéo thả file .tex, .zip hoặc cả thư mục vào đây</b>
+          <span class="small muted">hoặc</span>
+          <div class="row" style="justify-content:center;margin-top:8px">
+            <label class="btn sm ghost">Chọn file<input type="file" id="inFile" accept=".tex,.zip" multiple hidden></label>
+            <label class="btn sm ghost">Chọn thư mục<input type="file" id="inDir" webkitdirectory hidden></label>
+          </div>
+        </div>
+        <div id="ketQuaDoc"></div>
+        <div class="prog hidden" id="prog"><i></i></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div class="row" style="justify-content:space-between"><h3 style="margin:0">Ngân hàng trên máy chủ</h3><button class="btn sm ghost" id="btnTaiNH">⟳ Tải lại</button></div>
+        <div class="tbl-wrap" style="margin-top:12px"><table class="tbl" id="tNH"><thead><tr><th>Môn</th><th class="num">Lớp</th><th class="num">Tổng</th><th class="num">TN</th><th class="num">Đ/S</th><th class="num">TLN</th><th class="num">NB</th><th class="num">TH</th><th class="num">VD</th><th class="num">VDC</th><th></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </section>
+</div></main>
+
+<footer class="foot"><div class="wrap"><div class="dev" id="chanTrang"></div></div></footer>
+
+<script>
+(function () {
+  "use strict";
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const P = API.phien("gv"), esc = API.esc;
+  $("#chanTrang").textContent = (window.SITE || {}).chanTrang || "";
+  const bao = (html, kieu) => { $("#thongBao").innerHTML = html ? `<div class="note ${kieu || "blue"}">${html}</div>` : ""; };
+  const ngay = s => { if (!s) return "—"; const d = new Date(s); return isNaN(d) ? "—" : d.toLocaleString("vi-VN", { dateStyle: "short", timeStyle: "short" }); };
+  async function cho(btn, fn) { const t = btn.textContent; btn.disabled = true; btn.textContent = "Đang xử lí…"; try { return await fn(); } finally { btn.disabled = false; btn.textContent = t; } }
+  async function goi(action, data) {
+    try { return await P.goi(action, data); }
+    catch (e) { if (e.ma === "het-phien") { P.token = null; moDN(); } throw e; }
+  }
+
+  function moDN() { $("#vQL").classList.add("hidden"); $("#nav").classList.add("hidden"); $("#vDN").classList.remove("hidden"); }
+  function moQL() { $("#vDN").classList.add("hidden"); $("#vQL").classList.remove("hidden"); $("#nav").classList.remove("hidden"); taiLop(); nhacGiaoQuaHan(); taiTB(); taiHeThong(); }
+
+  $("#fDN").onsubmit = async e => {
+    e.preventDefault(); const f = e.target; f.querySelector(".loi").textContent = "";
+    await cho(f.querySelector("button"), async () => {
+      try { const r = await API.goi("gv.dangNhap", { khoa: f.khoa.value }); P.token = r.token; f.reset(); bao(""); moQL(); }
+      catch (err) { f.querySelector(".loi").textContent = err.message; }
+    });
+  };
+  $("#btnThoat").onclick = e => { e.preventDefault(); P.token = null; moDN(); };
+
+  $$("[data-tab]").forEach(b => b.onclick = () => {
+    $$("[data-tab]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    $$("[data-pane]").forEach(p => p.classList.toggle("on", p.dataset.pane === b.dataset.tab));
+    if (b.dataset.tab === "nh") taiNH();
+    if (b.dataset.tab === "kt") { taiBai(); if (baiGS) giamSat(); }
+    if (b.dataset.tab === "th") moTH();
+  });
+
+  /* ================= lớp học ================= */
+  let dsLop = [], lopChon = null, dsHS = [];
+  async function taiLop() {
+    try { dsLop = (await goi("gv.dsLop")).lop; } catch (e) { return bao(esc(e.message), "red"); }
+    $("#tLop tbody").innerHTML = dsLop.length ? dsLop.map(l => `<tr data-ma="${esc(l.maLop)}" class="${lopChon === l.maLop ? "sel" : ""}">
+      <td><b>${esc(l.tenLop)}</b>${l.dong ? ' <span class="tt khoa">đã đóng</span>' : ""}</td><td><span class="ma">${esc(l.maLop)}</span></td>
+      <td class="num">${l.soHS}</td><td class="num">${l.choDuyet ? `<span class="tt cho">${l.choDuyet}</span>` : 0}</td>
+      <td><button class="btn sm ${l.bxh ? "green" : "ghost"}" data-bxh="${esc(l.maLop)}" data-bat="${l.bxh ? 0 : 1}" title="Cho học sinh lớp này xem bảng xếp hạng tự học tuần">${l.bxh ? "Đang bật" : "Đang tắt"}</button></td>
+      <td><button class="btn sm ghost" data-xem="${esc(l.maLop)}">Xem học sinh</button></td></tr>`).join("")
+      : `<tr><td colspan="6" class="muted">Chưa có lớp nào. Thầy tạo lớp ở ô phía trên.</td></tr>`;
+    $$("[data-xem]").forEach(b => b.onclick = () => { lopChon = b.dataset.xem; $("#mkTam").innerHTML = ""; taiLop(); });
+    $$("[data-bxh]").forEach(b => b.onclick = () => cho(b, async () => { try { await goi("gv.caiLop", { maLop: b.dataset.bxh, bxh: b.dataset.bat === "1" }); taiLop(); } catch (e) { bao(esc(e.message), "red"); } }));
+    const cu = $("#fTB").maLop.value;
+    $("#fTB").maLop.innerHTML = `<option value="*">Tất cả các lớp</option>` + dsLop.map(l => `<option value="${esc(l.maLop)}">${esc(l.tenLop)}</option>`).join("");
+    if (cu) $("#fTB").maLop.value = cu;
+    if (lopChon) xemLop(lopChon, true);
+  }
+  $("#fLop").onsubmit = async e => {
+    e.preventDefault(); const f = e.target;
+    await cho(f.querySelector("button"), async () => {
+      try { const r = await goi("gv.taoLop", { tenLop: f.tenLop.value }); f.reset(); lopChon = r.maLop; bao(`Đã tạo lớp <b>${esc(r.tenLop)}</b>, mã lớp <span class="ma">${esc(r.maLop)}</span>. Thầy gửi mã này cho học sinh.`, "green"); taiLop(); }
+      catch (err) { bao(esc(err.message), "red"); }
+    });
+  };
+
+  async function xemLop(ma, giuThongBao) {
+    lopChon = ma; const l = dsLop.find(x => x.maLop === ma) || { tenLop: ma };
+    $$("#tLop tbody tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.ma === ma));
+    $("#cHS").classList.remove("hidden");
+    $("#hsTieuDe").innerHTML = `Học sinh lớp ${esc(l.tenLop)} <span class="ma">${esc(ma)}</span>`;
+    $("#selChuyen").innerHTML = `<option value="">Chuyển sang lớp…</option>` + dsLop.filter(x => x.maLop !== ma && !x.dong).map(x => `<option value="${esc(x.maLop)}">${esc(x.tenLop)} (${esc(x.maLop)})</option>`).join("");
+    $("#btnDongLop").textContent = l.dong ? "Mở lại lớp (cho đăng kí)" : "Đóng lớp (ngừng đăng kí)";
+    if (!giuThongBao) $("#mkTam").innerHTML = "";
+    try { dsHS = (await goi("gv.dsHS", { maLop: ma })).hs; } catch (e) { return bao(esc(e.message), "red"); }
+    const TT = { cho: "chờ duyệt", ok: "đã duyệt", khoa: "đã khoá" };
+    dsHS.sort((a, b) => (a.trangThai === "cho" ? 0 : 1) - (b.trangThai === "cho" ? 0 : 1) || a.hoTen.split(" ").pop().localeCompare(b.hoTen.split(" ").pop(), "vi"));
+    $("#tHS tbody").innerHTML = dsHS.length ? dsHS.map(h => `<tr>
+      <td><input type="checkbox" class="chon" value="${esc(h.id)}" aria-label="Chọn ${esc(h.hoTen)}"></td>
+      <td>${esc(h.hoTen)}</td><td>${esc(h.tenDN)}</td><td><span class="tt ${esc(h.trangThai)}">${TT[h.trangThai] || esc(h.trangThai)}</span></td>
+      <td class="small">${ngay(h.dangNhapCuoi)}</td>
+      <td><button class="btn sm ghost" data-mk="${esc(h.id)}">Đặt lại mật khẩu</button></td></tr>`).join("")
+      : `<tr><td colspan="6" class="muted">Chưa có em nào đăng kí. Học sinh vào trang học sinh → Tạo tài khoản → nhập mã lớp.</td></tr>`;
+    $("#chonHet").checked = false;
+    $$("[data-mk]").forEach(b => b.onclick = () => cho(b, async () => {
+      try { const r = await goi("gv.datLaiMatKhau", { id: b.dataset.mk }); $("#mkTam").innerHTML = `<div class="note green">Mật khẩu tạm của <b>${esc(r.tenDN)}</b>: <span class="ma">${esc(r.matKhauTam)}</span>. Em đăng nhập rồi vào <b>Đổi mật khẩu</b> để đặt mật khẩu mới.</div>`; }
+      catch (err) { bao(esc(err.message), "red"); }
+    }));
+  }
+  $("#chonHet").onchange = e => $$(".chon").forEach(c => c.checked = e.target.checked);
+  const daChon = () => $$(".chon:checked").map(c => c.value);
+  async function doiTT(btn, ids, tt) {
+    if (!ids.length) return bao("Thầy chưa chọn học sinh nào.", "");
+    if (tt === "xoa" && !confirm(`Xoá hẳn ${ids.length} tài khoản? Không khôi phục được.`)) return;
+    await cho(btn, async () => {
+      try { const r = await goi("gv.doiTrangThai", { ids, trangThai: tt }); bao(`Đã cập nhật ${r.n} học sinh.`, "green"); await taiLop(); }
+      catch (err) { bao(esc(err.message), "red"); }
+    });
+  }
+  $("#btnDuyetHet").onclick = e => doiTT(e.target, dsHS.filter(h => h.trangThai === "cho").map(h => h.id), "ok");
+  $("#btnDuyet").onclick = e => doiTT(e.target, daChon(), "ok");
+  $("#btnKhoa").onclick = e => doiTT(e.target, daChon(), "khoa");
+  $("#btnXoa").onclick = e => doiTT(e.target, daChon(), "xoa");
+  $("#btnChuyen").onclick = e => {
+    const ids = daChon(), ma = $("#selChuyen").value;
+    if (!ids.length) return bao("Thầy chưa chọn học sinh nào.", "");
+    if (!ma) return bao("Thầy chọn lớp chuyển đến.", "");
+    cho(e.target, async () => { try { const r = await goi("gv.chuyenLop", { ids, maLop: ma }); bao(`Đã chuyển ${r.n} học sinh sang lớp <b>${esc(r.tenLop)}</b>. Các em tải lại trang là thấy bài của lớp mới.`, "green"); await taiLop(); } catch (err) { bao(esc(err.message), "red"); } });
+  };
+  $("#btnXoaLop").onclick = e => {
+    const l = dsLop.find(x => x.maLop === lopChon); if (!l) return;
+    if (!confirm(`Xoá hẳn lớp ${l.tenLop} (mã ${l.maLop})? Chỉ xoá được khi lớp không còn học sinh và bài kiểm tra.`)) return;
+    cho(e.target, async () => {
+      try { const r = await goi("gv.xoaLop", { maLop: l.maLop }); lopChon = null; $("#cHS").classList.add("hidden"); bao(`Đã xoá lớp <b>${esc(r.tenLop)}</b>.`, "green"); await taiLop(); }
+      catch (err) { bao(esc(err.message), "red"); }
+    });
+  };
+  $("#btnDongLop").onclick = e => cho(e.target, async () => {
+    const l = dsLop.find(x => x.maLop === lopChon); if (!l) return;
+    try { await goi("gv.dongLop", { maLop: l.maLop, dong: !l.dong }); await taiLop(); } catch (err) { bao(esc(err.message), "red"); }
+  });
+
+  /* ================= ngân hàng đề ================= */
+  let docDuoc = null;
+  async function nhanFile(src) {
+    const kq = $("#ketQuaDoc"); kq.innerHTML = `<p class="muted">Đang đọc file…</p>`;
+    let files;
+    try { files = await NHD.Store.collect(src); } catch (e) { kq.innerHTML = `<div class="note red">${esc(e.message)}</div>`; return; }
+    if (!files.length) { kq.innerHTML = `<div class="note">Không thấy file .tex nào.</div>`; return; }
+    const lopHint = $("#selLop").value;
+    const qs = [], dang = {}, loi = [];
+    files.forEach(f => { const r = NHD.parseBank(f.text, f.name, lopHint); qs.push(...r.questions); Object.assign(dang, r.dang); loi.push(...r.errors); });
+    const khongLop = qs.filter(q => !q.lop);
+    const theoLop = {}; qs.filter(q => q.lop).forEach(q => theoLop[q.lop] = (theoLop[q.lop] || 0) + 1);
+    docDuoc = { qs: qs.filter(q => q.lop), dang };
+    kq.innerHTML = `<div class="note ${loi.length ? "" : "green"}">Đọc ${files.length} file: <b>${docDuoc.qs.length}</b> câu hợp lệ
+      (${Object.entries(theoLop).map(([l, n]) => `lớp ${l}: ${n}`).join(", ") || "—"})${loi.length ? `, <b>${loi.length}</b> câu lỗi bị bỏ qua` : ""}${khongLop.length ? `, <b>${khongLop.length}</b> câu không rõ lớp (chọn ô Lớp rồi nạp lại)` : ""}.</div>
+      ${loi.length ? `<details><summary class="small">Xem các câu lỗi</summary><div class="loglist">${loi.slice(0, 200).map(x => esc(`${x.file} · ${x.id}: ${x.msg}`)).join("<br>")}</div></details>` : ""}
+      ${docDuoc.qs.length ? `<div class="row" style="margin-top:10px"><button class="btn blue" id="btnDay">Đưa ${docDuoc.qs.length} câu lên máy chủ (môn ${esc($("#selMon").value)})</button></div>` : ""}`;
+    const b = $("#btnDay"); if (b) b.onclick = () => dayLen(b);
+  }
+  async function dayLen(btn) {
+    const mon = $("#selMon").value, all = docDuoc.qs, GOI = 200;
+    const prog = $("#prog"), bar = prog.querySelector("i"); prog.classList.remove("hidden"); bar.style.width = "0";
+    let moi = 0, capNhat = 0;
+    await cho(btn, async () => {
+      try {
+        for (let i = 0; i < all.length; i += GOI) {
+          const goiCau = all.slice(i, i + GOI).map(q => ({ id: q.id, loai: q.loai, muc: q.muc, lop: q.lop, chuong: q.chuong, bai: q.bai, dangSo: q.dangSo, dkey: q.dkey, de: q.de, pa: q.pa, y: q.y, da: q.da, loigiai: q.loigiai, file: q.file }));
+          const dangGoi = {}; goiCau.forEach(q => { const k = q.lop + "|" + q.dkey; if (docDuoc.dang[k]) dangGoi[k] = docDuoc.dang[k]; });
+          const r = await goi("gv.napCau", { mon, questions: goiCau, dang: dangGoi });
+          moi += r.moi; capNhat += r.capNhat;
+          bar.style.width = Math.round(100 * Math.min(all.length, i + GOI) / all.length) + "%";
+        }
+        bao(`Đã đưa lên máy chủ: <b>${moi}</b> câu mới, <b>${capNhat}</b> câu cập nhật.`, "green");
+        $("#ketQuaDoc").innerHTML = ""; docDuoc = null; taiNH();
+      } catch (err) { bao(`Dừng giữa chừng (${moi + capNhat} câu đã lên): ${esc(err.message)}. Thầy bấm nạp lại, câu đã có sẽ được ghi đè, không bị trùng.`, "red"); }
+    });
+    setTimeout(() => prog.classList.add("hidden"), 1200);
+  }
+  const drop = $("#drop");
+  drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); nhanFile(e.dataTransfer); };
+  $("#inFile").onchange = e => { nhanFile(e.target.files); e.target.value = ""; };
+  $("#inDir").onchange = e => { nhanFile(e.target.files); e.target.value = ""; };
+
+  async function taiNH() {
+    let ds;
+    try { ds = (await goi("gv.thongKeNH")).nganHang; } catch (e) { return bao(esc(e.message), "red"); }
+    $("#tNH tbody").innerHTML = ds.length ? ds.map(d => `<tr><td>${esc(d.mon)}</td><td class="num">${d.lop}</td><td class="num"><b>${d.tong}</b></td>
+      ${["TN", "DS", "TLN", "NB", "TH", "VD", "VDC"].map(k => `<td class="num">${d[k] || 0}</td>`).join("")}
+      <td><button class="btn sm ghost" data-xoa-mon="${esc(d.mon)}" data-xoa-lop="${d.lop}">Xoá</button></td></tr>`).join("")
+      : `<tr><td colspan="11" class="muted">Chưa có câu nào. Thầy nạp file ở trên.</td></tr>`;
+    $$("[data-xoa-mon]").forEach(b => b.onclick = () => {
+      if (!confirm(`Xoá toàn bộ câu ${b.dataset.xoaMon} lớp ${b.dataset.xoaLop} trên máy chủ?`)) return;
+      cho(b, async () => { try { const r = await goi("gv.xoaNganHang", { mon: b.dataset.xoaMon, lop: +b.dataset.xoaLop }); bao(`Đã xoá ${r.n} câu.`, "green"); taiNH(); } catch (err) { bao(esc(err.message), "red"); } });
+    });
+  }
+  $("#btnTaiNH").onclick = taiNH;
+
+  /* ---- thông báo lớp ---- */
+  async function taiTB() {
+    let r; try { r = await goi("gv.thongBao.ds"); } catch (e) { return; }
+    $("#tTB tbody").innerHTML = r.thongBao.length ? r.thongBao.map(t => `<tr class="${t.conHan ? "" : "muted"}"><td>${esc(t.noiDung)}</td><td>${esc(t.tenLop)}</td><td class="small">${ngay(t.taoLuc)}</td>
+      <td class="small">${t.hetHan ? (t.conHan ? ngay(t.hetHan) : "đã hết hạn") : "không"}</td><td><button class="btn sm ghost" data-xoa-tb="${t.ma}" title="Xoá">🗑</button></td></tr>`).join("")
+      : `<tr><td colspan="5" class="muted">Chưa có thông báo nào.</td></tr>`;
+    $$("[data-xoa-tb]").forEach(b => b.onclick = () => cho(b, async () => { try { await goi("gv.thongBao.xoa", { ma: b.dataset.xoaTb }); taiTB(); } catch (e) { bao(esc(e.message), "red"); } }));
+  }
+  $("#fTB").onsubmit = e => {
+    e.preventDefault(); const f = e.target;
+    cho(f.querySelector("[type=submit]"), async () => {
+      try { await goi("gv.thongBao.tao", { maLop: f.maLop.value, noiDung: f.noiDung.value, soNgay: +f.soNgay.value }); f.noiDung.value = ""; bao("Đã đăng thông báo.", "green"); taiTB(); }
+      catch (err) { bao(esc(err.message), "red"); }
+    });
+  };
+  /* ---- sao lưu ---- */
+  async function taiHeThong() {
+    let r; try { r = await goi("gv.heThong"); } catch (e) { return; }
+    $("#slTom").innerHTML = (r.saoLuuCuoi ? `Lần sao lưu gần nhất: <b>${ngay(r.saoLuuCuoi)}</b>.` : "Chưa sao lưu lần nào.") + (r.henSaoLuu ? " Tự động sao lưu: <b>đang bật</b> (22 giờ tối Chủ nhật)." : ` Tự động sao lưu: <b style="color:#c21e57">chưa bật</b>.`) + ` <span class="muted">Máy chủ bản ${esc(r.phienBan)}.</span>`;
+  }
+  $("#btnSaoLuu").onclick = () => cho($("#btnSaoLuu"), async () => {
+    try { const r = await goi("gv.saoLuu"); bao(esc(r.kq), "green"); taiHeThong(); } catch (e) { bao(esc(e.message), "red"); }
+  });
+
+  /* ================= tự học: chuyên cần ================= */
+  const iso = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  function khoang(loai) {
+    const n = new Date(), y = n.getFullYear(), m = n.getMonth();
+    if (loai === "tuan") { const t2 = new Date(n); t2.setDate(n.getDate() - ((n.getDay() + 6) % 7)); const cn = new Date(t2); cn.setDate(t2.getDate() + 6); return [iso(t2), iso(cn)]; }
+    if (loai === "thang") return [iso(new Date(y, m, 1)), iso(new Date(y, m + 1, 0))];
+    const namHoc = m >= 7 ? y : y - 1;                       // năm học bắt đầu tháng 9
+    if (loai === "hk1") return [namHoc + "-09-01", (namHoc + 1) + "-01-15"];
+    return [(namHoc + 1) + "-01-16", (namHoc + 1) + "-05-31"];
+  }
+  let thDuLieu = null;
+  async function moTH() {
+    if (!dsLop.length) { try { dsLop = (await goi("gv.dsLop")).lop; } catch (e) { return bao(esc(e.message), "red"); } }
+    const cu = $("#thLop").value;
+    $("#thLop").innerHTML = dsLop.map(l => `<option value="${esc(l.maLop)}">${esc(l.tenLop)}</option>`).join("") || `<option value="">(chưa có lớp)</option>`;
+    if (cu) $("#thLop").value = cu; else if (lopChon) $("#thLop").value = lopChon;
+    if (!$("#thTu").value) { const k = khoang("tuan"); $("#thTu").value = k[0]; $("#thDen").value = k[1]; }
+    xemTH(); taiGiao();
+  }
+  $$("[data-khoang]").forEach(b => b.onclick = () => { const k = khoang(b.dataset.khoang); $("#thTu").value = k[0]; $("#thDen").value = k[1]; xemTH(); });
+  $("#btnTH").onclick = () => xemTH();
+  async function xemTH() {
+    if (!$("#thLop").value) return;
+    try { thDuLieu = await goi("gv.tuHoc", { maLop: $("#thLop").value, tu: $("#thTu").value, den: $("#thDen").value }); } catch (e) { return bao(esc(e.message), "red"); }
+    const hs = thDuLieu.hs.sort((a, b) => b.chuoiDaiNhat - a.chuoiDaiNhat || b.soNgayDat - a.soNgayDat || b.dung - a.dung || a.hoTen.localeCompare(b.hoTen, "vi"));
+    let hang = 0, truoc = null;
+    hs.forEach((h, i) => { const k = h.chuoiDaiNhat + "|" + h.soNgayDat + "|" + h.dung; if (k !== truoc) hang = i + 1; truoc = k; h.hang = h.chuoiDaiNhat ? hang : ""; });
+    const dau = hs.filter(h => h.hang === 1);
+    const dmy = s => s ? s.split("-").reverse().join("/") : "";
+    $("#thTom").innerHTML = `Từ ${dmy(thDuLieu.tu)} đến ${dmy(thDuLieu.den)} · ${hs.filter(h => h.soNgayDat).length}/${hs.length} em có ngày đạt mục tiêu`
+      + (dau.length ? ` · 🏆 Chuỗi cao nhất: ${dau.map(h => `<b>${esc(h.hoTen)}</b>`).join(", ")} (${dau[0].chuoiDaiNhat} ngày)` : "");
+    $("#tTH tbody").innerHTML = hs.map(h => `<tr class="${h.hang === 1 ? "sel" : ""}"><td>${h.hang === 1 ? "🏆 1" : h.hang}</td><td>${esc(h.hoTen)}</td><td class="num"><b>${h.chuoiDaiNhat}</b></td><td class="num">${h.soNgayDat}</td>
+      <td class="num">${h.dung} / ${h.lam}</td><td class="num">${h.chuoiHienTai ? "🔥" + h.chuoiHienTai : 0}</td><td class="num">${h.soLoi}</td><td class="small">${dmy(h.ngayCuoi) || "chưa học"}</td></tr>`).join("")
+      || `<tr><td colspan="8" class="muted">Lớp chưa có học sinh đã duyệt.</td></tr>`;
+  }
+  $("#btnTHCSV").onclick = () => {
+    if (!thDuLieu) return;
+    const tenLop = ($("#thLop").selectedOptions[0] || {}).textContent || "";
+    taiCSV(`TuHoc_${tenLop}_${thDuLieu.tu}_${thDuLieu.den}`, [["Hạng", "Họ và tên", "Tên đăng nhập", "Chuỗi dài nhất", "Số ngày đạt", "Câu đúng", "Câu đã làm", "Chuỗi hiện tại", "Sổ lỗi", "Học gần nhất"]]
+      .concat(thDuLieu.hs.map(h => [h.hang, h.hoTen, h.tenDN, h.chuoiDaiNhat, h.soNgayDat, h.dung, h.lam, h.chuoiHienTai, h.soLoi, h.ngayCuoi])));
+  };
+
+  /* ---- giao bài tự học ---- */
+  let dsGiao = [];
+  async function taiGiao() {
+    try { dsGiao = (await goi("gv.giao.ds")).giao; } catch (e) { return bao(esc(e.message), "red"); }
+    $("#tGiao tbody").innerHTML = dsGiao.length ? dsGiao.map(gx => {
+      const n = t => gx.hs.filter(h => h.trangThai === t).length, chua = gx.hs.filter(h => h.trangThai !== "xong");
+      return `<tr class="${gx.quaHan && chua.length ? "canh" : ""}"><td><b>${esc(gx.ten)}</b><br><span class="small muted">${esc(gx.mon)} ${gx.lop} · ${gx.dkeys.length} dạng${gx.muc ? " · mức " + gx.muc : ""} · đúng ${gx.soCauDung} câu</span></td>
+        <td>${esc(gx.tenLop)}</td><td class="small">${ngay(gx.hanNop)}${gx.quaHan ? ' <span class="tt khoa">quá hạn</span>' : ""}</td>
+        <td class="num">${n("xong")} / ${n("dang")} / ${n("chua")}</td>
+        <td class="small">${chua.length ? chua.map(h => esc(h.hoTen) + (h.dung ? ` (${h.dung})` : "")).join(", ") : "—"}</td>
+        <td><button class="btn sm ghost" data-xoa-giao="${gx.maGiao}" title="Xoá bài giao">🗑</button></td></tr>`;
+    }).join("") : `<tr><td colspan="6" class="muted">Chưa giao bài tự học nào.</td></tr>`;
+    $$("[data-xoa-giao]").forEach(b => b.onclick = () => { if (confirm("Xoá bài tự học đã giao này?")) cho(b, async () => { try { await goi("gv.giao.xoa", { maGiao: b.dataset.xoaGiao }); taiGiao(); } catch (e) { bao(esc(e.message), "red"); } }); });
+    return dsGiao;
+  }
+  /* vào trang quản lí: báo các bài giao đã quá hạn mà còn em chưa xong */
+  async function nhacGiaoQuaHan() {
+    const ds = await taiGiao(); if (!ds) return;
+    const qh = ds.filter(gx => gx.quaHan && gx.hs.some(h => h.trangThai !== "xong"));
+    if (qh.length) bao("📌 Bài tự học đã quá hạn còn em chưa xong:<br>" + qh.slice(0, 5).map(gx => `<b>${esc(gx.ten)}</b> (${esc(gx.tenLop)}): ${gx.hs.filter(h => h.trangThai !== "xong").map(h => esc(h.hoTen)).join(", ")}`).join("<br>") + `<br><span class="small">Xem ở thẻ 🔥 Tự học.</span>`, "red");
+  }
+  $("#btnMoGiao").onclick = () => {
+    const f = $("#fGiao"); f.classList.remove("hidden");
+    f.maLop.innerHTML = dsLop.map(l => `<option value="${esc(l.maLop)}">${esc(l.tenLop)}</option>`).join("") || `<option value="">(chưa có lớp)</option>`;
+    f.maLop.value = $("#thLop").value || f.maLop.value;
+    const l = dsLop.find(x => x.maLop === f.maLop.value); if (l && l.khoi) f.lop.value = String(l.khoi);
+    if (!f.hanNop.value) { const d = new Date(Date.now() + 7 * 86400000); d.setHours(21, 0, 0, 0); f.hanNop.value = iso(d) + "T21:00"; }
+  };
+  $("#btnHuyGiao").onclick = () => $("#fGiao").classList.add("hidden");
+  $("#btnGiaoDang").onclick = () => cho($("#btnGiaoDang"), async () => {
+    const f = $("#fGiao");
+    let r; try { r = await goi("gv.cauTrucNH", { mon: f.mon.value, lop: +f.lop.value }); } catch (e) { return ($("#giaoLoi").textContent = e.message); }
+    $("#giaoTom").textContent = r.dang.length ? `${r.dang.length} dạng. Tick các dạng giao cho học sinh.` : "Ngân hàng chưa có câu cho môn, khối này.";
+    $("#giaoDang").innerHTML = r.dang.map(d => `<label class="chip"><input type="checkbox" class="giaoD" value="${esc(d.dkey)}"> C${d.chuong} · ${esc(d.ten || d.dkey)} <small class="muted">(${d.n})</small></label>`).join("");
+  });
+  $("#fGiao").onsubmit = e => {
+    e.preventDefault(); const f = e.target; $("#giaoLoi").textContent = "";
+    const dkeys = $$(".giaoD:checked").map(c => c.value);
+    if (!dkeys.length) return ($("#giaoLoi").textContent = "Thầy bấm “Tải các dạng” rồi tick ít nhất một dạng.");
+    cho(f.querySelector("[type=submit]"), async () => {
+      try {
+        await goi("gv.giao.tao", { ten: f.ten.value, maLop: f.maLop.value, mon: f.mon.value, lop: +f.lop.value, muc: f.muc.value, soCauDung: +f.soCauDung.value, hanNop: new Date(f.hanNop.value).toISOString(), dkeys });
+        bao(`Đã giao bài <b>${esc(f.ten.value)}</b>. Học sinh lớp đó thấy nhắc ở trang chính.`, "green");
+        f.classList.add("hidden"); f.ten.value = ""; taiGiao();
+      } catch (err) { $("#giaoLoi").textContent = err.message; }
+    });
+  };
+
+  /* ================= bài kiểm tra ================= */
+  const MUC = ["NB", "TH", "VD", "VDC"], LOAI = ["TN", "DS", "TLN"], TEN_LOAI = { TN: "Trắc nghiệm", DS: "Đúng/Sai", TLN: "Trả lời ngắn" };
+  const TT_BAI = { nhap: "chưa mở", mo: "đang mở", dong: "đã đóng", hen: "hẹn giờ mở" };
+  let dsBai = [], baiGS = null, henGS = null, ct = null, M = {};
+  async function taiBai() {
+    try { dsBai = (await goi("gv.dsBai")).bai; } catch (e) { return bao(esc(e.message), "red"); }
+    $("#tBai tbody").innerHTML = dsBai.length ? dsBai.map(b => `<tr class="${baiGS === b.maBai ? "sel" : ""}">
+      <td><b>${esc(b.ten)}</b><br><span class="small muted">${esc(b.mon)} ${b.lop} · tạo ${ngay(b.taoLuc)}${b.trangThai === "hen" ? " · mở " + ngay(b.moLuc) : ""}${b.dongLuc ? " · đóng " + ngay(b.dongLuc) : ""}${b.tuyChon && (!b.tuyChon.tronCau || !b.tuyChon.tronPA || !b.tuyChon.thiNghiem) ? " · " + [!b.tuyChon.tronCau && "không đảo câu", !b.tuyChon.tronPA && "không đảo phương án", !b.tuyChon.thiNghiem && "không thi nghiêm"].filter(Boolean).join(", ") : ""}</span></td>
+      <td>${esc(b.tenLop)}<br><span class="small muted">mã ${esc(b.maLop)}</span></td><td class="num">${b.soCau}</td><td class="num">${b.thoiGian}</td>
+      <td><span class="tt ${b.trangThai}">${TT_BAI[b.trangThai] || b.trangThai}</span>${b.congBo ? ' <span class="tt ok">đã công bố</span>' : ""}</td>
+      <td class="num">${b.daVao} / ${b.daNop}</td>
+      <td class="row" style="justify-content:flex-start;flex-wrap:nowrap">
+        <button class="btn sm ghost" data-gs="${b.maBai}">Theo dõi</button>
+        ${b.trangThai === "mo" ? `<button class="btn sm ghost" data-tt="dong" data-bai="${b.maBai}">Đóng bài</button>` : `<button class="btn sm ghost" data-tt="mo" data-bai="${b.maBai}">${b.trangThai === "hen" ? "Mở ngay" : "Mở bài"}</button>`}
+        <button class="btn sm ghost" data-cb="${b.congBo ? 0 : 1}" data-bai="${b.maBai}">${b.congBo ? "Thu hồi kết quả" : "Công bố kết quả"}</button>
+        <button class="btn sm ghost" data-xoa-bai="${b.maBai}" title="Xoá bài và mọi bài làm">🗑</button></td></tr>`).join("")
+      : `<tr><td colspan="7" class="muted">Chưa có bài kiểm tra nào. Bấm “Tạo bài mới”.</td></tr>`;
+    $$("[data-gs]").forEach(b => b.onclick = () => moGS(b.dataset.gs));
+    $$("[data-tt]").forEach(b => b.onclick = () => cho(b, async () => { try { await goi("gv.suaBai", { maBai: b.dataset.bai, trangThai: b.dataset.tt }); await taiBai(); if (baiGS) giamSat(); } catch (e) { bao(esc(e.message), "red"); } }));
+    $$("[data-cb]").forEach(b => b.onclick = () => cho(b, async () => { try { await goi("gv.suaBai", { maBai: b.dataset.bai, congBo: b.dataset.cb === "1" }); await taiBai(); if (baiGS) giamSat(); } catch (e) { bao(esc(e.message), "red"); } }));
+    $$("[data-xoa-bai]").forEach(b => b.onclick = () => {
+      if (!confirm("Xoá bài kiểm tra này và toàn bộ bài làm, điểm của học sinh? Không khôi phục được.")) return;
+      cho(b, async () => { try { await goi("gv.xoaBai", { maBai: b.dataset.xoaBai }); if (baiGS === b.dataset.xoaBai) { baiGS = null; $("#cGS").classList.add("hidden"); } taiBai(); } catch (e) { bao(esc(e.message), "red"); } });
+    });
+  }
+  $("#btnTaiBai").onclick = taiBai;
+
+  /* theo dõi: tự tải lại mỗi 20 giây khi đang mở */
+  let gsDuLieu = null;
+  function moGS(ma) { baiGS = ma; $("#cGS").classList.remove("hidden"); $$("#tBai tbody tr").forEach(tr => tr.classList.toggle("sel", !!tr.querySelector(`[data-gs="${ma}"]`))); giamSat(); }
+  async function giamSat() {
+    clearTimeout(henGS);
+    if (!baiGS || $("[data-pane=kt]").classList.contains("on") === false) return;
+    try { gsDuLieu = await goi("gv.giamSat", { maBai: baiGS }); } catch (e) { bao(esc(e.message), "red"); return; }
+    const { bai, hs } = gsDuLieu;
+    const TT = { chua: "chưa vào", lam: "đang làm", nop: "đã nộp" };
+    hs.sort((a, b) => a.hoTen.split(" ").pop().localeCompare(b.hoTen.split(" ").pop(), "vi") || a.hoTen.localeCompare(b.hoTen, "vi"));
+    $("#gsTieuDe").textContent = "Theo dõi: " + bai.ten;
+    const n = k => hs.filter(h => h.trangThai === k).length;
+    const diem = hs.filter(h => h.diem != null).map(h => h.diem);
+    $("#gsTom").innerHTML = `<span class="tt nop">${n("nop")} đã nộp</span> <span class="tt lam">${n("lam")} đang làm</span> <span class="tt chua">${n("chua")} chưa vào</span>
+      ${diem.length ? ` · điểm trung bình <b>${(diem.reduce((a, b) => a + b, 0) / diem.length).toFixed(2).replace(".", ",")}</b>` : ""}
+      · kết quả ${bai.ketQuaMo ? "<b>đã mở</b> cho học sinh" : "chưa mở (mở khi cả lớp nộp xong, khi đóng bài, hoặc khi thầy bấm Công bố)"}
+      ${hs.some(h => h.khoa) ? `<div class="note red" style="margin:8px 0 4px">🔒 Đang khoá chờ thầy mở: ${hs.filter(h => h.khoa).map(h => `<b>${esc(h.hoTen)}</b>`).join(", ")}. <button class="btn sm green" id="btnMoKhoaHet">Mở khoá tất cả</button></div>` : ""}
+      ${hs.some(h => h.viPham) ? `<br>⚠ Rời màn hình khi thi: ${hs.filter(h => h.viPham).map(h => `<b>${esc(h.hoTen)}</b> (${h.viPham} lần)`).join(", ")}` : ""}`;
+    $("#tGS tbody").innerHTML = hs.map((h, i) => `<tr><td>${i + 1}</td><td>${esc(h.hoTen)}</td><td><span class="tt ${h.trangThai}">${TT[h.trangThai]}</span>${h.khoa ? ` <button class="btn sm green" data-mo-khoa="${esc(h.id)}" title="Em này rời màn hình lần 2">🔓 Mở khoá</button>` : ""}${h.trangThai !== "chua" && bai.trangThai === "mo" ? ` <button class="btn sm ghost" data-lam-lai="${esc(h.id)}" data-ten="${esc(h.hoTen)}" title="Xoá lượt làm này để em làm lại từ đầu với đề mới">↺ Cho làm lại</button>` : ""}</td>
+      <td class="num">${h.trangThai === "chua" ? "" : h.soLam + "/" + bai.soCau}</td><td class="small">${h.batDau ? ngay(h.batDau) : ""}</td><td class="small">${h.nopLuc ? ngay(h.nopLuc) : ""}</td>
+      <td class="num">${h.viPham ? `<span class="tt khoa">${h.viPham}</span>` : ""}</td>
+      <td class="num"><b>${h.diem == null ? "" : String(h.diem).replace(".", ",")}</b></td></tr>`).join("") || `<tr><td colspan="8" class="muted">Lớp chưa có học sinh đã duyệt.</td></tr>`;
+    const moKhoa = (btn, ids) => cho(btn, async () => { try { const r = await goi("gv.moKhoaThi", { maBai: bai.maBai, hsId: ids }); bao(`Đã mở khoá cho ${r.n} em.`, "green"); giamSat(); } catch (e) { bao(esc(e.message), "red"); } });
+    $$("[data-mo-khoa]").forEach(b => b.onclick = () => moKhoa(b, [b.dataset.moKhoa]));
+    $$("[data-lam-lai]").forEach(b => b.onclick = () => {
+      if (!confirm(`Cho ${b.dataset.ten} làm lại bài từ đầu? Lượt làm hiện tại (điểm, số lần rời màn hình) được cất vào nhật kí và không còn tính. Em vào lại sẽ nhận đề mới và đủ thời gian.`)) return;
+      cho(b, async () => { try { await goi("gv.choLamLai", { maBai: bai.maBai, hsId: b.dataset.lamLai }); bao(`Đã cho <b>${esc(b.dataset.ten)}</b> làm lại. Em tải lại trang chính rồi bấm Vào làm bài.`, "green"); giamSat(); } catch (e) { bao(esc(e.message), "red"); } });
+    });
+    if ($("#btnMoKhoaHet")) $("#btnMoKhoaHet").onclick = () => moKhoa($("#btnMoKhoaHet"), hs.filter(h => h.khoa).map(h => h.id));
+    $("#gsLuc").textContent = "cập nhật " + new Date().toLocaleTimeString("vi-VN");
+    taiBai().catch(() => { });                                        // số vào / nộp trong danh sách bài cũng cập nhật theo
+    if (bai.trangThai === "mo") henGS = setTimeout(giamSat, hs.some(h => h.khoa) ? 8000 : 20000);   // có em đang chờ mở khoá: cập nhật nhanh hơn
+  }
+  $("#btnGS").onclick = giamSat;
+  const csvQ = v => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  function taiCSV(ten, dong) {
+    const blob = new Blob(["\ufeff" + dong.map(r => r.map(csvQ).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = ten.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").replace(/[^A-Za-z0-9]+/g, "_") + ".csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+  /* nhận xét tự động: mức điểm + dạng cần ôn + vi phạm; thầy sửa thêm trong Excel nếu muốn */
+  function nhanXet(h, tk) {
+    if (h.trangThai !== "nop") return h.trangThai === "lam" ? "Chưa nộp bài." : "Không tham gia kiểm tra.";
+    const d = h.diem, x = (tk && tk.hs[h.id]) || { yeu: [], vung: [] };
+    let s = d >= 9 ? "Xuất sắc." : d >= 8 ? "Làm bài tốt." : d >= 6.5 ? "Khá." : d >= 5 ? "Đạt, cần cố gắng thêm." : "Chưa đạt, cần ôn tập lại.";
+    if (x.vung.length) s += " Nắm vững: " + x.vung.slice(0, 3).join("; ") + ".";
+    if (x.yeu.length) s += " Cần ôn: " + x.yeu.slice(0, 3).join("; ") + ".";
+    if (h.viPham) s += ` Vi phạm khi thi ${h.viPham} lần.`;
+    return s;
+  }
+  $("#btnCSV").onclick = () => cho($("#btnCSV"), async () => {
+    if (!gsDuLieu) return;
+    let tk = null; try { tk = await goi("gv.thongKeBai", { maBai: baiGS }); } catch (e) { }
+    const TT = { chua: "chưa vào", lam: "đang làm", nop: "đã nộp" };
+    const dong = [["STT", "Họ và tên", "Tên đăng nhập", "Trạng thái", "Số câu đã làm", "Vào lúc", "Nộp lúc", "Vi phạm", "Điểm", "Nhận xét"]]
+      .concat(gsDuLieu.hs.map((h, i) => [i + 1, h.hoTen, h.tenDN, TT[h.trangThai] || h.trangThai, h.soLam, ngay(h.batDau), ngay(h.nopLuc), h.viPham || 0, h.diem == null ? "" : String(h.diem).replace(".", ","), nhanXet(h, tk)]));
+    const vp = gsDuLieu.hs.filter(h => h.viPham);
+    if (vp.length) { dong.push([]); dong.push(["Danh sách vi phạm khi thi"]); vp.forEach(h => dong.push(["", h.hoTen, h.tenDN, "", "", "", "", h.viPham])); }
+    taiCSV("Diem_" + gsDuLieu.bai.ten, dong);
+  });
+
+  /* thống kê theo câu, dạng, mức */
+  const tiLeO = x => `<td class="num"><span class="tl ${x < 0.5 ? "yeu" : x < 0.8 ? "kha" : "tot"}">${Math.round(x * 100)}%</span></td>`;
+  $("#btnTK").onclick = () => cho($("#btnTK"), async () => {
+    let r; try { r = await goi("gv.thongKeBai", { maBai: baiGS }); } catch (e) { return bao(esc(e.message), "red"); }
+    $("#cTK").classList.remove("hidden");
+    $("#tkTieuDe").textContent = `Thống kê: ${r.bai.ten} (${r.soBai} bài đã nộp)`;
+    if (!r.soBai) { ["#tkLoai", "#tkMuc", "#tkDang", "#tkCau"].forEach(t => $(t).innerHTML = `<tr><td class="muted">Chưa có bài nộp.</td></tr>`); return; }
+    const TEN_MUC = { NB: "Nhận biết", TH: "Thông hiểu", VD: "Vận dụng", VDC: "Vận dụng cao" };
+    $("#tkLoai").innerHTML = `<thead><tr><th>Phần</th><th class="num">Số câu</th><th class="num">Tỉ lệ</th></tr></thead><tbody>${r.loai.map(x => `<tr><td>${TEN_LOAI[x.khoa] || x.khoa}</td><td class="num">${x.soCau}</td>${tiLeO(x.tiLe)}</tr>`).join("")}</tbody>`;
+    $("#tkMuc").innerHTML = `<thead><tr><th>Mức</th><th class="num">Số câu</th><th class="num">Tỉ lệ</th></tr></thead><tbody>${r.muc.map(x => `<tr><td>${TEN_MUC[x.khoa] || x.khoa}</td><td class="num">${x.soCau}</td>${tiLeO(x.tiLe)}</tr>`).join("")}</tbody>`;
+    $("#tkDang").innerHTML = `<thead><tr><th>Dạng</th><th>Mã</th><th class="num">Số câu khác nhau</th><th class="num">Lượt làm</th><th class="num">Tỉ lệ</th></tr></thead><tbody>${r.dang.map(x => `<tr><td>${esc(x.ten || "")}</td><td class="small muted">${esc(x.khoa)}</td><td class="num">${x.soCau}</td><td class="num">${x.lam}</td>${tiLeO(x.tiLe)}</tr>`).join("")}</tbody>`;
+    $("#tkCau").innerHTML = `<thead><tr><th>Mã câu</th><th>Dạng</th><th>Mức</th><th>Phần</th><th class="num">Số em làm</th><th class="num">Đúng trọn</th><th class="num">Tỉ lệ</th></tr></thead><tbody>${r.cau.map(x => `<tr title="${esc(x.de)}"><td class="small">${esc(x.id)}</td><td>${esc(x.tenDang || x.dkey)}</td><td>${x.muc}</td><td>${TEN_LOAI[x.loai] || x.loai}</td><td class="num">${x.lam}</td><td class="num">${x.dung}</td>${tiLeO(x.tiLe)}</tr>`).join("")}</tbody>`;
+    $("#cTK").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#btnDongTK").onclick = () => $("#cTK").classList.add("hidden");
+
+  /* ---- tạo bài ---- */
+  $("#btnMoTao").onclick = () => {
+    $("#cTao").classList.remove("hidden");
+    $("#fBai").maLop.innerHTML = dsLop.map(l => `<option value="${esc(l.maLop)}">${esc(l.tenLop)}</option>`).join("") || `<option value="">(chưa có lớp)</option>`;
+    const kh = (dsLop[0] || {}).tenLop; if (kh && /^\d+/.test(kh)) $("#fBai").lop.value = String(+kh.match(/^\d+/)[0]);
+    $("#cTao").scrollIntoView({ behavior: "smooth" });
+  };
+  $("#btnHuyTao").onclick = () => $("#cTao").classList.add("hidden");
+  $("#fBai").maLop.onchange = e => { const l = dsLop.find(x => x.maLop === e.target.value); if (l && /^\d+/.test(l.tenLop)) { $("#fBai").lop.value = String(+l.tenLop.match(/^\d+/)[0]); ct = null; veCT(); } };
+  $("#fBai").lop.onchange = () => { ct = null; veCT(); };
+  $("#fBai").mon.onchange = () => { ct = null; veCT(); };
+
+  $("#btnNapCT").onclick = e => cho(e.target, async () => {
+    const f = $("#fBai");
+    try { ct = (await goi("gv.cauTrucNH", { mon: f.mon.value, lop: +f.lop.value })).dang; } catch (err) { return bao(esc(err.message), "red"); }
+    M = {}; veCT();
+  });
+  function veCT() {
+    if (!ct) { $("#ctTom").textContent = ""; $("#ctChuong").innerHTML = ""; $("#ctGoiY").classList.add("hidden"); $("#mxWrap").classList.add("hidden"); $("#mxTom").innerHTML = ""; return; }
+    const f = $("#fBai");
+    $("#ctTom").textContent = ct.length ? `${f.mon.value} ${f.lop.value}: ${ct.length} dạng, ${ct.reduce((a, d) => a + d.n, 0)} câu.` : `Ngân hàng ${f.mon.value} ${f.lop.value} chưa có câu nào.`;
+    const chs = [...new Set(ct.map(d => d.chuong))].sort((a, b) => a - b);
+    $("#ctChuong").innerHTML = chs.map(c => `<label class="chip"><input type="checkbox" class="chChon" value="${c}"> Chương ${c}</label>`).join("");
+    $("#ctGoiY").classList.toggle("hidden", !ct.length);
+    $$(".chChon").forEach(c => c.onchange = veMX);
+    veMX();
+  }
+  const chuongChon = () => $$(".chChon:checked").map(c => +c.value);
+  function veMX() {
+    const chs = chuongChon();
+    const ds = (ct || []).filter(d => chs.includes(d.chuong) || M[d.dkey]);
+    $("#mxWrap").classList.toggle("hidden", !ds.length);
+    if (!ds.length) { $("#mxTom").innerHTML = ct && ct.length ? "Thầy tích chọn chương để hiện các dạng." : ""; return; }
+    let h = `<thead><tr><th rowspan="2">Dạng</th>${LOAI.map((L, i) => `<th colspan="4" class="p${i + 1}">${TEN_LOAI[L]}</th>`).join("")}</tr><tr>${LOAI.map((L, i) => MUC.map(m => `<th class="p${i + 1}">${m}</th>`).join("")).join("")}</tr></thead><tbody>`;
+    let ch = 0;
+    ds.forEach(d => {
+      if (d.chuong !== ch) { ch = d.chuong; h += `<tr><td class="dang" colspan="13"><b>Chương ${ch}</b></td></tr>`; }
+      h += `<tr><td class="dang">${esc(d.ten || "Dạng " + d.so)} <small>${esc(d.dkey)}</small></td>`;
+      LOAI.forEach(L => MUC.forEach(m => {
+        const co = d.c[L + "|" + m] || 0, v = ((M[d.dkey] || {})[L] || {})[m] || 0;
+        h += co ? `<td><input type="number" min="0" max="${co}" value="${v || ""}" data-dk="${esc(d.dkey)}" data-l="${L}" data-m="${m}" class="${v > co ? "over" : ""}"><span class="co">/${co}</span></td>` : `<td class="na">–</td>`;
+      }));
+      h += `</tr>`;
+    });
+    $("#tMX").innerHTML = h + `</tbody><tfoot><tr id="mxTong"></tr></tfoot>`;
+    $$("#tMX input").forEach(inp => inp.oninput = () => {
+      const { dk, l, m } = inp.dataset, v = Math.max(0, Math.round(+inp.value || 0));
+      M[dk] = M[dk] || {}; M[dk][l] = M[dk][l] || {};
+      if (v) M[dk][l][m] = v; else delete M[dk][l][m];
+      inp.classList.toggle("over", v > +inp.max);
+      tongMX();
+    });
+    tongMX();
+  }
+  function tongMX() {
+    const t = { TN: 0, DS: 0, TLN: 0 }, lv = { NB: 0, TH: 0, VD: 0, VDC: 0 }, o = {};
+    Object.values(M).forEach(x => LOAI.forEach(L => MUC.forEach(m => { const n = ((x || {})[L] || {})[m] || 0; t[L] += n; lv[m] += n; o[L + m] = (o[L + m] || 0) + n; })));
+    const tr = $("#mxTong"); if (tr) tr.innerHTML = `<td class="dang">Tổng</td>` + LOAI.map(L => MUC.map(m => `<td>${o[L + m] || ""}</td>`).join("")).join("");
+    const n = t.TN + t.DS + t.TLN;
+    const toan = /^To/.test($("#fBai").mon.value);
+    const raw = t.TN * 0.25 + t.DS * 1 + t.TLN * (toan ? 0.5 : 0.25);
+    $("#mxTom").innerHTML = n ? `<b>${n}</b> câu: ${t.TN} trắc nghiệm, ${t.DS} đúng/sai, ${t.TLN} trả lời ngắn · NB ${lv.NB}, TH ${lv.TH}, VD ${lv.VD}, VDC ${lv.VDC} · thang gốc ${String(raw).replace(".", ",")} điểm, quy về thang 10.` : "Ma trận chưa có câu nào: thầy gõ số câu vào các ô, hoặc bấm Gợi ý ma trận.";
+  }
+  $("#btnGoiY").onclick = () => {
+    const chs = chuongChon();
+    if (!chs.length) return ($("#mxTom").textContent = "Thầy tích chọn ít nhất một chương trước.");
+    const dang = {}; ct.forEach(d => dang[d.dkey] = Object.assign({}, d));
+    const idx = { dang, levels: MUC.filter(m => ct.some(d => LOAI.some(L => d.c[L + "|" + m]))) };
+    const scope = ct.filter(d => chs.includes(d.chuong)).map(d => d.dkey);
+    const num = id => Math.max(0, +$(id).value || 0);
+    const r = NHD.Gen.suggest(idx, scope, { TN: num("#nTN"), DS: num("#nDS"), TLN: num("#nTLN") }, { NB: num("#pNB"), TH: num("#pTH"), VD: num("#pVD"), VDC: num("#pVDC") }, Date.now());
+    M = r.M; veMX();
+    if (r.short.length) $("#mxTom").innerHTML += `<div class="note">Ngân hàng không đủ câu cho: ${esc(r.short.join(", "))}. Thầy chỉnh tay hoặc giảm số câu.</div>`;
+  };
+  $("#btnXoaMT").onclick = () => { M = {}; veMX(); };
+  $("#btnTaoBai").onclick = e => {
+    const f = $("#fBai"); $("#taoLoi").textContent = "";
+    if (!f.reportValidity()) return;
+    if ($$("#tMX input.over").length) return ($("#taoLoi").textContent = "Có ô vượt quá số câu trong ngân hàng (ô đỏ).");
+    cho(e.target, async () => {
+      try {
+        const r = await goi("gv.taoBai", { ten: f.ten.value, maLop: f.maLop.value, mon: f.mon.value, lop: +f.lop.value, thoiGian: +f.thoiGian.value, dongLuc: f.dongLuc.value ? new Date(f.dongLuc.value).toISOString() : "", moLuc: f.moLuc.value ? new Date(f.moLuc.value).toISOString() : "", moNgay: f.moNgay.checked, tronCau: f.tronCau.checked, tronPA: f.tronPA.checked, thiNghiem: f.thiNghiem.checked, maTran: M });
+        bao(`Đã tạo bài <b>${esc(f.ten.value)}</b>${f.moLuc.value ? `, tự mở lúc ${ngay(new Date(f.moLuc.value).toISOString())}` : f.moNgay.checked ? ", học sinh lớp đó đã thấy bài khi đăng nhập" : ". Bấm “Mở bài” khi muốn cho học sinh làm"}.`, "green");
+        $("#cTao").classList.add("hidden"); f.ten.value = ""; await taiBai(); moGS(r.maBai);
+      } catch (err) { $("#taoLoi").textContent = err.message; }
+    });
+  };
+
+  if (!API.url()) bao("Web chưa được nối với máy chủ. Thầy dán địa chỉ /exec vào <code>config.js</code> (HUONG-DAN.md, mục 2).", "red");
+  P.token ? moQL() : moDN();
+})();
+</script>
+</body>
+</html>
