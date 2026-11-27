@@ -4,10 +4,11 @@
   const S = window.SITE || {};
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   window.esc = esc;
-  /* menu: 5 mục cho học sinh + mục "Giáo viên ▾" gom công cụ của thầy */
-  const MENU_HS = [["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["luyentap", "Tự học"], ["tailieu", "Tài liệu"], ["hs", "📱 Vào thi"]];
+  /* menu: phần dùng chung (mô phỏng, tài liệu, vào thi trên lớp) + nút sang web học sinh + mục "Giáo viên ▾" gom công cụ của thầy.
+     Tự học, Sổ tay kiến thức của học sinh nằm ở web học sinh (SITE.webHS). */
+  const MENU_HS = [["index", "Trang chủ"], ["mophong", "Mô phỏng"], ["tailieu", "Tài liệu"], ["hs", "📱 Vào thi"]];
   const MENU_GV = [["tren-lop", "📽 Trên lớp"], ["trochoi", "🎲 Trò chơi"], ["bangve", "📐 Bảng vẽ"], ["rade", "📄 Ra đề THPT"], ["rade-thcs", "📝 Ra đề THCS"], ["phieu", "🧾 Phiếu & chấm"],
-    ["phantich", "📈 Phân tích"], ["khbd", "🗂 Soạn bài"], ["beamer", "🖥 Beamer"], ["lophoc", "👥 Lớp học"], ["index#ngoaituyen", "📥 Tải sẵn ngoại tuyến"]];
+    ["phantich", "📈 Phân tích"], ["khbd", "🗂 Soạn bài"], ["beamer", "🖥 Beamer"], ["quanly", "👥 Quản lí lớp"], ["index#ngoaituyen", "📥 Tải sẵn ngoại tuyến"]];
   function header() {
     const h = document.getElementById("top"); if (!h) return;
     const cur = document.body.dataset.page || "";
@@ -16,7 +17,7 @@
     const gvCur = MENU_GV.find(([k]) => k === cur);
     h.className = "top";
     h.innerHTML = `<div class="wrap in"><a class="logo" href="index.html"><span class="mk">H</span><span><b>${m ? esc(m[1]) + "<span>" + esc(m[2]) + "</span>" : esc(ten)}</b><small>${esc(S.truong || "")}</small></span></a>
-      <nav class="nav" aria-label="Học sinh">${MENU_HS.map(a).join("")}</nav>
+      <nav class="nav" aria-label="Học sinh">${MENU_HS.map(a).join("")}${S.webHS ? `<a href="${esc(S.webHS)}" target="_blank" rel="noopener">🎒 Web học sinh</a>` : ""}</nav>
       <details class="menu-gv"><summary${gvCur ? ' aria-current="page"' : ""}>🧑‍🏫 ${gvCur ? esc(gvCur[1].replace(/^\S+\s/, "")) : "Giáo viên"} <span aria-hidden="true">▾</span></summary>
         <nav aria-label="Giáo viên">${MENU_GV.map(a).join("")}</nav></details></div>`;
     const d = h.querySelector(".menu-gv");

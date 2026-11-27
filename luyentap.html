@@ -2,7 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tự học · Học cùng Thầy Hiếu</title>
+<title>Bộ luyện tập · Học cùng Thầy Hiếu</title>
+<script>
+/* Sổ tay và Tự học đã chuyển sang web học sinh: giữ đường dẫn cũ bằng cách chuyển hướng */
+(function () {
+  var hs = "https://hieuant2812.github.io/hoc-cung-Thay-Hieu-HS/";
+  if (/^#st\//.test(location.hash)) location.replace(hs + "sotay.html" + location.hash);
+  else if (/^#lt\//.test(location.hash)) location.replace(hs + "tuhoc.html");
+})();
+</script>
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script><script src="data/chuongtrinh.js"></script><script src="data/sotay.js"></script><script src="assets/lophoc.js"></script><script src="assets/sotay.js?v=3"></script>
 <script src="assets/katex/katex.min.js"></script>
@@ -54,21 +62,21 @@
 <header id="top"></header>
 <main class="wrap">
   <section class="hero sm" style="background:linear-gradient(120deg,#10b3a3,#2fb6e8 55%,#3b7bff)">
-    <h1>Tự học</h1>
-    <p>Luyện tập theo chương, dạng, mức độ ngay trên điện thoại — chấm ngay, có lời giải. Sổ tay kiến thức theo từng bài: tóm tắt lí thuyết, dạng bài có giải mẫu, sơ đồ tư duy.</p>
+    <h1>Tự học đã chuyển sang web học sinh</h1>
+    <p>Học sinh tự luyện (có sổ lỗi sai, gợi ý theo điểm yếu) và đọc Sổ tay kiến thức (lời giải đủ bước, nút luyện từng dạng) ở web học sinh. Trang này giữ lại công cụ tạo bộ luyện tập của thầy.</p>
   </section>
   <div class="web-hs" id="webHS" hidden>
     <div class="web-hs-chu"><b>🎒 Web học sinh</b><span>Trang chính thức để gửi cho học sinh: các em đăng nhập, làm bài thầy giao và xem kết quả của mình.</span>
       <code id="webHSurl"></code></div>
     <div class="web-hs-nut"><a class="btn" id="webHSmo" target="_blank" rel="noopener">Mở web học sinh ↗</a>
+      <a class="btn ghost" id="webHSsotay" target="_blank" rel="noopener">📒 Sổ tay kiến thức ↗</a>
       <button class="btn ghost" id="webHSchep" type="button">📋 Sao chép liên kết</button>
       <button class="btn ghost" id="webHSqr" type="button" aria-expanded="false">📱 Mã QR</button></div>
     <div class="web-hs-qr" id="webHSqrBox" hidden></div>
   </div>
   <div class="lt-tabs" id="ltTabs">
-    <button data-t="lt">✍️ Luyện tập</button>
-    <button data-t="st">📘 Sổ tay kiến thức</button>
     <button data-t="gv">🧑‍🏫 Giáo viên: tạo bộ luyện tập</button>
+    <button data-t="lt">✍️ Luyện tập (bản cũ)</button>
   </div>
 
   <div id="lhBar"></div>
@@ -124,7 +132,7 @@
 (function () {
   const url = (window.SITE || {}).webHS; if (!url) return;
   const $ = id => document.getElementById(id);
-  $("webHS").hidden = false; $("webHSurl").textContent = url; $("webHSmo").href = url;
+  $("webHS").hidden = false; $("webHSurl").textContent = url; $("webHSmo").href = url; $("webHSsotay").href = url + "sotay.html";
   $("webHSchep").onclick = () => {
     const xong = () => { $("webHSchep").textContent = "✓ Đã sao chép"; setTimeout(() => $("webHSchep").textContent = "📋 Sao chép liên kết", 1800); };
     if (navigator.clipboard) navigator.clipboard.writeText(url).then(xong, () => prompt("Sao chép liên kết:", url)); else prompt("Sao chép liên kết:", url);
@@ -148,7 +156,7 @@
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
   const ROM = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
   const LVN = { NB: "Biết", TH: "Hiểu", VD: "Vận dụng", VDC: "VD cao" };
-  let tab = LS.get("lt-tab", "lt");
+  let tab = LS.get("lt-tab", "gv"); if (tab === "st") tab = "gv";
   function setTab(t) { tab = t; LS.set("lt-tab", t); document.querySelectorAll("#ltTabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.t === t)); document.querySelectorAll(".lt-pane").forEach(p => p.classList.toggle("on", p.id === t)); if (t === "gv" && !gvApi) gvApi = ChonCau.mount($("gvPick"), { key: "gv", soCau: false }); }
   document.querySelectorAll("#ltTabs button").forEach(b => b.onclick = () => setTab(b.dataset.t));
 
