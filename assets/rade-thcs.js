@@ -39,7 +39,7 @@
       Object.values(KHO).forEach(d => { if (d.nguon === "tl103") BANK[d.ma] = d; });   // bản nạp từ zip trên máy: có hướng dẫn giải
     }
   }
-  const S = Object.assign({ khoi: "8", mau: "gk", truong: "TRƯỜNG THCS …", phong: "UBND …", nam: "2026 – 2027", soDe: 2, tronTN: true, tronPA: true, hinh: "auto", chon: {}, mt: {}, nguon: { kho: true, tl103: true }, soY: 3 }, LS.get("rdthcs", {}));
+  const S = Object.assign({ khoi: "8", mau: "gk", truong: "TRƯỜNG THCS …", phong: "UBND …", nam: "2026 – 2027", soDe: 2, tronTN: true, tronPA: true, hinh: "auto", chon: {}, mt: {}, nguon: { kho: true, tl103: true }, soY: 0 }, LS.get("rdthcs", {}));
   const luuS = () => LS.set("rdthcs", { khoi: S.khoi, mau: S.mau, truong: S.truong, phong: S.phong, nam: S.nam, soDe: S.soDe, tronTN: S.tronTN, tronPA: S.tronPA, hinh: S.hinh, chon: S.chon, nguon: S.nguon, soY: S.soY, tsMuc: S.tsMuc });
 
   /* ---------------- ngân hàng ---------------- */
@@ -112,7 +112,7 @@
 
   /* ---------------- bài hình học chứng minh ---------------- */
   const soY = q => { if (q.y && !q.de) return q.y.length; let n = 0; for (const c of "abcde") if (new RegExp("(^|\\s|<br>)" + c + "\\)\\s").test(q.de)) n++; return Math.max(1, n); };
-  const laDangHinh = d => +d.khoi >= 7 && /chứng minh|tam giác bằng nhau|đồng dạng|nội tiếp|tiếp tuyến|tia phân giác|song song, vuông góc|thẳng hàng/i.test(d.tenDang) && !/biến|chia hết|bất đẳng thức đơn giản/i.test(d.tenDang) && d.cau.some(q => q.loai === "TL");
+  const laDangHinh = d => (d.nguon !== "tl103" || /^H\d|^TS-1[2-5]$/.test(d.ma)) && +d.khoi >= 7 && /chứng minh|tam giác bằng nhau|đồng dạng|nội tiếp|tiếp tuyến|tia phân giác|song song, vuông góc|thẳng hàng/i.test(d.tenDang) && !/biến|chia hết|bất đẳng thức đơn giản/i.test(d.tenDang) && d.cau.some(q => q.loai === "TL");
   function dangHinh() {
     const bais = Object.keys(S.chon[S.khoi] || {});
     return Object.values(BANK).filter(d => bais.includes(d.bai) && laDangHinh(d)).sort((a, b) => a.ma.localeCompare(b.ma, "vi", { numeric: true }));
@@ -137,7 +137,9 @@
       if (!ok.length) return;
       // ưu tiên bài ít câu đã phân để trải đều; xoay vòng có trộn
       const thu = ok.slice().sort(() => Math.random() - .5);
-      for (let i = 0; i < n; i++) { thu.sort((a, b) => (tong(mt[a]) - tong(mt[b]))); mt[thu[0]][loai][muc]++; }
+      // hàng ngân hàng 103 dạng: phân cả cụm ý cho một hàng để thành MỘT bài có ý a), b), c)… (không rải lẻ từng ý)
+      const la103 = b => Object.values(BANK).some(d => d.bai === b && d.nguon === "tl103");
+      for (let i = 0; i < n;) { thu.sort((a, b) => (tong(mt[a]) - tong(mt[b]))); const b = thu[0]; const c = loai === "TL" && la103(b) ? Math.min(n - i, +S.soY || 5) : 1; mt[b][loai][muc] += c; i += c; }
     };
     const tong = x => Object.values(x.TN).reduce((s, v) => s + v, 0) + Object.values(x.TL).reduce((s, v) => s + v, 0);
     MUC_TN.forEach(m => rai("TN", m, M.tn[m] || 0)); MUC_TL.forEach(m => rai("TL", m, M.tl[m] || 0));
@@ -234,10 +236,11 @@
     const q0 = tot[Math.floor(Math.random() * tot.length)], q = q0.y ? ThcsBank.cuThe(q0, Math.max(3, +S.soY || 99)) : q0;
     daDung.add(q.ma); daDung.add(dang.ma + "#" + soThuTu(q)); daDung.add("dang:" + dang.ma);
     // bỏ bớt ý tự luận để giữ độ dài đề: ưu tiên bỏ câu cùng bài SGK, rồi câu mức VD/TH
-    const bo = Math.min(TL.length, Math.max(1, soY(q) - 1));
-    for (let i = 0; i < bo; i++) {
+    // bớt số ý tự luận tương đương (tính theo số ý, để không xoá cả bài nhiều ý của ngân hàng 103 dạng)
+    const bo = Math.max(1, soY(q) - 1);
+    for (let i = 0; i < bo && TL.some(x => !x.hinh);) {
       let k = TL.findIndex(x => x.bai === dang.bai && !x.hinh); if (k < 0) k = TL.findIndex(x => x.muc === "VD" && !x.hinh); if (k < 0) k = TL.findIndex(x => x.muc === "TH" && !x.hinh); if (k < 0) k = TL.findIndex(x => !x.hinh);
-      if (k >= 0) TL.splice(k, 1);
+      if (k < 0) break; i += soY(TL[k].q); TL.splice(k, 1);
     }
     TL.push({ d: dang, q, muc: q.muc, lech: false, bai: dang.bai, hinh: true });
     return "";
@@ -250,7 +253,7 @@
     const out = []; let cur = null;
     ds.forEach(x => {
       const ch = chuongCua(x.bai);
-      if (laNhieuY(x.q) || x.hinh) { out.push({ ch, y: [x], rieng: true, hinh: !!x.hinh }); cur = null; return; }
+      if (laNhieuY(x.q) || x.hinh || x.q.goc) { out.push({ ch, y: [x], rieng: true, hinh: !!x.hinh }); cur = null; return; }
       if (!cur || cur.ch !== ch || cur.y.length >= 4) { cur = { ch, y: [] }; out.push(cur); }
       cur.y.push(x);
     });
@@ -385,7 +388,7 @@
     try { ML = await (await fetch("data/thcs/mucluc.json")).json(); } catch (e) {}
     try { DSHINH = await (await fetch("data/decuong/hinh/ds.json")).json(); } catch (e) {}
     try { TL103 = await (await fetch("data/thcs/tl103.json")).json(); } catch (e) {}
-    $("soY").value = String(S.soY == null ? 3 : S.soY); $("soY").onchange = () => { S.soY = +$("soY").value; luuS(); };
+    $("soY").value = String(S.soY == null ? 0 : S.soY); $("soY").onchange = () => { S.soY = +$("soY").value; luuS(); if (S.mau !== "ts10") phanBo(); };
     $("mau").innerHTML = Object.entries(MAU).map(([k, v]) => `<option value="${k}">${v.ten}</option>`).join("");
     $("mau").value = S.mau; $("truong").value = S.truong; $("phong").value = S.phong; $("nam").value = S.nam; $("soDe").value = S.soDe; $("tronTN").checked = S.tronTN; $("tronPA").checked = S.tronPA;
     ["truong", "phong", "nam", "soDe"].forEach(k => $(k).onchange = () => { S[k] = $(k).value; luuS(); });

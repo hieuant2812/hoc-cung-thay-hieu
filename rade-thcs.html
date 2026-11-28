@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/katex/katex.min.css"><link rel="stylesheet" href="assets/style.css">
 <script src="config.js"></script><script src="assets/site.js"></script>
 <script src="assets/katex/katex.min.js"></script><script src="assets/lib/jszip.min.js"></script><script src="assets/docx.js"></script><script src="assets/dongbo.js?v=10"></script>
-<script src="assets/decuong-tex.js"></script><script src="assets/thcs-bank.js?v=3"></script><script src="assets/ts10.js"></script><script src="assets/rade-thcs.js?v=3"></script>
+<script src="assets/decuong-tex.js"></script><script src="assets/thcs-bank.js?v=3"></script><script src="assets/ts10.js"></script><script src="assets/rade-thcs.js?v=4"></script>
 <style>
 .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
 .seg{display:flex;gap:6px;flex-wrap:wrap}.seg button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:7px 16px;font:800 15px var(--font-h);cursor:pointer}
@@ -81,7 +81,7 @@ table.mtb tr.tong td{font-weight:800;background:#fafbff}
         <label class="f">Tên trường<input id="truong"></label>
         <div class="f2"><label class="f">Năm học<input id="nam"></label><label class="f">Số mã đề<input type="number" id="soDe" min="1" max="24"></label></div>
         <label class="f">Bài hình học<select id="hinh"></select></label><div class="small muted" id="hinhTT" style="margin-top:-4px"></div>
-        <label class="f">Số ý mỗi bài tự luận (ngân hàng 103 dạng)<select id="soY"><option value="1">1 ý</option><option value="2">Tối đa 2 ý</option><option value="3">Tối đa 3 ý</option><option value="4">Tối đa 4 ý</option><option value="0">Giữ đủ các ý của bài</option></select></label>
+        <label class="f">Số ý mỗi bài tự luận (ngân hàng 103 dạng)<select id="soY"><option value="1">1 ý</option><option value="2">Tối đa 2 ý</option><option value="3">Tối đa 3 ý</option><option value="4">Tối đa 4 ý</option><option value="0">Giữ đủ các ý a), b), c)… của bài (mặc định)</option></select></label>
         <label><input type="checkbox" id="tronTN"> Trộn thứ tự câu trắc nghiệm</label>
         <label><input type="checkbox" id="tronPA"> Trộn phương án A, B, C, D</label>
       </div></div>
