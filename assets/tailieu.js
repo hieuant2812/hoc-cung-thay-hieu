@@ -93,6 +93,11 @@
 .tv .vdc{border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden;break-inside:avoid}
 .tv .vdc .vt{background:var(--nt);padding:5px 14px;font-weight:800;color:var(--nm);font-size:14px}
 .tv .vdc .vb{padding:8px 14px}
+.tv details.d103>summary{cursor:pointer;list-style:none}.tv details.d103>summary::-webkit-details-marker{display:none}.tv details.d103>summary::before{content:"▸ "}.tv details.d103[open]>summary::before{content:"▾ "}
+.tv h3.t103{margin:18px 0 4px;color:var(--nm)}.tv ol.b103>li{margin:8px 0}.tv ol.abc{list-style:lower-alpha;padding-left:1.6em;margin:2px 0}
+.tv .mc{display:inline-block;font:700 11px var(--font);border-radius:6px;padding:0 5px;vertical-align:1px}
+.tv .mc-NB{background:#e6f6ec;color:#1f7a44}.tv .mc-TH{background:#e7f0ff;color:#2856b8}.tv .mc-VD{background:#fff3df;color:#9a5a00}.tv .mc-VDC{background:#fde8e8;color:#b42323}
+@media print{.tv details.d103:not([open])>.vb{display:block}}
 .tv .lgv{margin-top:8px;background:#f6faf7;border-left:3px solid #2fb35a;border-radius:8px;padding:6px 12px}
 .tv .lgv>b:first-child{color:#16803c}
 .tv .dangdc{margin:16px 0 4px;font:800 16px var(--font);display:flex;gap:8px;align-items:center}.tv .dangdc::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--nm)}
@@ -179,7 +184,7 @@
   function mount(root) {
     if (!document.getElementById("tlCss")) { const st = document.createElement("style"); st.id = "tlCss"; st.textContent = CSS; document.head.appendChild(st); }
     const S = { lop: LS.get("tl-lop", "12"), k: LS.get("tl-k", ""), iDe: 0, ban: "hs", nguon: "web", moCh: null };
-    const mh = /^#([6-9]|1[0-2])\/([bot]\d+)$/.exec(location.hash); if (mh) { S.lop = mh[1]; S.k = mh[2]; }
+    const mh = /^#([6-9]|1[0-2])\/([bot]\d+|xTS-\d+)$/.exec(decodeURIComponent(location.hash)); if (mh) { S.lop = mh[1]; S.k = mh[2]; }
     const mt = /^#ts10(?:\/(d\d+|g-[A-Za-z0-9\-\/]+|ghep))?$/.exec(location.hash); if (mt) { S.lop = "ts10"; S.k = mt[1] || ""; }
     const DATA = { web: {}, gv: {}, may: {} };   // web: bản HS đã đăng; gv: bản GV giải mã; may: đề cương đang soạn
     let INDEX = null, laGV = sessionStorage.getItem("tl-gv") === "1";
@@ -321,7 +326,21 @@
     }
 
     /* ---------------- THCS: bài tập theo dạng (ngân hàng Toán 6–9) ---------------- */
-    const THCS = { ml: null, hs: {}, gv: {} };
+    const THCS = { ml: null, hs: {}, gv: {}, tl: null };
+    /* ngân hàng tự luận 103 dạng (Toán 8, 9): hiện dưới bài SGK tương ứng; TS-xx thành mục "Ôn thi vào 10" cuối danh sách Toán 9 */
+    const TENMUC = { NB: "Nhận biết", TH: "Thông hiểu", VD: "Vận dụng", VDC: "Vận dụng cao" };
+    function the103(D, gv, mo) {
+      const bai = D.cau.map((q, t) => `<li><span class="mc mc-${q.muc}" title="${TENMUC[q.muc]}">${q.muc}</span>${q.ten ? ` <i class="small muted">${ve(q.ten)}</i>` : ""}<div>${q.dan ? ve(q.dan) : ""}<ol class="abc">${q.y.map(y => `<li>${ve(y)}</li>`).join("")}</ol></div>${gv && q.hd ? `<div class="lgv"><b>Hướng dẫn giải.</b><ol class="abc">${q.hd.map(h => `<li>${ve(h)}</li>`).join("")}</ol></div>` : ""}</li>`).join("");
+      const dem = {}; D.cau.forEach(q => dem[q.muc] = (dem[q.muc] || 0) + 1);
+      return `<details class="vdc d103" id="d-${esc(D.ma)}" ${mo ? "open" : ""}><summary class="vt">${esc(D.ma)} · ${esc(D.tenDang)} <span class="small" style="font-weight:600">(${D.cau.length} bài${Object.keys(TENMUC).filter(m => dem[m]).map(m => ` · ${m} ${dem[m]}`).join("")})</span></summary><div class="vb"><ol class="btl b103">${bai}</ol></div></details>`;
+    }
+    async function napTL(k) {
+      if (!["8", "9"].includes(String(k))) return {};
+      if (!THCS.tl) { try { THCS.tl = await (await fetch("data/thcs/tl103.json")).json(); } catch (e) { THCS.tl = {}; } }
+      const out = {}; Object.values(THCS.tl).forEach(d => { if (d.khoi === String(k)) out[d.ma] = d; });
+      if (laGV && S.ban === "gv" && THCS.gv[k]) Object.values(THCS.gv[k]).forEach(d => { if (d.nguon === "tl103") out[d.ma] = d; });
+      return out;
+    }
     async function hienTHCS(out) {
       const k = S.lop;
       try {
@@ -329,19 +348,31 @@
         if (!THCS.hs[k]) THCS.hs[k] = await (await fetch(`data/thcs/hs-${k}.json`)).json();
         if (laGV && S.ban === "gv" && !THCS.gv[k] && G.ThcsBank) { const g = await ThcsBank.tatCa(k); if (Object.keys(g).length) THCS.gv[k] = g; }
       } catch (e) { out.innerHTML = `<div class="card">Không tải được tài liệu Toán ${k} (${esc(e.message)}).</div>`; return; }
-      const ML = THCS.ml[k] || {}, chs = Object.keys(ML).sort((a, b) => a - b);
+      const TL = await napTL(k), BAI103 = (G.ThcsBank && ThcsBank.BAI103) || {};
+      const theoBai = {}; Object.values(TL).forEach(d => (BAI103[d.ma] || []).forEach(b => (theoBai[b] = theoBai[b] || []).push(d)));
+      const ML = Object.assign({}, THCS.ml[k] || {}), chs = Object.keys(ML).sort((a, b) => a - b);
       const ds = []; chs.forEach(c => Object.keys(ML[c].bai).sort((a, b) => a - b).forEach(b => ds.push({ k: "t" + b, ch: c, ten: `Bài ${b}. ${ML[c].bai[b].ten}` })));
+      const TS = Object.values(TL).filter(d => /^TS-/.test(d.ma)).sort((a, b) => a.ma.localeCompare(b.ma, "vi", { numeric: true }));
+      if (TS.length) { ML.ts = { ten: "Ôn thi vào 10 – tự luận theo dạng", bai: {} }; chs.push("ts"); TS.forEach(d => ds.push({ k: "x" + d.ma, ch: "ts", ten: `${d.ma}. ${d.tenDang.replace(/^TS:\s*/, "")}` })); }
       if (!S.k || !ds.some(x => x.k === S.k)) S.k = ds[0].k; LS.set("tl-k", S.k);
       $(".tl-nam").textContent = "Bài tập theo dạng · Toán " + k;
       const cur = ds.find(x => x.k === S.k); if (S.moCh == null || !ML[S.moCh]) S.moCh = cur.ch;
       $(".tl-ds").innerHTML = chs.map((c, i) => { const m = MAU[i % MAU.length]; const items = ds.filter(x => x.ch === c);
-        return `<div class="tl-ch${S.moCh === c ? " mo" : ""}" style="--nm:${m[0]};--nt:${m[1]}"><button data-c="${c}"><b>${c}</b><span>${esc(ML[c].ten)}</span></button><div class="ds">${items.map(x => `<a href="#" data-k="${x.k}" class="${x.k === S.k ? "on" : ""}">${esc(x.ten)}</a>`).join("")}</div></div>`; }).join("");
+        return `<div class="tl-ch${S.moCh === c ? " mo" : ""}" style="--nm:${m[0]};--nt:${m[1]}"><button data-c="${c}"><b>${c === "ts" ? "🎯" : c}</b><span>${esc(ML[c].ten)}</span></button><div class="ds">${items.map(x => `<a href="#" data-k="${x.k}" class="${x.k === S.k ? "on" : ""}">${esc(x.ten)}</a>`).join("")}</div></div>`; }).join("");
       root.querySelectorAll(".tl-ch>button").forEach(b => b.onclick = () => { S.moCh = S.moCh === b.dataset.c ? -1 : b.dataset.c; hienTHCS(out); });
       root.querySelectorAll(".tl-ds a").forEach(a => a.onclick = ev => { ev.preventDefault(); S.k = a.dataset.k; S.iDe = 0; hienTHCS(out); if (innerWidth < 880) out.scrollIntoView({ behavior: "smooth" }); });
       const g = $(".tl-gv");
       g.innerHTML = laGV ? `<b class="small">🧑‍🏫 Chế độ giáo viên</b><a class="btn sm green" href="rade-thcs.html">📝 Ra đề Toán THCS</a><button class="btn sm ghost" data-a="thoat">Thoát chế độ GV</button>` : `<button class="btn sm ghost" data-a="gv">🔑 Giáo viên</button>`;
       g.querySelectorAll("button").forEach(b => b.onclick = () => { if (b.dataset.a === "gv") moGV(); else { laGV = false; sessionStorage.removeItem("tl-gv"); S.ban = "hs"; hien(); } });
       const gv = S.ban === "gv" && laGV, nguon = gv && THCS.gv[k] ? THCS.gv[k] : THCS.hs[k];
+      const iCh0 = chs.indexOf(cur.ch), i0 = ds.findIndex(x => x.k === S.k), a0 = ds[i0 - 1], b0 = ds[i0 + 1];
+      const nav0 = `<div class="nav2">${a0 ? `<a href="#" data-k="${a0.k}">← Trước<b>${esc(a0.ten)}</b></a>` : "<span></span>"}${b0 ? `<a class="r" href="#" data-k="${b0.k}">Tiếp theo →<b>${esc(b0.ten)}</b></a>` : ""}</div>`;
+      const ganNav = () => out.querySelectorAll(".nav2 a").forEach(x => x.onclick = ev => { ev.preventDefault(); S.k = x.dataset.k; S.iDe = 0; hienTHCS(out); out.scrollIntoView({ behavior: "smooth" }); });
+      if (S.k[0] === "x") { // một dạng ôn thi vào 10 (ngân hàng 103 dạng)
+        const D = TL[S.k.slice(1)];
+        out.innerHTML = `<article class="tv" style="${bien(MAU[iCh0 % MAU.length])}"><div class="hd"><small>Toán 9 · Ôn thi vào 10 · Ngân hàng tự luận 103 dạng</small><h2>${esc(D.ma)}. ${esc(D.tenDang)}</h2><p>${gv ? (D.cau.some(q => q.hd) ? "Bản giáo viên — có hướng dẫn giải" : "Máy này chưa nạp hướng dẫn giải 103 dạng — nạp file zip ở trang Ra đề THCS") : "Mỗi bài có các ý a), b), c)…; nhãn NB, TH, VD, VDC là mức độ"}</p></div><div class="bd">${the103(D, gv, true)}${nav0}</div><div class="ft">${CHAN}</div></article>`;
+        ganNav(); return;
+      }
       const bai = S.k.slice(1), C = ML[cur.ch], B = C.bai[bai], bo = S.iDe || 0, N = 10;
       const dangs = Object.keys(B.dang).sort();
       const iCh = chs.indexOf(cur.ch), mau = MAU[iCh % MAU.length];
@@ -357,7 +388,7 @@
       }).join("");
       const soBo = Math.max(...dangs.map(dk => { const D = THCS.hs[k][B.dang[dk].ma]; return D ? Math.ceil(D.cau.filter(q => q.loai === "TL").length / N) : 1; }), 1);
       out.innerHTML = `<article class="tv" style="${bien(mau)}"><div class="hd"><small>Toán ${k} · Chương ${cur.ch}. ${esc(C.ten)}</small><h2>Bài ${bai}. ${esc(B.ten)}</h2><p>${gv ? (THCS.gv[k] ? "Bản giáo viên — có lời giải, đáp án" : "Máy này chưa có ngân hàng có lời giải — nạp ở trang Ra đề THCS") : "Bài tập luyện tập theo dạng — mỗi bộ 10 bài tự luận và 10 câu trắc nghiệm"}</p></div>
-        <div class="bd"><div class="tl-bar" style="justify-content:flex-start;margin:4px 0 8px">${Array.from({ length: soBo }, (_, x) => `<button class="btn sm ${x === bo ? "violet" : "ghost"}" data-bo="${x}">Bộ ${x + 1}</button>`).join("")}</div>${the}${nav}</div><div class="ft">${CHAN}</div></article>`;
+        <div class="bd"><div class="tl-bar" style="justify-content:flex-start;margin:4px 0 8px">${Array.from({ length: soBo }, (_, x) => `<button class="btn sm ${x === bo ? "violet" : "ghost"}" data-bo="${x}">Bộ ${x + 1}</button>`).join("")}${(theoBai[bai] || []).length ? `<a class="btn sm ghost" href="#tl103">📚 Bài tập tự luận theo dạng (${theoBai[bai].length} dạng)</a>` : ""}</div>${the}${(theoBai[bai] || []).length ? `<h3 id="tl103" class="t103">📚 Bài tập tự luận theo dạng <span class="small muted">· ngân hàng 103 dạng</span></h3>${theoBai[bai].map((D, j) => the103(D, gv, j === 0)).join("")}` : ""}${nav}</div><div class="ft">${CHAN}</div></article>`;
       out.querySelectorAll("[data-bo]").forEach(x => x.onclick = () => { S.iDe = +x.dataset.bo; hienTHCS(out); });
       out.querySelectorAll(".nav2 a").forEach(x => x.onclick = ev => { ev.preventDefault(); S.k = x.dataset.k; S.iDe = 0; hienTHCS(out); out.scrollIntoView({ behavior: "smooth" }); });
       root.querySelectorAll(".tl-lop button").forEach(b => b.classList.toggle("on", b.dataset.l === S.lop));
