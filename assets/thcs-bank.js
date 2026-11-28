@@ -45,6 +45,86 @@
     tenDang = sach2(tenDang);
     return { ma: `${khoi}H${hk}-C${chuong}-B${bai}-D${dang.padStart(2, "0")}`, khoi, hk, chuong, bai, dang: "D" + dang.padStart(2, "0"), tenChuong: sach2(tenChuong), tenBai: sach2(tenBai), tenDang, cau };
   }
+  /* ---- Ngân hàng tự luận 103 dạng (Toán 8, 9, ôn thi vào 10): file <Mã dạng>.tex, \dang{Mã}{Tên}, \bai[Mức -- tên] + enumerate + huongdan ----
+     Mỗi "bài" của ngân hàng là một câu tự luận có nhiều ý a), b), c)… (mặc định 5 ý). Mức: Cơ bản → NB, Thông hiểu → TH, Vận dụng → VD, Vận dụng cao → VDC.
+     Dạng được xếp vào chương SGK (Kết nối tri thức) theo bảng CH103; dạng tổng hợp liên môn và ôn thi vào 10 có chương riêng. */
+  const C8 = { 1: ["Đa thức", "1"], 2: ["Hằng đẳng thức đáng nhớ và ứng dụng", "1"], 3: ["Tứ giác", "1"], 4: ["Định lí Thalès", "1"], 5: ["Dữ liệu và biểu đồ", "1"], 6: ["Phân thức đại số", "2"], 7: ["Phương trình bậc nhất và hàm số bậc nhất", "2"], 8: ["Mở đầu về tính xác suất của biến cố", "2"], 9: ["Tam giác đồng dạng", "2"], 10: ["Một số hình khối trong thực tiễn", "2"], 11: ["Toán thực tế – liên môn (tổng hợp)", ""] };
+  const C9 = { 1: ["Phương trình và hệ hai phương trình bậc nhất hai ẩn", "1"], 2: ["Phương trình và bất phương trình bậc nhất một ẩn", "1"], 3: ["Căn bậc hai và căn bậc ba", "1"], 4: ["Hệ thức lượng trong tam giác vuông", "1"], 5: ["Đường tròn", "1"], 6: ["Hàm số y = ax² (a ≠ 0). Phương trình bậc hai một ẩn", "2"], 7: ["Tần số và tần số tương đối", "2"], 8: ["Xác suất của biến cố trong một số mô hình xác suất đơn giản", "2"], 9: ["Đường tròn ngoại tiếp và đường tròn nội tiếp", "2"], 10: ["Một số hình khối trong thực tiễn", "2"], 11: ["Toán thực tế – liên môn (tổng hợp)", ""], 12: ["Ôn thi tuyển sinh vào lớp 10", ""] };
+  const CH103 = {
+    "Đ8": [0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7], "H8": [0, 3, 3, 3, 3, 3, 3, 4, 4, 4, 9, 9, 9, 9, 10], "T8": [0, 5, 5, 5, 8, 8], "TT8": [0, 1, 6, 7, 11, 9],
+    "Đ9": [0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 6, 6, 6, 6, 6], "H9": [0, 4, 4, 5, 5, 5, 9, 5, 9, 9, 9, 10, 10, 10, 10, 9], "T9": [0, 7, 7, 7, 8, 8], "TT9": [0, 4, 6, 6, 11, 2], "TS": null
+  };
+  const MUC103 = s => /^Cơ bản/i.test(s) ? "NB" : /^Thông hiểu/i.test(s) ? "TH" : /^Vận dụng cao/i.test(s) ? "VDC" : /^Vận dụng/i.test(s) ? "VD" : "";
+  function khoi103(ma) { // "Đ8-05" → {khoi:"8", chuong:"2"}
+    const m = /^(Đ|D|H|T|TT)([89])-(\d+)$/.exec(ma) || /^(TS)-(\d+)$/.exec(ma); if (!m) return null;
+    if (m[1] === "TS") return { khoi: "9", chuong: "12" };
+    const ch = (CH103[(m[1] === "D" ? "Đ" : m[1]) + m[2]] || [])[+m[3]]; return ch ? { khoi: m[2], chuong: String(ch) } : null;
+  }
+  function moiTruong1(s, ten, tu) { // vị trí \begin{ten}…\end{ten} đầu tiên (có lồng nhau) từ vị trí tu
+    const b = "\\begin{" + ten + "}", e = "\\end{" + ten + "}"; const a = s.indexOf(b, tu || 0); if (a < 0) return null;
+    let j = a + b.length, d = 1;
+    while (d) { const nb = s.indexOf(b, j), ne = s.indexOf(e, j); if (ne < 0) return null; if (nb >= 0 && nb < ne) { d++; j = nb + b.length; } else { d--; j = ne + e.length; } }
+    let k = a + b.length; if (s[k] === "[") k = s.indexOf("]", k) + 1;
+    return { a, e: j, trong: s.slice(k, j - e.length) };
+  }
+  function tachItem(s) { // tách \item ở cấp ngoài cùng (bỏ qua \item trong môi trường lồng và trong ngoặc {})
+    const out = []; let d = 0, env = 0, cur = null;
+    for (let i = 0; i < s.length; i++) {
+      if (s.startsWith("\\begin{", i)) env++; else if (s.startsWith("\\end{", i)) env--;
+      const c = s[i];
+      if (c === "\\" && !d && !env && /^\\item(?![A-Za-z])/.test(s.slice(i, i + 6))) { if (cur !== null) out.push(cur); cur = ""; i += 4; continue; }
+      if (c === "\\") { if (cur !== null) cur += s.slice(i, i + 2); i++; continue; }
+      if (c === "{") d++; else if (c === "}") d--;
+      if (cur !== null) cur += c;
+    }
+    if (cur !== null) out.push(cur);
+    return out.map(x => x.trim());
+  }
+  function chuanTex(s) { // macro riêng của ngân hàng 103 dạng → TeX thường; gạch nối -- → –
+    let out = "", i = 0;
+    for (;;) { const k = s.indexOf("\\dapso{", i); if (k < 0) { out += s.slice(i); break; } const [g, j] = nhom(s, k + 6); out += s.slice(i, k) + "\\textbf{Đáp số:} " + g; i = j; }
+    out = out.replace(/\\hs(?![A-Za-z])/g, "");
+    // gạch nối ngoài TikZ
+    return out.split(/(\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\})/).map((p, i) => i % 2 ? p : p.replace(/---/g, "—").replace(/--/g, "–")).join("");
+  }
+  const CHUOI = /(câu|ý)\s*[a-e]\)?(?![A-Za-zÀ-ỹ])|ở trên|trên đây|khi đó|kết quả|vừa (tìm|tính|lập|vẽ)|tương ứng|mỗi trường hợp|kiểm tra|từ đó|suy ra|với giá trị|nghiệm đó|đã tìm|đã tính|so sánh|hai (cách|kết quả)/i;
+  function docTep103(ten, tex) {
+    const s = sach(tex); const dm = /\\dang\{([^}]*)\}\{/.exec(s); if (!dm) return null;
+    const ma = dm[1].trim().replace(/^D(?=\d)/, "Đ"), vt = khoi103(ma); if (!vt) return null;
+    const tenDang = nhom(s, dm.index + dm[0].length - 1)[0].replace(/---?/g, "–").replace(/\\sqrt\{([^{}]*)\^2\}/g, "√($1²)").replace(/\^2/g, "²").replace(/\$/g, "").replace(/\\[a-zA-Z]+\s*/g, "").replace(/[{}]/g, "").trim();
+    const bang = vt.khoi === "8" ? C8 : C9, [tenChuong, hk] = bang[vt.chuong];
+    const cau = []; let i = 0, n = 0;
+    for (;;) {
+      const a = s.indexOf("\\bai[", i); if (a < 0) break;
+      let d = 0, k = a + 4; for (; k < s.length; k++) { const c = s[k]; if (c === "{") d++; else if (c === "}") d--; else if (c === "]" && !d) break; }
+      const nhan = s.slice(a + 5, k).replace(/^\{|\}$/g, "").trim();
+      const sau = s.indexOf("\\bai[", k), body = s.slice(k + 1, sau < 0 ? s.length : sau); i = sau < 0 ? s.length : sau;
+      const en = moiTruong1(body, "enumerate"), hd = moiTruong1(body, "huongdan"); n++;
+      const muc = MUC103(nhan); if (!en || !muc) continue;
+      const dan = chuanTex(body.slice(0, en.a).trim()), y = tachItem(en.trong).map(chuanTex), g = hd ? tachItem(hd.trong).map(chuanTex) : [];
+      const q = { ma: `${ma}-TL-${muc}-${String(n).padStart(3, "0")}`, loai: "TL", muc, ten: T().html(nhan.replace(/^[^–-]*(--|–)\s*/, "").replace(/^(Cơ bản|Thông hiểu|Vận dụng cao|Vận dụng)$/i, "")), dan: T().html(dan), y: y.map(x => T().html(x)), tex: { dan, y } };
+      if (g.length) { q.hd = g.map(x => T().html(x)); q.tex.hd = g; }
+      if (dan.replace(/\s+/g, "") || y.some(x => CHUOI.test(x))) q.chuoi = 1;
+      cau.push(q);
+    }
+    return { ma, nguon: "tl103", khoi: vt.khoi, hk, chuong: vt.chuong, bai: ma, dang: ma, tenChuong, tenBai: tenDang, tenDang, cau };
+  }
+  /* câu cụ thể từ một bài nhiều ý: lấy k ý (bài chuỗi ý: k ý đầu; bài các ý độc lập: k ý ngẫu nhiên, giữ thứ tự) */
+  function cuThe(q, k) {
+    if (!q.y) return q;
+    const n = q.y.length; k = !k || k >= n ? n : k;
+    let chon = [...Array(n).keys()];
+    if (k < n) { if (q.chuoi) chon = chon.slice(0, k); else { for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [chon[i], chon[j]] = [chon[j], chon[i]]; } chon = chon.slice(0, k).sort((a, b) => a - b); } }
+    const nh = i => "abcdefgh"[i] + ")";
+    const mot = chon.length === 1;
+    const de = (q.dan ? q.dan + (mot ? " " : "<br>") : "") + chon.map((j, i) => (mot ? "" : nh(i) + " ") + q.y[j]).join("<br>");
+    const lg = q.hd ? chon.map((j, i) => (mot ? "" : `<b>${nh(i)}</b> `) + (q.hd[j] || "")).join("<br>") : "";
+    const tde = (q.tex.dan ? q.tex.dan + "\n" : "") + (mot ? q.tex.y[chon[0]] : "\\begin{enumerate}[label=\\alph*)]\n" + chon.map(j => "\\item " + q.tex.y[j]).join("\n") + "\n\\end{enumerate}");
+    const tlg = q.tex.hd ? (mot ? q.tex.hd[chon[0]] : "\\begin{enumerate}[label=\\alph*)]\n" + chon.map(j => "\\item " + (q.tex.hd[j] || "")).join("\n") + "\n\\end{enumerate}") : "";
+    return { ma: q.ma, loai: "TL", muc: q.muc, de, lg, tex: { de: tde, lg: tlg }, goc: q, y: chon };
+  }
+  const banHS103 = d => Object.assign({}, d, { cau: d.cau.map(q => { const x = Object.assign({}, q, { tex: { dan: q.tex.dan, y: q.tex.y } }); delete x.hd; return x; }) });
+
   /* ---- kho ngân hàng trên máy giáo viên (IndexedDB) ---- */
   const DBN = "hcth-thcs";
   const moDB = () => new Promise((ok, loi) => { const r = indexedDB.open(DBN, 1); r.onupgradeneeded = () => r.result.createObjectStore("dang"); r.onsuccess = () => ok(r.result); r.onerror = () => loi(r.error); });
@@ -55,15 +135,15 @@
   /* nạp file: .tex lẻ, .zip (đọc mọi NH_*.tex), hoặc .json (đã tách) */
   async function napFile(files, onTien) {
     const ds = []; let n = 0;
-    const them = (ten, tex) => { const d = docTep(ten, tex); if (d && d.cau.length) ds.push(d); };
+    const them = (ten, tex) => { const d = docTep(ten, tex) || docTep103(ten, tex); if (d && d.cau.length) ds.push(d); };
     for (const f of files) {
       if (/\.zip$/i.test(f.name)) {
-        const z = await JSZip.loadAsync(f); const ps = Object.keys(z.files).filter(p => /\.tex$/i.test(p) && !/__MACOSX/.test(p) && /\dH\d[_-]C\d+[_-]B\d+[_-]D\d+/.test(p));
+        const z = await JSZip.loadAsync(f); const ps = Object.keys(z.files).filter(p => /\.tex$/i.test(p) && !/__MACOSX/.test(p) && (/\dH\d[_-]C\d+[_-]B\d+[_-]D\d+/.test(p) || /(^|\/)(D|Đ|H|T|TT)[89]-\d+\.tex$|(^|\/)TS-\d+\.tex$/i.test(p)));
         for (const p of ps) { them(p.split("/").pop(), await z.files[p].async("string")); if (onTien && ++n % 10 === 0) onTien(n, ps.length); }
       } else if (/\.tex$/i.test(f.name)) them(f.name, await f.text());
     }
     await luu(ds); return ds;
   }
   const banHS = d => Object.assign({}, d, { cau: d.cau.map(q => q.loai === "TN" ? { ma: q.ma, loai: q.loai, muc: q.muc, de: q.de, pa: q.pa } : { ma: q.ma, loai: q.loai, muc: q.muc, de: q.de }) });
-  G.ThcsBank = { docTep, banHS, luu, tatCa, demKho, xoaKho, napFile };
+  G.ThcsBank = { docTep, docTep103, cuThe, banHS103, CHUONG103: { 8: C8, 9: C9 }, banHS, luu, tatCa, demKho, xoaKho, napFile };
 })(typeof window !== "undefined" ? window : globalThis);
