@@ -48,16 +48,19 @@
   /* ---- Ngân hàng tự luận 103 dạng (Toán 8, 9, ôn thi vào 10): file <Mã dạng>.tex, \dang{Mã}{Tên}, \bai[Mức -- tên] + enumerate + huongdan ----
      Mỗi "bài" của ngân hàng là một câu tự luận có nhiều ý a), b), c)… (mặc định 5 ý). Mức: Cơ bản → NB, Thông hiểu → TH, Vận dụng → VD, Vận dụng cao → VDC.
      Dạng được xếp vào chương SGK (Kết nối tri thức) theo bảng CH103; dạng tổng hợp liên môn và ôn thi vào 10 có chương riêng. */
+  const C6 = { 1: ["Tập hợp các số tự nhiên", "1"], 2: ["Tính chia hết trong tập hợp các số tự nhiên", "1"], 3: ["Số nguyên", "1"], 4: ["Một số hình phẳng trong thực tiễn", "1"], 5: ["Tính đối xứng của hình phẳng trong tự nhiên", "1"], 6: ["Phân số", "2"], 7: ["Số thập phân", "2"], 8: ["Những hình hình học cơ bản", "2"], 9: ["Dữ liệu và xác suất thực nghiệm", "2"] };
   const C7 = { 1: ["Số hữu tỉ", "1"], 2: ["Số thực", "1"], 3: ["Góc và đường thẳng song song", "1"], 4: ["Tam giác bằng nhau", "1"], 5: ["Thu thập và biểu diễn dữ liệu", "1"], 6: ["Tỉ lệ thức và đại lượng tỉ lệ", "2"], 7: ["Biểu thức đại số và đa thức một biến", "2"], 8: ["Làm quen với biến cố và xác suất của biến cố", "2"], 9: ["Quan hệ giữa các yếu tố trong một tam giác", "2"], 10: ["Một số hình khối trong thực tiễn", "2"] };
   const C8 = { 1: ["Đa thức", "1"], 2: ["Hằng đẳng thức đáng nhớ và ứng dụng", "1"], 3: ["Tứ giác", "1"], 4: ["Định lí Thalès", "1"], 5: ["Dữ liệu và biểu đồ", "1"], 6: ["Phân thức đại số", "2"], 7: ["Phương trình bậc nhất và hàm số bậc nhất", "2"], 8: ["Mở đầu về tính xác suất của biến cố", "2"], 9: ["Tam giác đồng dạng", "2"], 10: ["Một số hình khối trong thực tiễn", "2"], 11: ["Toán thực tế – liên môn (tổng hợp)", ""] };
   const C9 = { 1: ["Phương trình và hệ hai phương trình bậc nhất hai ẩn", "1"], 2: ["Phương trình và bất phương trình bậc nhất một ẩn", "1"], 3: ["Căn bậc hai và căn bậc ba", "1"], 4: ["Hệ thức lượng trong tam giác vuông", "1"], 5: ["Đường tròn", "1"], 6: ["Hàm số y = ax² (a ≠ 0). Phương trình bậc hai một ẩn", "2"], 7: ["Tần số và tần số tương đối", "2"], 8: ["Xác suất của biến cố trong một số mô hình xác suất đơn giản", "2"], 9: ["Đường tròn ngoại tiếp và đường tròn nội tiếp", "2"], 10: ["Một số hình khối trong thực tiễn", "2"], 11: ["Toán thực tế – liên môn (tổng hợp)", ""], 12: ["Ôn thi tuyển sinh vào lớp 10", ""] };
   const CH103 = {
+    "Đ6": [0, 1, 1, 1, 2, 2, 2, 3, 3, 6, 6, 6, 7, 7], "H6": [0, 4, 5, 8, 8], "T6": [0, 9, 9],
     "Đ7": [0, 1, 1, 1, 1, 1, 2, 2, 6, 6, 7, 7, 7], "H7": [0, 3, 3, 3, 4, 4, 4, 4, 4, 9, 9, 10], "T7": [0, 5, 8],
     "Đ8": [0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7], "H8": [0, 3, 3, 3, 3, 3, 3, 4, 4, 4, 9, 9, 9, 9, 10, 9], "T8": [0, 5, 5, 5, 8, 8], "TT8": [0, 1, 6, 7, 11, 9],
     "Đ9": [0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 6, 6, 6, 6, 6], "H9": [0, 4, 4, 5, 5, 5, 9, 5, 9, 9, 9, 10, 10, 10, 10, 9], "T9": [0, 7, 7, 7, 8, 8], "TT9": [0, 4, 6, 6, 11, 2], "TS": null
   };
   /* dạng → bài SGK (KNTT) để trang Tài liệu hiện bài tập 103 dạng ngay dưới bài học tương ứng; TS-xx hiện ở mục "Ôn thi vào 10" của Toán 9 */
   const BAI103 = {
+    "Đ6-01": [1, 2, 3], "Đ6-02": [4, 5], "Đ6-03": [6, 7], "Đ6-04": [8, 9], "Đ6-05": [10], "Đ6-06": [11, 12], "Đ6-07": [13, 14, 15], "Đ6-08": [16, 17], "Đ6-09": [23, 24], "Đ6-10": [25, 26], "Đ6-11": [27], "Đ6-12": [28, 29, 30], "Đ6-13": [31], "H6-01": [18, 19, 20], "H6-02": [21, 22], "H6-03": [32, 33, 34, 35], "H6-04": [36, 37], "T6-01": [38, 39, 40, 41], "T6-02": [42, 43],
     "Đ7-01": [1], "Đ7-02": [2], "Đ7-03": [2, 4], "Đ7-04": [3], "Đ7-05": [4], "Đ7-06": [5, 6], "Đ7-07": [7], "H7-01": [8], "H7-02": [9, 10], "H7-03": [11], "H7-04": [12], "H7-05": [13], "H7-06": [14], "H7-07": [15], "H7-08": [16], "Đ7-08": [20, 21], "Đ7-09": [22, 23], "Đ7-10": [24], "Đ7-11": [25, 26], "Đ7-12": [27, 28], "T7-01": [17, 18, 19], "T7-02": [29, 30], "H7-09": [31, 32, 33], "H7-10": [34, 35], "H7-11": [36, 37],
     "Đ8-01": [1, 2], "Đ8-02": [3], "Đ8-03": [4], "Đ8-04": [5], "Đ8-05": [6], "Đ8-06": [7, 8], "Đ8-07": [9], "Đ8-08": [9], "Đ8-09": [6], "Đ8-10": [9], "Đ8-11": [21], "Đ8-12": [22], "Đ8-13": [23], "Đ8-14": [24], "Đ8-15": [24], "Đ8-16": [25], "Đ8-17": [26], "Đ8-18": [26], "Đ8-19": [26], "Đ8-20": [27], "Đ8-21": [28], "Đ8-22": [29],
     "H8-01": [10], "H8-02": [11], "H8-03": [12], "H8-04": [13], "H8-05": [14], "H8-06": [14], "H8-07": [15], "H8-08": [16], "H8-09": [17], "H8-10": [33], "H8-11": [34], "H8-12": [36], "H8-13": [37], "H8-14": [38, 39], "H8-15": [35],
@@ -104,7 +107,7 @@
     const s = sach(tex); const dm = /\\dang\{([^}]*)\}\{/.exec(s); if (!dm) return null;
     const ma = dm[1].trim().replace(/^D(?=\d)/, "Đ"), vt = khoi103(ma); if (!vt) return null;
     const tenDang = nhom(s, dm.index + dm[0].length - 1)[0].replace(/---?/g, "–").replace(/\\sqrt\{([^{}]*)\^2\}/g, "√($1²)").replace(/\^2/g, "²").replace(/\$/g, "").replace(/\\[a-zA-Z]+\s*/g, "").replace(/[{}]/g, "").trim();
-    const bang = { 7: C7, 8: C8, 9: C9 }[vt.khoi], [tenChuong, hk] = bang[vt.chuong];
+    const bang = { 6: C6, 7: C7, 8: C8, 9: C9 }[vt.khoi], [tenChuong, hk] = bang[vt.chuong];
     const cau = []; let i = 0, n = 0;
     for (;;) {
       const a = s.indexOf("\\bai[", i); if (a < 0) break;
@@ -157,5 +160,5 @@
     await luu(ds); return ds;
   }
   const banHS = d => Object.assign({}, d, { cau: d.cau.map(q => q.loai === "TN" ? { ma: q.ma, loai: q.loai, muc: q.muc, de: q.de, pa: q.pa } : { ma: q.ma, loai: q.loai, muc: q.muc, de: q.de }) });
-  G.ThcsBank = { docTep, docTep103, cuThe, BAI103, banHS103, CHUONG103: { 7: C7, 8: C8, 9: C9 }, banHS, luu, tatCa, demKho, xoaKho, napFile };
+  G.ThcsBank = { docTep, docTep103, cuThe, BAI103, banHS103, CHUONG103: { 6: C6, 7: C7, 8: C8, 9: C9 }, banHS, luu, tatCa, demKho, xoaKho, napFile };
 })(typeof window !== "undefined" ? window : globalThis);

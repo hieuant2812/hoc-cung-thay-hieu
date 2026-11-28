@@ -48,12 +48,12 @@
     const ds = Object.values(await ThcsBank.tatCa()), nKho = ds.filter(d => d.nguon !== "tl103").length, nLg = ds.filter(d => d.nguon === "tl103").length;
     const n103 = Object.keys(TL103).length, b103 = Object.values(TL103).reduce((s, d) => s + d.cau.length, 0);
     $("nhTT").innerHTML = (nKho ? `✅ Ngân hàng trên máy này: <b>${nKho}</b> dạng. ` : `⚠️ Máy này chưa có ngân hàng TN + TL của thầy. Bấm <b>📂 Nạp ngân hàng</b> và chọn file zip ngân hàng Toán 6–9, hoặc <b>☁️ Tải từ web</b> nếu đã đăng gói mã hoá. `) +
-      (n103 ? `<br>📚 Ngân hàng tự luận 103 dạng (Toán 8, 9, ôn thi vào 10): <b>${n103}</b> dạng, <b>${b103}</b> bài có sẵn trên web. ` + (nLg ? `Hướng dẫn giải: ✅ đã nạp trên máy này (${nLg} dạng).` : `Hướng dẫn giải: chưa có trên máy này, bấm <b>📂 Nạp ngân hàng</b> và chọn file <i>Toan_THCS_NganHang_Tu_Luan_103_dang.zip</i> (một lần mỗi máy) để có đáp án – hướng dẫn chấm.`) : "");
+      (n103 ? `<br>📚 Ngân hàng tự luận theo dạng (Toán 6–9, ôn thi vào 10): <b>${n103}</b> dạng, <b>${b103}</b> bài có sẵn trên web. ` + (nLg ? `Hướng dẫn giải: ✅ đã nạp trên máy này (${nLg} dạng).` : `Hướng dẫn giải: chưa có trên máy này, bấm <b>📂 Nạp ngân hàng</b> và chọn file <i>Toan_THCS_NganHang_Tu_Luan_103_dang.zip</i> (một lần mỗi máy) để có đáp án – hướng dẫn chấm.`) : "");
     veNguon(); veKhoi();
   }
   function veNguon() {
     const el = $("nguon"); if (!el) return; const n = S.nguon = S.nguon || { kho: true, tl103: true };
-    el.innerHTML = `<b>Lấy câu từ:</b> <label><input type="checkbox" data-n="kho" ${n.kho !== false ? "checked" : ""}> Ngân hàng TN + TL trên máy (6–9)</label> <label><input type="checkbox" data-n="tl103" ${n.tl103 !== false ? "checked" : ""}> Ngân hàng tự luận 103 dạng (8, 9, vào 10)</label>`;
+    el.innerHTML = `<b>Lấy câu từ:</b> <label><input type="checkbox" data-n="kho" ${n.kho !== false ? "checked" : ""}> Ngân hàng TN + TL trên máy (6–9)</label> <label><input type="checkbox" data-n="tl103" ${n.tl103 !== false ? "checked" : ""}> Ngân hàng tự luận theo dạng (6–9, vào 10)</label>`;
     el.querySelectorAll("input").forEach(x => x.onchange = async () => { n[x.dataset.n] = x.checked; luuS(); await napBank(); veKhoi(); });
   }
   async function napNH(files) {
