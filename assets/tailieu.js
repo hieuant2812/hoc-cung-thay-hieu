@@ -335,7 +335,7 @@
       return `<details class="vdc d103" id="d-${esc(D.ma)}" ${mo ? "open" : ""}><summary class="vt">${esc(D.ma)} · ${esc(D.tenDang)} <span class="small" style="font-weight:600">(${D.cau.length} bài${Object.keys(TENMUC).filter(m => dem[m]).map(m => ` · ${m} ${dem[m]}`).join("")})</span></summary><div class="vb"><ol class="btl b103">${bai}</ol></div></details>`;
     }
     async function napTL(k) {
-      if (!["8", "9"].includes(String(k))) return {};
+      if (!["6", "7", "8", "9"].includes(String(k))) return {};
       if (!THCS.tl) { try { THCS.tl = await (await fetch("data/thcs/tl103.json")).json(); } catch (e) { THCS.tl = {}; } }
       const out = {}; Object.values(THCS.tl).forEach(d => { if (d.khoi === String(k)) out[d.ma] = d; });
       if (laGV && S.ban === "gv" && THCS.gv[k]) Object.values(THCS.gv[k]).forEach(d => { if (d.nguon === "tl103") out[d.ma] = d; });
